@@ -15,7 +15,6 @@ public class ConfigUI extends JDialog {
 	private static final long serialVersionUID = -4765449778876379813L;
 	private JPanel contentPane;
 	private JTextField textFieldListeningPort;
-	private JTextField textFieldDatabasePort;
 	private JTextField textFieldDatabaseIP;
 
 	public ConfigUI() {
@@ -54,20 +53,6 @@ public class ConfigUI extends JDialog {
 		JPanel panelDatabaseSettings = new JPanel();
 		tabbedPane.addTab("Database Server Settings", null, panelDatabaseSettings, null);
 		panelDatabaseSettings.setLayout(null);
-		
-		JLabel lblDatabasePort = new JLabel("Database Port :");
-		lblDatabasePort.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblDatabasePort.setBounds(10, 42, 82, 14);
-		panelDatabaseSettings.add(lblDatabasePort);
-		
-		textFieldDatabasePort = new JTextField(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY));
-		textFieldDatabasePort.setColumns(10);
-		textFieldDatabasePort.setBounds(102, 39, 86, 20);
-		panelDatabaseSettings.add(textFieldDatabasePort);
-		
-		JLabel lblthePortOf = new JLabel("<html><i>The port of database server to connect to.</i></html>");
-		lblthePortOf.setBounds(198, 42, 336, 14);
-		panelDatabaseSettings.add(lblthePortOf);
 		
 		JLabel lblDatabaseIP = new JLabel("Database IP :");
 		lblDatabaseIP.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -120,7 +105,6 @@ public class ConfigUI extends JDialog {
 	private void saveConfigurations() {
 		Config.setConfig(Config.CONFIG_SERVER_INCOMING_PORT_KEY, textFieldListeningPort.getText());
 		Config.setConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY, textFieldDatabaseIP.getText());
-		Config.setConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY, textFieldDatabasePort.getText());
 		
 		Config.writeConfigFile();
 	}

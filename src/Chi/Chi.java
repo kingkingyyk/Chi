@@ -11,10 +11,11 @@ public class Chi {
 		Config.initialize();
 		Logger.log("Reading configuration done.");
 		
-		Logger.log("Starting config UI started.");
-		ConfigUI ui=new ConfigUI();
-		ui.setVisible(true);
-		Logger.log("Starting config UI done.");
+		Logger.log("Splash screen started.");
+		SplashScreen ss=new SplashScreen();
+		Logger.log("Splash screen done.");
+		ss.setVisible(true);
+		Logger.log("Splash screen closed.");
 	}
 	
 }

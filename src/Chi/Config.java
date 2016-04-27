@@ -20,12 +20,10 @@ public class Config {
 	//Changeable via configuration file
 	public static final String CONFIG_SERVER_INCOMING_PORT_KEY="server.incoming.port";
 	public static final String CONFIG_SERVER_DATABASE_IP_KEY="server.database.ip";
-	public static final String CONFIG_SERVER_DATABASE_PORT_KEY="server.database.port";
 	
 	//Default values.
 	private static final String CONFIG_SERVER_INCOMING_PORT_DEFAULT="40000";
 	private static final String CONFIG_SERVER_DATABASE_IP_DEFAULT="127.0.0.1";
-	private static final String CONFIG_SERVER_DATABASE_PORT_DEFAULT="9160";
 	
 	public static void setConfig (String key, String value) {
 		prop.setProperty(key,value);
@@ -57,7 +55,6 @@ public class Config {
 		prop=new Properties();
 		Config.setConfig(CONFIG_SERVER_INCOMING_PORT_KEY, CONFIG_SERVER_INCOMING_PORT_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_DATABASE_IP_KEY, CONFIG_SERVER_DATABASE_IP_DEFAULT);
-		Config.setConfig(CONFIG_SERVER_DATABASE_PORT_KEY, CONFIG_SERVER_DATABASE_PORT_DEFAULT);
 		
 		//To be replaced by configuration files
 		try {

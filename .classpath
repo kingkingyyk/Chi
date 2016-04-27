@@ -2,5 +2,25 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="lib" path="D:/Documents/EclipseProjects/Chi/lib/cassandra-driver-core-3.0.0.jar"/>
+	<classpathentry kind="lib" path="D:/Documents/EclipseProjects/Chi/lib/cassandra-driver-extras-3.0.0.jar"/>
+	<classpathentry kind="lib" path="D:/Documents/EclipseProjects/Chi/lib/cassandra-driver-mapping-3.0.0.jar"/>
+	<classpathentry kind="lib" path="D:/Documents/EclipseProjects/Chi/lib/cassandrajdbc1.1.jar"/>
+	<classpathentry kind="lib" path="D:/Documents/EclipseProjects/Chi/lib/guava-16.0.1.jar"/>
+	<classpathentry kind="lib" path="D:/Documents/EclipseProjects/Chi/lib/HdrHistogram-2.1.4.jar"/>
+	<classpathentry kind="lib" path="D:/Documents/EclipseProjects/Chi/lib/jackson-annotations-2.6.0.jar"/>
+	<classpathentry kind="lib" path="D:/Documents/EclipseProjects/Chi/lib/jackson-core-2.6.3.jar"/>
+	<classpathentry kind="lib" path="D:/Documents/EclipseProjects/Chi/lib/jackson-databind-2.6.3.jar"/>
+	<classpathentry kind="lib" path="D:/Documents/EclipseProjects/Chi/lib/javax.json-api-1.0.jar"/>
+	<classpathentry kind="lib" path="D:/Documents/EclipseProjects/Chi/lib/joda-time-2.9.1.jar"/>
+	<classpathentry kind="lib" path="D:/Documents/EclipseProjects/Chi/lib/lz4-1.2.0.jar"/>
+	<classpathentry kind="lib" path="D:/Documents/EclipseProjects/Chi/lib/metrics-core-3.1.2.jar"/>
+	<classpathentry kind="lib" path="D:/Documents/EclipseProjects/Chi/lib/netty-buffer-4.0.33.Final.jar"/>
+	<classpathentry kind="lib" path="D:/Documents/EclipseProjects/Chi/lib/netty-codec-4.0.33.Final.jar"/>
+	<classpathentry kind="lib" path="D:/Documents/EclipseProjects/Chi/lib/netty-common-4.0.33.Final.jar"/>
+	<classpathentry kind="lib" path="D:/Documents/EclipseProjects/Chi/lib/netty-handler-4.0.33.Final.jar"/>
+	<classpathentry kind="lib" path="D:/Documents/EclipseProjects/Chi/lib/netty-transport-4.0.33.Final.jar"/>
+	<classpathentry kind="lib" path="D:/Documents/EclipseProjects/Chi/lib/slf4j-api-1.7.7.jar"/>
+	<classpathentry kind="lib" path="D:/Documents/EclipseProjects/Chi/lib/snappy-java-1.0.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
