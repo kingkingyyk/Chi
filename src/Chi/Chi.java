@@ -11,6 +11,10 @@ public class Chi {
 		Config.initialize();
 		Logger.log("Reading configuration done.");
 		
+		Logger.log("Loading theme started.");
+		Theme.initialize();
+		Logger.log("Loading theme done.");
+		
 		Logger.log("Splash screen started.");
 		SplashScreen ss=new SplashScreen();
 		Logger.log("Splash screen done.");
