@@ -12,7 +12,6 @@ import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
-import javax.swing.UIManager;
 import java.awt.Font;
 
 public class ConfigUI extends JDialog {

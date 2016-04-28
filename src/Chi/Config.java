@@ -14,6 +14,10 @@ public class Config {
 	
 	public static final String CONFIG_FOLDER_PATH="conf";
 	public static final String CONFIG_FILE_NAME="chi_conf.sh";
+
+	public static final String SENSOR_DATA_DELIMITER="?";
+	
+	public static final String DATABASE_SQL_PATH="sql";
 	
 	private static Properties prop;
 	
@@ -25,7 +29,11 @@ public class Config {
 	public static final String CONFIG_SERVER_DATABASE_TEST_FAIL_KEY="server.database.test.fail.text";
 	//Listening server config
 	public static final String CONFIG_SERVER_LOCK_FILE_KEY="server.lock.file.name";
-	
+	//Database
+	public static final String DATABASE_INIT_SQL_FILE_KEY="server.database.sql.init.file";
+	public static final String DATABASE_CREATE_TABLES_SQL_FILE_KEY="server.database.sql.createtables.file";
+	public static final String DATABASE_RESET_SQL_FILE_KEY="server.database.sql.reset.file";
+	public static final String DATABASE_RECORD_READING_SQL_FILE_KEY="server.database.sql.recordreading";
 	//Default values.
 	public static final String CONFIG_DEFAULT_KEY=".default";
 	private static final String CONFIG_SERVER_INCOMING_PORT_DEFAULT="40000";
@@ -33,8 +41,13 @@ public class Config {
 	private static final String CONFIG_SERVER_DATABASE_PORT_DEFAULT="9042";
 	private static final String CONFIG_SERVER_DATABASE_TEST_OK_DEFAULT="<html><font color=\"green\">Connection OK!</font></html>";
 	private static final String CONFIG_SERVER_DATABASE_TEST_FAIL_DEFAULT="<html><font color=\"red\">Connection fail!</font></html>";
-	
+	//Listening server
 	public static final String CONFIG_SERVER_LOCK_FILE_DEFAULT="CHI_LOCK";
+	//Database
+	public static final String DATABASE_INIT_SQL_FILE_DEFAULT="InitDB.sql";
+	public static final String DATABASE_CREATE_TABLES_SQL_FILE_DEFAULT="CreateTables.sql";
+	public static final String DATABASE_RESET_SQL_FILE_DEFAULT="ResetDB.sql";
+	public static final String DATABASE_RECORD_READING_SQL_FILE_DEFAULT="RecordReading.sql";
 	
 	public static void setConfig (String key, String value) {
 		prop.setProperty(key,value);
@@ -72,7 +85,12 @@ public class Config {
 		Config.setConfig(CONFIG_SERVER_DATABASE_TEST_OK_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_TEST_OK_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_DATABASE_TEST_FAIL_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_TEST_FAIL_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_LOCK_FILE_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_LOCK_FILE_DEFAULT);
+		Config.setConfig(DATABASE_INIT_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_INIT_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_CREATE_TABLES_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_CREATE_TABLES_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_RESET_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_RESET_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_RECORD_READING_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_RECORD_READING_SQL_FILE_DEFAULT);
 
+		
 		//Real config
 		Config.setConfig(CONFIG_SERVER_INCOMING_PORT_KEY, CONFIG_SERVER_INCOMING_PORT_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_DATABASE_IP_KEY, CONFIG_SERVER_DATABASE_IP_DEFAULT);
@@ -80,6 +98,10 @@ public class Config {
 		Config.setConfig(CONFIG_SERVER_DATABASE_TEST_OK_KEY, CONFIG_SERVER_DATABASE_TEST_OK_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_DATABASE_TEST_FAIL_KEY, CONFIG_SERVER_DATABASE_TEST_FAIL_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_LOCK_FILE_KEY, CONFIG_SERVER_LOCK_FILE_DEFAULT);
+		Config.setConfig(DATABASE_INIT_SQL_FILE_KEY, DATABASE_SQL_PATH+"/"+DATABASE_INIT_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_CREATE_TABLES_SQL_FILE_KEY, DATABASE_SQL_PATH+"/"+DATABASE_CREATE_TABLES_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_RESET_SQL_FILE_KEY, DATABASE_SQL_PATH+"/"+DATABASE_RESET_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_RECORD_READING_SQL_FILE_KEY, DATABASE_SQL_PATH+"/"+DATABASE_RECORD_READING_SQL_FILE_DEFAULT);
 		
 		//To be replaced by configuration files
 		try {

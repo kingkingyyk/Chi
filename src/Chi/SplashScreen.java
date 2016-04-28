@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 
 public class SplashScreen extends JFrame {
+	private static final long serialVersionUID = -1439297640667763037L;
 	private JPanel contentPane;
 	private JButton btnStartServer;
 	private JButton btnStopServer;
@@ -19,7 +20,7 @@ public class SplashScreen extends JFrame {
 		setTitle(Config.APP_NAME);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 410, 284);
+		setBounds(100, 100, 403, 284);
 		setIconImage(Theme.getIcon("ChiLogo").getImage());
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -44,7 +45,7 @@ public class SplashScreen extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
-		btnManage.setBounds(147, 11, 119, 23);
+		btnManage.setBounds(268, 11, 119, 23);
 		contentPane.add(btnManage);
 		
 		JButton btnInitDatabase = new JButton("Init Database");
@@ -52,12 +53,12 @@ public class SplashScreen extends JFrame {
 			public void actionPerformed(ActionEvent e) {
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
-                    	//if (Database.testConnection(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), port))
+                    	Database.freshStart(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
                     }
                 });
 			}
 		});
-		btnInitDatabase.setBounds(147, 45, 119, 23);
+		btnInitDatabase.setBounds(139, 11, 119, 23);
 		contentPane.add(btnInitDatabase);
 		
 		JButton btnConfig = new JButton("Config");
@@ -70,7 +71,7 @@ public class SplashScreen extends JFrame {
 				Logger.log("Config UI closed.");
 			}
 		});
-		btnConfig.setBounds(276, 11, 119, 23);
+		btnConfig.setBounds(268, 45, 119, 23);
 		contentPane.add(btnConfig);
 		
 		btnStopServer = new JButton("Stop Server");
@@ -88,8 +89,35 @@ public class SplashScreen extends JFrame {
 		contentPane.add(btnStopServer);
 		
 		JLabel lblAppLogo = new JLabel();
-		lblAppLogo.setBounds(314, 164, 80, 80);
+		lblAppLogo.setBounds(307, 164, 80, 80);
 		lblAppLogo.setIcon(Utility.resizeImageIcon(Theme.getIcon("ChiLogo"), lblAppLogo.getWidth(), lblAppLogo.getHeight()));
 		contentPane.add(lblAppLogo);
+		
+		JButton btnResetDatabase = new JButton("Reset Database");
+		btnResetDatabase.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+            	Database.reset(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+			}
+		});
+		btnResetDatabase.setBounds(139, 79, 119, 23);
+		contentPane.add(btnResetDatabase);
+		
+		JButton btnExit = new JButton("Exit");
+		btnExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		btnExit.setBounds(268, 79, 119, 23);
+		contentPane.add(btnExit);
+		
+		JButton btnCreateTables = new JButton("Create Tables");
+		btnCreateTables.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+            	Database.createTables(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+			}
+		});
+		btnCreateTables.setBounds(139, 45, 119, 23);
+		contentPane.add(btnCreateTables);
 	}
 }

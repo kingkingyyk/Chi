@@ -15,3 +15,6 @@ Server Requirement :
 Compile :
 + Eclipse
 + Apache Maven?
+
+============================================
+Database Schema : http://ondras.zarovi.cz/sql/demo/
