@@ -1,10 +1,8 @@
 package Chi;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.util.StringTokenizer;
 
 public class ServerThread extends Thread {
@@ -16,10 +14,12 @@ public class ServerThread extends Thread {
 	}
 	
 	public void run() {
-		ServerSocket ss=null;
+		DatagramSocket ss=null;
+		byte [] buffer=new byte [8192];
+		DatagramPacket packet=new DatagramPacket(buffer,buffer.length);
 		try {
 			Logger.log("Listening Server - StartP2 - Opening port "+Config.getConfig(Config.CONFIG_SERVER_INCOMING_PORT_KEY));
-			ss=new ServerSocket(Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_INCOMING_PORT_KEY)));
+			ss=new DatagramSocket(Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_INCOMING_PORT_KEY)));
 		} catch (IOException e) {
 			Logger.log("Listening Server - StartP2 - Error - "+e.getMessage());
 		}
@@ -30,14 +30,12 @@ public class ServerThread extends Thread {
 			Logger.log("Listening Server - Run - Listening");
 			while (this.running) {
 				try {
-					Socket clientSc=ss.accept();
+					ss.receive(packet);
 					if (this.running) {
-						BufferedReader br=new BufferedReader(new InputStreamReader(clientSc.getInputStream()));
-						StringTokenizer st=new StringTokenizer(br.readLine(),Config.SENSOR_DATA_DELIMITER);
+						StringTokenizer st=new StringTokenizer(new String(buffer,0,buffer.length),Config.SENSOR_DATA_DELIMITER);
 						ServerToDatabase.queueData(st.nextToken(),st.nextToken(),Double.parseDouble(st.nextToken()));
-						br.close();
 					}
-					clientSc.close();
+					packet.setLength(buffer.length);
 				} catch (IOException e) {
 					Logger.log("Listening Server - Error - "+e.getMessage());
 				}
