@@ -15,8 +15,7 @@ public class Config {
 	public static final String CONFIG_FOLDER_PATH="conf";
 	public static final String CONFIG_FILE_NAME="chi_conf.sh";
 
-	public static final String SENSOR_DATA_DELIMITER="?";
-	
+	public static final String SENSOR_DATA_DELIMITER=Character.toString((char)0);
 	public static final String DATABASE_SQL_PATH="sql";
 	
 	private static Properties prop;

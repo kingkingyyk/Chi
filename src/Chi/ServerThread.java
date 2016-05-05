@@ -32,8 +32,10 @@ public class ServerThread extends Thread {
 				try {
 					ss.receive(packet);
 					if (this.running) {
-						StringTokenizer st=new StringTokenizer(new String(buffer,0,buffer.length),Config.SENSOR_DATA_DELIMITER);
-						ServerToDatabase.queueData(st.nextToken(),st.nextToken(),Double.parseDouble(st.nextToken()));
+						String cName=new StringTokenizer(new String(buffer,0,63),Config.SENSOR_DATA_DELIMITER).nextToken();
+						String sName=new StringTokenizer(new String(buffer,64,127),Config.SENSOR_DATA_DELIMITER).nextToken();
+						double value=Double.parseDouble(new StringTokenizer(new String(buffer,128,8191),Config.SENSOR_DATA_DELIMITER).nextToken());
+						ServerToDatabase.queueData(cName,sName,value);
 					}
 					packet.setLength(buffer.length);
 				} catch (IOException e) {
