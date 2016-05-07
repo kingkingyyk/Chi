@@ -21,7 +21,14 @@ CREATE TABLE SensorReading(
 CREATE TABLE Sensor(
 	SensorName varchar PRIMARY KEY,
 	Class varchar,
-	Expression varchar,
 	MinValue double,
 	MaxValue double
 )
+@
+CREATE TABLE User(
+	Username varchar PRIMARY KEY,
+	Password varchar,
+	Level int
+)
+@
+COMMIT

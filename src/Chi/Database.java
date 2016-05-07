@@ -35,7 +35,9 @@ public class Database {
 		Cluster cluster=null;
 		try {
 			Logger.log("DB Store Reading - Connecting to database : "+ip+":"+port);
-			cluster=Cluster.builder().withPort(port).addContactPoint(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY)).build();
+			cluster=Cluster.builder().withCredentials(Config.getConfig(Config.CONFIG_SERVER_DATABASE_USERNAME_KEY),Config.getConfig(Config.CONFIG_SERVER_DATABASE_PASSWORD_KEY))/*
+			*/.withPort(port)/*
+			*/.addContactPoint(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY)).build();
 			Session session=cluster.connect();
 			Logger.log("DB Store Reading - Database connection OK!");
 			
@@ -66,7 +68,9 @@ public class Database {
 		Cluster cluster=null;
 		try {
 			Logger.log(cmdName+" - Connecting to database : "+ip+":"+port);
-			cluster=Cluster.builder().withPort(port).addContactPoint(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY)).build();
+			cluster=Cluster.builder().withCredentials(Config.getConfig(Config.CONFIG_SERVER_DATABASE_USERNAME_KEY),Config.getConfig(Config.CONFIG_SERVER_DATABASE_PASSWORD_KEY))/*
+			*/.withPort(port)/*
+			*/.addContactPoint(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY)).build();
 			Session session=cluster.connect();
 			Logger.log(cmdName+" - Database connection OK!");
 			if (filename!=null) {

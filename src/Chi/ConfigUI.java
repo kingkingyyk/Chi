@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.Font;
+import javax.swing.JPasswordField;
 
 public class ConfigUI extends JDialog {
 	private static final long serialVersionUID = -4765449778876379813L;
@@ -21,6 +22,8 @@ public class ConfigUI extends JDialog {
 	private JTextField textFieldDatabaseIP;
 	private JTextField textFieldDatabasePort;
 	private JLabel lblTestDatabaseResult;
+	private JTextField textFieldDatabaseUsername;
+	private JPasswordField passwordFieldDatabasePassword;
 
 	public ConfigUI() {
 		setModal(true);
@@ -68,23 +71,23 @@ public class ConfigUI extends JDialog {
 		
 		JLabel lblDatabaseIP = new JLabel("Database IP :");
 		lblDatabaseIP.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblDatabaseIP.setBounds(10, 14, 82, 14);
+		lblDatabaseIP.setBounds(10, 14, 86, 14);
 		panelDatabaseSettings.add(lblDatabaseIP);
 		
 		textFieldDatabaseIP = new JTextField(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY));
 		textFieldDatabaseIP.setColumns(10);
-		textFieldDatabaseIP.setBounds(102, 11, 86, 20);
+		textFieldDatabaseIP.setBounds(106, 10, 86, 20);
 		textFieldDatabaseIP.setToolTipText("The IP of database server to connect to.");
 		panelDatabaseSettings.add(textFieldDatabaseIP);
 		
 		JLabel lblDatabasePort = new JLabel("Database Port :");
 		lblDatabasePort.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblDatabasePort.setBounds(10, 45, 82, 14);
+		lblDatabasePort.setBounds(10, 45, 86, 14);
 		panelDatabaseSettings.add(lblDatabasePort);
 		
 		textFieldDatabasePort = new JTextField(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY));
 		textFieldDatabasePort.setColumns(10);
-		textFieldDatabasePort.setBounds(102, 42, 86, 20);
+		textFieldDatabasePort.setBounds(106, 41, 86, 20);
 		textFieldDatabasePort.setToolTipText("The port of database server to connect to.");
 		panelDatabaseSettings.add(textFieldDatabasePort);
 		
@@ -94,7 +97,7 @@ public class ConfigUI extends JDialog {
 				textFieldDatabaseIP.setText(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY+Config.CONFIG_DEFAULT_KEY));
 			}
 		});
-		btnDatabaseIPReset.setBounds(195, 11, 24, 20);
+		btnDatabaseIPReset.setBounds(199, 10, 24, 20);
 		panelDatabaseSettings.add(btnDatabaseIPReset);
 		
 		JButton btnDatabasePortReset = new JButton(Theme.getIcon("Reset-16x16"));
@@ -103,7 +106,7 @@ public class ConfigUI extends JDialog {
 				textFieldDatabasePort.setText(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY+Config.CONFIG_DEFAULT_KEY));
 			}
 		});
-		btnDatabasePortReset.setBounds(195, 42, 24, 20);
+		btnDatabasePortReset.setBounds(199, 41, 24, 20);
 		panelDatabaseSettings.add(btnDatabasePortReset);
 		
 		JButton btnTestDatabase = new JButton("Test Connection");
@@ -125,17 +128,38 @@ public class ConfigUI extends JDialog {
                 });
 			}
 		});
-		btnTestDatabase.setBounds(10, 89, 117, 23);
+		btnTestDatabase.setBounds(10, 175, 117, 23);
 		panelDatabaseSettings.add(btnTestDatabase);
 		
 		lblTestDatabaseResult = new JLabel("");
-		lblTestDatabaseResult.setBounds(137, 93, 165, 14);
+		lblTestDatabaseResult.setBounds(137, 179, 165, 14);
 		panelDatabaseSettings.add(lblTestDatabaseResult);
 		
 		JLabel lblDatabaseLogo = new JLabel();
 		lblDatabaseLogo.setBounds(434, 131, 100, 67);
 		lblDatabaseLogo.setIcon(Utility.resizeImageIcon(Theme.getIcon("CassandraLogo"),lblDatabaseLogo.getWidth(),lblDatabaseLogo.getHeight()));
 		panelDatabaseSettings.add(lblDatabaseLogo);
+		
+		JLabel lblDatabaseUsername = new JLabel("Username :");
+		lblDatabaseUsername.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblDatabaseUsername.setBounds(10, 76, 86, 14);
+		panelDatabaseSettings.add(lblDatabaseUsername);
+		
+		textFieldDatabaseUsername = new JTextField(Config.getConfig(Config.CONFIG_SERVER_DATABASE_USERNAME_KEY));
+		textFieldDatabaseUsername.setToolTipText("The username to login to the database.");
+		textFieldDatabaseUsername.setColumns(10);
+		textFieldDatabaseUsername.setBounds(106, 72, 86, 20);
+		panelDatabaseSettings.add(textFieldDatabaseUsername);
+		
+		JLabel lblDatabasePassword = new JLabel("Password :");
+		lblDatabasePassword.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblDatabasePassword.setBounds(10, 106, 86, 14);
+		panelDatabaseSettings.add(lblDatabasePassword);
+		
+		passwordFieldDatabasePassword = new JPasswordField(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PASSWORD_KEY));
+		passwordFieldDatabasePassword.setToolTipText("The password to login to the database.");
+		passwordFieldDatabasePassword.setBounds(106, 103, 86, 20);
+		panelDatabaseSettings.add(passwordFieldDatabasePassword);
 		
 		JButton btnApply = new JButton("Apply");
 		btnApply.addActionListener(new ActionListener() {
@@ -185,6 +209,9 @@ public class ConfigUI extends JDialog {
 	private void saveConfigurations() {
 		Config.setConfig(Config.CONFIG_SERVER_INCOMING_PORT_KEY, textFieldListeningPort.getText());
 		Config.setConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY, textFieldDatabaseIP.getText());
+		Config.setConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY, textFieldDatabasePort.getText());
+		Config.setConfig(Config.CONFIG_SERVER_DATABASE_USERNAME_KEY, textFieldDatabaseUsername.getText());
+		Config.setConfig(Config.CONFIG_SERVER_DATABASE_PASSWORD_KEY, new String(passwordFieldDatabasePassword.getPassword()));
 		
 		Config.writeConfigFile();
 	}

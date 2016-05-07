@@ -1,0 +1,3 @@
+INSERT INTO User VALUES(?,?,?)
+@
+COMMIT

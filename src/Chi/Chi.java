@@ -17,6 +17,7 @@ public class Chi {
 		
 		Logger.log("Splash screen started.");
 		SplashScreen ss=new SplashScreen();
+		ss.setLocationRelativeTo(null);
 		Logger.log("Splash screen done.");
 		ss.setVisible(true);
 		Logger.log("Splash screen closed.");

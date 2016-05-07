@@ -6,7 +6,7 @@ A system built for Internet of Things that focuses on scalability
 
 Requires :
 + Apache Cassandra NoSQL
-+ Apache Tomcat
++ Web Server to determined
 
 Server Requirement :
 + Windows at the moment
@@ -14,7 +14,6 @@ Server Requirement :
 
 Compile :
 + Eclipse
-+ Apache Maven?
 
 ============================================
 Database Schema : http://ondras.zarovi.cz/sql/demo/

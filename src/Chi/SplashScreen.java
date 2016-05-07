@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
+import javax.swing.JSeparator;
 
 public class SplashScreen extends JFrame {
 	private static final long serialVersionUID = -1439297640667763037L;
@@ -20,7 +21,7 @@ public class SplashScreen extends JFrame {
 		setTitle(Config.APP_NAME);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 403, 284);
+		setBounds(100, 100, 403, 355);
 		setIconImage(Theme.getIcon("ChiLogo").getImage());
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -89,7 +90,7 @@ public class SplashScreen extends JFrame {
 		contentPane.add(btnStopServer);
 		
 		JLabel lblAppLogo = new JLabel();
-		lblAppLogo.setBounds(307, 164, 80, 80);
+		lblAppLogo.setBounds(307, 235, 80, 80);
 		lblAppLogo.setIcon(Utility.resizeImageIcon(Theme.getIcon("ChiLogo"), lblAppLogo.getWidth(), lblAppLogo.getHeight()));
 		contentPane.add(lblAppLogo);
 		
@@ -119,5 +120,49 @@ public class SplashScreen extends JFrame {
 		});
 		btnCreateTables.setBounds(139, 45, 119, 23);
 		contentPane.add(btnCreateTables);
+		
+		JButton btnCreateUser = new JButton("Create User");
+		btnCreateUser.setBounds(10, 126, 119, 23);
+		contentPane.add(btnCreateUser);
+		
+		JSeparator separator = new JSeparator();
+		separator.setBounds(10, 113, 377, 7);
+		contentPane.add(separator);
+		
+		JButton btnDeleteUser = new JButton("Delete User");
+		btnDeleteUser.setBounds(10, 157, 119, 23);
+		contentPane.add(btnDeleteUser);
+		
+		JButton btnViewUsers = new JButton("View Users");
+		btnViewUsers.setBounds(10, 188, 119, 23);
+		contentPane.add(btnViewUsers);
+		
+		JButton btnCreateController = new JButton("Create Controller");
+		btnCreateController.setBounds(139, 126, 119, 23);
+		contentPane.add(btnCreateController);
+		
+		JButton btnDeleteController = new JButton("Delete Controller");
+		btnDeleteController.setBounds(139, 157, 119, 23);
+		contentPane.add(btnDeleteController);
+		
+		JButton btnCreateSensor = new JButton("Create Sensor");
+		btnCreateSensor.setBounds(268, 126, 119, 23);
+		contentPane.add(btnCreateSensor);
+		
+		JButton btnDeleteSensor = new JButton("Delete Sensor");
+		btnDeleteSensor.setBounds(268, 157, 119, 23);
+		contentPane.add(btnDeleteSensor);
+		
+		JButton btnViewControllers = new JButton("View Controllers");
+		btnViewControllers.setBounds(139, 188, 119, 23);
+		contentPane.add(btnViewControllers);
+		
+		JButton btnViewSensors = new JButton("View Sensors");
+		btnViewSensors.setBounds(268, 188, 119, 23);
+		contentPane.add(btnViewSensors);
+		
+		JButton btnViewReadings = new JButton("View Readings");
+		btnViewReadings.setBounds(10, 235, 119, 23);
+		contentPane.add(btnViewReadings);
 	}
 }
