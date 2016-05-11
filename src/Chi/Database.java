@@ -30,6 +30,10 @@ public class Database {
 		return runSQLFromFile("DB Reset",ip,port,Config.getConfig(Config.DATABASE_RESET_SQL_FILE_KEY));
 	}
 	
+	public static ResultSet getSensorReading (String ip, int port) {
+		return runSQLFromFileAndGetData("DB Get Sensor Reading",ip,port,Config.getConfig(Config.DATABASE_RECORD_GETTING_SQL_FILE_KEY));
+	}
+	
 	public static boolean storeReading (String ip, int port, String cn, String sn, Date time, double v) {
 		Logger.log("DB Store Reading : "+Config.getConfig(Config.DATABASE_RECORD_READING_SQL_FILE_KEY));
 		Cluster cluster=null;
@@ -43,11 +47,10 @@ public class Database {
 			
 			BoundStatement [] sql=getBoundSQLStatementFromFile(session,Config.getConfig(Config.DATABASE_RECORD_READING_SQL_FILE_KEY));
 			sql[0].setString(0, cn);
-			sql[1].setString(1, sn);
-			sql[2].setTimestamp(2, time);
-			sql[3].setDouble(3, v);
+			sql[0].setString(1, sn);
+			sql[0].setTimestamp(2, time);
+			sql[0].setDouble(3, v);
 			Database.executeSQL("DB Store Reading", session, sql[0]);
-			Database.executeSQL("DB Store Reading", session, sql[1]);
 			
 			session.close();
 			cluster.close();
@@ -56,6 +59,7 @@ public class Database {
 			Logger.log("DB Store Reading - Database connection fail!");
 		} catch (Exception e) {
 			Logger.log("DB Store Reading - Error - "+e.getMessage());
+			e.printStackTrace();
 		}
 		if (cluster!=null) {
 			cluster.close();
@@ -91,6 +95,37 @@ public class Database {
 			cluster.close();
 		}
 		return false;
+	}
+
+	private static ResultSet runSQLFromFileAndGetData(String cmdName, String ip, int port, String filename) {
+		Logger.log("Database - Run SQL From File : "+filename);
+		Cluster cluster=null;
+		try {
+			Logger.log(cmdName+" - Connecting to database : "+ip+":"+port);
+			cluster=Cluster.builder().withCredentials(Config.getConfig(Config.CONFIG_SERVER_DATABASE_USERNAME_KEY),Config.getConfig(Config.CONFIG_SERVER_DATABASE_PASSWORD_KEY))/*
+			*/.withPort(port)/*
+			*/.addContactPoint(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY)).build();
+			Session session=cluster.connect();
+			Logger.log(cmdName+" - Database connection OK!");
+			ResultSet rs=null;
+			if (filename!=null) {
+				String [] sql=getSQLStatementFromFile(filename);
+				for (int i=0;i<sql.length;i++) {
+					rs=Database.executeSQL(cmdName,session,sql[i]);
+				}
+			}
+			session.close();
+			cluster.close();
+			return rs;
+		} catch (NoHostAvailableException e) {
+			Logger.log(cmdName+" - Database connection fail!");
+		} catch (Exception e) {
+			Logger.log(cmdName+" - Error - "+e.getMessage());
+		}
+		if (cluster!=null) {
+			cluster.close();
+		}
+		return null;
 	}
 	
 	private static ResultSet executeSQL(String cmdName, Session session, String statement) {

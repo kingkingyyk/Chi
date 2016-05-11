@@ -1,5 +1,5 @@
 #
-#Sat May 07 20:52:17 SGT 2016
+#Wed May 11 12:19:16 SGT 2016
 server.database.sql.controller.delete.file=sql/Controller/DeleteController.sql
 server.database.sql.sensor.queryall.file=sql/Sensor/QueryAllSensors.sql
 server.database.sql.user.queryall.file.default=sql/User/QueryAllUsers.sql
@@ -20,7 +20,7 @@ server.database.sql.user.create.file.default=sql/User/InsertUser.sql
 server.database.sql.sensor.updatename.file.default=sql/Sensor/UpdateSensorName.sql
 server.database.sql.user.delete.file=sql/User/DeleteUser.sql
 server.database.sql.sensor.queryname.file.default=sql/Sensor/QuerySensor.sql
-server.database.ip=10.85.8.57
+server.database.ip=10.226.8.88
 server.database.test.success.text=<html><font color\="green">Connection OK\!</font></html>
 server.database.sql.controller.updatename.file.default=sql/Controller/UpdateControllerName.sql
 server.database.sql.user.delete.file.default=sql/User/DeleteUser.sql

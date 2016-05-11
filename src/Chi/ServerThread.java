@@ -15,7 +15,7 @@ public class ServerThread extends Thread {
 	
 	public void run() {
 		DatagramSocket ss=null;
-		byte [] buffer=new byte [8192];
+		byte [] buffer=new byte [8191];
 		DatagramPacket packet=new DatagramPacket(buffer,buffer.length);
 		try {
 			Logger.log("Listening Server - StartP2 - Opening port "+Config.getConfig(Config.CONFIG_SERVER_INCOMING_PORT_KEY));
@@ -32,10 +32,18 @@ public class ServerThread extends Thread {
 				try {
 					ss.receive(packet);
 					if (this.running) {
-						String cName=new StringTokenizer(new String(buffer,0,63),Config.SENSOR_DATA_DELIMITER).nextToken();
-						String sName=new StringTokenizer(new String(buffer,64,127),Config.SENSOR_DATA_DELIMITER).nextToken();
-						double value=Double.parseDouble(new StringTokenizer(new String(buffer,128,8191),Config.SENSOR_DATA_DELIMITER).nextToken());
-						ServerToDatabase.queueData(cName,sName,value);
+						int packetLength=0;
+						for (;buffer[packetLength]!=0 && packetLength<buffer.length;packetLength++) {
+						}
+						String received=new String(buffer,0,packetLength);
+						Logger.log("Listening Server - Received packet - "+received);
+						StringTokenizer st=new StringTokenizer(received,Config.SENSOR_DATA_DELIMITER);
+						if (st.countTokens()==3) {
+							String cName=st.nextToken();
+							String sName=st.nextToken();
+							double value=Double.parseDouble(st.nextToken());
+							ServerToDatabase.queueData(cName,sName,value);
+						}
 					}
 					packet.setLength(buffer.length);
 				} catch (IOException e) {

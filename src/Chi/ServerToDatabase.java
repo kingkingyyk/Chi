@@ -31,7 +31,12 @@ public class ServerToDatabase {
 		Logger.log("Database Writer - Queued Data : "+d.toString());
 		
 		if (queue.size()==1) {
-			writeToDatabase();
+			Thread t=new Thread() {
+				public void run() {
+					writeToDatabase();
+				}
+			};
+			t.start();
 		}
 	}
 	

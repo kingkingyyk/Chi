@@ -4,8 +4,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
+
+import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.Row;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JSeparator;
@@ -162,6 +167,16 @@ public class SplashScreen extends JFrame {
 		contentPane.add(btnViewSensors);
 		
 		JButton btnViewReadings = new JButton("View Readings");
+		btnViewReadings.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ResultSet rs=Database.getSensorReading(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+				Iterator<Row> rows=rs.iterator();
+				while (rows.hasNext()) {
+					Row r=rows.next();
+					System.out.println(r.getString(0)+";"+r.getString(1)+";"+r.getTimestamp(2)+";"+r.getDouble(3));
+				}
+			}
+		});
 		btnViewReadings.setBounds(10, 235, 119, 23);
 		contentPane.add(btnViewReadings);
 	}

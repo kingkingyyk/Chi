@@ -15,7 +15,7 @@ public class Config {
 	public static final String CONFIG_FOLDER_PATH="conf";
 	public static final String CONFIG_FILE_NAME="chi_conf.sh";
 
-	public static final String SENSOR_DATA_DELIMITER=Character.toString((char)0);
+	public static final String SENSOR_DATA_DELIMITER=":";
 	public static final String DATABASE_SQL_PATH="sql";
 	
 	private static Properties prop;
@@ -35,6 +35,7 @@ public class Config {
 	public static final String DATABASE_CREATE_TABLES_SQL_FILE_KEY="server.database.sql.createtables.file";
 	public static final String DATABASE_RESET_SQL_FILE_KEY="server.database.sql.reset.file";
 	public static final String DATABASE_RECORD_READING_SQL_FILE_KEY="server.database.sql.recordreading";
+	public static final String DATABASE_RECORD_GETTING_SQL_FILE_KEY="server.database.sql.recordgetting";
 	
 	public static final String DATABASE_CREATE_USER_SQL_FILE_KEY="server.database.sql.user.create.file";
 	public static final String DATABASE_DELETE_USER_SQL_FILE_KEY="server.database.sql.user.delete.file";
@@ -90,6 +91,7 @@ public class Config {
 	public static final String DATABASE_QUERY_SENSOR_ALL_SQL_FILE_DEFAULT="Sensor/QueryAllSensors.sql";
 	//Database - Reading
 	public static final String DATABASE_RECORD_READING_SQL_FILE_DEFAULT="Reading/RecordReading.sql";
+	public static final String DATABASE_RECORD_GETTING_SQL_FILE_DEFAULT="Reading/QueryReading.sql";
 	
 	public static void setConfig (String key, String value) {
 		prop.setProperty(key,value);
@@ -134,6 +136,7 @@ public class Config {
 		Config.setConfig(DATABASE_CREATE_TABLES_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_CREATE_TABLES_SQL_FILE_DEFAULT);
 		Config.setConfig(DATABASE_RESET_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_RESET_SQL_FILE_DEFAULT);
 		Config.setConfig(DATABASE_RECORD_READING_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_RECORD_READING_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_RECORD_GETTING_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_RECORD_GETTING_SQL_FILE_DEFAULT);
 		
 		Config.setConfig(DATABASE_CREATE_USER_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_CREATE_USER_SQL_FILE_DEFAULT);
 		Config.setConfig(DATABASE_DELETE_USER_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_DELETE_USER_SQL_FILE_DEFAULT);

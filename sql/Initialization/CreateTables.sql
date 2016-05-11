@@ -15,7 +15,7 @@ CREATE TABLE SensorReading(
 	SensorName varchar,
 	Time timestamp,
 	Value double,
-	PRIMARY KEY (ControllerName, SensorName)
+	PRIMARY KEY (ControllerName, SensorName, Time)
 )
 @
 CREATE TABLE Sensor(
@@ -30,5 +30,3 @@ CREATE TABLE User(
 	Password varchar,
 	Level int
 )
-@
-COMMIT
