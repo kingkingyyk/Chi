@@ -14,12 +14,14 @@ import java.util.Iterator;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JSeparator;
+import javax.swing.JTextField;
 
 public class SplashScreen extends JFrame {
 	private static final long serialVersionUID = -1439297640667763037L;
 	private JPanel contentPane;
 	private JButton btnStartServer;
 	private JButton btnStopServer;
+	private JTextField textFieldSQL;
 
 
 	public SplashScreen() {
@@ -143,26 +145,32 @@ public class SplashScreen extends JFrame {
 		contentPane.add(btnViewUsers);
 		
 		JButton btnCreateController = new JButton("Create Controller");
+		btnCreateController.setEnabled(false);
 		btnCreateController.setBounds(139, 126, 119, 23);
 		contentPane.add(btnCreateController);
 		
 		JButton btnDeleteController = new JButton("Delete Controller");
+		btnDeleteController.setEnabled(false);
 		btnDeleteController.setBounds(139, 157, 119, 23);
 		contentPane.add(btnDeleteController);
 		
 		JButton btnCreateSensor = new JButton("Create Sensor");
+		btnCreateSensor.setEnabled(false);
 		btnCreateSensor.setBounds(268, 126, 119, 23);
 		contentPane.add(btnCreateSensor);
 		
 		JButton btnDeleteSensor = new JButton("Delete Sensor");
+		btnDeleteSensor.setEnabled(false);
 		btnDeleteSensor.setBounds(268, 157, 119, 23);
 		contentPane.add(btnDeleteSensor);
 		
 		JButton btnViewControllers = new JButton("View Controllers");
+		btnViewControllers.setEnabled(false);
 		btnViewControllers.setBounds(139, 188, 119, 23);
 		contentPane.add(btnViewControllers);
 		
 		JButton btnViewSensors = new JButton("View Sensors");
+		btnViewSensors.setEnabled(false);
 		btnViewSensors.setBounds(268, 188, 119, 23);
 		contentPane.add(btnViewSensors);
 		
@@ -179,5 +187,19 @@ public class SplashScreen extends JFrame {
 		});
 		btnViewReadings.setBounds(10, 235, 119, 23);
 		contentPane.add(btnViewReadings);
+		
+		textFieldSQL = new JTextField();
+		textFieldSQL.setBounds(10, 269, 188, 20);
+		contentPane.add(textFieldSQL);
+		textFieldSQL.setColumns(10);
+		
+		JButton btnRunSQL = new JButton("Run SQL");
+		btnRunSQL.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Database.runSQL("Run SQL", Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)), textFieldSQL.getText());
+			}
+		});
+		btnRunSQL.setBounds(208, 268, 89, 23);
+		contentPane.add(btnRunSQL);
 	}
 }

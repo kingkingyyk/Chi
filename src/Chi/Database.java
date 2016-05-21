@@ -67,6 +67,30 @@ public class Database {
 		return false;
 	}
 	
+	public static boolean runSQL(String cmdName, String ip, int port, String sql) {
+		Cluster cluster=null;
+		try {
+			Logger.log(cmdName+" - Connecting to database : "+ip+":"+port);
+			cluster=Cluster.builder().withCredentials(Config.getConfig(Config.CONFIG_SERVER_DATABASE_USERNAME_KEY),Config.getConfig(Config.CONFIG_SERVER_DATABASE_PASSWORD_KEY))/*
+			*/.withPort(port)/*
+			*/.addContactPoint(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY)).build();
+			Session session=cluster.connect();
+			Logger.log(cmdName+" - Database connection OK!");
+			System.out.println("Result : "+Database.executeSQL(cmdName,session,sql).toString());
+			session.close();
+			cluster.close();
+			return true;
+		} catch (NoHostAvailableException e) {
+			Logger.log(cmdName+" - Database connection fail!");
+		} catch (Exception e) {
+			Logger.log(cmdName+" - Error - "+e.getMessage());
+		}
+		if (cluster!=null) {
+			cluster.close();
+		}
+		return false;
+	}
+	
 	private static boolean runSQLFromFile(String cmdName, String ip, int port, String filename) {
 		Logger.log("Database - Run SQL From File : "+filename);
 		Cluster cluster=null;
