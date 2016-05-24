@@ -135,7 +135,7 @@ public class SplashScreen extends JFrame {
 				Iterator<Row> rows=rs.iterator();
 				while (rows.hasNext()) {
 					Row r=rows.next();
-					System.out.println(r.getString(0)+";"+r.getString(1)+";"+r.getTimestamp(2)+";"+r.getDouble(3));
+					System.out.println(r.getTimestamp(2)+";"+r.getDouble(3));
 				}
 			}
 		});
