@@ -15,6 +15,7 @@ import javax.swing.JFileChooser;
 
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
@@ -101,6 +102,17 @@ public class SplashScreen extends JFrame {
 		JButton btnViewReadings = new JButton("View All Readings");
 		btnViewReadings.setBounds(10, 76, 377, 23);
 		panelSQL.add(btnViewReadings);
+		btnViewReadings.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ResultSet rs=Database.getSensorReading(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+				ArrayList<Row> rows=new ArrayList<>();
+				for (Row row : rs) {
+					rows.add(row);
+				}
+				ReadingGraph grp=new ReadingGraph(rows);
+				grp.setVisible(true);
+			}
+		});
 		
 		textFieldSQL = new JTextField();
 		textFieldSQL.setBounds(119, 11, 268, 20);
@@ -129,16 +141,7 @@ public class SplashScreen extends JFrame {
 			}
 		});
 		
-		btnViewReadings.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				ResultSet rs=Database.getSensorReading(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
-				Iterator<Row> rows=rs.iterator();
-				while (rows.hasNext()) {
-					Row r=rows.next();
-					System.out.println(r.getTimestamp(2)+";"+r.getDouble(3));
-				}
-			}
-		});
+
 		
 		JPanel panelUsers = new JPanel();
 		tabbedPane.addTab("Users", null, panelUsers, null);

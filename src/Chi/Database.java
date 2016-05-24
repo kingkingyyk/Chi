@@ -130,8 +130,10 @@ public class Database {
 			Logger.log(cmdName+" - Connecting to database : "+ip+":"+port);
 			cluster=Cluster.builder().withCredentials(Config.getConfig(Config.CONFIG_SERVER_DATABASE_USERNAME_KEY),Config.getConfig(Config.CONFIG_SERVER_DATABASE_PASSWORD_KEY))/*
 			*/.withPort(port)/*
-			*/.addContactPoint(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY)).build();
+			*/.addContactPoint(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY))/*
+			*/.build();
 			Session session=cluster.connect();
+			session=cluster.connect("Chi");
 			Logger.log(cmdName+" - Database connection OK!");
 			ResultSet rs=null;
 			if (filename!=null) {
