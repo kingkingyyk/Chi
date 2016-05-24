@@ -91,7 +91,7 @@ public class Database {
 		return false;
 	}
 	
-	private static boolean runSQLFromFile(String cmdName, String ip, int port, String filename) {
+	public static boolean runSQLFromFile(String cmdName, String ip, int port, String filename) {
 		Logger.log("Database - Run SQL From File : "+filename);
 		Cluster cluster=null;
 		try {
@@ -104,7 +104,9 @@ public class Database {
 			if (filename!=null) {
 				String [] sql=getSQLStatementFromFile(filename);
 				for (int i=0;i<sql.length;i++) {
-					Database.executeSQL(cmdName,session,sql[i]);
+					if (!sql[i].equals("")) {
+						Database.executeSQL(cmdName,session,sql[i]);
+					}
 				}
 			}
 			session.close();
