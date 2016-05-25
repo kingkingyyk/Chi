@@ -109,8 +109,7 @@ public class SplashScreen extends JFrame {
 				for (Row row : rs) {
 					rows.add(row);
 				}
-				ReadingGraph grp=new ReadingGraph(rows);
-				grp.setVisible(true);
+				ReadingExport.export(rows);
 			}
 		});
 		

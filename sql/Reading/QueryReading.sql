@@ -1,1 +1,1 @@
-SELECT * FROM Chi.SensorReading WHERE ControllerName='C1' AND SensorName='S1' AND time>='2006-12-17 00:00:00' AND time<='2006-12-18 00:00:00';
+SELECT * FROM Chi.SensorReading WHERE ControllerName='C1' AND SensorName='S1' LIMIT 1000;

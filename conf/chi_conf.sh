@@ -1,5 +1,5 @@
 #
-#Tue May 24 17:58:29 SGT 2016
+#Wed May 25 15:16:21 SGT 2016
 server.database.sql.controller.delete.file=sql/Controller/DeleteController.sql
 server.database.sql.sensor.queryall.file=sql/Sensor/QueryAllSensors.sql
 server.database.sql.user.queryall.file.default=sql/User/QueryAllUsers.sql

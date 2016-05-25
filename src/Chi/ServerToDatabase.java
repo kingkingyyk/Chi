@@ -43,7 +43,12 @@ public class ServerToDatabase {
 	private static void writeToDatabase() {
 		while (queue.size()>0) {
 			Data d=queue.poll();
-			Database.storeReading(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)), d.cname, d.sname, d.timestamp, d.reading);
+			boolean success=Database.storeReading(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)), d.cname, d.sname, d.timestamp, d.reading);
+			if (!success) {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {}
+			}
 		}
 	}
 }
