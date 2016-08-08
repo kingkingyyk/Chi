@@ -109,7 +109,7 @@ public class SplashScreen extends JFrame {
 				for (Row row : rs) {
 					rows.add(row);
 				}
-				ReadingExport.export(rows);
+				//ReadingExport.export(rows);
 			}
 		});
 		
