@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
@@ -34,7 +34,7 @@ public class Database {
 		return runSQLFromFileAndGetData("DB Get Sensor Reading",ip,port,Config.getConfig(Config.DATABASE_RECORD_GETTING_SQL_FILE_KEY));
 	}
 	
-	public static boolean storeReading (String ip, int port, String cn, String sn, Date time, double v) {
+	public static boolean storeReading (String ip, int port, String cn, String sn, Calendar time, double v) {
 		Logger.log("DB Store Reading : "+Config.getConfig(Config.DATABASE_RECORD_READING_SQL_FILE_KEY));
 		Cluster cluster=null;
 		try {
@@ -48,8 +48,15 @@ public class Database {
 			BoundStatement [] sql=getBoundSQLStatementFromFile(session,Config.getConfig(Config.DATABASE_RECORD_READING_SQL_FILE_KEY));
 			sql[0].setString(0, cn);
 			sql[0].setString(1, sn);
-			sql[0].setTimestamp(2, time);
-			sql[0].setDouble(3, v);
+			sql[0].setInt(2, time.get(Calendar.DAY_OF_WEEK));
+			sql[0].setInt(3, time.get(Calendar.DAY_OF_MONTH));
+			sql[0].setInt(4, time.get(Calendar.MONTH));
+			sql[0].setInt(5, time.get(Calendar.YEAR));
+			sql[0].setInt(6, time.get(Calendar.HOUR));
+			sql[0].setInt(7, time.get(Calendar.HOUR));
+			sql[0].setInt(8, time.get(Calendar.MINUTE));
+			sql[0].setInt(9, time.get(Calendar.SECOND));
+			sql[0].setDouble(10, v);
 			Database.executeSQL("DB Store Reading", session, sql[0]);
 			
 			session.close();

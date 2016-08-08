@@ -1,7 +1,7 @@
 package Chi;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ServerToDatabase {
@@ -11,7 +11,7 @@ public class ServerToDatabase {
 	private static class Data {
 		String cname;
 		String sname;
-		Date timestamp;
+		Calendar timestamp;
 		double reading;
 		
 		public String toString() {
@@ -25,7 +25,7 @@ public class ServerToDatabase {
 		Data d=new Data();
 		d.cname=cn;
 		d.sname=sn;
-		d.timestamp=new Date();
+		d.timestamp=Calendar.getInstance();
 		d.reading=r;
 		queue.add(d);
 		Logger.log("Database Writer - Queued Data : "+d.toString());

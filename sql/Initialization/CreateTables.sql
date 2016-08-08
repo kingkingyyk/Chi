@@ -14,8 +14,15 @@ CREATE TABLE SensorReading(
 	ControllerName varchar,
 	SensorName varchar,
 	Time timestamp,
+	DayInWeek int,
+	Day int,
+	Month int,
+	Year int,
+	Hour int,
+	Minute in,
+	Second int,
 	Value double,
-	PRIMARY KEY (ControllerName, SensorName, Time)
+	PRIMARY KEY (ControllerName, SensorName, Day, Month, Year, Hour, Minute, Second)
 )
 @
 CREATE TABLE Sensor(
