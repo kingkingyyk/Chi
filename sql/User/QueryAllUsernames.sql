@@ -1,0 +1,1 @@
+SELECT Username FROM Chi.User

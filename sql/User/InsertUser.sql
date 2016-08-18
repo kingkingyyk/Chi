@@ -1,3 +1,1 @@
-INSERT INTO User VALUES(?,?,?)
-@
-COMMIT
+INSERT INTO Chi.User(Username,Password,Level,Status,DateAdded) VALUES(?, ?, ?, ?, ?)

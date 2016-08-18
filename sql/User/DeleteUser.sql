@@ -1,3 +1,1 @@
-DELETE FROM User WHERE Username=?
-@
-COMMIT
+DELETE FROM Chi.User WHERE Username=?

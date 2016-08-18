@@ -1,3 +1,1 @@
-INSERT INTO Controller VALUES(?)
-@
-COMMIT
+INSERT INTO Chi.Controller VALUES(?)

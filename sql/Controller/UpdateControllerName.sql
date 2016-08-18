@@ -1,3 +1,1 @@
-UPDATE Controller SET ControllerName=? WHERE ControllerName=?
-@
-COMMIT
+UPDATE Chi.Controller SET ControllerName=? WHERE ControllerName=?

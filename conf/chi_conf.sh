@@ -1,11 +1,11 @@
 #
-#Thu Aug 18 13:49:58 SGT 2016
+#Thu Aug 18 17:06:22 SGT 2016
 server.database.sql.controller.delete.file=sql/Controller/DeleteController.sql
 server.database.sql.sensor.queryall.file=sql/Sensor/QueryAllSensors.sql
 server.database.sql.user.queryall.file.default=sql/User/QueryAllUsers.sql
 server.database.sql.user.queryname.file.default=sql/User/QueryUsername.sql
 server.database.sql.recordreading=sql/Reading/RecordReading.sql
-server.incoming.port=8080
+server.incoming.port=40000
 server.database.sql.reset.file.default=sql/Initialization/ResetDB.sql
 server.database.sql.init.file=sql/Initialization/InitDB.sql
 server.database.sql.sensor.updatename.file=sql/Sensor/UpdateSensorName.sql

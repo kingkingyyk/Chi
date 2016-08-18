@@ -1,1 +1,1 @@
-SELECT * FROM Controller WHERE ControllerName=?
+SELECT * FROM Chi.Controller WHERE ControllerName=?

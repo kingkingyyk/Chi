@@ -1,7 +1,7 @@
 package Chi;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.time.LocalDateTime;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ServerToDatabase {
@@ -11,7 +11,7 @@ public class ServerToDatabase {
 	private static class Data {
 		String cname;
 		String sname;
-		Calendar timestamp;
+		LocalDateTime timestamp;
 		double reading;
 		
 		public String toString() {
@@ -25,7 +25,7 @@ public class ServerToDatabase {
 		Data d=new Data();
 		d.cname=cn;
 		d.sname=sn;
-		d.timestamp=Calendar.getInstance();
+		d.timestamp=LocalDateTime.now();
 		d.reading=r;
 		queue.add(d);
 		Logger.log("Database Writer - Queued Data : "+d.toString());
@@ -43,7 +43,7 @@ public class ServerToDatabase {
 	private static void writeToDatabase() {
 		while (queue.size()>0) {
 			Data d=queue.poll();
-			boolean success=Database.storeReading(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)), d.cname, d.sname, d.timestamp, d.reading);
+			boolean success=DatabaseReading.storeReading(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)), d.cname, d.sname, d.timestamp, d.reading);
 			if (!success) {
 				try {
 					Thread.sleep(1000);

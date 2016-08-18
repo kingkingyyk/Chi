@@ -94,7 +94,7 @@ public class SplashScreen extends JFrame {
 		panelSQL.add(btnViewReadings);
 		btnViewReadings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ResultSet rs=Database.getSensorReading(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+				ResultSet rs=DatabaseReading.getSensorReading(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
 				ArrayList<Row> rows=new ArrayList<>();
 				for (Row row : rs) {
 					rows.add(row);
@@ -136,28 +136,17 @@ public class SplashScreen extends JFrame {
 		tabbedPane.addTab("Users", null, panelUsers, null);
 		panelUsers.setLayout(null);
 		
-		JButton btnCreateUser = new JButton("Create User");
-		btnCreateUser.setBounds(10, 11, 192, 23);
-		btnCreateUser.addActionListener(new ActionListener() {
-			@Override
+		JButton btnUserManagement = new JButton("User Management");
+		btnUserManagement.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+				FrameUserManagement f=FrameUserManagement.getInstance();
+				if (f.updateSuccess) {
+					f.setVisible(true);
+				}
 			}
-			
 		});
-		panelUsers.add(btnCreateUser);
-		
-		JButton btnViewUsers = new JButton("View Users");
-		btnViewUsers.setBounds(212, 11, 192, 23);
-		panelUsers.add(btnViewUsers);
-		
-		JButton btnModifyUser = new JButton("Modify User");
-		btnModifyUser.setBounds(10, 45, 192, 23);
-		panelUsers.add(btnModifyUser);
-		
-		JButton btnDeleteUser = new JButton("Delete User");
-		btnDeleteUser.setBounds(212, 45, 192, 23);
-		panelUsers.add(btnDeleteUser);
+		btnUserManagement.setBounds(10, 11, 192, 23);
+		panelUsers.add(btnUserManagement);
 		
 		JPanel panelSensor = new JPanel();
 		tabbedPane.addTab("Sensors", null, panelSensor, null);

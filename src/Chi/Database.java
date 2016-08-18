@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
-
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.KeyspaceMetadata;
@@ -30,11 +28,7 @@ public class Database {
 	public static boolean reset (String ip, int port) {
 		return runSQLFromFile("DB Reset",ip,port,Config.getConfig(Config.DATABASE_RESET_SQL_FILE_KEY));
 	}
-	
-	public static ResultSet getSensorReading (String ip, int port) {
-		return runSQLFromFileAndGetData("DB Get Sensor Reading",ip,port,Config.getConfig(Config.DATABASE_RECORD_GETTING_SQL_FILE_KEY));
-	}
-	
+
 	public static boolean testKeyspace (String ip, int port) {
 		Cluster cluster=null;
 		try {
@@ -52,46 +46,6 @@ public class Database {
 			Logger.log("DB Test Keyspace - Database connection fail!");
 		} catch (Exception e) {
 			Logger.log("DB Test Keyspace - Error - "+e.getMessage());
-		}
-		if (cluster!=null) {
-			cluster.close();
-		}
-		return false;
-	}
-	
-	public static boolean storeReading (String ip, int port, String cn, String sn, Calendar time, double v) {
-		Logger.log("DB Store Reading : "+Config.getConfig(Config.DATABASE_RECORD_READING_SQL_FILE_KEY));
-		Cluster cluster=null;
-		try {
-			Logger.log("DB Store Reading - Connecting to database : "+ip+":"+port);
-			cluster=Cluster.builder().withCredentials(Config.getConfig(Config.CONFIG_SERVER_DATABASE_USERNAME_KEY),Config.getConfig(Config.CONFIG_SERVER_DATABASE_PASSWORD_KEY))/*
-			*/.withPort(port)/*
-			*/.addContactPoint(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY)).build();
-			Session session=cluster.connect();
-			Logger.log("DB Store Reading - Database connection OK!");
-			
-			BoundStatement [] sql=getBoundSQLStatementFromFile(session,Config.getConfig(Config.DATABASE_RECORD_READING_SQL_FILE_KEY));
-			sql[0].setString(0, cn);
-			sql[0].setString(1, sn);
-			sql[0].setInt(2, time.get(Calendar.DAY_OF_WEEK));
-			sql[0].setInt(3, time.get(Calendar.DAY_OF_MONTH));
-			sql[0].setInt(4, time.get(Calendar.MONTH));
-			sql[0].setInt(5, time.get(Calendar.YEAR));
-			sql[0].setInt(6, time.get(Calendar.HOUR));
-			sql[0].setInt(7, time.get(Calendar.HOUR));
-			sql[0].setInt(8, time.get(Calendar.MINUTE));
-			sql[0].setInt(9, time.get(Calendar.SECOND));
-			sql[0].setDouble(10, v);
-			Database.executeSQL("DB Store Reading", session, sql[0]);
-			
-			session.close();
-			cluster.close();
-			return true;
-		} catch (NoHostAvailableException e) {
-			Logger.log("DB Store Reading - Database connection fail!");
-		} catch (Exception e) {
-			Logger.log("DB Store Reading - Error - "+e.getMessage());
-			e.printStackTrace();
 		}
 		if (cluster!=null) {
 			cluster.close();
@@ -155,7 +109,7 @@ public class Database {
 		return false;
 	}
 
-	private static ResultSet runSQLFromFileAndGetData(String cmdName, String ip, int port, String filename) {
+	protected static ResultSet runSQLFromFileAndGetData(String cmdName, String ip, int port, String filename) {
 		Logger.log("Database - Run SQL From File : "+filename);
 		Cluster cluster=null;
 		try {
@@ -188,21 +142,21 @@ public class Database {
 		return null;
 	}
 	
-	private static ResultSet executeSQL(String cmdName, Session session, String statement) {
+	protected static ResultSet executeSQL(String cmdName, Session session, String statement) {
 		Logger.log(cmdName+" - Execute SQL : "+statement);
 		ResultSet rs=session.execute(statement);
 		Logger.log(cmdName+" - SQL Result : "+rs.toString());
 		return rs;
 	}
 	
-	private static ResultSet executeSQL(String cmdName, Session session, BoundStatement statement) {
+	protected static ResultSet executeSQL(String cmdName, Session session, BoundStatement statement) {
 		Logger.log(cmdName+" - Execute SQL : "+statement.toString());
 		ResultSet rs=session.execute(statement);
 		Logger.log(cmdName+" - SQL Result : "+rs.toString());
 		return rs;
 	}
 	
-	private static String [] getSQLStatementFromFile(String path) throws IOException {
+	protected static String [] getSQLStatementFromFile(String path) throws IOException {
 		ArrayList<String> statements=new ArrayList<>();
 		StringBuilder sqlStatement=new StringBuilder();
 		BufferedReader br=new BufferedReader(new FileReader(path));
@@ -221,7 +175,7 @@ public class Database {
 		return statements.toArray(new String[statements.size()]);
 	}
 	
-	private static BoundStatement [] getBoundSQLStatementFromFile(Session ss, String path) throws IOException {
+	protected static BoundStatement [] getBoundSQLStatementFromFile(Session ss, String path) throws IOException {
 		String [] sql=getSQLStatementFromFile(path);
 		BoundStatement [] psql=new BoundStatement[sql.length];
 		for (int i=0;i<sql.length;i++) {

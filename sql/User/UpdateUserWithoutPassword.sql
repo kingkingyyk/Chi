@@ -1,0 +1,1 @@
+UPDATE Chi.User SET Level=?, Status=? WHERE Username=?

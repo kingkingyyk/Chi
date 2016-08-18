@@ -1,3 +1,1 @@
-DELETE FROM Controller WHERE ControllerName=?
-@
-COMMIT
+DELETE FROM Chi.Controller WHERE ControllerName=?

@@ -1,3 +1,1 @@
-UPDATE Sensor SET SensorName=? WHERE SensorName=?
-@
-COMMIT
+UPDATE Chi.Sensor SET SensorName=? WHERE SensorName=?

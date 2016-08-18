@@ -1,1 +1,1 @@
-INSERT INTO Chi.SensorReading(ControllerName,SensorName,Time,Value) VALUES(?, ?, ?, ?);
+INSERT INTO Chi.SensorReading(ControllerName,SensorName,TimeStp,Day,Month,Year,Hour,Minute,Second,Value) VALUES(? ,? ,? ,? ,? ,? ,? ,? ,?, ?);

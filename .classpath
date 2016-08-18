@@ -34,5 +34,7 @@
 	<classpathentry kind="lib" path="D:/Documents/King/EclipseProjects/Chi/lib/slf4j-api-1.7.7.jar"/>
 	<classpathentry kind="lib" path="D:/Documents/King/EclipseProjects/Chi/lib/snappy-java-1.0.5.jar"/>
 	<classpathentry kind="lib" path="D:/Documents/King/EclipseProjects/Chi/lib/swtgraphics2d.jar"/>
+	<classpathentry kind="lib" path="D:/Documents/King/EclipseProjects/Chi/lib/swt.jar"/>
+	<classpathentry kind="lib" path="D:/Documents/King/EclipseProjects/Chi/lib/swingx-all-1.6.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

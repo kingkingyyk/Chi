@@ -13,7 +13,7 @@ CREATE TABLE ControllerGroup(
 CREATE TABLE SensorReading(
 	ControllerName varchar,
 	SensorName varchar,
-	Time timestamp,
+	TimeStp timestamp,
 	DayInWeek int,
 	Day int,
 	Month int,
@@ -22,7 +22,7 @@ CREATE TABLE SensorReading(
 	Minute int,
 	Second int,
 	Value double,
-	PRIMARY KEY (ControllerName, SensorName, Day, Month, Year, Hour, Minute, Second)
+	PRIMARY KEY ((ControllerName, SensorName, Year, Month, Day), Hour, Minute, Second)
 )
 @
 CREATE TABLE Sensor(
@@ -34,7 +34,10 @@ CREATE TABLE Sensor(
 )
 @
 CREATE TABLE User(
-	Username varchar PRIMARY KEY,
+	Username varchar,
 	Password varchar,
-	Level int
+	Level int,
+	Status varchar,
+	DateAdded timestamp,
+	PRIMARY KEY (Username)
 )

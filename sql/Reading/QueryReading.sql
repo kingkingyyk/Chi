@@ -1,1 +1,1 @@
-SELECT * FROM Chi.SensorReading WHERE ControllerName='C1' AND SensorName='S1' LIMIT 1000;
+SELECT * FROM Chi.SensorReading WHERE ControllerName='C1' AND SensorName='S1';

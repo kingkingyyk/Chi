@@ -1,3 +1,1 @@
-INSERT INTO Sensor VALUES(?,?,?,?,?)
-@
-COMMIT
+INSERT INTO Chi.Sensor VALUES(?,?,?,?,?)

@@ -17,6 +17,7 @@ public class Config {
 
 	public static final String SENSOR_DATA_DELIMITER=":";
 	public static final String DATABASE_SQL_PATH="sql";
+	public static final String ICON_TEXTURE_PATH="/images";
 	
 	private static Properties prop;
 	
@@ -39,8 +40,10 @@ public class Config {
 	
 	public static final String DATABASE_CREATE_USER_SQL_FILE_KEY="server.database.sql.user.create.file";
 	public static final String DATABASE_DELETE_USER_SQL_FILE_KEY="server.database.sql.user.delete.file";
-	public static final String DATABASE_UPDATE_USER_PASSWORD_SQL_FILE_KEY="server.database.sql.user.updatepassword.file";
+	public static final String DATABASE_UPDATE_USER_W_PASSWORD_SQL_FILE_KEY="server.database.sql.user.updateWpassword.file";
+	public static final String DATABASE_UPDATE_USER_WO_PASSWORD_SQL_FILE_KEY="server.database.sql.user.updateWOpassword.file";
 	public static final String DATABASE_QUERY_USERNAME_SQL_FILE_KEY="server.database.sql.user.queryname.file";
+	public static final String DATABASE_QUERY_USERNAME_ALL_SQL_FILE_KEY="server.database.sql.user.queryallnames.file";
 	public static final String DATABASE_QUERY_USER_ALL_SQL_FILE_KEY="server.database.sql.user.queryall.file";
 	
 	public static final String DATABASE_CREATE_CONTROLLER_SQL_FILE_KEY="server.database.sql.controller.create.file";
@@ -73,9 +76,10 @@ public class Config {
 	//Database - User
 	public static final String DATABASE_CREATE_USER_SQL_FILE_DEFAULT="User/InsertUser.sql";
 	public static final String DATABASE_DELETE_USER_SQL_FILE_DEFAULT="User/DeleteUser.sql";
-	public static final String DATABASE_UPDATE_USER_PASSWORD_SQL_FILE_DEFAULT="User/UpdateUserPassword.sql";
-	public static final String DATABASE_UPDATE_USER_LEVEL_SQL_FILE_DEFAULT="User/UpdateUserLevel.sql";
+	public static final String DATABASE_UPDATE_USER_W_PASSWORD_SQL_FILE_DEFAULT="User/UpdateUserWithPassword.sql";
+	public static final String DATABASE_UPDATE_USER_WO_PASSWORD_SQL_FILE_DEFAULT="User/UpdateUserWithoutPassword.sql";
 	public static final String DATABASE_QUERY_USERNAME_SQL_FILE_DEFAULT="User/QueryUsername.sql";
+	public static final String DATABASE_QUERY_USERNAME_ALL_SQL_FILE_DEFAULT="User/QueryAllUsernames.sql";
 	public static final String DATABASE_QUERY_USER_ALL_SQL_FILE_DEFAULT="User/QueryAllUsers.sql";
 	//Database - Controller
 	public static final String DATABASE_CREATE_CONTROLLER_SQL_FILE_DEFAULT="Controller/InsertController.sql";
@@ -140,8 +144,10 @@ public class Config {
 		
 		Config.setConfig(DATABASE_CREATE_USER_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_CREATE_USER_SQL_FILE_DEFAULT);
 		Config.setConfig(DATABASE_DELETE_USER_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_DELETE_USER_SQL_FILE_DEFAULT);
-		Config.setConfig(DATABASE_UPDATE_USER_PASSWORD_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_UPDATE_USER_PASSWORD_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_UPDATE_USER_W_PASSWORD_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_UPDATE_USER_W_PASSWORD_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_UPDATE_USER_WO_PASSWORD_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_UPDATE_USER_WO_PASSWORD_SQL_FILE_DEFAULT);
 		Config.setConfig(DATABASE_QUERY_USERNAME_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_QUERY_USERNAME_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_QUERY_USERNAME_ALL_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_QUERY_USERNAME_ALL_SQL_FILE_DEFAULT);
 		Config.setConfig(DATABASE_QUERY_USER_ALL_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_QUERY_USER_ALL_SQL_FILE_DEFAULT);
 
 		Config.setConfig(DATABASE_CREATE_CONTROLLER_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_CREATE_CONTROLLER_SQL_FILE_DEFAULT);

@@ -1,1 +1,1 @@
-SELECT * FROM Controller
+SELECT * FROM Chi.Controller
