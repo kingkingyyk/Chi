@@ -1,3 +1,3 @@
-INSERT INTO Sensor VALUES(?,?,?,?)
+INSERT INTO Sensor VALUES(?,?,?,?,?)
 @
 COMMIT

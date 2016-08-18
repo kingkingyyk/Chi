@@ -8,6 +8,7 @@ import java.util.Calendar;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.KeyspaceMetadata;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.exceptions.NoHostAvailableException;
@@ -32,6 +33,30 @@ public class Database {
 	
 	public static ResultSet getSensorReading (String ip, int port) {
 		return runSQLFromFileAndGetData("DB Get Sensor Reading",ip,port,Config.getConfig(Config.DATABASE_RECORD_GETTING_SQL_FILE_KEY));
+	}
+	
+	public static boolean testKeyspace (String ip, int port) {
+		Cluster cluster=null;
+		try {
+			Logger.log("DB Test Keyspace - Connecting to database : "+ip+":"+port);
+			cluster=Cluster.builder().withCredentials(Config.getConfig(Config.CONFIG_SERVER_DATABASE_USERNAME_KEY),Config.getConfig(Config.CONFIG_SERVER_DATABASE_PASSWORD_KEY))/*
+			*/.withPort(port)/*
+			*/.addContactPoint(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY)).build();
+			Session session=cluster.connect();
+			Logger.log("DB Test Keyspace - Database connection OK!");
+			KeyspaceMetadata ks=cluster.getMetadata().getKeyspace(Config.APP_NAME);
+			session.close();
+			cluster.close();
+			return ks!=null;
+		} catch (NoHostAvailableException e) {
+			Logger.log("DB Test Keyspace - Database connection fail!");
+		} catch (Exception e) {
+			Logger.log("DB Test Keyspace - Error - "+e.getMessage());
+		}
+		if (cluster!=null) {
+			cluster.close();
+		}
+		return false;
 	}
 	
 	public static boolean storeReading (String ip, int port, String cn, String sn, Calendar time, double v) {

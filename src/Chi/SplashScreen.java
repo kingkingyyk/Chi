@@ -2,24 +2,18 @@ package Chi;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
-
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
-
-import javafx.stage.FileChooser;
-
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
-import javax.swing.JSeparator;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JTabbedPane;
 
@@ -83,16 +77,12 @@ public class SplashScreen extends JFrame {
 		tabbedPane.addTab("Database", null, panelDatabase, null);
 		panelDatabase.setLayout(null);
 		
-		JButton btnInitDatabase = new JButton("Init Database");
-		btnInitDatabase.setBounds(42, 5, 97, 23);
-		panelDatabase.add(btnInitDatabase);
-		
 		JButton btnCreateTables = new JButton("Create Tables");
-		btnCreateTables.setBounds(156, 5, 99, 23);
+		btnCreateTables.setBounds(10, 5, 109, 23);
 		panelDatabase.add(btnCreateTables);
 		
 		JButton btnResetDatabase = new JButton("Reset Database");
-		btnResetDatabase.setBounds(265, 5, 109, 23);
+		btnResetDatabase.setBounds(10, 35, 109, 23);
 		panelDatabase.add(btnResetDatabase);
 		
 		JPanel panelSQL = new JPanel();
@@ -205,21 +195,38 @@ public class SplashScreen extends JFrame {
 		});
 		btnResetDatabase.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-            	Database.reset(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+				boolean flag=Database.testKeyspace(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+				if (!flag) {
+            		JOptionPane.showMessageDialog(SplashScreen.this,"No matching keyspace to reset!",Config.APP_NAME,JOptionPane.INFORMATION_MESSAGE);
+            		return;
+				}
+            	flag=Database.reset(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+            	if (flag) {
+            		JOptionPane.showMessageDialog(SplashScreen.this,"Keyspace reset successully!",Config.APP_NAME,JOptionPane.INFORMATION_MESSAGE);
+            	} else {
+            		JOptionPane.showMessageDialog(SplashScreen.this,"Failed to reset keyspace!\nPlease check the IP and the availability of the Cassandra server.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
+            	}
 			}
 		});
 		btnCreateTables.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-            	Database.createTables(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
-			}
-		});
-		btnInitDatabase.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
-                    	Database.freshStart(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
-                    }
-                });
+				boolean flag=Database.testKeyspace(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+				if (!flag) {
+					flag=Database.freshStart(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+                	if (flag) {
+                		JOptionPane.showMessageDialog(SplashScreen.this,"Keyspace created successfully!",Config.APP_NAME,JOptionPane.INFORMATION_MESSAGE);
+					} else { 
+                		JOptionPane.showMessageDialog(SplashScreen.this,"Failed to create keyspace!\nPlease check the IP and the availability of the Cassandra server.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
+                		return;
+                	}
+				}
+				flag=Database.createTables(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+            	if (flag) {
+            		JOptionPane.showMessageDialog(SplashScreen.this,"Tables created successfully!",Config.APP_NAME,JOptionPane.INFORMATION_MESSAGE);
+				} else { 
+            		JOptionPane.showMessageDialog(SplashScreen.this,"Failed to create table!",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
+            		return;
+            	}
 			}
 		});
 		btnStopServer.addActionListener(new ActionListener() {

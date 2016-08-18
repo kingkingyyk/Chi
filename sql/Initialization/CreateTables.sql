@@ -19,7 +19,7 @@ CREATE TABLE SensorReading(
 	Month int,
 	Year int,
 	Hour int,
-	Minute in,
+	Minute int,
 	Second int,
 	Value double,
 	PRIMARY KEY (ControllerName, SensorName, Day, Month, Year, Hour, Minute, Second)
@@ -29,7 +29,8 @@ CREATE TABLE Sensor(
 	SensorName varchar PRIMARY KEY,
 	Class varchar,
 	MinValue double,
-	MaxValue double
+	MaxValue double,
+	TransformationFactor double
 )
 @
 CREATE TABLE User(

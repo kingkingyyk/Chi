@@ -4,8 +4,10 @@ import javax.swing.UIManager;
 
 public class Chi {
 
-	public static void main (String [] args) throws Exception {
-    	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+	public static void main (String [] args) {
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {}
 		
 		Logger.log("Reading configuration started.");
 		Config.initialize();
