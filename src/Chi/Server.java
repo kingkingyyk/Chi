@@ -3,7 +3,9 @@ package Chi;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.Socket;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 
 public class Server {
 	private static FileOutputStream fileLocker;
@@ -61,11 +63,12 @@ public class Server {
 			isStarted=false;
 			
 			Server.listeningThread.setFlag(false);
+			
 			//Send a dummy packet to notify the server to shut down.
-			Socket clientSc=new Socket("localhost",Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_INCOMING_PORT_KEY)));
-			clientSc.getOutputStream().write(1);
-			clientSc.getOutputStream().close();
-			clientSc.close();
+			DatagramPacket packet=new DatagramPacket(new byte [1],1,InetAddress.getByName("localhost"),Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_INCOMING_PORT_KEY)));
+			DatagramSocket dsocket=new DatagramSocket();
+			dsocket.send(packet);
+			dsocket.close();
 		} catch (IOException e) {
 			Logger.log("Listening server - StopP1 - "+e.getMessage());
 		}

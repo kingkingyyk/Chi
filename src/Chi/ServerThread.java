@@ -5,6 +5,8 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.util.StringTokenizer;
 
+import javax.swing.JOptionPane;
+
 public class ServerThread extends Thread {
 	private boolean running;
 	
@@ -21,6 +23,7 @@ public class ServerThread extends Thread {
 			Logger.log("Listening Server - StartP2 - Opening port "+Config.getConfig(Config.CONFIG_SERVER_INCOMING_PORT_KEY));
 			ss=new DatagramSocket(Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_INCOMING_PORT_KEY)));
 		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Fail to start server : "+e.getMessage(),Config.APP_NAME,JOptionPane.ERROR);
 			Logger.log("Listening Server - StartP2 - Error - "+e.getMessage());
 		}
 		if (ss==null) {
@@ -46,11 +49,12 @@ public class ServerThread extends Thread {
 						}
 					}
 					packet.setLength(buffer.length);
-				} catch (IOException e) {
+				} catch (Exception e) {
 					Logger.log("Listening Server - Error - "+e.getMessage());
 				}
 			}
 			Logger.log("Listening Server - StopP2 - Stop listening");
+			ss.close();
 		}
 	}
 }

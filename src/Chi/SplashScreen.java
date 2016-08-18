@@ -138,6 +138,13 @@ public class SplashScreen extends JFrame {
 		
 		JButton btnCreateUser = new JButton("Create User");
 		btnCreateUser.setBounds(10, 11, 192, 23);
+		btnCreateUser.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+			
+		});
 		panelUsers.add(btnCreateUser);
 		
 		JButton btnViewUsers = new JButton("View Users");
@@ -195,38 +202,65 @@ public class SplashScreen extends JFrame {
 		});
 		btnResetDatabase.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				boolean flag=Database.testKeyspace(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
-				if (!flag) {
-            		JOptionPane.showMessageDialog(SplashScreen.this,"No matching keyspace to reset!",Config.APP_NAME,JOptionPane.INFORMATION_MESSAGE);
-            		return;
-				}
-            	flag=Database.reset(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
-            	if (flag) {
-            		JOptionPane.showMessageDialog(SplashScreen.this,"Keyspace reset successully!",Config.APP_NAME,JOptionPane.INFORMATION_MESSAGE);
-            	} else {
-            		JOptionPane.showMessageDialog(SplashScreen.this,"Failed to reset keyspace!\nPlease check the IP and the availability of the Cassandra server.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
-            	}
+				WaitUI u=new WaitUI();
+				u.setProgressBarMin(1);
+				u.setProgressBarMax(3);
+				Thread t=new Thread() {
+					public void run () {
+						u.setText("Step (1/2) Checking keyspace existence");
+						u.setProgressBarValue(2);
+						boolean flag=Database.testKeyspace(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+						if (!flag) {
+		            		JOptionPane.showMessageDialog(SplashScreen.this,"No matching keyspace to reset!",Config.APP_NAME,JOptionPane.INFORMATION_MESSAGE);
+		            		u.dispose();
+		            		return;
+						}
+						u.setText("Step (2/2) Reseting keyspace");
+						u.setProgressBarValue(3);
+		            	flag=Database.reset(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+		            	if (flag) {
+		            		JOptionPane.showMessageDialog(SplashScreen.this,"Keyspace reset successully!",Config.APP_NAME,JOptionPane.INFORMATION_MESSAGE);
+		            	} else {
+		            		JOptionPane.showMessageDialog(SplashScreen.this,"Failed to reset keyspace!\nPlease check the availability of the Cassandra server.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
+		            	}
+		            	u.dispose();
+					}
+				};
+				t.start();
+				u.setVisible(true);
 			}
 		});
 		btnCreateTables.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				boolean flag=Database.testKeyspace(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
-				if (!flag) {
-					flag=Database.freshStart(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
-                	if (flag) {
-                		JOptionPane.showMessageDialog(SplashScreen.this,"Keyspace created successfully!",Config.APP_NAME,JOptionPane.INFORMATION_MESSAGE);
-					} else { 
-                		JOptionPane.showMessageDialog(SplashScreen.this,"Failed to create keyspace!\nPlease check the IP and the availability of the Cassandra server.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
-                		return;
-                	}
-				}
-				flag=Database.createTables(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
-            	if (flag) {
-            		JOptionPane.showMessageDialog(SplashScreen.this,"Tables created successfully!",Config.APP_NAME,JOptionPane.INFORMATION_MESSAGE);
-				} else { 
-            		JOptionPane.showMessageDialog(SplashScreen.this,"Failed to create table!",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
-            		return;
-            	}
+				WaitUI u=new WaitUI();
+				u.setProgressBarMin(1);
+				u.setProgressBarMax(3);
+				Thread t=new Thread() {
+					public void run () {
+						u.setText("Step (1/2) Checking keyspace existence");
+						u.setProgressBarValue(2);
+						boolean flag=Database.testKeyspace(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+						if (!flag) {
+							flag=Database.freshStart(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+		                	if (!flag) {
+		                		JOptionPane.showMessageDialog(SplashScreen.this,"Failed to create keyspace!\nPlease check the availability of the Cassandra server.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
+				            	u.dispose();
+				            	return;
+		                	}
+						}
+						u.setText("Step (2/2) Creating tables");
+						u.setProgressBarValue(3);
+						flag=Database.createTables(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+		            	if (flag) {
+		            		JOptionPane.showMessageDialog(SplashScreen.this,"Tables created successfully!",Config.APP_NAME,JOptionPane.INFORMATION_MESSAGE);
+						} else { 
+		            		JOptionPane.showMessageDialog(SplashScreen.this,"Failed to create table!\nPlease check if existing table is removed.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
+		            	}
+		            	u.dispose();
+					}
+				};
+				t.start();
+				u.setVisible(true);
 			}
 		});
 		btnStopServer.addActionListener(new ActionListener() {
