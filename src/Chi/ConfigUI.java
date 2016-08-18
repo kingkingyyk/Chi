@@ -117,7 +117,7 @@ public class ConfigUI extends JDialog {
                     	lblTestDatabaseResult.setText("Attempting to connect...");
                         SwingUtilities.invokeLater(new Runnable() {
                             public void run() {
-                            	if (Database.testConnection(textFieldDatabaseIP.getText(), Integer.parseInt(textFieldDatabasePort.getText()))) {
+                            	if (DatabaseCassandra.testConnection(textFieldDatabaseIP.getText(), Integer.parseInt(textFieldDatabasePort.getText()))) {
                             		lblTestDatabaseResult.setText(Config.getConfig(Config.CONFIG_SERVER_DATABASE_TEST_OK_KEY));
                             	} else {
                             		lblTestDatabaseResult.setText(Config.getConfig(Config.CONFIG_SERVER_DATABASE_TEST_FAIL_KEY));

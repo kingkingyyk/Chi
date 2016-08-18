@@ -1,1 +1,1 @@
-SELECT Username,Password,Level,Status,DateAdded FROM Chi.User
+SELECT Username,Password,Level,Status,DateAdded FROM User

@@ -1,1 +1,1 @@
-SELECT * FROM Chi.User WHERE Username=?
+SELECT * FROM User WHERE Username=?

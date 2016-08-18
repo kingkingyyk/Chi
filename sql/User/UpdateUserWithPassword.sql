@@ -1,1 +1,1 @@
-UPDATE Chi.User SET Password=?, Level=?, Status=? WHERE Username=?
+UPDATE User SET Password=?, Level=?, Status=? WHERE Username=?

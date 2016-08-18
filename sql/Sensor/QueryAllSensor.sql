@@ -1,1 +1,1 @@
-SELECT * FROM Chi.Sensor
+SELECT * FROM Sensor

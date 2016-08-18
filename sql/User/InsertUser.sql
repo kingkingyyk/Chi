@@ -1,1 +1,1 @@
-INSERT INTO Chi.User(Username,Password,Level,Status,DateAdded) VALUES(?, ?, ?, ?, ?)
+INSERT INTO User(Username,Password,Level,Status,DateAdded) VALUES(?, ?, ?, ?, ?)

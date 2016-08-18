@@ -1,1 +1,1 @@
-INSERT INTO Chi.Sensor VALUES(?,?,?,?,?)
+INSERT INTO Sensor (SensorName,Class,MinValue,MaxValue,TransformationFactor) VALUES(?,?,?,?,?)

@@ -1,1 +1,1 @@
-SELECT Username FROM Chi.User
+SELECT Username FROM User

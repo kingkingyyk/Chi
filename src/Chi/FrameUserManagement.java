@@ -5,20 +5,18 @@ import java.awt.Component;
 import java.awt.SystemColor;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Row;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.GroupLayout;
@@ -237,19 +235,18 @@ public class FrameUserManagement extends JFrame {
 				if (rs!=null) {
 					rootRow=new UserTableRow(null);
 					list.clear();
-					for (Row r : rs) {
-						usernameDB.add(r.getString(0));
-						Object [] o={r.getString(0),r.getString(1),r.getInt(2),r.getString(3),r.getTimestamp(4)};
-						UserTableRow utr=new UserTableRow(o);
-						rootRow.addRow(utr);
-						list.add(o);
-					}
+					try {
+						while (rs.next()) {
+							usernameDB.add(rs.getString(1));
+							Object [] o={rs.getString(1),rs.getString(2),rs.getInt(3),rs.getString(4),rs.getTimestamp(5)};
+							UserTableRow utr=new UserTableRow(o);
+							rootRow.addRow(utr);
+							list.add(o);
+						}
+					} catch (SQLException e) {e.printStackTrace();}
 					createTable();
 					table.setTreeTableModel(new UserTableModel(rootRow));
 					updateSuccess=true;
-				} else {
-					Logger.log("FrameUserManagement updateUserTable - Error reading user database");
-					JOptionPane.showMessageDialog(null,"Error reading user database!",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
 				}
 				u.dispose();
 			}

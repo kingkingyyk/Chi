@@ -25,6 +25,7 @@ public class Config {
 	public static final String CONFIG_SERVER_INCOMING_PORT_KEY="server.incoming.port";
 	public static final String CONFIG_SERVER_DATABASE_IP_KEY="server.database.ip";
 	public static final String CONFIG_SERVER_DATABASE_PORT_KEY="server.database.port";
+	public static final String CONFIG_SERVER_DATABASE_HSQL_PORT_KEY="server.database.hsql.port";
 	public static final String CONFIG_SERVER_DATABASE_USERNAME_KEY="server.database.username";
 	public static final String CONFIG_SERVER_DATABASE_PASSWORD_KEY="server.database.password";
 	public static final String CONFIG_SERVER_DATABASE_TEST_OK_KEY="server.database.test.success.text";
@@ -32,9 +33,12 @@ public class Config {
 	//Listening server config
 	public static final String CONFIG_SERVER_LOCK_FILE_KEY="server.lock.file.name";
 	//Database
-	public static final String DATABASE_INIT_SQL_FILE_KEY="server.database.sql.init.file";
-	public static final String DATABASE_CREATE_TABLES_SQL_FILE_KEY="server.database.sql.createtables.file";
-	public static final String DATABASE_RESET_SQL_FILE_KEY="server.database.sql.reset.file";
+	public static final String DATABASE_INIT_SQL_CASSANDRA_FILE_KEY="server.database.sql.cassandra.init.file";
+	public static final String DATABASE_CREATE_TABLES_SQL_CASSANDRA_FILE_KEY="server.database.sql.cassandra.createtables.file";
+	public static final String DATABASE_RESET_SQL_CASSANDRA_FILE_KEY="server.database.cassandra.sql.reset.file";
+	public static final String DATABASE_CREATE_TABLES_SQL_HSQL_FILE_KEY="server.database.sql.hsql.createtables.file";
+	public static final String DATABASE_RESET_SQL_HSQL_FILE_KEY="server.database.cassandra.hsql.reset.file";
+	
 	public static final String DATABASE_RECORD_READING_SQL_FILE_KEY="server.database.sql.recordreading";
 	public static final String DATABASE_RECORD_GETTING_SQL_FILE_KEY="server.database.sql.recordgetting";
 	
@@ -63,6 +67,7 @@ public class Config {
 	private static final String CONFIG_SERVER_INCOMING_PORT_DEFAULT="40000";
 	private static final String CONFIG_SERVER_DATABASE_IP_DEFAULT="127.0.0.1";
 	private static final String CONFIG_SERVER_DATABASE_PORT_DEFAULT="9042";
+	private static final String CONFIG_SERVER_DATABASE_HSQL_PORT_DEFAULT="9001";
 	private static final String CONFIG_SERVER_DATABASE_USERNAME_DEFAULT="chi-admin";
 	private static final String CONFIG_SERVER_DATABASE_PASSWORD_DEFAULT="chi-admin";
 	private static final String CONFIG_SERVER_DATABASE_TEST_OK_DEFAULT="<html><font color=\"green\">Connection OK!</font></html>";
@@ -70,9 +75,12 @@ public class Config {
 	//Listening server
 	public static final String CONFIG_SERVER_LOCK_FILE_DEFAULT="CHI_LOCK";
 	//Database - Init
-	public static final String DATABASE_INIT_SQL_FILE_DEFAULT="Initialization/InitDB.sql";
-	public static final String DATABASE_CREATE_TABLES_SQL_FILE_DEFAULT="Initialization/CreateTables.sql";
-	public static final String DATABASE_RESET_SQL_FILE_DEFAULT="Initialization/ResetDB.sql";
+	public static final String DATABASE_INIT_SQL_CASSANDRA_FILE_DEFAULT="InitializationCassandra/InitDB.sql";
+	public static final String DATABASE_CREATE_TABLES_SQL_CASSANDRA_FILE_DEFAULT="InitializationCassandra/CreateTables.sql";
+	public static final String DATABASE_RESET_SQL_CASSANDRA_FILE_DEFAULT="InitializationCassandra/ResetDB.sql";
+	
+	public static final String DATABASE_CREATE_TABLES_SQL_HSQL_FILE_DEFAULT="InitializationHSQL/CreateTables.sql";
+	public static final String DATABASE_RESET_SQL_HSQL_FILE_DEFAULT="InitializationHSQL/ResetDB.sql";
 	//Database - User
 	public static final String DATABASE_CREATE_USER_SQL_FILE_DEFAULT="User/InsertUser.sql";
 	public static final String DATABASE_DELETE_USER_SQL_FILE_DEFAULT="User/DeleteUser.sql";
@@ -130,15 +138,19 @@ public class Config {
 		Config.setConfig(CONFIG_SERVER_INCOMING_PORT_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_INCOMING_PORT_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_DATABASE_IP_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_IP_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_DATABASE_PORT_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_PORT_DEFAULT);
+		Config.setConfig(CONFIG_SERVER_DATABASE_HSQL_PORT_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_HSQL_PORT_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_DATABASE_USERNAME_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_USERNAME_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_DATABASE_PASSWORD_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_PASSWORD_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_DATABASE_TEST_OK_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_TEST_OK_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_DATABASE_TEST_FAIL_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_TEST_FAIL_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_LOCK_FILE_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_LOCK_FILE_DEFAULT);
 		
-		Config.setConfig(DATABASE_INIT_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_INIT_SQL_FILE_DEFAULT);
-		Config.setConfig(DATABASE_CREATE_TABLES_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_CREATE_TABLES_SQL_FILE_DEFAULT);
-		Config.setConfig(DATABASE_RESET_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_RESET_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_INIT_SQL_CASSANDRA_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_INIT_SQL_CASSANDRA_FILE_DEFAULT);
+		Config.setConfig(DATABASE_CREATE_TABLES_SQL_CASSANDRA_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_CREATE_TABLES_SQL_CASSANDRA_FILE_DEFAULT);
+		Config.setConfig(DATABASE_RESET_SQL_CASSANDRA_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_RESET_SQL_CASSANDRA_FILE_DEFAULT);
+		Config.setConfig(DATABASE_CREATE_TABLES_SQL_HSQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_CREATE_TABLES_SQL_HSQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_RESET_SQL_HSQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_RESET_SQL_HSQL_FILE_DEFAULT);
+		
 		Config.setConfig(DATABASE_RECORD_READING_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_RECORD_READING_SQL_FILE_DEFAULT);
 		Config.setConfig(DATABASE_RECORD_GETTING_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_RECORD_GETTING_SQL_FILE_DEFAULT);
 		

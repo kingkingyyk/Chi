@@ -1,1 +1,1 @@
-DELETE FROM Chi.Sensor WHERE SensorName=?
+DELETE FROM Sensor WHERE SensorName=?

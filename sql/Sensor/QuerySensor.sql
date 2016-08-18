@@ -1,1 +1,1 @@
-SELECT * FROM Chi.Sensor WHERE SensorName=?
+SELECT * FROM Sensor WHERE SensorName=?

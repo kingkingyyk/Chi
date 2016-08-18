@@ -11,22 +11,22 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.exceptions.NoHostAvailableException;
 
-public class Database {
+public class DatabaseCassandra {
 
 	public static boolean testConnection(String ip, int port) {
 		return runSQLFromFile("DB Test Connection",ip,port,null);
 	}
 	
 	public static boolean freshStart (String ip, int port) {
-		return runSQLFromFile("DB Init",ip,port,Config.getConfig(Config.DATABASE_INIT_SQL_FILE_KEY));
+		return runSQLFromFile("DB Init",ip,port,Config.getConfig(Config.DATABASE_INIT_SQL_CASSANDRA_FILE_KEY));
 	}
 	
 	public static boolean createTables (String ip, int port) {
-		return runSQLFromFile("DB Create Tables",ip,port,Config.getConfig(Config.DATABASE_CREATE_TABLES_SQL_FILE_KEY));
+		return runSQLFromFile("DB Create Tables",ip,port,Config.getConfig(Config.DATABASE_CREATE_TABLES_SQL_CASSANDRA_FILE_KEY));
 	}
 	
 	public static boolean reset (String ip, int port) {
-		return runSQLFromFile("DB Reset",ip,port,Config.getConfig(Config.DATABASE_RESET_SQL_FILE_KEY));
+		return runSQLFromFile("DB Reset",ip,port,Config.getConfig(Config.DATABASE_RESET_SQL_CASSANDRA_FILE_KEY));
 	}
 
 	public static boolean testKeyspace (String ip, int port) {
@@ -62,7 +62,7 @@ public class Database {
 			*/.addContactPoint(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY)).build();
 			Session session=cluster.connect();
 			Logger.log(cmdName+" - Database connection OK!");
-			System.out.println("Result : "+Database.executeSQL(cmdName,session,sql).toString());
+			System.out.println("Result : "+executeSQL(cmdName,session,sql).toString());
 			session.close();
 			cluster.close();
 			return true;
@@ -91,7 +91,7 @@ public class Database {
 				String [] sql=getSQLStatementFromFile(filename);
 				for (int i=0;i<sql.length;i++) {
 					if (!sql[i].equals("")) {
-						Database.executeSQL(cmdName,session,sql[i]);
+						executeSQL(cmdName,session,sql[i]);
 					}
 				}
 			}
@@ -125,7 +125,7 @@ public class Database {
 			if (filename!=null) {
 				String [] sql=getSQLStatementFromFile(filename);
 				for (int i=0;i<sql.length;i++) {
-					rs=Database.executeSQL(cmdName,session,sql[i]);
+					rs=executeSQL(cmdName,session,sql[i]);
 				}
 			}
 			session.close();

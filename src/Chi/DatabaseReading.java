@@ -8,7 +8,7 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.exceptions.NoHostAvailableException;
 
-public class DatabaseReading extends Database{
+public class DatabaseReading extends DatabaseCassandra {
 
 	public static ResultSet getSensorReading (String ip, int port) {
 		return runSQLFromFileAndGetData("DB Get Sensor Reading",ip,port,Config.getConfig(Config.DATABASE_RECORD_GETTING_SQL_FILE_KEY));
@@ -37,7 +37,7 @@ public class DatabaseReading extends Database{
 			sql[0].setInt(8, time.getMinute());
 			sql[0].setInt(9, time.getSecond());
 			sql[0].setDouble(10, v);
-			Database.executeSQL("DB Store Reading", session, sql[0]);
+			executeSQL("DB Store Reading", session, sql[0]);
 			
 			session.close();
 			cluster.close();

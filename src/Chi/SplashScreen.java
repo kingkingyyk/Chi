@@ -73,6 +73,18 @@ public class SplashScreen extends JFrame {
 		panelServer.add(btnStopServer);
 		btnStopServer.setEnabled(false);
 		
+		JButton btnConfig = new JButton("Config");
+		panelServer.add(btnConfig);
+		btnConfig.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Logger.log("Config UI started.");
+				ConfigUI ui=new ConfigUI();
+				Logger.log("Config UI done.");
+				ui.setVisible(true);
+				Logger.log("Config UI closed.");
+			}
+		});
+		
 		JPanel panelDatabase = new JPanel();
 		tabbedPane.addTab("Database", null, panelDatabase, null);
 		panelDatabase.setLayout(null);
@@ -84,6 +96,23 @@ public class SplashScreen extends JFrame {
 		JButton btnResetDatabase = new JButton("Reset Database");
 		btnResetDatabase.setBounds(10, 35, 109, 23);
 		panelDatabase.add(btnResetDatabase);
+		
+		JButton btnUserManagement = new JButton("User Management");
+		btnUserManagement.setBounds(213, 5, 192, 23);
+		panelDatabase.add(btnUserManagement);
+		btnUserManagement.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				FrameUserManagement f=FrameUserManagement.getInstance();
+				if (f.updateSuccess) {
+					f.setVisible(true);
+				}
+			}
+		});
+		
+		JButton btnSensorManagement = new JButton("Sensor Management");
+		btnSensorManagement.setBounds(213, 35, 193, 23);
+		panelDatabase.add(btnSensorManagement);
+
 		
 		JPanel panelSQL = new JPanel();
 		tabbedPane.addTab("SQL", null, panelSQL, null);
@@ -113,7 +142,7 @@ public class SplashScreen extends JFrame {
 		panelSQL.add(btnRunSQL);
 		btnRunSQL.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Database.runSQL("Run SQL", Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)), textFieldSQL.getText());
+				DatabaseCassandra.runSQL("Run SQL", Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)), textFieldSQL.getText());
 			}
 		});
 		
@@ -125,92 +154,39 @@ public class SplashScreen extends JFrame {
 				JFileChooser fc=new JFileChooser();
 				if (fc.showOpenDialog(SplashScreen.this)==JFileChooser.APPROVE_OPTION) {
 					File selectedFile=fc.getSelectedFile();
-					Database.runSQLFromFile("Run SQL From File",Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)), selectedFile.getPath());
+					DatabaseCassandra.runSQLFromFile("Run SQL From File",Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)), selectedFile.getPath());
 				}
-			}
-		});
-		
-
-		
-		JPanel panelUsers = new JPanel();
-		tabbedPane.addTab("Users", null, panelUsers, null);
-		panelUsers.setLayout(null);
-		
-		JButton btnUserManagement = new JButton("User Management");
-		btnUserManagement.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				FrameUserManagement f=FrameUserManagement.getInstance();
-				if (f.updateSuccess) {
-					f.setVisible(true);
-				}
-			}
-		});
-		btnUserManagement.setBounds(10, 11, 192, 23);
-		panelUsers.add(btnUserManagement);
-		
-		JPanel panelSensor = new JPanel();
-		tabbedPane.addTab("Sensors", null, panelSensor, null);
-		panelSensor.setLayout(null);
-		
-		JButton btnCreateSensor = new JButton("Create Sensor");
-		btnCreateSensor.setBounds(10, 11, 193, 23);
-		panelSensor.add(btnCreateSensor);
-		
-		JButton btnViewSensors = new JButton("View Sensors");
-		btnViewSensors.setBounds(213, 11, 191, 23);
-		panelSensor.add(btnViewSensors);
-		
-		JButton btnDeleteSensor = new JButton("Delete Sensor");
-		btnDeleteSensor.setBounds(213, 45, 191, 23);
-		panelSensor.add(btnDeleteSensor);
-		
-		JButton btnModifySensor = new JButton("Modify Sensor");
-		btnModifySensor.setBounds(10, 45, 193, 23);
-		panelSensor.add(btnModifySensor);
-		
-		JPanel panelSettings = new JPanel();
-		tabbedPane.addTab("Settings", null, panelSettings, null);
-		
-		JButton btnManage = new JButton("Manage");
-		panelSettings.add(btnManage);
-		
-		JButton btnConfig = new JButton("Config");
-		panelSettings.add(btnConfig);
-		btnConfig.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Logger.log("Config UI started.");
-				ConfigUI ui=new ConfigUI();
-				Logger.log("Config UI done.");
-				ui.setVisible(true);
-				Logger.log("Config UI closed.");
-			}
-		});
-		btnManage.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
 		btnResetDatabase.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				WaitUI u=new WaitUI();
 				u.setProgressBarMin(1);
-				u.setProgressBarMax(3);
+				u.setProgressBarMax(4);
 				Thread t=new Thread() {
 					public void run () {
-						u.setText("Step (1/2) Checking keyspace existence");
+						u.setText("Step (1/3) Cassandra - Checking keyspace existence");
 						u.setProgressBarValue(2);
-						boolean flag=Database.testKeyspace(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+						boolean flag=DatabaseCassandra.testKeyspace(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
 						if (!flag) {
 		            		JOptionPane.showMessageDialog(SplashScreen.this,"No matching keyspace to reset!",Config.APP_NAME,JOptionPane.INFORMATION_MESSAGE);
-		            		u.dispose();
+		                	u.dispose();
 		            		return;
 						}
-						u.setText("Step (2/2) Reseting keyspace");
+						u.setText("Step (2/3) Cassandra - Reseting keyspace");
 						u.setProgressBarValue(3);
-		            	flag=Database.reset(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
-		            	if (flag) {
-		            		JOptionPane.showMessageDialog(SplashScreen.this,"Keyspace reset successully!",Config.APP_NAME,JOptionPane.INFORMATION_MESSAGE);
-		            	} else {
+		            	flag=DatabaseCassandra.reset(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+		            	if (!flag) {
 		            		JOptionPane.showMessageDialog(SplashScreen.this,"Failed to reset keyspace!\nPlease check the availability of the Cassandra server.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
+		            	}
+		            	
+						u.setText("Step (3/3) HSQL - Dropping tables");
+						u.setProgressBarValue(4);
+		            	flag=DatabaseHSQL.reset(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+		            	if (flag) {
+		            		JOptionPane.showMessageDialog(SplashScreen.this,"Dropped tables successully!",Config.APP_NAME,JOptionPane.INFORMATION_MESSAGE);
+		            	} else {
+		            		JOptionPane.showMessageDialog(SplashScreen.this,"Failed to drop tables!\nPlease check the availability of the HSQL server.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
 		            	}
 		            	u.dispose();
 					}
@@ -223,33 +199,41 @@ public class SplashScreen extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				WaitUI u=new WaitUI();
 				u.setProgressBarMin(1);
-				u.setProgressBarMax(3);
+				u.setProgressBarMax(4);
 				Thread t=new Thread() {
 					public void run () {
-						u.setText("Step (1/2) Checking keyspace existence");
+						u.setText("Step (1/3) Cassandra - Checking keyspace existence");
 						u.setProgressBarValue(2);
-						boolean flag=Database.testKeyspace(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+						boolean flag=DatabaseCassandra.testKeyspace(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
 						if (!flag) {
-							flag=Database.freshStart(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+							flag=DatabaseCassandra.freshStart(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
 		                	if (!flag) {
 		                		JOptionPane.showMessageDialog(SplashScreen.this,"Failed to create keyspace!\nPlease check the availability of the Cassandra server.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
-				            	u.dispose();
-				            	return;
+		                    	u.dispose();
+		                		return;
 		                	}
 						}
-						u.setText("Step (2/2) Creating tables");
+						u.setText("Step (2/3) Cassandra - Creating tables");
 						u.setProgressBarValue(3);
-						flag=Database.createTables(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+						flag=DatabaseCassandra.createTables(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+		            	if (!flag) {
+		            		JOptionPane.showMessageDialog(SplashScreen.this,"Failed to create table!\nPlease check if existing table is removed.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
+						}
+		            	
+						u.setText("Step (3/3) HSQL - Creating tables");
+						u.setProgressBarValue(4);
+						flag=DatabaseHSQL.createTables(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
 		            	if (flag) {
 		            		JOptionPane.showMessageDialog(SplashScreen.this,"Tables created successfully!",Config.APP_NAME,JOptionPane.INFORMATION_MESSAGE);
 						} else { 
 		            		JOptionPane.showMessageDialog(SplashScreen.this,"Failed to create table!\nPlease check if existing table is removed.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
-		            	}
+						}
 		            	u.dispose();
 					}
 				};
 				t.start();
 				u.setVisible(true);
+            	u.dispose();
 			}
 		});
 		btnStopServer.addActionListener(new ActionListener() {
