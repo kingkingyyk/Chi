@@ -3,10 +3,12 @@ A system built for Internet of Things that focuses on scalability
 + Supports remote management
 + Supports automated management
 + Web based UI
++ Server UI control
 
 Requires :
 + Apache Cassandra NoSQL
-+ Web Server to determined
++ HSQL
++ GWT
 
 Server Requirement :
 + Windows at the moment
@@ -16,4 +18,4 @@ Compile :
 + Eclipse
 
 ============================================
-Database Schema : http://ondras.zarovi.cz/sql/demo/
+Database Schema (Outdated) : http://ondras.zarovi.cz/sql/demo/
