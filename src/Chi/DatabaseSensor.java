@@ -28,7 +28,11 @@ public class DatabaseSensor extends DatabaseHSQL {
 				ps.setDouble(4, max);
 				ps.setDouble(5, trans);
 				ps.setString(6, unit);
-				Logger.log("DB Create Sensor - Execute");
+				Logger.log("DB Create Sensor - Execute "+ps.toString());
+				ps.execute();
+				
+				ps=c.prepareStatement(sql[1]);
+				Logger.log("DB Create Sensor - Execute "+ps.toString());
 				ps.execute();
 			}
 			c.close();
@@ -54,7 +58,11 @@ public class DatabaseSensor extends DatabaseHSQL {
 				ps.setDouble(4, trans);
 				ps.setString(5, unit);
 				ps.setString(6, sn);
-				Logger.log("DB Update Sensor - Execute");
+				Logger.log("DB Update Sensor - Execute "+ps.toString());
+				ps.execute();
+				
+				ps=c.prepareStatement(sql[1]);
+				Logger.log("DB Update Sensor - Execute "+ps.toString());
 				ps.execute();
 			}
 			c.close();
@@ -76,6 +84,10 @@ public class DatabaseSensor extends DatabaseHSQL {
 				PreparedStatement ps=c.prepareStatement(sql[0]);
 				ps.setString(1, sn);
 				Logger.log("DB Delete Sensor - Execute - "+ps.toString());
+				ps.execute();
+				
+				ps=c.prepareStatement(sql[1]);
+				Logger.log("DB Delete Sensor - Execute "+ps.toString());
 				ps.execute();
 			}
 			c.close();

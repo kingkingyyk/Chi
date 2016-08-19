@@ -1,5 +1,5 @@
 #
-#Fri Aug 19 12:58:19 SGT 2016
+#Fri Aug 19 17:25:18 SGT 2016
 server.database.sql.hsql.createtables.file=sql/InitializationHSQL/CreateTables.sql
 server.incoming.port.default=40000
 server.database.sql.user.queryall.file.default=sql/User/QueryAllUsers.sql

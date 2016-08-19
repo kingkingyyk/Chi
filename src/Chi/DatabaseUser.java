@@ -17,11 +17,11 @@ public class DatabaseUser extends DatabaseHSQL {
 	}
 	
 	public static boolean createUserCredential (String user, String pw, int lvl, String status) {
-		Logger.log("DB Create User Credential : "+Config.getConfig(Config.DATABASE_CREATE_USER_SQL_FILE_KEY));
+		Logger.log("DB Create User : "+Config.getConfig(Config.DATABASE_CREATE_USER_SQL_FILE_KEY));
 		try {
 			Connection c = getConnection();
 			if (c!=null) {
-				Logger.log("DB Create User Credential - Database connection OK!");
+				Logger.log("DB Create User - Database connection OK!");
 				String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_CREATE_USER_SQL_FILE_KEY));
 				PreparedStatement ps=c.prepareStatement(sql[0]);
 				ps.setString(1, user);
@@ -29,13 +29,17 @@ public class DatabaseUser extends DatabaseHSQL {
 				ps.setInt(3, lvl);
 				ps.setString(4, status);
 				ps.setTimestamp(5,Timestamp.valueOf(LocalDateTime.now()));
-				Logger.log("DB Create User Credential - Execute");
+				Logger.log("DB Create User - Execute");
+				ps.execute();
+				
+				ps=c.prepareStatement(sql[1]);
+				Logger.log("DB Create User - Execute "+ps.toString());
 				ps.execute();
 			}
 			c.close();
 			return true;
 		} catch (Exception e) {
-			Logger.log("DB Create User Credential - Error - "+e.getMessage());
+			Logger.log("DB Create User - Error - "+e.getMessage());
 			e.printStackTrace();
 		}
 		return false;
@@ -53,7 +57,11 @@ public class DatabaseUser extends DatabaseHSQL {
 				ps.setInt(2, lvl);
 				ps.setString(3, status);
 				ps.setString(4, user);
-				Logger.log("DB Update User Credential - Execute");
+				Logger.log("DB Update User Credential - Execute "+ps.toString());
+				ps.execute();
+				
+				ps=c.prepareStatement(sql[1]);
+				Logger.log("DB Update User Credential - Execute "+ps.toString());
 				ps.execute();
 			}
 			c.close();
@@ -76,7 +84,11 @@ public class DatabaseUser extends DatabaseHSQL {
 				ps.setInt(1, lvl);
 				ps.setString(2, status);
 				ps.setString(3, user);
-				Logger.log("DB Update User Credential/2 - Execute");
+				Logger.log("DB Update User Credential/2 - Execute "+ps.toString());
+				ps.execute();
+				
+				ps=c.prepareStatement(sql[1]);
+				Logger.log("DB Update User Credential/2 - Execute "+ps.toString());
 				ps.execute();
 			}
 			c.close();
@@ -89,21 +101,25 @@ public class DatabaseUser extends DatabaseHSQL {
 	}
 	
 	public static boolean deleteUser (String user) {
-		Logger.log("DB Update User Credential/2 : "+Config.getConfig(Config.DATABASE_DELETE_USER_SQL_FILE_KEY));
+		Logger.log("DB Delete User : "+Config.getConfig(Config.DATABASE_DELETE_USER_SQL_FILE_KEY));
 		try {
 			Connection c = getConnection();
 			if (c!=null) {
-				Logger.log("DB Update User Credential/2 - Database connection OK!");
+				Logger.log("DB Delete User - Database connection OK!");
 				String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_DELETE_USER_SQL_FILE_KEY));
 				PreparedStatement ps=c.prepareStatement(sql[0]);
 				ps.setString(1, user);
-				Logger.log("DB Update User Credential/2 - Execute");
+				Logger.log("DB Delete User - Execute "+ps.toString());
+				ps.execute();
+				
+				ps=c.prepareStatement(sql[1]);
+				Logger.log("DB Delete User - Execute "+ps.toString());
 				ps.execute();
 			}
 			c.close();
 			return true;
 		} catch (Exception e) {
-			Logger.log("DB Create User Credential/2 - Error - "+e.getMessage());
+			Logger.log("DB Delete User - Error - "+e.getMessage());
 			e.printStackTrace();
 		}
 		return false;
