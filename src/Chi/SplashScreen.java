@@ -112,6 +112,10 @@ public class SplashScreen extends JFrame {
 		JButton btnSensor = new JButton("Sensor");
 		btnSensor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				FrameSensorManagement f=FrameSensorManagement.getInstance();
+				if (f.updateSuccess) {
+					f.setVisible(true);
+				}
 			}
 		});
 		btnSensor.setBounds(129, 35, 130, 23);
@@ -136,7 +140,6 @@ public class SplashScreen extends JFrame {
 		});
 		btnSensorClass.setBounds(269, 5, 135, 23);
 		panelDatabase.add(btnSensorClass);
-
 		
 		JPanel panelSQL = new JPanel();
 		tabbedPane.addTab("SQL", null, panelSQL, null);

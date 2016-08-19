@@ -75,7 +75,7 @@ public class DatabaseSensor extends DatabaseHSQL {
 				String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_DELETE_SENSOR_SQL_FILE_KEY));
 				PreparedStatement ps=c.prepareStatement(sql[0]);
 				ps.setString(1, sn);
-				Logger.log("DB Delete Sensor - Execute");
+				Logger.log("DB Delete Sensor - Execute - "+ps.toString());
 				ps.execute();
 			}
 			c.close();

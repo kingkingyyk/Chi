@@ -63,8 +63,14 @@ public class DatabaseSensorClass extends DatabaseHSQL {
 				String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_DELETE_SENSOR_CLASS_SQL_FILE_KEY));
 				PreparedStatement ps=c.prepareStatement(sql[0]);
 				ps.setString(1, oldN);
-				Logger.log("DB Delete Sensor Class - Execute");
+				Logger.log("DB Delete Sensor Class - Execute - "+ps.toString());
 				ps.execute();
+				
+				ps=c.prepareStatement(sql[1]);
+				ps.setString(1, oldN);
+				Logger.log("DB Delete Sensor Class - Execute - "+ps.toString());
+				ps.execute();
+
 			}
 			c.close();
 			return true;

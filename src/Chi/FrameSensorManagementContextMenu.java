@@ -2,7 +2,6 @@ package Chi;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -10,22 +9,23 @@ import javax.swing.JPopupMenu;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
-public class FrameSensorClassManagementContextMenu extends JPopupMenu {
+public class FrameSensorManagementContextMenu extends JPopupMenu {
 	private static final long serialVersionUID = 1L;
 	private JMenuItem newMenu;
 	private JMenuItem editMenu;
 	private JMenuItem deleteMenu;
 	
-	public FrameSensorClassManagementContextMenu (FrameSensorClassManagement m) {
+	public FrameSensorManagementContextMenu (FrameSensorManagement m) {
 		this.newMenu=new JMenuItem("New...",Utility.resizeImageIcon(new ImageIcon(getClass().getResource(Config.ICON_TEXTURE_PATH+"/ADD.png")),14,14));
 		newMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				DialogSensorClassAdd diag=new DialogSensorClassAdd();
-				diag.classSet=m.classDB;
-				diag.setVisible(true);
-				if (diag.classAdded) {
-					m.updateSensorClassTable();
+				if (Cache.updateSensorClass() && Cache.updateSensor()) {
+					DialogSensorAdd diag=new DialogSensorAdd();
+					diag.setVisible(true);
+					if (diag.sensorAdded) {
+						m.updateSensorTable();
+					}
 				}
 			}
 		});
@@ -34,11 +34,13 @@ public class FrameSensorClassManagementContextMenu extends JPopupMenu {
 		editMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Object [] o=m.getSelectedObj();
-				DialogSensorClassEdit diag=new DialogSensorClassEdit(o[0].toString());
-				diag.setVisible(true);
-				if (diag.classEdited) {
-					m.updateSensorClassTable();
+				if (Cache.updateSensorClass() && Cache.updateSensor()) {
+					Object [] o=m.getSelectedObj();
+					DialogSensorEdit diag=new DialogSensorEdit((String)o[0],(String)o[1],(Double)o[2],(Double)o[3],(Double)o[4],(String)o[5]);
+					diag.setVisible(true);
+					if (diag.sensorEdited) {
+						m.updateSensorTable();
+					}
 				}
 			}
 		});
@@ -47,12 +49,12 @@ public class FrameSensorClassManagementContextMenu extends JPopupMenu {
 		deleteMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete sensor class "+m.getSelectedObj()[0].toString()+"?\nSensors in this class will be removed to DefaultClass after deletion.","Delete sensor class",JOptionPane.WARNING_MESSAGE)==JOptionPane.YES_OPTION) {
+				if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete sensor "+m.getSelectedObj()[0].toString()+"?","Delete sensor",JOptionPane.WARNING_MESSAGE)==JOptionPane.YES_OPTION) {
 					WaitUI u=new WaitUI();
-					u.setText("Deleting sensor class");
+					u.setText("Deleting sensor");
 					Thread t=new Thread() {
 						public void run () {
-							boolean flag=DatabaseSensorClass.deleteSensorClass(m.getSelectedObj()[0].toString());
+							boolean flag=DatabaseSensor.deleteSensor(m.getSelectedObj()[0].toString());
 							if (!flag) {
 								JOptionPane.showMessageDialog(null,"Database error, please check the console for more information.",Config.APP_NAME,JOptionPane.WARNING_MESSAGE);
 							}
@@ -62,8 +64,7 @@ public class FrameSensorClassManagementContextMenu extends JPopupMenu {
 					t.start();
 					u.setVisible(true);
 					
-					m.updateSensorClassTable();
-					FrameSensorManagement.refresh();
+					m.updateSensorTable();
 				}
 			}
 		});

@@ -6,8 +6,8 @@ CREATE TABLE Site(
 CREATE TABLE Controller(
 	ControllerName varchar(100) PRIMARY KEY,
 	Site varchar(100),
-	PositionX int,
-	PositionY int,
+	PositionX double,
+	PositionY double,
 	FOREIGN KEY (Site) REFERENCES Site(SiteName)
 )
 @

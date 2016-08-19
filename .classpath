@@ -38,5 +38,6 @@
 	<classpathentry kind="lib" path="D:/Documents/King/EclipseProjects/Chi/lib/swingx-all-1.6.4.jar"/>
 	<classpathentry kind="lib" path="D:/Documents/King/EclipseProjects/Chi/lib/hsqldb.jar"/>
 	<classpathentry kind="lib" path="D:/Documents/King/EclipseProjects/Chi/lib/sqltool.jar"/>
+	<classpathentry kind="lib" path="D:/Documents/King/EclipseProjects/Chi/lib/commons-lang3-3.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
