@@ -21,7 +21,7 @@ public class FrameUserManagementContextMenu extends JPopupMenu {
 		newMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				DialogAddUser diag=new DialogAddUser();
+				DialogUserAdd diag=new DialogUserAdd();
 				diag.usernameSet=m.usernameDB;
 				diag.setVisible(true);
 				if (diag.userAdded) {
@@ -35,7 +35,7 @@ public class FrameUserManagementContextMenu extends JPopupMenu {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Object [] o=m.getSelectedObj();
-				DialogEditUser diag=new DialogEditUser(o[0].toString(),(Integer)o[2],o[3].toString());
+				DialogUserEdit diag=new DialogUserEdit(o[0].toString(),(Integer)o[2],o[3].toString());
 				diag.setVisible(true);
 				if (diag.userEdited) {
 					m.updateUserTable();
@@ -52,7 +52,7 @@ public class FrameUserManagementContextMenu extends JPopupMenu {
 					u.setText("Deleting user");
 					Thread t=new Thread() {
 						public void run () {
-							boolean flag=DatabaseUser.deleteUser(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)), m.getSelectedObj()[0].toString());
+							boolean flag=DatabaseUser.deleteUser(m.getSelectedObj()[0].toString());
 							if (!flag) {
 								JOptionPane.showMessageDialog(null,"Database error, please check the console for more information.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
 							}

@@ -17,7 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
-public class DialogEditUser extends JDialog {
+public class DialogUserEdit extends JDialog {
 	private static final long serialVersionUID = 2263148230107556625L;
 	private static String prefilledPassword="~!@ZXC";
 	private final JPanel contentPanel = new JPanel();
@@ -28,7 +28,7 @@ public class DialogEditUser extends JDialog {
 	private JComboBox<String> comboBoxStatus;
 	public boolean userEdited=false;
 
-	public DialogEditUser(String fillU, int fillL, String fillS) {
+	public DialogUserEdit(String fillU, int fillL, String fillS) {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setModal(true);
 		setResizable(false);
@@ -61,7 +61,7 @@ public class DialogEditUser extends JDialog {
 			contentPanel.add(lblPassword);
 		}
 		{
-			textFieldPassword = new JPasswordField(DialogEditUser.prefilledPassword);
+			textFieldPassword = new JPasswordField(DialogUserEdit.prefilledPassword);
 			textFieldPassword.setBounds(89, 39, 246, 20);
 			contentPanel.add(textFieldPassword);
 			textFieldPassword.setColumns(10);
@@ -135,9 +135,9 @@ public class DialogEditUser extends JDialog {
 							Thread t=new Thread() {
 								public void run () {
 									if (new String(pw).equals(prefilledPassword)) {
-										flag=DatabaseUser.updateUserCredentialNoPassword(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)), fillU, (int)comboBoxLevel.getSelectedItem(),(String)comboBoxStatus.getSelectedItem());
+										flag=DatabaseUser.updateUserCredentialNoPassword(fillU, (int)comboBoxLevel.getSelectedItem(),(String)comboBoxStatus.getSelectedItem());
 									} else {
-										flag=DatabaseUser.updateUserCredentialPassword(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)), fillU, Utility.hashSHA1CharAry(pw), (int)comboBoxLevel.getSelectedItem(),(String)comboBoxStatus.getSelectedItem());
+										flag=DatabaseUser.updateUserCredentialPassword(fillU, Utility.hashSHA1CharAry(pw), (int)comboBoxLevel.getSelectedItem(),(String)comboBoxStatus.getSelectedItem());
 									}
 									u.dispose();
 								}

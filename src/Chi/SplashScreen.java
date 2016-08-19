@@ -110,8 +110,20 @@ public class SplashScreen extends JFrame {
 		});
 		
 		JButton btnSensorManagement = new JButton("Sensor Management");
+		btnSensorManagement.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
 		btnSensorManagement.setBounds(213, 35, 193, 23);
 		panelDatabase.add(btnSensorManagement);
+		
+		JButton btnControllerManagement = new JButton("Controller Management");
+		btnControllerManagement.setBounds(213, 97, 191, 23);
+		panelDatabase.add(btnControllerManagement);
+		
+		JButton btnSiteManagement = new JButton("Site Management");
+		btnSiteManagement.setBounds(213, 66, 192, 23);
+		panelDatabase.add(btnSiteManagement);
 
 		
 		JPanel panelSQL = new JPanel();
@@ -123,7 +135,7 @@ public class SplashScreen extends JFrame {
 		panelSQL.add(btnViewReadings);
 		btnViewReadings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ResultSet rs=DatabaseReading.getSensorReading(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+				ResultSet rs=DatabaseReading.getSensorReading();
 				ArrayList<Row> rows=new ArrayList<>();
 				for (Row row : rs) {
 					rows.add(row);
@@ -142,7 +154,7 @@ public class SplashScreen extends JFrame {
 		panelSQL.add(btnRunSQL);
 		btnRunSQL.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				DatabaseCassandra.runSQL("Run SQL", Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)), textFieldSQL.getText());
+				DatabaseCassandra.runSQL("Run SQL", textFieldSQL.getText());
 			}
 		});
 		
@@ -154,7 +166,7 @@ public class SplashScreen extends JFrame {
 				JFileChooser fc=new JFileChooser();
 				if (fc.showOpenDialog(SplashScreen.this)==JFileChooser.APPROVE_OPTION) {
 					File selectedFile=fc.getSelectedFile();
-					DatabaseCassandra.runSQLFromFile("Run SQL From File",Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)), selectedFile.getPath());
+					DatabaseCassandra.runSQLFromFile("Run SQL From File",selectedFile.getPath());
 				}
 			}
 		});
@@ -167,7 +179,7 @@ public class SplashScreen extends JFrame {
 					public void run () {
 						u.setText("Step (1/3) Cassandra - Checking keyspace existence");
 						u.setProgressBarValue(2);
-						boolean flag=DatabaseCassandra.testKeyspace(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+						boolean flag=DatabaseCassandra.testKeyspace();
 						if (!flag) {
 		            		JOptionPane.showMessageDialog(SplashScreen.this,"No matching keyspace to reset!",Config.APP_NAME,JOptionPane.INFORMATION_MESSAGE);
 		                	u.dispose();
@@ -175,14 +187,14 @@ public class SplashScreen extends JFrame {
 						}
 						u.setText("Step (2/3) Cassandra - Reseting keyspace");
 						u.setProgressBarValue(3);
-		            	flag=DatabaseCassandra.reset(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+		            	flag=DatabaseCassandra.reset();
 		            	if (!flag) {
 		            		JOptionPane.showMessageDialog(SplashScreen.this,"Failed to reset keyspace!\nPlease check the availability of the Cassandra server.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
 		            	}
 		            	
 						u.setText("Step (3/3) HSQL - Dropping tables");
 						u.setProgressBarValue(4);
-		            	flag=DatabaseHSQL.reset(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+		            	flag=DatabaseHSQL.reset();
 		            	if (flag) {
 		            		JOptionPane.showMessageDialog(SplashScreen.this,"Dropped tables successully!",Config.APP_NAME,JOptionPane.INFORMATION_MESSAGE);
 		            	} else {
@@ -204,9 +216,9 @@ public class SplashScreen extends JFrame {
 					public void run () {
 						u.setText("Step (1/3) Cassandra - Checking keyspace existence");
 						u.setProgressBarValue(2);
-						boolean flag=DatabaseCassandra.testKeyspace(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+						boolean flag=DatabaseCassandra.testKeyspace();
 						if (!flag) {
-							flag=DatabaseCassandra.freshStart(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+							flag=DatabaseCassandra.freshStart();
 		                	if (!flag) {
 		                		JOptionPane.showMessageDialog(SplashScreen.this,"Failed to create keyspace!\nPlease check the availability of the Cassandra server.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
 		                    	u.dispose();
@@ -215,14 +227,14 @@ public class SplashScreen extends JFrame {
 						}
 						u.setText("Step (2/3) Cassandra - Creating tables");
 						u.setProgressBarValue(3);
-						flag=DatabaseCassandra.createTables(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+						flag=DatabaseCassandra.createTables();
 		            	if (!flag) {
 		            		JOptionPane.showMessageDialog(SplashScreen.this,"Failed to create table!\nPlease check if existing table is removed.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
 						}
 		            	
 						u.setText("Step (3/3) HSQL - Creating tables");
 						u.setProgressBarValue(4);
-						flag=DatabaseHSQL.createTables(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+						flag=DatabaseHSQL.createTables();
 		            	if (flag) {
 		            		JOptionPane.showMessageDialog(SplashScreen.this,"Tables created successfully!",Config.APP_NAME,JOptionPane.INFORMATION_MESSAGE);
 						} else { 

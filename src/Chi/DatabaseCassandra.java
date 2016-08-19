@@ -13,29 +13,33 @@ import com.datastax.driver.core.exceptions.NoHostAvailableException;
 
 public class DatabaseCassandra {
 
-	public static boolean testConnection(String ip, int port) {
-		return runSQLFromFile("DB Test Connection",ip,port,null);
+	protected static Cluster getCluster() {
+		return 	Cluster.builder().withCredentials(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_USERNAME_KEY),Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PASSWORD_KEY))/*
+				*/.withPort(Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY)))/*
+				*/.addContactPoint(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)).build();
 	}
 	
-	public static boolean freshStart (String ip, int port) {
-		return runSQLFromFile("DB Init",ip,port,Config.getConfig(Config.DATABASE_INIT_SQL_CASSANDRA_FILE_KEY));
+	public static boolean testConnection() {
+		return runSQLFromFile("DB Test Connection",null);
 	}
 	
-	public static boolean createTables (String ip, int port) {
-		return runSQLFromFile("DB Create Tables",ip,port,Config.getConfig(Config.DATABASE_CREATE_TABLES_SQL_CASSANDRA_FILE_KEY));
+	public static boolean freshStart () {
+		return runSQLFromFile("DB Init",Config.getConfig(Config.DATABASE_INIT_SQL_CASSANDRA_FILE_KEY));
 	}
 	
-	public static boolean reset (String ip, int port) {
-		return runSQLFromFile("DB Reset",ip,port,Config.getConfig(Config.DATABASE_RESET_SQL_CASSANDRA_FILE_KEY));
+	public static boolean createTables () {
+		return runSQLFromFile("DB Create Tables",Config.getConfig(Config.DATABASE_CREATE_TABLES_SQL_CASSANDRA_FILE_KEY));
+	}
+	
+	public static boolean reset () {
+		return runSQLFromFile("DB Reset",Config.getConfig(Config.DATABASE_RESET_SQL_CASSANDRA_FILE_KEY));
 	}
 
-	public static boolean testKeyspace (String ip, int port) {
+	public static boolean testKeyspace () {
 		Cluster cluster=null;
 		try {
-			Logger.log("DB Test Keyspace - Connecting to database : "+ip+":"+port);
-			cluster=Cluster.builder().withCredentials(Config.getConfig(Config.CONFIG_SERVER_DATABASE_USERNAME_KEY),Config.getConfig(Config.CONFIG_SERVER_DATABASE_PASSWORD_KEY))/*
-			*/.withPort(port)/*
-			*/.addContactPoint(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY)).build();
+			Logger.log("DB Test Keyspace - Connecting to database : "+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)+":"+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
+			cluster=getCluster();
 			Session session=cluster.connect();
 			Logger.log("DB Test Keyspace - Database connection OK!");
 			KeyspaceMetadata ks=cluster.getMetadata().getKeyspace(Config.APP_NAME);
@@ -53,13 +57,11 @@ public class DatabaseCassandra {
 		return false;
 	}
 	
-	public static boolean runSQL(String cmdName, String ip, int port, String sql) {
+	public static boolean runSQL(String cmdName, String sql) {
 		Cluster cluster=null;
 		try {
-			Logger.log(cmdName+" - Connecting to database : "+ip+":"+port);
-			cluster=Cluster.builder().withCredentials(Config.getConfig(Config.CONFIG_SERVER_DATABASE_USERNAME_KEY),Config.getConfig(Config.CONFIG_SERVER_DATABASE_PASSWORD_KEY))/*
-			*/.withPort(port)/*
-			*/.addContactPoint(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY)).build();
+			Logger.log(cmdName+" - Connecting to database : "+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)+":"+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
+			cluster=getCluster();
 			Session session=cluster.connect();
 			Logger.log(cmdName+" - Database connection OK!");
 			System.out.println("Result : "+executeSQL(cmdName,session,sql).toString());
@@ -77,14 +79,12 @@ public class DatabaseCassandra {
 		return false;
 	}
 	
-	public static boolean runSQLFromFile(String cmdName, String ip, int port, String filename) {
+	public static boolean runSQLFromFile(String cmdName, String filename) {
 		Logger.log("Database - Run SQL From File : "+filename);
 		Cluster cluster=null;
 		try {
-			Logger.log(cmdName+" - Connecting to database : "+ip+":"+port);
-			cluster=Cluster.builder().withCredentials(Config.getConfig(Config.CONFIG_SERVER_DATABASE_USERNAME_KEY),Config.getConfig(Config.CONFIG_SERVER_DATABASE_PASSWORD_KEY))/*
-			*/.withPort(port)/*
-			*/.addContactPoint(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY)).build();
+			Logger.log(cmdName+" - Connecting to database : "+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)+":"+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
+			cluster=getCluster();
 			Session session=cluster.connect();
 			Logger.log(cmdName+" - Database connection OK!");
 			if (filename!=null) {
@@ -109,15 +109,12 @@ public class DatabaseCassandra {
 		return false;
 	}
 
-	protected static ResultSet runSQLFromFileAndGetData(String cmdName, String ip, int port, String filename) {
+	protected static ResultSet runSQLFromFileAndGetData(String cmdName, String filename) {
 		Logger.log("Database - Run SQL From File : "+filename);
 		Cluster cluster=null;
 		try {
-			Logger.log(cmdName+" - Connecting to database : "+ip+":"+port);
-			cluster=Cluster.builder().withCredentials(Config.getConfig(Config.CONFIG_SERVER_DATABASE_USERNAME_KEY),Config.getConfig(Config.CONFIG_SERVER_DATABASE_PASSWORD_KEY))/*
-			*/.withPort(port)/*
-			*/.addContactPoint(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY))/*
-			*/.build();
+			Logger.log(cmdName+" - Connecting to database : "+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)+":"+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
+			cluster=getCluster();
 			Session session=cluster.connect();
 			session=cluster.connect("Chi");
 			Logger.log(cmdName+" - Database connection OK!");

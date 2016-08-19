@@ -10,18 +10,20 @@ import com.datastax.driver.core.exceptions.NoHostAvailableException;
 
 public class DatabaseReading extends DatabaseCassandra {
 
-	public static ResultSet getSensorReading (String ip, int port) {
-		return runSQLFromFileAndGetData("DB Get Sensor Reading",ip,port,Config.getConfig(Config.DATABASE_RECORD_GETTING_SQL_FILE_KEY));
+	public static ResultSet getSensorReading () {
+		return runSQLFromFileAndGetData("DB Get Sensor Reading",Config.getConfig(Config.DATABASE_RECORD_GETTING_SQL_FILE_KEY));
 	}
 	
-	public static boolean storeReading (String ip, int port, String cn, String sn, LocalDateTime time, double v) {
+	public static boolean storeReading (String cn, String sn, LocalDateTime time, double v) {
+		String ip=Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY);
+		int port=Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
 		Logger.log("DB Store Reading : "+Config.getConfig(Config.DATABASE_RECORD_READING_SQL_FILE_KEY));
 		Cluster cluster=null;
 		try {
 			Logger.log("DB Store Reading - Connecting to database : "+ip+":"+port);
-			cluster=Cluster.builder().withCredentials(Config.getConfig(Config.CONFIG_SERVER_DATABASE_USERNAME_KEY),Config.getConfig(Config.CONFIG_SERVER_DATABASE_PASSWORD_KEY))/*
+			cluster=Cluster.builder().withCredentials(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_USERNAME_KEY),Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PASSWORD_KEY))/*
 			*/.withPort(port)/*
-			*/.addContactPoint(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY)).build();
+			*/.addContactPoint(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)).build();
 			Session session=cluster.connect();
 			Logger.log("DB Store Reading - Database connection OK!");
 			

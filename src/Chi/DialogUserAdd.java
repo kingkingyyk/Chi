@@ -18,7 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
-public class DialogAddUser extends JDialog {
+public class DialogUserAdd extends JDialog {
 	private static final long serialVersionUID = 2263148230107556625L;
 	public HashSet<String> usernameSet;
 	private final JPanel contentPanel = new JPanel();
@@ -30,7 +30,7 @@ public class DialogAddUser extends JDialog {
 	private JComboBox<String> comboBoxStatus;
 	public boolean userAdded=false;
 
-	public DialogAddUser() {
+	public DialogUserAdd() {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setModal(true);
 		setResizable(false);
@@ -148,7 +148,7 @@ public class DialogAddUser extends JDialog {
 							u.setText("Creating user");
 							Thread t=new Thread() {
 								public void run () {
-									flag=DatabaseUser.createUserCredential(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)), txt, Utility.hashSHA1CharAry(pw), (int)comboBoxLevel.getSelectedItem(),(String)comboBoxStatus.getSelectedItem());
+									flag=DatabaseUser.createUserCredential(txt, Utility.hashSHA1CharAry(pw), (int)comboBoxLevel.getSelectedItem(),(String)comboBoxStatus.getSelectedItem());
 									u.dispose();
 								}
 							};

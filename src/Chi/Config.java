@@ -23,11 +23,14 @@ public class Config {
 	
 	//Changeable via configuration file
 	public static final String CONFIG_SERVER_INCOMING_PORT_KEY="server.incoming.port";
-	public static final String CONFIG_SERVER_DATABASE_IP_KEY="server.database.ip";
-	public static final String CONFIG_SERVER_DATABASE_PORT_KEY="server.database.port";
+	public static final String CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY="server.database.cassandra.ip";
+	public static final String CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY="server.database.cassandra.port";
+	public static final String CONFIG_SERVER_DATABASE_HSQL_IP_KEY="server.hsql.ip";
 	public static final String CONFIG_SERVER_DATABASE_HSQL_PORT_KEY="server.database.hsql.port";
-	public static final String CONFIG_SERVER_DATABASE_USERNAME_KEY="server.database.username";
-	public static final String CONFIG_SERVER_DATABASE_PASSWORD_KEY="server.database.password";
+	public static final String CONFIG_SERVER_DATABASE_CASSANDRA_USERNAME_KEY="server.database.cassandra.username";
+	public static final String CONFIG_SERVER_DATABASE_CASSANDRA_PASSWORD_KEY="server.database.cassandra.password";
+	public static final String CONFIG_SERVER_DATABASE_HSQL_USERNAME_KEY="server.database.hsql.username";
+	public static final String CONFIG_SERVER_DATABASE_HSQL_PASSWORD_KEY="server.database.hsql.password";
 	public static final String CONFIG_SERVER_DATABASE_TEST_OK_KEY="server.database.test.success.text";
 	public static final String CONFIG_SERVER_DATABASE_TEST_FAIL_KEY="server.database.test.fail.text";
 	//Listening server config
@@ -65,11 +68,14 @@ public class Config {
 	//Default values.
 	public static final String CONFIG_DEFAULT_KEY=".default";
 	private static final String CONFIG_SERVER_INCOMING_PORT_DEFAULT="40000";
-	private static final String CONFIG_SERVER_DATABASE_IP_DEFAULT="127.0.0.1";
-	private static final String CONFIG_SERVER_DATABASE_PORT_DEFAULT="9042";
+	private static final String CONFIG_SERVER_DATABASE_CASSANDRA_IP_DEFAULT="127.0.0.1";
+	private static final String CONFIG_SERVER_DATABASE_CASSANDRA_PORT_DEFAULT="9042";
+	private static final String CONFIG_SERVER_DATABASE_HSQL_IP_DEFAULT="127.0.0.1";
 	private static final String CONFIG_SERVER_DATABASE_HSQL_PORT_DEFAULT="9001";
-	private static final String CONFIG_SERVER_DATABASE_USERNAME_DEFAULT="chi-admin";
-	private static final String CONFIG_SERVER_DATABASE_PASSWORD_DEFAULT="chi-admin";
+	private static final String CONFIG_SERVER_DATABASE_CASSANDRA_USERNAME_DEFAULT="chi-admin";
+	private static final String CONFIG_SERVER_DATABASE_CASSANDRA_PASSWORD_DEFAULT="chi-admin";
+	private static final String CONFIG_SERVER_DATABASE_HSQL_USERNAME_DEFAULT="chi-admin";
+	private static final String CONFIG_SERVER_DATABASE_HSQL_PASSWORD_DEFAULT="chi-admin";
 	private static final String CONFIG_SERVER_DATABASE_TEST_OK_DEFAULT="<html><font color=\"green\">Connection OK!</font></html>";
 	private static final String CONFIG_SERVER_DATABASE_TEST_FAIL_DEFAULT="<html><font color=\"red\">Connection fail!</font></html>";
 	//Listening server
@@ -136,11 +142,14 @@ public class Config {
 		
 		//Default values
 		Config.setConfig(CONFIG_SERVER_INCOMING_PORT_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_INCOMING_PORT_DEFAULT);
-		Config.setConfig(CONFIG_SERVER_DATABASE_IP_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_IP_DEFAULT);
-		Config.setConfig(CONFIG_SERVER_DATABASE_PORT_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_PORT_DEFAULT);
+		Config.setConfig(CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_CASSANDRA_IP_DEFAULT);
+		Config.setConfig(CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_CASSANDRA_PORT_DEFAULT);
+		Config.setConfig(CONFIG_SERVER_DATABASE_HSQL_IP_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_HSQL_IP_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_DATABASE_HSQL_PORT_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_HSQL_PORT_DEFAULT);
-		Config.setConfig(CONFIG_SERVER_DATABASE_USERNAME_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_USERNAME_DEFAULT);
-		Config.setConfig(CONFIG_SERVER_DATABASE_PASSWORD_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_PASSWORD_DEFAULT);
+		Config.setConfig(CONFIG_SERVER_DATABASE_CASSANDRA_USERNAME_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_CASSANDRA_USERNAME_DEFAULT);
+		Config.setConfig(CONFIG_SERVER_DATABASE_CASSANDRA_PASSWORD_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_CASSANDRA_PASSWORD_DEFAULT);
+		Config.setConfig(CONFIG_SERVER_DATABASE_HSQL_USERNAME_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_HSQL_USERNAME_DEFAULT);
+		Config.setConfig(CONFIG_SERVER_DATABASE_HSQL_PASSWORD_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_HSQL_PASSWORD_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_DATABASE_TEST_OK_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_TEST_OK_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_DATABASE_TEST_FAIL_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_TEST_FAIL_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_LOCK_FILE_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_LOCK_FILE_DEFAULT);

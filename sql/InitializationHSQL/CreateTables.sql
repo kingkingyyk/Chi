@@ -1,5 +1,14 @@
+CREATE TABLE Site(
+	SiteName varchar(100) PRIMARY KEY,
+	SiteMapURL varchar(350)
+)
+@
 CREATE TABLE Controller(
-	ControllerName varchar(100) PRIMARY KEY
+	ControllerName varchar(100) PRIMARY KEY,
+	Site varchar(100),
+	PositionX int,
+	PositionY int,
+	FOREIGN KEY (Site) REFERENCES Site(SiteName)
 )
 @
 CREATE TABLE Sensor(

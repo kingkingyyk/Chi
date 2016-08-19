@@ -14,25 +14,38 @@ public class DatabaseHSQL {
 	protected static String getAddress () {
 		StringBuilder sb=new StringBuilder();
 		sb.append("jdbc:hsqldb:hsql://");
-		sb.append(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY));
+		sb.append(Config.getConfig(Config.CONFIG_SERVER_DATABASE_HSQL_IP_KEY));
 		sb.append(':');
 		sb.append(Config.getConfig(Config.CONFIG_SERVER_DATABASE_HSQL_PORT_KEY));
 		sb.append("/Chi");
 		return sb.toString();
 	}
 	
-	public static boolean createTables (String ip, int port) {
-		return runSQLFromFile("DB HSQL Create Tables",ip,port,Config.getConfig(Config.DATABASE_CREATE_TABLES_SQL_HSQL_FILE_KEY));
+	protected static Connection getConnection() throws SQLException {
+		return DriverManager.getConnection(getAddress(), Config.getConfig(Config.CONFIG_SERVER_DATABASE_HSQL_USERNAME_KEY), Config.getConfig(Config.CONFIG_SERVER_DATABASE_HSQL_PASSWORD_KEY));
 	}
 	
-	public static boolean reset (String ip, int port) {
-		return runSQLFromFile("DB HSQL Reset",ip,port,Config.getConfig(Config.DATABASE_RESET_SQL_HSQL_FILE_KEY));
-	}
-	
-	public static boolean runSQL(String cmdName, String ip, int port, String sql) {
-		Logger.log(cmdName+" - Connecting to database  : "+ip+":"+port);
+	public static boolean testConnection() {
 		try {
-			Connection c = DriverManager.getConnection(getAddress(), Config.getConfig(Config.CONFIG_SERVER_DATABASE_USERNAME_KEY), Config.getConfig(Config.CONFIG_SERVER_DATABASE_PASSWORD_KEY));
+			boolean flag=(getConnection()!=null);
+			Logger.log("DB HSQL Test Connection - Result : "+flag);
+			return flag;
+		} catch (SQLException e) {}
+		Logger.log("DB HSQL Test Connection - Result : "+false);
+		return false;
+	}
+	public static boolean createTables () {
+		return runSQLFromFile("DB HSQL Create Tables",Config.getConfig(Config.DATABASE_CREATE_TABLES_SQL_HSQL_FILE_KEY));
+	}
+	
+	public static boolean reset () {
+		return runSQLFromFile("DB HSQL Reset",Config.getConfig(Config.DATABASE_RESET_SQL_HSQL_FILE_KEY));
+	}
+	
+	public static boolean runSQL(String cmdName, String sql) {
+		Logger.log(cmdName+" - Connecting to database  : "+getAddress());
+		try {
+			Connection c = getConnection();
 			if (c!=null) {
 				Logger.log(cmdName+" - Database connection OK!");
 				c.createStatement().executeQuery(sql);
@@ -46,10 +59,11 @@ public class DatabaseHSQL {
 		return false;
 	}
 	
-	public static boolean runSQLFromFile(String cmdName, String ip, int port, String filename) {
+	public static boolean runSQLFromFile(String cmdName, String filename) {
 		Logger.log("Database HSQL - Run SQL From File : "+filename);
+		Logger.log(cmdName+" - Connecting to database  : "+getAddress());
 		try {
-			Connection c = DriverManager.getConnection(getAddress(), Config.getConfig(Config.CONFIG_SERVER_DATABASE_USERNAME_KEY), Config.getConfig(Config.CONFIG_SERVER_DATABASE_PASSWORD_KEY));
+			Connection c = getConnection();
 			if (c!=null) {
 				Logger.log(cmdName+" - Database connection OK!");
 				if (filename!=null) {
@@ -70,10 +84,11 @@ public class DatabaseHSQL {
 		return false;
 	}
 
-	protected static ResultSet runSQLFromFileAndGetData(String cmdName, String ip, int port, String filename) {
+	protected static ResultSet runSQLFromFileAndGetData(String cmdName, String filename) {
 		Logger.log("Database HSQL - Run SQL From File : "+filename);
+		Logger.log(cmdName+" - Connecting to database  : "+getAddress());
 		try {
-			Connection c = DriverManager.getConnection(getAddress(), Config.getConfig(Config.CONFIG_SERVER_DATABASE_USERNAME_KEY), Config.getConfig(Config.CONFIG_SERVER_DATABASE_PASSWORD_KEY));
+			Connection c = getConnection();
 			ResultSet rs=null;
 			if (c!=null) {
 				Logger.log(cmdName+" - Database connection OK!");

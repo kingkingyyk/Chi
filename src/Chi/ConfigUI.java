@@ -24,6 +24,11 @@ public class ConfigUI extends JDialog {
 	private JLabel lblTestDatabaseResult;
 	private JTextField textFieldDatabaseUsername;
 	private JPasswordField passwordFieldDatabasePassword;
+	private JTextField textFieldDBHSQLIP;
+	private JTextField textFieldDBHSQLPort;
+	private JTextField textFieldDBHSQLUsername;
+	private JPasswordField passwordFieldDBHSQLPassword;
+	private JLabel lblDBHSQLTestResult;
 
 	public ConfigUI() {
 		setModal(true);
@@ -65,49 +70,146 @@ public class ConfigUI extends JDialog {
 		btnListeningPort.setBounds(198, 7, 24, 20);
 		panelServerSettings.add(btnListeningPort);
 		
-		JPanel panelDatabaseSettings = new JPanel();
-		tabbedPane.addTab("Database Server Settings", null, panelDatabaseSettings, null);
-		panelDatabaseSettings.setLayout(null);
+		JPanel panelHSQLSettings = new JPanel();
+		panelHSQLSettings.setLayout(null);
+		tabbedPane.addTab("HSQL Settings", null, panelHSQLSettings, null);
+		
+		JLabel lblDBHSQLIP = new JLabel("Database IP :");
+		lblDBHSQLIP.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblDBHSQLIP.setBounds(10, 14, 86, 14);
+		panelHSQLSettings.add(lblDBHSQLIP);
+		
+		textFieldDBHSQLIP = new JTextField(Config.getConfig(Config.CONFIG_SERVER_DATABASE_HSQL_IP_KEY));
+		textFieldDBHSQLIP.setToolTipText("The IP of database server to connect to.");
+		textFieldDBHSQLIP.setColumns(10);
+		textFieldDBHSQLIP.setBounds(106, 10, 86, 20);
+		panelHSQLSettings.add(textFieldDBHSQLIP);
+		
+		JLabel lblDBHSQLPort = new JLabel("Database Port :");
+		lblDBHSQLPort.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblDBHSQLPort.setBounds(10, 45, 86, 14);
+		panelHSQLSettings.add(lblDBHSQLPort);
+		
+		textFieldDBHSQLPort = new JTextField(Config.getConfig(Config.CONFIG_SERVER_DATABASE_HSQL_PORT_KEY));
+		textFieldDBHSQLPort.setToolTipText("The port of database server to connect to.");
+		textFieldDBHSQLPort.setColumns(10);
+		textFieldDBHSQLPort.setBounds(106, 41, 86, 20);
+		panelHSQLSettings.add(textFieldDBHSQLPort);
+		
+		JButton btnDBHSQLIP = new JButton(Theme.getIcon("Reset-16x16"));
+		btnDBHSQLIP.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textFieldDBHSQLIP.setText(Config.getConfig(Config.CONFIG_SERVER_DATABASE_HSQL_IP_KEY+Config.CONFIG_DEFAULT_KEY));
+			}
+		});
+		btnDBHSQLIP.setBounds(199, 10, 24, 20);
+		panelHSQLSettings.add(btnDBHSQLIP);
+		
+		JButton btnDBHSQLPort = new JButton(Theme.getIcon("Reset-16x16"));
+		btnDBHSQLPort.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textFieldDBHSQLPort.setText(Config.getConfig(Config.CONFIG_SERVER_DATABASE_HSQL_PORT_KEY+Config.CONFIG_DEFAULT_KEY));
+			}
+		});
+		btnDBHSQLPort.setBounds(199, 41, 24, 20);
+		panelHSQLSettings.add(btnDBHSQLPort);
+		
+		JButton btnBDHSQLTest = new JButton("Test Connection");
+		btnBDHSQLTest.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                    	lblDBHSQLTestResult.setText("Attempting to connect...");
+                        SwingUtilities.invokeLater(new Runnable() {
+                            public void run() {
+                        		String ip=Config.getConfig(Config.CONFIG_SERVER_DATABASE_HSQL_IP_KEY);
+                        		String port=Config.getConfig(Config.CONFIG_SERVER_DATABASE_HSQL_PORT_KEY);
+                        		Config.setConfig(Config.CONFIG_SERVER_DATABASE_HSQL_IP_KEY,textFieldDBHSQLIP.getText());
+                        		Config.setConfig(Config.CONFIG_SERVER_DATABASE_HSQL_PORT_KEY,textFieldDBHSQLPort.getText());
+                            	if (DatabaseHSQL.testConnection()) {
+                            		lblDBHSQLTestResult.setText(Config.getConfig(Config.CONFIG_SERVER_DATABASE_TEST_OK_KEY));
+                            	} else {
+                            		lblDBHSQLTestResult.setText(Config.getConfig(Config.CONFIG_SERVER_DATABASE_TEST_FAIL_KEY));
+                            	}
+                        		Config.setConfig(Config.CONFIG_SERVER_DATABASE_HSQL_IP_KEY,ip);
+                        		Config.setConfig(Config.CONFIG_SERVER_DATABASE_HSQL_PORT_KEY,port);
+                            }
+                        });
+                    }
+                });
+			}
+		});
+		btnBDHSQLTest.setBounds(10, 175, 117, 23);
+		panelHSQLSettings.add(btnBDHSQLTest);
+		
+		lblDBHSQLTestResult = new JLabel("");
+		lblDBHSQLTestResult.setBounds(137, 179, 165, 14);
+		panelHSQLSettings.add(lblDBHSQLTestResult);
+		
+		JLabel lblDBHSQLUsername = new JLabel("Username :");
+		lblDBHSQLUsername.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblDBHSQLUsername.setBounds(10, 76, 86, 14);
+		panelHSQLSettings.add(lblDBHSQLUsername);
+		
+		textFieldDBHSQLUsername = new JTextField(Config.getConfig(Config.CONFIG_SERVER_DATABASE_HSQL_USERNAME_KEY));
+		textFieldDBHSQLUsername.setToolTipText("The username to login to the database.");
+		textFieldDBHSQLUsername.setColumns(10);
+		textFieldDBHSQLUsername.setBounds(106, 72, 86, 20);
+		panelHSQLSettings.add(textFieldDBHSQLUsername);
+		
+		JLabel lblDBHSQLPassword = new JLabel("Password :");
+		lblDBHSQLPassword.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblDBHSQLPassword.setBounds(10, 106, 86, 14);
+		panelHSQLSettings.add(lblDBHSQLPassword);
+		
+		passwordFieldDBHSQLPassword = new JPasswordField(Config.getConfig(Config.CONFIG_SERVER_DATABASE_HSQL_PASSWORD_KEY));
+		passwordFieldDBHSQLPassword.setToolTipText("The password to login to the database.");
+		passwordFieldDBHSQLPassword.setBounds(106, 103, 86, 20);
+		panelHSQLSettings.add(passwordFieldDBHSQLPassword);
+		
+		JPanel panelCassandraSettings = new JPanel();
+		tabbedPane.addTab("Cassandra Settings", null, panelCassandraSettings, null);
+		panelCassandraSettings.setLayout(null);
 		
 		JLabel lblDatabaseIP = new JLabel("Database IP :");
 		lblDatabaseIP.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblDatabaseIP.setBounds(10, 14, 86, 14);
-		panelDatabaseSettings.add(lblDatabaseIP);
+		panelCassandraSettings.add(lblDatabaseIP);
 		
-		textFieldDatabaseIP = new JTextField(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY));
+		textFieldDatabaseIP = new JTextField(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY));
 		textFieldDatabaseIP.setColumns(10);
 		textFieldDatabaseIP.setBounds(106, 10, 86, 20);
 		textFieldDatabaseIP.setToolTipText("The IP of database server to connect to.");
-		panelDatabaseSettings.add(textFieldDatabaseIP);
+		panelCassandraSettings.add(textFieldDatabaseIP);
 		
 		JLabel lblDatabasePort = new JLabel("Database Port :");
 		lblDatabasePort.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblDatabasePort.setBounds(10, 45, 86, 14);
-		panelDatabaseSettings.add(lblDatabasePort);
+		panelCassandraSettings.add(lblDatabasePort);
 		
-		textFieldDatabasePort = new JTextField(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY));
+		textFieldDatabasePort = new JTextField(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
 		textFieldDatabasePort.setColumns(10);
 		textFieldDatabasePort.setBounds(106, 41, 86, 20);
 		textFieldDatabasePort.setToolTipText("The port of database server to connect to.");
-		panelDatabaseSettings.add(textFieldDatabasePort);
+		panelCassandraSettings.add(textFieldDatabasePort);
 		
 		JButton btnDatabaseIPReset = new JButton(Theme.getIcon("Reset-16x16"));
 		btnDatabaseIPReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textFieldDatabaseIP.setText(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY+Config.CONFIG_DEFAULT_KEY));
+				textFieldDatabaseIP.setText(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY+Config.CONFIG_DEFAULT_KEY));
 			}
 		});
 		btnDatabaseIPReset.setBounds(199, 10, 24, 20);
-		panelDatabaseSettings.add(btnDatabaseIPReset);
+		panelCassandraSettings.add(btnDatabaseIPReset);
 		
 		JButton btnDatabasePortReset = new JButton(Theme.getIcon("Reset-16x16"));
 		btnDatabasePortReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textFieldDatabasePort.setText(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY+Config.CONFIG_DEFAULT_KEY));
+				textFieldDatabasePort.setText(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY+Config.CONFIG_DEFAULT_KEY));
 			}
 		});
 		btnDatabasePortReset.setBounds(199, 41, 24, 20);
-		panelDatabaseSettings.add(btnDatabasePortReset);
+		panelCassandraSettings.add(btnDatabasePortReset);
 		
 		JButton btnTestDatabase = new JButton("Test Connection");
 		btnTestDatabase.addActionListener(new ActionListener() {
@@ -117,11 +219,17 @@ public class ConfigUI extends JDialog {
                     	lblTestDatabaseResult.setText("Attempting to connect...");
                         SwingUtilities.invokeLater(new Runnable() {
                             public void run() {
-                            	if (DatabaseCassandra.testConnection(textFieldDatabaseIP.getText(), Integer.parseInt(textFieldDatabasePort.getText()))) {
+                        		String ip=Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY);
+                        		String port=Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY);
+                        		Config.setConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY,textFieldDatabaseIP.getText());
+                        		Config.setConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY,textFieldDatabasePort.getText());
+                            	if (DatabaseCassandra.testConnection()) {
                             		lblTestDatabaseResult.setText(Config.getConfig(Config.CONFIG_SERVER_DATABASE_TEST_OK_KEY));
                             	} else {
                             		lblTestDatabaseResult.setText(Config.getConfig(Config.CONFIG_SERVER_DATABASE_TEST_FAIL_KEY));
                             	}
+                        		Config.setConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY,ip);
+                        		Config.setConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY,port);
                             }
                         });
                     }
@@ -129,37 +237,37 @@ public class ConfigUI extends JDialog {
 			}
 		});
 		btnTestDatabase.setBounds(10, 175, 117, 23);
-		panelDatabaseSettings.add(btnTestDatabase);
+		panelCassandraSettings.add(btnTestDatabase);
 		
 		lblTestDatabaseResult = new JLabel("");
 		lblTestDatabaseResult.setBounds(137, 179, 165, 14);
-		panelDatabaseSettings.add(lblTestDatabaseResult);
+		panelCassandraSettings.add(lblTestDatabaseResult);
 		
 		JLabel lblDatabaseLogo = new JLabel();
 		lblDatabaseLogo.setBounds(434, 131, 100, 67);
 		lblDatabaseLogo.setIcon(Utility.resizeImageIcon(Theme.getIcon("CassandraLogo"),lblDatabaseLogo.getWidth(),lblDatabaseLogo.getHeight()));
-		panelDatabaseSettings.add(lblDatabaseLogo);
+		panelCassandraSettings.add(lblDatabaseLogo);
 		
 		JLabel lblDatabaseUsername = new JLabel("Username :");
 		lblDatabaseUsername.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblDatabaseUsername.setBounds(10, 76, 86, 14);
-		panelDatabaseSettings.add(lblDatabaseUsername);
+		panelCassandraSettings.add(lblDatabaseUsername);
 		
-		textFieldDatabaseUsername = new JTextField(Config.getConfig(Config.CONFIG_SERVER_DATABASE_USERNAME_KEY));
+		textFieldDatabaseUsername = new JTextField(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_USERNAME_KEY));
 		textFieldDatabaseUsername.setToolTipText("The username to login to the database.");
 		textFieldDatabaseUsername.setColumns(10);
 		textFieldDatabaseUsername.setBounds(106, 72, 86, 20);
-		panelDatabaseSettings.add(textFieldDatabaseUsername);
+		panelCassandraSettings.add(textFieldDatabaseUsername);
 		
 		JLabel lblDatabasePassword = new JLabel("Password :");
 		lblDatabasePassword.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblDatabasePassword.setBounds(10, 106, 86, 14);
-		panelDatabaseSettings.add(lblDatabasePassword);
+		panelCassandraSettings.add(lblDatabasePassword);
 		
-		passwordFieldDatabasePassword = new JPasswordField(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PASSWORD_KEY));
+		passwordFieldDatabasePassword = new JPasswordField(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PASSWORD_KEY));
 		passwordFieldDatabasePassword.setToolTipText("The password to login to the database.");
 		passwordFieldDatabasePassword.setBounds(106, 103, 86, 20);
-		panelDatabaseSettings.add(passwordFieldDatabasePassword);
+		panelCassandraSettings.add(passwordFieldDatabasePassword);
 		
 		JButton btnApply = new JButton("Apply");
 		btnApply.addActionListener(new ActionListener() {
@@ -208,10 +316,16 @@ public class ConfigUI extends JDialog {
 	
 	private void saveConfigurations() {
 		Config.setConfig(Config.CONFIG_SERVER_INCOMING_PORT_KEY, textFieldListeningPort.getText());
-		Config.setConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY, textFieldDatabaseIP.getText());
-		Config.setConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY, textFieldDatabasePort.getText());
-		Config.setConfig(Config.CONFIG_SERVER_DATABASE_USERNAME_KEY, textFieldDatabaseUsername.getText());
-		Config.setConfig(Config.CONFIG_SERVER_DATABASE_PASSWORD_KEY, new String(passwordFieldDatabasePassword.getPassword()));
+		
+		Config.setConfig(Config.CONFIG_SERVER_DATABASE_HSQL_IP_KEY, textFieldDBHSQLIP.getText());
+		Config.setConfig(Config.CONFIG_SERVER_DATABASE_HSQL_PORT_KEY, textFieldDBHSQLPort.getText());
+		Config.setConfig(Config.CONFIG_SERVER_DATABASE_HSQL_USERNAME_KEY, textFieldDBHSQLUsername.getText());
+		Config.setConfig(Config.CONFIG_SERVER_DATABASE_HSQL_PASSWORD_KEY, new String(passwordFieldDBHSQLPassword.getPassword()));
+		
+		Config.setConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY, textFieldDatabaseIP.getText());
+		Config.setConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY, textFieldDatabasePort.getText());
+		Config.setConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_USERNAME_KEY, textFieldDatabaseUsername.getText());
+		Config.setConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PASSWORD_KEY, new String(passwordFieldDatabasePassword.getPassword()));
 		
 		Config.writeConfigFile();
 	}

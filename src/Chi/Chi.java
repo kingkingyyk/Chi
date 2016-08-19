@@ -23,10 +23,6 @@ public class Chi {
 		Logger.log("Splash screen done.");
 		ss.setVisible(true);
 		Logger.log("Splash screen closed.");
-		
-		Logger.log("User database started.");
-		DatabaseUser.initialize();
-		Logger.log("User database closed.");
 	}
 	
 }

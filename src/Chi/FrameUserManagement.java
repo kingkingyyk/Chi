@@ -231,7 +231,7 @@ public class FrameUserManagement extends JFrame {
 		usernameDB=new HashSet<>();
 		Thread t=new Thread() {
 			public void run () {
-				ResultSet rs=DatabaseUser.getUsers(Config.getConfig(Config.CONFIG_SERVER_DATABASE_IP_KEY), Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_PORT_KEY)));
+				ResultSet rs=DatabaseUser.getUsers();
 				if (rs!=null) {
 					rootRow=new UserTableRow(null);
 					list.clear();
