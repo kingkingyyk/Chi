@@ -11,12 +11,18 @@ CREATE TABLE Controller(
 	FOREIGN KEY (Site) REFERENCES Site(SiteName)
 )
 @
+CREATE TABLE SensorClass (
+	ClassName varchar(100) PRIMARY KEY
+)
+@
 CREATE TABLE Sensor(
 	SensorName varchar(100) PRIMARY KEY,
 	Class varchar(100),
 	MinValue double,
 	MaxValue double,
-	TransformationFactor double
+	TransformationFactor double,
+	Unit varchar(10),
+	FOREIGN KEY (Class) REFERENCES SensorClass(ClassName)
 )
 @
 CREATE TABLE ControllerGroup(
@@ -34,3 +40,7 @@ CREATE TABLE User(
 	Status varchar(100),
 	DateAdded timestamp
 )
+@
+INSERT INTO Site VALUES ('DefaultSite','http://')
+@
+INSERT INTO SensorClass VALUES ('DefaultClass')

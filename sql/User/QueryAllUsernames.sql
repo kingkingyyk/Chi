@@ -1,1 +1,1 @@
-SELECT Username FROM User
+SELECT Username FROM User ORDER BY Username

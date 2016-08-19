@@ -17,7 +17,7 @@ public class DatabaseUser extends DatabaseHSQL {
 	}
 	
 	public static boolean createUserCredential (String user, String pw, int lvl, String status) {
-		Logger.log("DB Create User Credential : "+Config.getConfig(Config.DATABASE_RECORD_READING_SQL_FILE_KEY));
+		Logger.log("DB Create User Credential : "+Config.getConfig(Config.DATABASE_CREATE_USER_SQL_FILE_KEY));
 		try {
 			Connection c = getConnection();
 			if (c!=null) {
@@ -42,7 +42,7 @@ public class DatabaseUser extends DatabaseHSQL {
 	}
 	
 	public static boolean updateUserCredentialPassword (String user, String pw, int lvl, String status) {
-		Logger.log("DB Update User Credential : "+Config.getConfig(Config.DATABASE_RECORD_READING_SQL_FILE_KEY));
+		Logger.log("DB Update User Credential : "+Config.getConfig(Config.DATABASE_UPDATE_USER_W_PASSWORD_SQL_FILE_KEY));
 		try {
 			Connection c = getConnection();
 			if (c!=null) {
@@ -66,7 +66,7 @@ public class DatabaseUser extends DatabaseHSQL {
 	}
 	
 	public static boolean updateUserCredentialNoPassword (String user, int lvl, String status) {
-		Logger.log("DB Update User Credential/2 : "+Config.getConfig(Config.DATABASE_RECORD_READING_SQL_FILE_KEY));
+		Logger.log("DB Update User Credential/2 : "+Config.getConfig(Config.DATABASE_UPDATE_USER_WO_PASSWORD_SQL_FILE_KEY));
 		try {
 			Connection c = getConnection();
 			if (c!=null) {
@@ -89,7 +89,7 @@ public class DatabaseUser extends DatabaseHSQL {
 	}
 	
 	public static boolean deleteUser (String user) {
-		Logger.log("DB Update User Credential/2 : "+Config.getConfig(Config.DATABASE_RECORD_READING_SQL_FILE_KEY));
+		Logger.log("DB Update User Credential/2 : "+Config.getConfig(Config.DATABASE_DELETE_USER_SQL_FILE_KEY));
 		try {
 			Connection c = getConnection();
 			if (c!=null) {

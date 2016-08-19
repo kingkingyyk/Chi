@@ -1,1 +1,1 @@
-SELECT Username,Password,Level,Status,DateAdded FROM User
+SELECT Username,Password,Level,Status,DateAdded FROM User ORDER BY Username

@@ -97,10 +97,10 @@ public class SplashScreen extends JFrame {
 		btnResetDatabase.setBounds(10, 35, 109, 23);
 		panelDatabase.add(btnResetDatabase);
 		
-		JButton btnUserManagement = new JButton("User Management");
-		btnUserManagement.setBounds(213, 5, 192, 23);
-		panelDatabase.add(btnUserManagement);
-		btnUserManagement.addActionListener(new ActionListener() {
+		JButton btnUser = new JButton("User");
+		btnUser.setBounds(129, 5, 130, 23);
+		panelDatabase.add(btnUser);
+		btnUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				FrameUserManagement f=FrameUserManagement.getInstance();
 				if (f.updateSuccess) {
@@ -109,21 +109,33 @@ public class SplashScreen extends JFrame {
 			}
 		});
 		
-		JButton btnSensorManagement = new JButton("Sensor Management");
-		btnSensorManagement.addActionListener(new ActionListener() {
+		JButton btnSensor = new JButton("Sensor");
+		btnSensor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
-		btnSensorManagement.setBounds(213, 35, 193, 23);
-		panelDatabase.add(btnSensorManagement);
+		btnSensor.setBounds(129, 35, 130, 23);
+		panelDatabase.add(btnSensor);
 		
-		JButton btnControllerManagement = new JButton("Controller Management");
-		btnControllerManagement.setBounds(213, 97, 191, 23);
-		panelDatabase.add(btnControllerManagement);
+		JButton btnController = new JButton("Controller");
+		btnController.setBounds(129, 103, 130, 23);
+		panelDatabase.add(btnController);
 		
-		JButton btnSiteManagement = new JButton("Site Management");
-		btnSiteManagement.setBounds(213, 66, 192, 23);
-		panelDatabase.add(btnSiteManagement);
+		JButton btnSite = new JButton("Site");
+		btnSite.setBounds(130, 69, 130, 23);
+		panelDatabase.add(btnSite);
+		
+		JButton btnSensorClass = new JButton("Sensor Class");
+		btnSensorClass.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				FrameSensorClassManagement f=FrameSensorClassManagement.getInstance();
+				if (f.updateSuccess) {
+					f.setVisible(true);
+				}
+			}
+		});
+		btnSensorClass.setBounds(269, 5, 135, 23);
+		panelDatabase.add(btnSensorClass);
 
 		
 		JPanel panelSQL = new JPanel();

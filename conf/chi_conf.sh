@@ -1,5 +1,5 @@
 #
-#Fri Aug 19 11:07:18 SGT 2016
+#Fri Aug 19 12:58:19 SGT 2016
 server.database.sql.hsql.createtables.file=sql/InitializationHSQL/CreateTables.sql
 server.incoming.port.default=40000
 server.database.sql.user.queryall.file.default=sql/User/QueryAllUsers.sql
@@ -7,7 +7,9 @@ server.database.sql.user.queryallnames.file=sql/User/QueryAllUsernames.sql
 server.database.cassandra.sql.reset.file.default=sql/InitializationCassandra/ResetDB.sql
 server.database.cassandra.hsql.reset.file=sql/InitializationHSQL/ResetDB.sql
 server.database.sql.cassandra.init.file=sql/InitializationCassandra/InitDB.sql
+server.database.sql.sensorclass.create.file=sql/SensorClass/InsertSensorClass.sql
 server.database.hsql.password=chi-admin
+server.database.sql.sensorclass.update.file.default=sql/SensorClass/UpdateSensorClass.sql
 server.database.hsql.username.default=chi-admin
 server.database.sql.cassandra.init.file.default=sql/InitializationCassandra/InitDB.sql
 server.database.cassandra.password=chi-admin
@@ -25,14 +27,16 @@ server.database.sql.user.updateWpassword.file=sql/User/UpdateUserWithPassword.sq
 server.database.sql.user.create.file.default=sql/User/InsertUser.sql
 server.database.sql.user.delete.file.default=sql/User/DeleteUser.sql
 server.database.cassandra.username=chi-admin
+server.database.sql.sensorclass.queryall.file.default=sql/SensorClass/QueryAllClasses.sql
 server.database.sql.controller.queryname.file.default=sql/Controller/QueryController.sql
 server.hsql.ip=192.168.0.5
 server.database.sql.hsql.createtables.file.default=sql/InitializationHSQL/CreateTables.sql
 server.database.sql.controller.delete.file=sql/Controller/DeleteController.sql
 server.database.sql.user.delete.file=sql/User/DeleteUser.sql
-server.database.sql.user.queryname.file=sql/User/QueryUsername.sql
 server.database.sql.recordreading.default=sql/Reading/RecordReading.sql
+server.database.sql.user.query.file=sql/User/QueryUsername.sql
 server.database.sql.user.queryallnames.file.default=sql/User/QueryAllUsernames.sql
+server.database.sql.user.query.file.default=sql/User/QueryUsername.sql
 server.database.sql.recordgetting.default=sql/Reading/QueryReading.sql
 server.database.sql.controller.queryall.file=sql/Controller/QueryAllControllers.sql
 server.database.sql.sensor.create.file.default=sql/Sensor/InsertSensor.sql
@@ -41,32 +45,36 @@ server.database.sql.cassandra.createtables.file=sql/InitializationCassandra/Crea
 server.database.hsql.password.default=chi-admin
 server.database.sql.recordgetting=sql/Reading/QueryReading.sql
 server.database.cassandra.port.default=9042
-server.database.sql.user.queryname.file.default=sql/User/QueryUsername.sql
+server.database.sql.sensorclass.queryall.file=sql/SensorClass/QueryAllClasses.sql
 server.database.test.success.text=<html><font color\="green">Connection OK\!</font></html>
 server.database.cassandra.password.default=chi-admin
 server.database.sql.controller.updatename.file.default=sql/Controller/UpdateControllerName.sql
-server.database.sql.sensor.updatename.file.default=sql/Sensor/UpdateSensorName.sql
-server.database.sql.sensor.queryname.file.default=sql/Sensor/QuerySensor.sql
+server.database.sql.sensor.queryname.file.default=sql/Sensor/QuerySensorName.sql
 server.hsql.ip.default=127.0.0.1
 server.database.sql.controller.create.file=sql/Controller/InsertController.sql
 server.database.hsql.port.default=9001
 server.database.test.success.text.default=<html><font color\="green">Connection OK\!</font></html>
+server.database.sql.sensor.update.file=sql/Sensor/UpdateSensor.sql
 server.database.sql.recordreading=sql/Reading/RecordReading.sql
 server.lock.file.name=CHI_LOCK
 server.incoming.port=40000
 server.database.sql.controller.queryname.file=sql/Controller/QueryController.sql
-server.database.sql.sensor.queryname.file=sql/Sensor/QuerySensor.sql
+server.database.sql.sensorclass.update.file=sql/SensorClass/UpdateSensorClass.sql
+server.database.sql.sensor.queryname.file=sql/Sensor/QuerySensorName.sql
 server.database.sql.sensor.queryall.file.default=sql/Sensor/QueryAllSensors.sql
+server.database.sql.sensor.update.file.default=sql/Sensor/UpdateSensor.sql
 server.database.sql.user.updateWOpassword.file.default=sql/User/UpdateUserWithoutPassword.sql
-server.database.cassandra.sql.reset.file=sql/InitializationCassandra/ResetDB.sql
 server.database.sql.sensor.delete.file=sql/Sensor/DeleteSensor.sql
+server.database.cassandra.sql.reset.file=sql/InitializationCassandra/ResetDB.sql
 server.database.cassandra.ip=192.168.0.5
 server.database.cassandra.hsql.reset.file.default=sql/InitializationHSQL/ResetDB.sql
 server.database.sql.controller.updatename.file=sql/Controller/UpdateControllerName.sql
 server.database.test.fail.text.default=<html><font color\="red">Connection fail\!</font></html>
 server.database.sql.user.create.file=sql/User/InsertUser.sql
+server.database.sql.sensorclass.delete.file=sql/SensorClass/DeleteSensorClass.sql
 server.database.sql.user.updateWpassword.file.default=sql/User/UpdateUserWithPassword.sql
-server.database.sql.sensor.updatename.file=sql/Sensor/UpdateSensorName.sql
+server.database.sql.sensorclass.create.file.default=sql/SensorClass/InsertSensorClass.sql
+server.database.sql.sensorclass.delete.file.default=sql/SensorClass/DeleteSensorClass.sql
 server.database.test.fail.text=<html><font color\="red">Connection fail\!</font></html>
 server.database.hsql.port=9001
 server.database.sql.controller.queryall.file.default=sql/Controller/QueryAllControllers.sql

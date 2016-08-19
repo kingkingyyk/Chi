@@ -226,7 +226,7 @@ public class FrameUserManagement extends JFrame {
 	
 	public void updateUserTable() {
 		WaitUI u=new WaitUI();
-		u.setText("Populating user database");
+		u.setText("Populating user list");
 		updateSuccess=false;
 		usernameDB=new HashSet<>();
 		Thread t=new Thread() {

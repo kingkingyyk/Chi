@@ -49,7 +49,7 @@ public class Config {
 	public static final String DATABASE_DELETE_USER_SQL_FILE_KEY="server.database.sql.user.delete.file";
 	public static final String DATABASE_UPDATE_USER_W_PASSWORD_SQL_FILE_KEY="server.database.sql.user.updateWpassword.file";
 	public static final String DATABASE_UPDATE_USER_WO_PASSWORD_SQL_FILE_KEY="server.database.sql.user.updateWOpassword.file";
-	public static final String DATABASE_QUERY_USERNAME_SQL_FILE_KEY="server.database.sql.user.queryname.file";
+	public static final String DATABASE_QUERY_USERNAME_SQL_FILE_KEY="server.database.sql.user.query.file";
 	public static final String DATABASE_QUERY_USERNAME_ALL_SQL_FILE_KEY="server.database.sql.user.queryallnames.file";
 	public static final String DATABASE_QUERY_USER_ALL_SQL_FILE_KEY="server.database.sql.user.queryall.file";
 	
@@ -58,11 +58,16 @@ public class Config {
 	public static final String DATABASE_UPDATE_CONTROLLER_NAME_SQL_FILE_KEY="server.database.sql.controller.updatename.file";
 	public static final String DATABASE_QUERY_CONTROLLERNAME_SQL_FILE_KEY="server.database.sql.controller.queryname.file";
 	public static final String DATABASE_QUERY_CONTROLLER_ALL_SQL_FILE_KEY="server.database.sql.controller.queryall.file";
-			
+	
+	public static final String DATABASE_CREATE_SENSOR_CLASS_SQL_FILE_KEY="server.database.sql.sensorclass.create.file";
+	public static final String DATABASE_DELETE_SENSOR_CLASS_SQL_FILE_KEY="server.database.sql.sensorclass.delete.file";
+	public static final String DATABASE_UPDATE_SENSOR_CLASS_SQL_FILE_KEY="server.database.sql.sensorclass.update.file";
+	public static final String DATABASE_QUERY_SENSOR_CLASS_ALL_SQL_FILE_KEY="server.database.sql.sensorclass.queryall.file";
+	
 	public static final String DATABASE_CREATE_SENSOR_SQL_FILE_KEY="server.database.sql.sensor.create.file";
 	public static final String DATABASE_DELETE_SENSOR_SQL_FILE_KEY="server.database.sql.sensor.delete.file";
-	public static final String DATABASE_UPDATE_SENSOR_NAME_SQL_FILE_KEY="server.database.sql.sensor.updatename.file";
-	public static final String DATABASE_QUERY_SENSORNAME_SQL_FILE_KEY="server.database.sql.sensor.queryname.file";
+	public static final String DATABASE_UPDATE_SENSOR_SQL_FILE_KEY="server.database.sql.sensor.update.file";
+	public static final String DATABASE_QUERY_SENSOR_ALL_NAME_SQL_FILE_KEY="server.database.sql.sensor.queryname.file";
 	public static final String DATABASE_QUERY_SENSOR_ALL_SQL_FILE_KEY="server.database.sql.sensor.queryall.file";
 	
 	//Default values.
@@ -101,11 +106,16 @@ public class Config {
 	public static final String DATABASE_UPDATE_CONTROLLER_NAME_SQL_FILE_DEFAULT="Controller/UpdateControllerName.sql";
 	public static final String DATABASE_QUERY_CONTROLLER_SQL_FILE_DEFAULT="Controller/QueryController.sql";
 	public static final String DATABASE_QUERY_CONTROLLER_ALL_SQL_FILE_DEFAULT="Controller/QueryAllControllers.sql";
+	//Database - Sensor Class
+	public static final String DATABASE_CREATE_SENSOR_CLASS_SQL_FILE_DEFAULT="SensorClass/InsertSensorClass.sql";
+	public static final String DATABASE_DELETE_SENSOR_CLASS_SQL_FILE_DEFAULT="SensorClass/DeleteSensorClass.sql";
+	public static final String DATABASE_UPDATE_SENSOR_CLASS_SQL_FILE_DEFAULT="SensorClass/UpdateSensorClass.sql";
+	public static final String DATABASE_QUERY_SENSOR_CLASS_ALL_SQL_FILE_DEFAULT="SensorClass/QueryAllClasses.sql";
 	//Database - Sensor
 	public static final String DATABASE_CREATE_SENSOR_SQL_FILE_DEFAULT="Sensor/InsertSensor.sql";
 	public static final String DATABASE_DELETE_SENSOR_SQL_FILE_DEFAULT="Sensor/DeleteSensor.sql";
-	public static final String DATABASE_UPDATE_SENSOR_NAME_SQL_FILE_DEFAULT="Sensor/UpdateSensorName.sql";
-	public static final String DATABASE_QUERY_SENSOR_SQL_FILE_DEFAULT="Sensor/QuerySensor.sql";
+	public static final String DATABASE_UPDATE_SENSOR_SQL_FILE_DEFAULT="Sensor/UpdateSensor.sql";
+	public static final String DATABASE_QUERY_SENSOR_ALL_NAME_SQL_FILE_DEFAULT="Sensor/QuerySensorName.sql";
 	public static final String DATABASE_QUERY_SENSOR_ALL_SQL_FILE_DEFAULT="Sensor/QueryAllSensors.sql";
 	//Database - Reading
 	public static final String DATABASE_RECORD_READING_SQL_FILE_DEFAULT="Reading/RecordReading.sql";
@@ -179,9 +189,14 @@ public class Config {
 		
 		Config.setConfig(DATABASE_CREATE_SENSOR_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_CREATE_SENSOR_SQL_FILE_DEFAULT);
 		Config.setConfig(DATABASE_DELETE_SENSOR_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_DELETE_SENSOR_SQL_FILE_DEFAULT);
-		Config.setConfig(DATABASE_UPDATE_SENSOR_NAME_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_UPDATE_SENSOR_NAME_SQL_FILE_DEFAULT);
-		Config.setConfig(DATABASE_QUERY_SENSORNAME_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_QUERY_SENSOR_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_UPDATE_SENSOR_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_UPDATE_SENSOR_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_QUERY_SENSOR_ALL_NAME_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_QUERY_SENSOR_ALL_NAME_SQL_FILE_DEFAULT);
 		Config.setConfig(DATABASE_QUERY_SENSOR_ALL_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_QUERY_SENSOR_ALL_SQL_FILE_DEFAULT);
+		
+		Config.setConfig(DATABASE_CREATE_SENSOR_CLASS_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_CREATE_SENSOR_CLASS_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_DELETE_SENSOR_CLASS_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_DELETE_SENSOR_CLASS_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_UPDATE_SENSOR_CLASS_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_UPDATE_SENSOR_CLASS_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_QUERY_SENSOR_CLASS_ALL_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_QUERY_SENSOR_CLASS_ALL_SQL_FILE_DEFAULT);
 		
 		//Real config
 		String [] keys=prop.keySet().toArray(new String[prop.keySet().size()]);
