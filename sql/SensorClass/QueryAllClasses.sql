@@ -1,1 +1,1 @@
-SELECT * FROM SensorClass ORDER BY ClassName
+SELECT * FROM SensorClass

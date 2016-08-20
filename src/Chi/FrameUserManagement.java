@@ -244,8 +244,18 @@ public class FrameUserManagement extends JFrame {
 							list.add(o);
 						}
 					} catch (SQLException e) {e.printStackTrace();}
+					int lastSelectedRow=-1;
+					if (table!=null) {
+						lastSelectedRow=table.getSelectedRow();
+					}
+					
 					createTable();
 					table.setTreeTableModel(new UserTableModel(rootRow));
+					
+					if (lastSelectedRow>=0) {
+						lastSelectedRow=Math.min(lastSelectedRow,usernameDB.size()-1);
+						table.setRowSelectionInterval(lastSelectedRow,lastSelectedRow);
+					}
 					updateSuccess=true;
 				}
 				u.dispose();

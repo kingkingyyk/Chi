@@ -38,13 +38,13 @@ public class DialogSensorClassAdd extends JDialog {
 		contentPanel.setLayout(null);
 		{
 			JLabel lblName = new JLabel("Name :");
-			lblName.setBounds(29, 11, 55, 14);
+			lblName.setBounds(10, 11, 55, 14);
 			lblName.setHorizontalAlignment(SwingConstants.RIGHT);
 			contentPanel.add(lblName);
 		}
 		{
 			textFieldName = new JTextField();
-			textFieldName.setBounds(89, 8, 246, 20);
+			textFieldName.setBounds(75, 8, 246, 20);
 			contentPanel.add(textFieldName);
 			textFieldName.setColumns(30);
 			textFieldName.addKeyListener(new KeyAdapter() {
@@ -62,7 +62,7 @@ public class DialogSensorClassAdd extends JDialog {
 		}
 		{
 			lblNameInfo = new JLabel("<html><font color=\"red\">Cannot be empty!</font></html>");
-			lblNameInfo.setBounds(345, 9, 89, 16);
+			lblNameInfo.setBounds(331, 10, 89, 16);
 			contentPanel.add(lblNameInfo);
 		}
 		{

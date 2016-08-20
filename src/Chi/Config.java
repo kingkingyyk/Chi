@@ -55,8 +55,8 @@ public class Config {
 	
 	public static final String DATABASE_CREATE_CONTROLLER_SQL_FILE_KEY="server.database.sql.controller.create.file";
 	public static final String DATABASE_DELETE_CONTROLLER_SQL_FILE_KEY="server.database.sql.controller.delete.file";
-	public static final String DATABASE_UPDATE_CONTROLLER_NAME_SQL_FILE_KEY="server.database.sql.controller.updatename.file";
-	public static final String DATABASE_QUERY_CONTROLLERNAME_SQL_FILE_KEY="server.database.sql.controller.queryname.file";
+	public static final String DATABASE_UPDATE_CONTROLLER_SQL_FILE_KEY="server.database.sql.controller.update.file";
+	public static final String DATABASE_QUERY_CONTROLLER_ALL_NAME_SQL_FILE_KEY="server.database.sql.controller.queryname.file";
 	public static final String DATABASE_QUERY_CONTROLLER_ALL_SQL_FILE_KEY="server.database.sql.controller.queryall.file";
 	
 	public static final String DATABASE_CREATE_SENSOR_CLASS_SQL_FILE_KEY="server.database.sql.sensorclass.create.file";
@@ -103,8 +103,9 @@ public class Config {
 	//Database - Controller
 	public static final String DATABASE_CREATE_CONTROLLER_SQL_FILE_DEFAULT="Controller/InsertController.sql";
 	public static final String DATABASE_DELETE_CONTROLLER_SQL_FILE_DEFAULT="Controller/DeleteController.sql";
-	public static final String DATABASE_UPDATE_CONTROLLER_NAME_SQL_FILE_DEFAULT="Controller/UpdateControllerName.sql";
+	public static final String DATABASE_UPDATE_CONTROLLER_SQL_FILE_DEFAULT="Controller/UpdateController.sql";
 	public static final String DATABASE_QUERY_CONTROLLER_SQL_FILE_DEFAULT="Controller/QueryController.sql";
+	public static final String DATABASE_QUERY_CONTROLLER_ALL_NAME_SQL_FILE_DEFAULT="Controller/QueryControllerName.sql";
 	public static final String DATABASE_QUERY_CONTROLLER_ALL_SQL_FILE_DEFAULT="Controller/QueryAllControllers.sql";
 	//Database - Sensor Class
 	public static final String DATABASE_CREATE_SENSOR_CLASS_SQL_FILE_DEFAULT="SensorClass/InsertSensorClass.sql";
@@ -183,8 +184,8 @@ public class Config {
 
 		Config.setConfig(DATABASE_CREATE_CONTROLLER_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_CREATE_CONTROLLER_SQL_FILE_DEFAULT);
 		Config.setConfig(DATABASE_DELETE_CONTROLLER_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_DELETE_CONTROLLER_SQL_FILE_DEFAULT);
-		Config.setConfig(DATABASE_UPDATE_CONTROLLER_NAME_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_UPDATE_CONTROLLER_NAME_SQL_FILE_DEFAULT);
-		Config.setConfig(DATABASE_QUERY_CONTROLLERNAME_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_QUERY_CONTROLLER_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_UPDATE_CONTROLLER_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_UPDATE_CONTROLLER_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_QUERY_CONTROLLER_ALL_NAME_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_QUERY_CONTROLLER_ALL_NAME_SQL_FILE_DEFAULT);
 		Config.setConfig(DATABASE_QUERY_CONTROLLER_ALL_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_QUERY_CONTROLLER_ALL_SQL_FILE_DEFAULT);
 		
 		Config.setConfig(DATABASE_CREATE_SENSOR_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_CREATE_SENSOR_SQL_FILE_DEFAULT);

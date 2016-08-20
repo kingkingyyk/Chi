@@ -1,5 +1,5 @@
 #
-#Fri Aug 19 17:25:18 SGT 2016
+#Sat Aug 20 10:47:58 SGT 2016
 server.database.sql.hsql.createtables.file=sql/InitializationHSQL/CreateTables.sql
 server.incoming.port.default=40000
 server.database.sql.user.queryall.file.default=sql/User/QueryAllUsers.sql
@@ -24,15 +24,17 @@ server.database.sql.controller.create.file.default=sql/Controller/InsertControll
 server.database.sql.controller.delete.file.default=sql/Controller/DeleteController.sql
 server.database.hsql.username=chi-admin
 server.database.sql.user.updateWpassword.file=sql/User/UpdateUserWithPassword.sql
+server.database.sql.controller.update.file=sql/Controller/UpdateController.sql
 server.database.sql.user.create.file.default=sql/User/InsertUser.sql
 server.database.sql.user.delete.file.default=sql/User/DeleteUser.sql
 server.database.cassandra.username=chi-admin
 server.database.sql.sensorclass.queryall.file.default=sql/SensorClass/QueryAllClasses.sql
-server.database.sql.controller.queryname.file.default=sql/Controller/QueryController.sql
-server.hsql.ip=192.168.0.5
+server.database.sql.controller.queryname.file.default=sql/Controller/QueryControllerName.sql
+server.hsql.ip=192.168.0.3
 server.database.sql.hsql.createtables.file.default=sql/InitializationHSQL/CreateTables.sql
 server.database.sql.controller.delete.file=sql/Controller/DeleteController.sql
 server.database.sql.user.delete.file=sql/User/DeleteUser.sql
+server.database.sql.controller.update.file.default=sql/Controller/UpdateController.sql
 server.database.sql.recordreading.default=sql/Reading/RecordReading.sql
 server.database.sql.user.query.file=sql/User/QueryUsername.sql
 server.database.sql.user.queryallnames.file.default=sql/User/QueryAllUsernames.sql
@@ -48,7 +50,6 @@ server.database.cassandra.port.default=9042
 server.database.sql.sensorclass.queryall.file=sql/SensorClass/QueryAllClasses.sql
 server.database.test.success.text=<html><font color\="green">Connection OK\!</font></html>
 server.database.cassandra.password.default=chi-admin
-server.database.sql.controller.updatename.file.default=sql/Controller/UpdateControllerName.sql
 server.database.sql.sensor.queryname.file.default=sql/Sensor/QuerySensorName.sql
 server.hsql.ip.default=127.0.0.1
 server.database.sql.controller.create.file=sql/Controller/InsertController.sql
@@ -58,7 +59,7 @@ server.database.sql.sensor.update.file=sql/Sensor/UpdateSensor.sql
 server.database.sql.recordreading=sql/Reading/RecordReading.sql
 server.lock.file.name=CHI_LOCK
 server.incoming.port=40000
-server.database.sql.controller.queryname.file=sql/Controller/QueryController.sql
+server.database.sql.controller.queryname.file=sql/Controller/QueryControllerName.sql
 server.database.sql.sensorclass.update.file=sql/SensorClass/UpdateSensorClass.sql
 server.database.sql.sensor.queryname.file=sql/Sensor/QuerySensorName.sql
 server.database.sql.sensor.queryall.file.default=sql/Sensor/QueryAllSensors.sql
@@ -66,9 +67,8 @@ server.database.sql.sensor.update.file.default=sql/Sensor/UpdateSensor.sql
 server.database.sql.user.updateWOpassword.file.default=sql/User/UpdateUserWithoutPassword.sql
 server.database.sql.sensor.delete.file=sql/Sensor/DeleteSensor.sql
 server.database.cassandra.sql.reset.file=sql/InitializationCassandra/ResetDB.sql
-server.database.cassandra.ip=192.168.0.5
+server.database.cassandra.ip=192.168.0.3
 server.database.cassandra.hsql.reset.file.default=sql/InitializationHSQL/ResetDB.sql
-server.database.sql.controller.updatename.file=sql/Controller/UpdateControllerName.sql
 server.database.test.fail.text.default=<html><font color\="red">Connection fail\!</font></html>
 server.database.sql.user.create.file=sql/User/InsertUser.sql
 server.database.sql.sensorclass.delete.file=sql/SensorClass/DeleteSensorClass.sql

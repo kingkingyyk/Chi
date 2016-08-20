@@ -128,7 +128,17 @@ public class FrameSensorClassManagement extends JFrame {
 							classDB.add(rs.getString(1));
 						}
 					} catch (SQLException e) {e.printStackTrace();}
+					
+					int lastSelectedRow=-1;
+					if (table!=null) {
+						 lastSelectedRow=table.getSelectedRow();
+					}
 					createTable();
+					if (lastSelectedRow>=0) {
+						lastSelectedRow=Math.min(lastSelectedRow,list.size()-1);
+						table.setRowSelectionInterval(lastSelectedRow,lastSelectedRow);
+					}
+					
 					updateSuccess=true;
 				}
 				u.dispose();

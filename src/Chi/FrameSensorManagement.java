@@ -246,9 +246,18 @@ public class FrameSensorManagement extends JFrame {
 							list.add(o);
 						}
 					} catch (SQLException e) {e.printStackTrace();}
+					int lastSelectedRow=-1;
+					if (table!=null) {
+						lastSelectedRow=table.getSelectedRow();
+					}
 					createTable();
 					table.setAutoCreateRowSorter(true);
 					table.setTreeTableModel(new SensorTableModel(rootRow));
+					
+					if (lastSelectedRow>=0) {
+						lastSelectedRow=Math.min(lastSelectedRow,sensorDB.size()-1);
+						table.setRowSelectionInterval(lastSelectedRow,lastSelectedRow);
+					}
 					updateSuccess=true;
 				}
 				u.dispose();
