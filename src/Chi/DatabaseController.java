@@ -1,6 +1,7 @@
 package Chi;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -14,7 +15,7 @@ public class DatabaseController extends DatabaseHSQL {
 		return runSQLFromFileAndGetData("DB Get Controller",Config.getConfig(Config.DATABASE_QUERY_CONTROLLER_ALL_SQL_FILE_KEY));
 	}
 	
-	public static boolean createController (String n, String s, double x, double y) {
+	public static boolean createController (String n, String s, double x, double y, int t) {
 		Logger.log("DB Create Controller : "+Config.getConfig(Config.DATABASE_CREATE_CONTROLLER_SQL_FILE_KEY));
 		try {
 			Connection c = getConnection();
@@ -26,6 +27,8 @@ public class DatabaseController extends DatabaseHSQL {
 				ps.setString(2, s);
 				ps.setDouble(3, x);
 				ps.setDouble(4, y);
+				ps.setInt(5, t);
+				ps.setDate(6,new Date(0));
 				Logger.log("DB Create Controller - Execute "+ps.toString());
 				ps.execute();
 				
@@ -42,18 +45,19 @@ public class DatabaseController extends DatabaseHSQL {
 		return false;
 	}
 	
-	public static boolean updateController (String n, String s, double x, double y) {
+	public static boolean updateController (String n, String s, double x, double y, int t) {
 		Logger.log("DB Update Controller : "+Config.getConfig(Config.DATABASE_UPDATE_CONTROLLER_SQL_FILE_KEY));
 		try {
 			Connection c = getConnection();
 			if (c!=null) {
-				Logger.log("DB Update Sensor - Database connection OK!");
+				Logger.log("DB Update Controller - Database connection OK!");
 				String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_UPDATE_CONTROLLER_SQL_FILE_KEY));
 				PreparedStatement ps=c.prepareStatement(sql[0]);
 				ps.setString(1, s);
 				ps.setDouble(2, x);
 				ps.setDouble(3, y);
-				ps.setString(4, n);
+				ps.setInt(4, t);
+				ps.setString(5, n);
 				Logger.log("DB Update Controller - Execute "+ps.toString());
 				ps.execute();
 				

@@ -146,7 +146,6 @@ public class DialogUserEdit extends JDialog {
 							u.setVisible(true);
 							
 							if (flag) {
-								JOptionPane.showMessageDialog(null,"User updated successfully!",Config.APP_NAME,JOptionPane.INFORMATION_MESSAGE);
 								userEdited=true;
 								dispose();
 							} else {

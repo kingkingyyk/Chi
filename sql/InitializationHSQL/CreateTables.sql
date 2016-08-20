@@ -6,8 +6,10 @@ CREATE TABLE Site(
 CREATE TABLE Controller(
 	ControllerName varchar(100) PRIMARY KEY,
 	Site varchar(100),
-	PositionX double,
+	PositionX double,:
 	PositionY double,
+	ReportTimeout integer,
+	LastReportTime timestamp,
 	FOREIGN KEY (Site) REFERENCES Site(SiteName)
 )
 @
@@ -41,6 +43,6 @@ CREATE TABLE User(
 	DateAdded timestamp
 )
 @
-INSERT INTO Site VALUES ('DefaultSite','http://')
+INSERT INTO Site VALUES ('DefaultSite','http://i.imgur.com/Ep8mS4K.jpg')
 @
 INSERT INTO SensorClass VALUES ('DefaultClass')

@@ -254,7 +254,7 @@ public class FrameSensorManagement extends JFrame {
 					table.setAutoCreateRowSorter(true);
 					table.setTreeTableModel(new SensorTableModel(rootRow));
 					
-					if (lastSelectedRow>=0) {
+					if (lastSelectedRow>=0 && sensorDB.size()>0) {
 						lastSelectedRow=Math.min(lastSelectedRow,sensorDB.size()-1);
 						table.setRowSelectionInterval(lastSelectedRow,lastSelectedRow);
 					}

@@ -2,7 +2,10 @@ package Chi;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+
+import javax.swing.JOptionPane;
 
 public class Cache {
 	
@@ -40,6 +43,7 @@ public class Cache {
 					sensorClassUpdateSuccess=true;
 				} catch (Exception e) {
 					Logger.log("Cache.updateSensorClass - Error - "+e.getMessage());
+					JOptionPane.showMessageDialog(null,"Fail to retrieve data from database.\nPlease refer to the console for more information.","Query Sensor Class",JOptionPane.ERROR_MESSAGE);
 				}
 				u.dispose();
 			}
@@ -75,6 +79,7 @@ public class Cache {
 					sensorUpdateSuccess=true;
 				} catch (Exception e) {
 					Logger.log("Cache.updateSensor - Error - "+e.getMessage());
+					JOptionPane.showMessageDialog(null,"Fail to retrieve data from database.\nPlease refer to the console for more information.","Query Sensor",JOptionPane.ERROR_MESSAGE);
 				}
 				u.dispose();
 			}
@@ -84,4 +89,77 @@ public class Cache {
 		return sensorUpdateSuccess;
 	}
 	
+	public static ArrayList<String> controllerList=new ArrayList<>();
+	public static HashSet<String> controllerSet=new HashSet<>();
+	public static ArrayList<Object []> controllerObj=new ArrayList<>();
+	private static boolean controllerUpdateSuccess=false;
+	
+	public static boolean updateController() {
+		controllerUpdateSuccess=false;
+		WaitUI u=new WaitUI();
+		u.setText("Querying controller");
+		Thread t=new Thread() {
+			public void run () {
+				ResultSet rs=DatabaseController.getControllers();
+				controllerList.clear();
+				controllerSet.clear();
+				controllerObj.clear();
+				
+				try {
+					while (rs.next()) {
+						Object [] o={rs.getString(1),rs.getString(2),rs.getDouble(3),rs.getDouble(4),rs.getInt(5),rs.getDate(6)};
+						controllerList.add(rs.getString(1));
+						controllerSet.add(rs.getString(1));
+						controllerObj.add(o);
+					}
+					controllerUpdateSuccess=true;
+				} catch (Exception e) {
+					Logger.log("Cache.updateController - Error - "+e.getMessage());
+					JOptionPane.showMessageDialog(null,"Fail to retrieve data from database.\nPlease refer to the console for more information.","Query Controller",JOptionPane.ERROR_MESSAGE);
+				}
+				u.dispose();
+			}
+		};
+		t.start();
+		u.setVisible(true);
+		return controllerUpdateSuccess;
+	}
+	
+	public static ArrayList<String> siteList=new ArrayList<>();
+	public static HashSet<String> siteSet=new HashSet<>();
+	public static HashMap<String,String> siteToImgSet=new HashMap<>();
+	public static ArrayList<Object []> siteObj=new ArrayList<>();
+	private static boolean siteUpdateSuccess=false;
+	
+	public static boolean updateSite() {
+		siteUpdateSuccess=false;
+		WaitUI u=new WaitUI();
+		u.setText("Querying site");
+		Thread t=new Thread() {
+			public void run () {
+				ResultSet rs=DatabaseSite.getSites();
+				siteList.clear();
+				siteSet.clear();
+				siteObj.clear();
+				
+				try {
+					while (rs.next()) {
+						Object [] o={rs.getString(1),rs.getString(2)};
+						siteList.add(rs.getString(1));
+						siteSet.add(rs.getString(1));
+						siteToImgSet.put(rs.getString(1), rs.getString(2));
+						siteObj.add(o);
+					}
+					siteUpdateSuccess=true;
+				} catch (Exception e) {
+					Logger.log("Cache.updateSite - Error - "+e.getMessage());
+					JOptionPane.showMessageDialog(null,"Fail to retrieve data from database.\nPlease refer to the console for more information.","Query Site",JOptionPane.ERROR_MESSAGE);
+				}
+				u.dispose();
+			}
+		};
+		t.start();
+		u.setVisible(true);
+		return siteUpdateSuccess;
+	}
 }

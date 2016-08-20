@@ -232,7 +232,6 @@ public class DialogSensorAdd extends JDialog {
 							u.setVisible(true);
 							
 							if (flag) {
-								JOptionPane.showMessageDialog(null,"User created successfully!",Config.APP_NAME,JOptionPane.INFORMATION_MESSAGE);
 								sensorAdded=true;
 								dispose();
 							} else {

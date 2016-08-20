@@ -94,7 +94,6 @@ public class DialogSensorClassEdit extends JDialog {
 							u.setVisible(true);
 							
 							if (flag) {
-								JOptionPane.showMessageDialog(null,"Sensor class created successfully!",Config.APP_NAME,JOptionPane.INFORMATION_MESSAGE);
 								classEdited=true;
 								dispose();
 							} else {

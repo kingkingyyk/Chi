@@ -252,7 +252,7 @@ public class FrameUserManagement extends JFrame {
 					createTable();
 					table.setTreeTableModel(new UserTableModel(rootRow));
 					
-					if (lastSelectedRow>=0) {
+					if (lastSelectedRow>=0 && usernameDB.size()>0) {
 						lastSelectedRow=Math.min(lastSelectedRow,usernameDB.size()-1);
 						table.setRowSelectionInterval(lastSelectedRow,lastSelectedRow);
 					}

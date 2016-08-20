@@ -134,7 +134,7 @@ public class FrameSensorClassManagement extends JFrame {
 						 lastSelectedRow=table.getSelectedRow();
 					}
 					createTable();
-					if (lastSelectedRow>=0) {
+					if (lastSelectedRow>=0 && list.size()>0) {
 						lastSelectedRow=Math.min(lastSelectedRow,list.size()-1);
 						table.setRowSelectionInterval(lastSelectedRow,lastSelectedRow);
 					}

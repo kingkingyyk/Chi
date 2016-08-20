@@ -81,8 +81,8 @@ public class FrameSensorManagementContextMenu extends JPopupMenu {
 
 			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
-				editMenu.setEnabled(m.getSelectedRow()!=-1  && !m.getSelectedObj()[0].equals("DefaultClass"));
-				deleteMenu.setEnabled(m.getSelectedRow()!=-1  && !m.getSelectedObj()[0].equals("DefaultClass"));
+				editMenu.setEnabled(m.getSelectedRow()!=-1);
+				deleteMenu.setEnabled(m.getSelectedRow()!=-1);
 			};
 		
 		});

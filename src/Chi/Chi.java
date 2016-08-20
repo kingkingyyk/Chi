@@ -18,7 +18,7 @@ public class Chi {
 		Logger.log("Loading theme done.");
 		
 		Logger.log("Splash screen started.");
-		SplashScreen ss=new SplashScreen();
+		MenuUI ss=new MenuUI();
 		ss.setLocationRelativeTo(null);
 		Logger.log("Splash screen done.");
 		ss.setVisible(true);

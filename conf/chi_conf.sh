@@ -1,14 +1,20 @@
 #
-#Sat Aug 20 10:47:58 SGT 2016
+#Sat Aug 20 15:51:48 SGT 2016
 server.database.sql.hsql.createtables.file=sql/InitializationHSQL/CreateTables.sql
+server.database.sql.site.create.file=sql/Site/InsertSite.sql
+server.database.sql.site.queryallnames.file=sql/Site/QueryAllSiteName.sql
 server.incoming.port.default=40000
 server.database.sql.user.queryall.file.default=sql/User/QueryAllUsers.sql
+server.database.sql.site.queryall.file.default=sql/Site/QueryAllSites.sql
 server.database.sql.user.queryallnames.file=sql/User/QueryAllUsernames.sql
+server.database.sql.site.queryall.file=sql/Site/QueryAllSites.sql
 server.database.cassandra.sql.reset.file.default=sql/InitializationCassandra/ResetDB.sql
 server.database.cassandra.hsql.reset.file=sql/InitializationHSQL/ResetDB.sql
+server.database.sql.site.queryallnames.file.default=sql/Site/QueryAllSiteName.sql
 server.database.sql.cassandra.init.file=sql/InitializationCassandra/InitDB.sql
 server.database.sql.sensorclass.create.file=sql/SensorClass/InsertSensorClass.sql
 server.database.hsql.password=chi-admin
+server.database.sql.site.update.file.default=sql/Site/UpdateSite.sql
 server.database.sql.sensorclass.update.file.default=sql/SensorClass/UpdateSensorClass.sql
 server.database.hsql.username.default=chi-admin
 server.database.sql.cassandra.init.file.default=sql/InitializationCassandra/InitDB.sql
@@ -21,8 +27,8 @@ server.database.cassandra.port=9042
 server.lock.file.name.default=CHI_LOCK
 server.database.sql.cassandra.createtables.file.default=sql/InitializationCassandra/CreateTables.sql
 server.database.sql.controller.create.file.default=sql/Controller/InsertController.sql
-server.database.sql.controller.delete.file.default=sql/Controller/DeleteController.sql
 server.database.hsql.username=chi-admin
+server.database.sql.controller.delete.file.default=sql/Controller/DeleteController.sql
 server.database.sql.user.updateWpassword.file=sql/User/UpdateUserWithPassword.sql
 server.database.sql.controller.update.file=sql/Controller/UpdateController.sql
 server.database.sql.user.create.file.default=sql/User/InsertUser.sql
@@ -43,9 +49,10 @@ server.database.sql.recordgetting.default=sql/Reading/QueryReading.sql
 server.database.sql.controller.queryall.file=sql/Controller/QueryAllControllers.sql
 server.database.sql.sensor.create.file.default=sql/Sensor/InsertSensor.sql
 server.database.sql.sensor.delete.file.default=sql/Sensor/DeleteSensor.sql
+server.database.sql.site.update.file=sql/Site/UpdateSite.sql
 server.database.sql.cassandra.createtables.file=sql/InitializationCassandra/CreateTables.sql
-server.database.hsql.password.default=chi-admin
 server.database.sql.recordgetting=sql/Reading/QueryReading.sql
+server.database.hsql.password.default=chi-admin
 server.database.cassandra.port.default=9042
 server.database.sql.sensorclass.queryall.file=sql/SensorClass/QueryAllClasses.sql
 server.database.test.success.text=<html><font color\="green">Connection OK\!</font></html>
@@ -57,6 +64,7 @@ server.database.hsql.port.default=9001
 server.database.test.success.text.default=<html><font color\="green">Connection OK\!</font></html>
 server.database.sql.sensor.update.file=sql/Sensor/UpdateSensor.sql
 server.database.sql.recordreading=sql/Reading/RecordReading.sql
+server.database.sql.site.delete.file=sql/Site/DeleteSite.sql
 server.lock.file.name=CHI_LOCK
 server.incoming.port=40000
 server.database.sql.controller.queryname.file=sql/Controller/QueryControllerName.sql
@@ -73,7 +81,9 @@ server.database.test.fail.text.default=<html><font color\="red">Connection fail\
 server.database.sql.user.create.file=sql/User/InsertUser.sql
 server.database.sql.sensorclass.delete.file=sql/SensorClass/DeleteSensorClass.sql
 server.database.sql.user.updateWpassword.file.default=sql/User/UpdateUserWithPassword.sql
+server.database.sql.site.create.file.default=sql/Site/InsertSite.sql
 server.database.sql.sensorclass.create.file.default=sql/SensorClass/InsertSensorClass.sql
+server.database.sql.site.delete.file.default=sql/Site/DeleteSite.sql
 server.database.sql.sensorclass.delete.file.default=sql/SensorClass/DeleteSensorClass.sql
 server.database.test.fail.text=<html><font color\="red">Connection fail\!</font></html>
 server.database.hsql.port=9001

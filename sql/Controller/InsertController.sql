@@ -1,3 +1,3 @@
-INSERT INTO Controller (ControllerName,Site,PositionX,PositionY) VALUES(?,?,?,?)
+INSERT INTO Controller (ControllerName,Site,PositionX,PositionY,ReportTimeout,LastReportTime) VALUES(?,?,?,?,?,?)
 @
 COMMIT
