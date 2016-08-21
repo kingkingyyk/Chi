@@ -71,7 +71,7 @@ public class Cache {
 				
 				try {
 					while (rs.next()) {
-						Object [] o={rs.getString(1),rs.getString(2),rs.getDouble(3),rs.getDouble(4),rs.getDouble(5),rs.getString(6)};
+						Object [] o={rs.getString(1),rs.getString(2),rs.getDouble(3),rs.getDouble(4),rs.getDouble(5),rs.getString(6),rs.getString(6)};
 						sensorList.add(rs.getString(1));
 						sensorSet.add(rs.getString(1));
 						sensorObj.add(o);

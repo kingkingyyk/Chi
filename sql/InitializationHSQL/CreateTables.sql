@@ -6,7 +6,7 @@ CREATE TABLE Site(
 CREATE TABLE Controller(
 	ControllerName varchar(100) PRIMARY KEY,
 	Site varchar(100),
-	PositionX double,:
+	PositionX double,
 	PositionY double,
 	ReportTimeout integer,
 	LastReportTime timestamp,
@@ -24,7 +24,9 @@ CREATE TABLE Sensor(
 	MaxValue double,
 	TransformationFactor double,
 	Unit varchar(10),
-	FOREIGN KEY (Class) REFERENCES SensorClass(ClassName)
+	Controller varchar(100),
+	FOREIGN KEY (Class) REFERENCES SensorClass(ClassName),
+	FOREIGN KEY (Controller) REFERENCES Controller(ControllerName)
 )
 @
 CREATE TABLE ControllerGroup(
@@ -46,3 +48,7 @@ CREATE TABLE User(
 INSERT INTO Site VALUES ('DefaultSite','http://i.imgur.com/Ep8mS4K.jpg')
 @
 INSERT INTO SensorClass VALUES ('DefaultClass')
+@
+INSERT INTO Controller VALUES ('DefaultController','DefaultSite','0.5','0.5',10,TIMESTAMP(0))
+@
+INSERT INTO Site VALUES ('FSKTM Student Center','http://i.imgur.com/p5ZPRNm.jpg')

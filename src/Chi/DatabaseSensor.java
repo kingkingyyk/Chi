@@ -14,7 +14,7 @@ public class DatabaseSensor extends DatabaseHSQL {
 		return runSQLFromFileAndGetData("DB Get Sensor",Config.getConfig(Config.DATABASE_QUERY_SENSOR_ALL_SQL_FILE_KEY));
 	}
 	
-	public static boolean createSensor (String sn, String cn, double min, double max, double trans, String unit) {
+	public static boolean createSensor (String sn, String cn, double min, double max, double trans, String unit, String con) {
 		Logger.log("DB Create Sensor : "+Config.getConfig(Config.DATABASE_CREATE_SENSOR_SQL_FILE_KEY));
 		try {
 			Connection c = getConnection();
@@ -28,6 +28,7 @@ public class DatabaseSensor extends DatabaseHSQL {
 				ps.setDouble(4, max);
 				ps.setDouble(5, trans);
 				ps.setString(6, unit);
+				ps.setString(7, con);
 				Logger.log("DB Create Sensor - Execute "+ps.toString());
 				ps.execute();
 				
@@ -44,7 +45,7 @@ public class DatabaseSensor extends DatabaseHSQL {
 		return false;
 	}
 	
-	public static boolean updateSensor (String sn, String cn, double min, double max, double trans, String unit) {
+	public static boolean updateSensor (String sn, String cn, double min, double max, double trans, String unit, String con) {
 		Logger.log("DB Update Sensor : "+Config.getConfig(Config.DATABASE_UPDATE_SENSOR_SQL_FILE_KEY));
 		try {
 			Connection c = getConnection();
@@ -57,7 +58,8 @@ public class DatabaseSensor extends DatabaseHSQL {
 				ps.setDouble(3, max);
 				ps.setDouble(4, trans);
 				ps.setString(5, unit);
-				ps.setString(6, sn);
+				ps.setString(6, con);
+				ps.setString(7, sn);
 				Logger.log("DB Update Sensor - Execute "+ps.toString());
 				ps.execute();
 				

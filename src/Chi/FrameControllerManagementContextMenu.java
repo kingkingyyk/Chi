@@ -81,8 +81,8 @@ public class FrameControllerManagementContextMenu extends JPopupMenu {
 
 			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
-				editMenu.setEnabled(m.getSelectedRow()!=-1);
-				deleteMenu.setEnabled(m.getSelectedRow()!=-1);
+				editMenu.setEnabled(m.getSelectedRow()!=-1 && !m.getSelectedObj()[0].equals("DefaultController"));
+				deleteMenu.setEnabled(m.getSelectedRow()!=-1 && !m.getSelectedObj()[0].equals("DefaultController"));
 			};
 		
 		});

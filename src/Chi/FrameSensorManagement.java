@@ -5,10 +5,7 @@ import java.awt.Component;
 import java.awt.SystemColor;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -43,7 +40,7 @@ public class FrameSensorManagement extends JFrame {
 	}
 	
 	private static class SensorTableModel extends AbstractTreeTableModel {
-		public static final String [] COLUMNS= {"Name","Class","Min Value","Max Value","Trans. Fact","Unit"};
+		public static final String [] COLUMNS= {"Name","Class","Min Value","Max Value","Trans. Fact","Unit","Attached On"};
 		
 		public SensorTableModel (SensorTableRow r) {
 			super(r);
@@ -164,7 +161,6 @@ public class FrameSensorManagement extends JFrame {
 	private SensorTable table;
 	private SensorTableRow rootRow;
 	private ArrayList<Object []> list=new ArrayList<>();
-	public HashSet<String> sensorDB=new HashSet<>();
 	public boolean updateSuccess;
 	private JScrollPane scrollPane;
 
@@ -227,45 +223,29 @@ public class FrameSensorManagement extends JFrame {
 	}
 	
 	public void updateSensorTable() {
-		WaitUI u=new WaitUI();
-		u.setText("Populating sensor list");
-		updateSuccess=false;
-		sensorDB=new HashSet<>();
-		Thread t=new Thread() {
-			public void run () {
-				ResultSet rs=DatabaseSensor.getSensors();
-				if (rs!=null) {
-					rootRow=new SensorTableRow(null);
-					list.clear();
-					try {
-						while (rs.next()) {
-							sensorDB.add(rs.getString(1));
-							Object [] o={rs.getString(1),rs.getString(2),rs.getDouble(3),rs.getDouble(4),rs.getDouble(5),rs.getString(6)};
-							SensorTableRow utr=new SensorTableRow(o);
-							rootRow.addRow(utr);
-							list.add(o);
-						}
-					} catch (SQLException e) {e.printStackTrace();}
-					int lastSelectedRow=-1;
-					if (table!=null) {
-						lastSelectedRow=table.getSelectedRow();
-					}
-					createTable();
-					table.setAutoCreateRowSorter(true);
-					table.setTreeTableModel(new SensorTableModel(rootRow));
-					
-					if (lastSelectedRow>=0 && sensorDB.size()>0) {
-						lastSelectedRow=Math.min(lastSelectedRow,sensorDB.size()-1);
-						table.setRowSelectionInterval(lastSelectedRow,lastSelectedRow);
-					}
-					updateSuccess=true;
-				}
-				u.dispose();
-			}
-		};
-		t.start();
-		u.setVisible(true);
+		Cache.updateSensor();
+		rootRow=new SensorTableRow(null);
+		list.clear();
+		for (Object [] o : Cache.sensorObj) {
+			SensorTableRow utr=new SensorTableRow(o);
+			rootRow.addRow(utr);
+			list.add(o);
+		}
 		
+		int lastSelectedRow=-1;
+		if (table!=null) {
+			lastSelectedRow=table.getSelectedRow();
+		}
+		createTable();
+		table.setAutoCreateRowSorter(true);
+		table.setTreeTableModel(new SensorTableModel(rootRow));
+		
+		if (lastSelectedRow>=0 && Cache.sensorList.size()>0) {
+			lastSelectedRow=Math.min(lastSelectedRow,Cache.sensorList.size()-1);
+			table.setRowSelectionInterval(lastSelectedRow,lastSelectedRow);
+		}
+		updateSuccess=true;
+
 		if (updateSuccess) {
 			table.getColumn(0).setCellRenderer(new SensorTableCellRenderer());
 			table.getColumn(1).setCellRenderer(new SensorTableCellRenderer());
@@ -273,6 +253,7 @@ public class FrameSensorManagement extends JFrame {
 			table.getColumn(3).setCellRenderer(new SensorTableCellRenderer());
 			table.getColumn(4).setCellRenderer(new SensorTableCellRenderer());
 			table.getColumn(5).setCellRenderer(new SensorTableCellRenderer());
+			table.getColumn(6).setCellRenderer(new SensorTableCellRenderer());
 			
 			table.getColumnModel().getColumn(0).setPreferredWidth(133);
 			table.getColumnModel().getColumn(1).setPreferredWidth(133);
@@ -280,7 +261,7 @@ public class FrameSensorManagement extends JFrame {
 			table.getColumnModel().getColumn(3).setPreferredWidth(54);
 			table.getColumnModel().getColumn(4).setPreferredWidth(54);
 			table.getColumnModel().getColumn(5).setPreferredWidth(54);
-
+			table.getColumnModel().getColumn(6).setPreferredWidth(100);
 		}
 	}
 	

@@ -79,7 +79,7 @@ public class DialogSensorClassEdit extends JDialog {
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
 						String txt=textFieldName.getText();
-						if (txt==null || txt.isEmpty() || (classSet.contains(txt) && txt!=fillN)) {
+						if (txt==null || txt.isEmpty() || (classSet.contains(txt) && !txt.equals(fillN))) {
 							JOptionPane.showMessageDialog(null,"Invalid name!",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
 						} else {
 							WaitUI u=new WaitUI();

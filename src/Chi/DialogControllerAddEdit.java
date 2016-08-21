@@ -225,6 +225,7 @@ public class DialogControllerAddEdit extends JDialog {
 	}
 	
 	private void drawMap (String u) {
+		lblPositionMap.setIcon(null);
 		lblPositionMap.setText("Loading Image");
 		lblPositionTarget.setVisible(false);
 		Thread t=new Thread() {

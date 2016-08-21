@@ -15,6 +15,7 @@ public class Logger {
 	private static SimpleDateFormat formatter=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
 	private static SimpleDateFormat logFileNameFormatter=new SimpleDateFormat("yyyy.MM.dd-HH.mm.ss");
 	private static File LogFile=null;
+	private static boolean EnableLogToFile=false;
 	private static ConcurrentLinkedQueue<String> eventQueue=new ConcurrentLinkedQueue<>();
 	
 	public static void log (String event) {
@@ -27,7 +28,7 @@ public class Logger {
 						while (eventQueue.size()>0) {
 							String s=eventQueue.poll();
 							System.out.println(s);
-							pw.println(s);
+							if (EnableLogToFile) pw.println(s);
 						}
 						pw.close();
 					} catch (IOException e) {
