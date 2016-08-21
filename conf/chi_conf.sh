@@ -1,5 +1,5 @@
 #
-#Sat Aug 20 15:51:48 SGT 2016
+#Sun Aug 21 13:14:22 SGT 2016
 server.database.sql.hsql.createtables.file=sql/InitializationHSQL/CreateTables.sql
 server.database.sql.site.create.file=sql/Site/InsertSite.sql
 server.database.sql.site.queryallnames.file=sql/Site/QueryAllSiteName.sql
@@ -36,7 +36,7 @@ server.database.sql.user.delete.file.default=sql/User/DeleteUser.sql
 server.database.cassandra.username=chi-admin
 server.database.sql.sensorclass.queryall.file.default=sql/SensorClass/QueryAllClasses.sql
 server.database.sql.controller.queryname.file.default=sql/Controller/QueryControllerName.sql
-server.hsql.ip=192.168.0.3
+server.hsql.ip=192.168.0.10
 server.database.sql.hsql.createtables.file.default=sql/InitializationHSQL/CreateTables.sql
 server.database.sql.controller.delete.file=sql/Controller/DeleteController.sql
 server.database.sql.user.delete.file=sql/User/DeleteUser.sql
@@ -75,7 +75,7 @@ server.database.sql.sensor.update.file.default=sql/Sensor/UpdateSensor.sql
 server.database.sql.user.updateWOpassword.file.default=sql/User/UpdateUserWithoutPassword.sql
 server.database.sql.sensor.delete.file=sql/Sensor/DeleteSensor.sql
 server.database.cassandra.sql.reset.file=sql/InitializationCassandra/ResetDB.sql
-server.database.cassandra.ip=192.168.0.3
+server.database.cassandra.ip=192.168.0.10
 server.database.cassandra.hsql.reset.file.default=sql/InitializationHSQL/ResetDB.sql
 server.database.test.fail.text.default=<html><font color\="red">Connection fail\!</font></html>
 server.database.sql.user.create.file=sql/User/InsertUser.sql

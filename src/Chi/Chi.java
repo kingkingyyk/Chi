@@ -9,6 +9,8 @@ public class Chi {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {}
 		
+		Logger.initialize();
+		
 		Logger.log("Reading configuration started.");
 		Config.initialize();
 		Logger.log("Reading configuration done.");
