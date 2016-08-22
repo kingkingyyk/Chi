@@ -157,6 +157,22 @@ public class MenuUI extends JFrame {
 		btnSensorClass.setBounds(269, 5, 135, 23);
 		panelDatabase.add(btnSensorClass);
 		
+		JButton btnActuator = new JButton("Actuator");
+		btnActuator.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				FrameActuatorManagement f=FrameActuatorManagement.getInstance();
+				if (f.updateSuccess) {
+					f.setVisible(true);
+				}
+			}
+		});
+		btnActuator.setBounds(269, 35, 135, 23);
+		panelDatabase.add(btnActuator);
+		
+		JPanel panelScheduling = new JPanel();
+		tabbedPane.addTab("Scheduling", null, panelScheduling, null);
+		panelScheduling.setLayout(null);
+		
 		JPanel panelSQL = new JPanel();
 		tabbedPane.addTab("SQL", null, panelSQL, null);
 		panelSQL.setLayout(null);

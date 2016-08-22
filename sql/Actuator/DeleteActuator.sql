@@ -1,0 +1,4 @@
+DELETE FROM Actuator WHERE Name=?
+
+@
+COMMIT

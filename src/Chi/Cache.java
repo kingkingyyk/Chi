@@ -162,4 +162,42 @@ public class Cache {
 		u.setVisible(true);
 		return siteUpdateSuccess;
 	}
+	
+	public static ArrayList<String> actuatorList=new ArrayList<>();
+	public static HashSet<String> actuatorSet=new HashSet<>();
+	public static HashMap<String,String> actuatorToImgSet=new HashMap<>();
+	public static ArrayList<Object []> actuatorObj=new ArrayList<>();
+	private static boolean actuatorUpdateSuccess=false;
+	
+	public static boolean updateActuator() {
+		actuatorUpdateSuccess=false;
+		WaitUI u=new WaitUI();
+		u.setText("Querying actuator");
+		Thread t=new Thread() {
+			public void run () {
+				ResultSet rs=DatabaseActuator.getActuators();
+				actuatorList.clear();
+				actuatorSet.clear();
+				actuatorObj.clear();
+				
+				try {
+					while (rs.next()) {
+						Object [] o={rs.getString(1),rs.getString(2)};
+						actuatorList.add(rs.getString(1));
+						actuatorSet.add(rs.getString(1));
+						actuatorToImgSet.put(rs.getString(1), rs.getString(2));
+						actuatorObj.add(o);
+					}
+					actuatorUpdateSuccess=true;
+				} catch (Exception e) {
+					Logger.log("Cache.updateActuator - Error - "+e.getMessage());
+					JOptionPane.showMessageDialog(null,"Fail to retrieve data from database.\nPlease refer to the console for more information.","Query actuator",JOptionPane.ERROR_MESSAGE);
+				}
+				u.dispose();
+			}
+		};
+		t.start();
+		u.setVisible(true);
+		return actuatorUpdateSuccess;
+	}
 }

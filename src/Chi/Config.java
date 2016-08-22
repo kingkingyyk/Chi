@@ -76,6 +76,12 @@ public class Config {
 	public static final String DATABASE_QUERY_SENSOR_ALL_NAME_SQL_FILE_KEY="server.database.sql.sensor.queryname.file";
 	public static final String DATABASE_QUERY_SENSOR_ALL_SQL_FILE_KEY="server.database.sql.sensor.queryall.file";
 	
+	public static final String DATABASE_CREATE_ACTUATOR_SQL_FILE_KEY="server.database.sql.actuator.create.file";
+	public static final String DATABASE_DELETE_ACTUATOR_SQL_FILE_KEY="server.database.sql.actuator.delete.file";
+	public static final String DATABASE_UPDATE_ACTUATOR_SQL_FILE_KEY="server.database.sql.actuator.update.file";
+	public static final String DATABASE_QUERY_ACTUATOR_ALL_NAME_SQL_FILE_KEY="server.database.sql.actuator.queryallnames.file";
+	public static final String DATABASE_QUERY_ACTUATOR_ALL_SQL_FILE_KEY="server.database.sql.actuator.queryall.file";
+	
 	//Default values.
 	public static final String CONFIG_DEFAULT_KEY=".default";
 	private static final String CONFIG_SERVER_INCOMING_PORT_DEFAULT="40000";
@@ -130,9 +136,16 @@ public class Config {
 	public static final String DATABASE_UPDATE_SENSOR_SQL_FILE_DEFAULT="Sensor/UpdateSensor.sql";
 	public static final String DATABASE_QUERY_SENSOR_ALL_NAME_SQL_FILE_DEFAULT="Sensor/QuerySensorName.sql";
 	public static final String DATABASE_QUERY_SENSOR_ALL_SQL_FILE_DEFAULT="Sensor/QueryAllSensors.sql";
+	//Database - Actuator
+	public static final String DATABASE_CREATE_ACTUATOR_SQL_FILE_DEFAULT="Actuator/InsertActuator.sql";
+	public static final String DATABASE_DELETE_ACTUATOR_SQL_FILE_DEFAULT="Actuator/DeleteActuator.sql";
+	public static final String DATABASE_UPDATE_ACTUATOR_SQL_FILE_DEFAULT="Actuator/UpdateActuator.sql";
+	public static final String DATABASE_QUERY_ACTUATOR_ALL_SQL_FILE_DEFAULT="Actuator/QueryAllActuators.sql";
+	public static final String DATABASE_QUERY_ACTUATOR_ALL_NAME_SQL_FILE_DEFAULT="Actuator/QueryAllActuatorName.sql";
 	//Database - Reading
 	public static final String DATABASE_RECORD_READING_SQL_FILE_DEFAULT="Reading/RecordReading.sql";
 	public static final String DATABASE_RECORD_GETTING_SQL_FILE_DEFAULT="Reading/QueryReading.sql";
+
 	
 	public static void setConfig (String key, String value) {
 		prop.setProperty(key,value);
@@ -216,6 +229,12 @@ public class Config {
 		Config.setConfig(DATABASE_DELETE_SENSOR_CLASS_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_DELETE_SENSOR_CLASS_SQL_FILE_DEFAULT);
 		Config.setConfig(DATABASE_UPDATE_SENSOR_CLASS_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_UPDATE_SENSOR_CLASS_SQL_FILE_DEFAULT);
 		Config.setConfig(DATABASE_QUERY_SENSOR_CLASS_ALL_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_QUERY_SENSOR_CLASS_ALL_SQL_FILE_DEFAULT);
+		
+		Config.setConfig(DATABASE_CREATE_ACTUATOR_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_CREATE_ACTUATOR_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_DELETE_ACTUATOR_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_DELETE_ACTUATOR_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_UPDATE_ACTUATOR_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_UPDATE_ACTUATOR_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_QUERY_ACTUATOR_ALL_NAME_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_QUERY_ACTUATOR_ALL_NAME_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_QUERY_ACTUATOR_ALL_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_QUERY_ACTUATOR_ALL_SQL_FILE_DEFAULT);
 		
 		//Real config
 		String [] keys=prop.keySet().toArray(new String[prop.keySet().size()]);

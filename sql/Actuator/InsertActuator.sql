@@ -1,0 +1,3 @@
+INSERT INTO Actuator VALUES(?,?)
+@
+COMMIT
