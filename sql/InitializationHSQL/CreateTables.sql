@@ -29,14 +29,6 @@ CREATE TABLE Sensor(
 	FOREIGN KEY (Controller) REFERENCES Controller(ControllerName)
 )
 @
-CREATE TABLE ControllerGroup(
-	GroupName varchar(100) PRIMARY KEY,
-	Controller varchar(100),
-	Sensor varchar(100),
-	FOREIGN KEY (Controller) REFERENCES Controller(ControllerName),
-	FOREIGN KEY (Sensor) REFERENCES Sensor(SensorName)
-)
-@
 CREATE TABLE User(
 	Username varchar(100) PRIMARY KEY,
 	Password varchar(100),
