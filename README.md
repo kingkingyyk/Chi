@@ -18,3 +18,5 @@ Compile :
 + Eclipse
 
 ============================================
+Database Schema (Paste the XML) : http://ondras.zarovi.cz/sql/demo/ 
+============================================
