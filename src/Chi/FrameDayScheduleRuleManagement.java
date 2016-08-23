@@ -80,32 +80,18 @@ public class FrameDayScheduleRuleManagement extends JFrame {
 	}
 	
 	private static class DayScheduleRuleTableRow {
-		private static String [] Hours={"12","01","02","03","04","05","06","07","08","09","10","11"};
-		private static String [] Minutes; //generated dynamically, too long :P
-		private static String [] AMPM={"AM","PM"};
 		private ArrayList<DayScheduleRuleTableRow> subRow;
 		public String [] renderText;
 		
 		public DayScheduleRuleTableRow(Object [] o) {
-			if (Minutes==null) {
-				Minutes=new String [60];
-				for (int i=0;i<60;i++) {
-					if (i<10) {
-						StringBuilder sb=new StringBuilder();
-						sb.append("0");
-						sb.append(i);
-						Minutes[i]=sb.toString();
-					} else {
-						Minutes[i]=String.valueOf(i);
-					}
-				}
-			}
-			
 			if (o!=null) {
 				renderText=new String [3];
 				renderText[0]=(String)o[0];
-				renderText[1]=Hours[(Integer)o[1]%Hours.length]+":"+Minutes[(Integer)o[2]]+" "+AMPM[(Integer)o[1]/Hours.length];
-				renderText[2]=Hours[(Integer)o[3]%Hours.length]+":"+Minutes[(Integer)o[4]]+" "+AMPM[(Integer)o[3]/Hours.length];
+				
+				String [] t=Utility.formatTime((int)o[1],(int)o[2]);
+				renderText[1]=t[0]+":"+t[1]+" "+t[2];
+				t=Utility.formatTime((int)o[3],(int)o[4]);
+				renderText[2]=t[0]+":"+t[1]+" "+t[2];
 			} else {
 				renderText=new String [] {"root"};
 			}

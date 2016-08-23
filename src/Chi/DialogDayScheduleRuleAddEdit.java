@@ -17,9 +17,6 @@ import javax.swing.JComboBox;
 
 public class DialogDayScheduleRuleAddEdit extends JDialog {
 	private static final long serialVersionUID = 2263148230107556625L;
-	private static String [] Hours={"12","01","02","03","04","05","06","07","08","09","10","11"};
-	private static String [] Minutes; //generated dynamically, too long :P
-	private static String [] AMPM={"AM","PM"};
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textFieldName;
 	private JLabel lblNameInfo;
@@ -71,19 +68,6 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 	}
 	
 	private void create() {
-		if (Minutes==null) {
-			Minutes=new String [60];
-			for (int i=0;i<60;i++) {
-				if (i<10) {
-					StringBuilder sb=new StringBuilder();
-					sb.append("0");
-					sb.append(i);
-					Minutes[i]=sb.toString();
-				} else {
-					Minutes[i]=String.valueOf(i);
-				}
-			}
-		}
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setModal(true);
 		setResizable(false);
@@ -222,15 +206,15 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 	}
 	
 	private void uiActionsNormal() {
-		for (String s : Hours) {
+		for (String s : Utility.Hours) {
 			comboBoxStartHour.addItem(s);
 			comboBoxEndHour.addItem(s);
 		}
-		for (String s : Minutes) {
+		for (String s : Utility.Minutes) {
 			comboBoxStartMinute.addItem(s);
 			comboBoxEndMinute.addItem(s);
 		}
-		for (String s : AMPM) {
+		for (String s : Utility.AMPM) {
 			comboBoxStartTimeAMPM.addItem(s);
 			comboBoxEndTimeAMPM.addItem(s);
 		}
@@ -251,7 +235,7 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
-				} else if (Cache.siteSet.contains(txt)) {
+				} else if (Cache.DayScheduleRuleList.contains(txt)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
@@ -265,7 +249,7 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || Cache.siteList.contains(txt)) {
+				if (txt==null || txt.isEmpty() || Cache.DayScheduleRuleList.contains(txt)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Day Schedule Rule",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -299,7 +283,7 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
-				} else if (Cache.siteSet.contains(txt) && !txt.equals(n)) {
+				} else if (Cache.DayScheduleRuleList.contains(txt) && !txt.equals(n)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
@@ -313,7 +297,7 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || (Cache.siteList.contains(txt) && !txt.equals(n))) {
+				if (txt==null || txt.isEmpty() || (Cache.DayScheduleRuleList.contains(txt) && !txt.equals(n))) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Edit Day Schedule Rule",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

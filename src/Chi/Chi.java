@@ -11,6 +11,9 @@ public class Chi {
 		
 		Logger.initialize();
 		
+		Logger.log("Initializing Utility class.");
+		Utility.initialize();
+		
 		Logger.log("Reading configuration started.");
 		Config.initialize();
 		Logger.log("Reading configuration done.");
@@ -19,12 +22,12 @@ public class Chi {
 		Theme.initialize();
 		Logger.log("Loading theme done.");
 		
-		Logger.log("Splash screen started.");
+		Logger.log("MainUI started.");
 		MenuUI ss=new MenuUI();
 		ss.setLocationRelativeTo(null);
-		Logger.log("Splash screen done.");
+		Logger.log("MainUI done.");
 		ss.setVisible(true);
-		Logger.log("Splash screen closed.");
+		Logger.log("MainUI closed.");
 	}
 	
 }

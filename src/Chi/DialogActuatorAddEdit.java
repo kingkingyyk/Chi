@@ -120,7 +120,7 @@ public class DialogActuatorAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
-				} else if (Cache.siteSet.contains(txt)) {
+				} else if (Cache.actuatorSet.contains(txt)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
@@ -134,7 +134,7 @@ public class DialogActuatorAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || Cache.siteList.contains(txt)) {
+				if (txt==null || txt.isEmpty() || Cache.actuatorList.contains(txt)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Actuator",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
