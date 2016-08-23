@@ -14,7 +14,7 @@ public class DatabaseReading extends DatabaseCassandra {
 		return runSQLFromFileAndGetData("DB Get Sensor Reading",Config.getConfig(Config.DATABASE_RECORD_GETTING_SQL_FILE_KEY));
 	}
 	
-	public static boolean storeReading (String cn, String sn, LocalDateTime time, double v) {
+	public static boolean storeReading (String sn, LocalDateTime time, double v) {
 		String ip=Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY);
 		int port=Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
 		Logger.log("DB Store Reading : "+Config.getConfig(Config.DATABASE_RECORD_READING_SQL_FILE_KEY));
@@ -28,17 +28,16 @@ public class DatabaseReading extends DatabaseCassandra {
 			Logger.log("DB Store Reading - Database connection OK!");
 			
 			BoundStatement [] sql=getBoundSQLStatementFromFile(session,Config.getConfig(Config.DATABASE_RECORD_READING_SQL_FILE_KEY));
-			sql[0].setString(0, cn);
-			sql[0].setString(1, sn);
-			sql[0].setTimestamp(2,Timestamp.valueOf(time));
-			sql[0].setInt(3, time.getDayOfWeek().getValue());
-			sql[0].setInt(4, time.getDayOfMonth());
-			sql[0].setInt(5, time.getMonth().getValue());
-			sql[0].setInt(6, time.getYear());
-			sql[0].setInt(7, time.getHour());
-			sql[0].setInt(8, time.getMinute());
-			sql[0].setInt(9, time.getSecond());
-			sql[0].setDouble(10, v);
+			sql[0].setString(0, sn);
+			sql[0].setTimestamp(1,Timestamp.valueOf(time));
+			sql[0].setInt(2, time.getDayOfWeek().getValue());
+			sql[0].setInt(3, time.getDayOfMonth());
+			sql[0].setInt(4, time.getMonth().getValue());
+			sql[0].setInt(5, time.getYear());
+			sql[0].setInt(6, time.getHour());
+			sql[0].setInt(7, time.getMinute());
+			sql[0].setInt(8, time.getSecond());
+			sql[0].setDouble(9, v);
 			executeSQL("DB Store Reading", session, sql[0]);
 			
 			session.close();

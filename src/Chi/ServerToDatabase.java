@@ -9,21 +9,19 @@ public class ServerToDatabase {
 	private static SimpleDateFormat formatter=new SimpleDateFormat(ServerToDatabase.TIMESTAMP_FORMAT);
 	
 	private static class Data {
-		String cname;
 		String sname;
 		LocalDateTime timestamp;
 		double reading;
 		
 		public String toString() {
-			return this.cname+"|"+this.sname+"|"+formatter.format(this.timestamp)+"|"+this.reading;
+			return this.sname+"|"+formatter.format(this.timestamp)+"|"+this.reading;
 		}
 	}
 	//Thread safe queue.
 	private static ConcurrentLinkedQueue<Data> queue=new ConcurrentLinkedQueue<>();
 
-	public static void queueData(String cn, String sn, double r) {
+	public static void queueData(String sn, double r) {
 		Data d=new Data();
-		d.cname=cn;
 		d.sname=sn;
 		d.timestamp=LocalDateTime.now();
 		d.reading=r;
@@ -43,7 +41,7 @@ public class ServerToDatabase {
 	private static void writeToDatabase() {
 		while (queue.size()>0) {
 			Data d=queue.poll();
-			boolean success=DatabaseReading.storeReading(d.cname, d.sname, d.timestamp, d.reading);
+			boolean success=DatabaseReading.storeReading(d.sname, d.timestamp, d.reading);
 			if (!success) {
 				try {
 					Thread.sleep(1000);

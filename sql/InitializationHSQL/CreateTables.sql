@@ -66,7 +66,7 @@ CREATE TABLE SpecialSchedule (
 	ActuatorName varchar(100),
 	Day int,
 	Month int,
-	year int,
+	Year int,
 	Rule varchar(100),
 	ActuatorOn boolean,
 	Priority int,

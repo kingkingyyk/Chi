@@ -37,54 +37,219 @@
 		<type label="SET" length="1" sql="SET" quote=""/>
 		<type label="Bit" length="0" sql="bit" quote=""/>
 	</group>
-</datatypes><table x="804" y="205" name="Sensor">
-<row name="SensorName" null="0" autoincrement="0">
-<datatype>VARCHAR(50)</datatype>
-<default>'SENSOR'</default><relation table="SensorGroup" row="ReadingSensor" />
-<relation table="SensorGroup" row="ActingSensor" />
+</datatypes><table x="601" y="675" name="Site">
+<row name="SiteName" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+<default>'NULL'</default></row>
+<row name="SiteMapURL" null="0" autoincrement="0">
+<datatype>VARCHAR(350)</datatype>
 </row>
-<row name="MinReading" null="1" autoincrement="0">
+<key type="PRIMARY" name="">
+<part>SiteName</part>
+</key>
+</table>
+<table x="842" y="453" name="Controller">
+<row name="ControllerName" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+</row>
+<row name="Site" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+<relation table="Site" row="SiteName" />
+</row>
+<row name="PositionX" null="0" autoincrement="0">
 <datatype>DOUBLE</datatype>
-<default>NULL</default></row>
-<row name="MaxReading" null="1" autoincrement="0">
+</row>
+<row name="PositionY" null="1" autoincrement="0">
 <datatype>DOUBLE</datatype>
-<default>NULL</default></row>
+</row>
+<row name="ReportTimeout" null="0" autoincrement="0">
+<datatype>INTEGER</datatype>
+</row>
+<row name="LastReportTime" null="0" autoincrement="0">
+<datatype>TIMESTAMP</datatype>
+</row>
+<key type="PRIMARY" name="">
+<part>ControllerName</part>
+</key>
+</table>
+<table x="1333" y="579" name="SensorClass">
+<row name="ClassName" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+</row>
+<key type="PRIMARY" name="">
+<part>ClassName</part>
+</key>
+</table>
+<table x="1047" y="563" name="Sensor">
+<row name="SensorName" null="0" autoincrement="0">
+<datatype>VARCHAR</datatype>
+</row>
+<row name="Class" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+<relation table="SensorClass" row="ClassName" />
+</row>
+<row name="MinValue" null="0" autoincrement="0">
+<datatype>DOUBLE</datatype>
+</row>
+<row name="MaxValue" null="0" autoincrement="0">
+<datatype>DOUBLE</datatype>
+</row>
+<row name="TransformationFactor" null="0" autoincrement="0">
+<datatype>DOUBLE</datatype>
+</row>
+<row name="Unit" null="0" autoincrement="0">
+<datatype>VARCHAR(10)</datatype>
+</row>
+<row name="Controller" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+<relation table="Controller" row="ControllerName" />
+</row>
 <key type="PRIMARY" name="">
 <part>SensorName</part>
 </key>
 </table>
-<table x="521" y="308" name="SensorReading">
+<table x="395" y="456" name="User">
+<row name="Username" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+</row>
+<row name="Password" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+</row>
+<row name="Level" null="0" autoincrement="0">
+<datatype>INTEGER</datatype>
+</row>
+<row name="Status" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+</row>
+<row name="DateAdded" null="0" autoincrement="0">
+<datatype>TIMESTAMP</datatype>
+</row>
+<key type="PRIMARY" name="">
+<part>Username</part>
+</key>
+</table>
+<table x="940" y="203" name="Actuator">
+<row name="Name" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+</row>
+<row name="Controller" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+<relation table="Controller" row="ControllerName" />
+</row>
+<key type="PRIMARY" name="">
+<part>Name</part>
+</key>
+</table>
+<table x="358" y="149" name="DayScheduleRule">
+<row name="Name" null="0" autoincrement="0">
+<datatype>VARCHAR</datatype>
+</row>
+<row name="StartHour" null="0" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="StartMinute" null="0" autoincrement="0">
+<datatype>INTEGER</datatype>
+</row>
+<row name="EndHour" null="0" autoincrement="0">
+<datatype>INTEGER</datatype>
+</row>
+<row name="EndMinute" null="0" autoincrement="0">
+<datatype>INTEGER</datatype>
+</row>
+<key type="PRIMARY" name="">
+<part>Name</part>
+</key>
+</table>
+<table x="611" y="58" name="RegularSchedule">
+<row name="ScheduleName" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+</row>
+<row name="ActuatorName" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+<relation table="Actuator" row="Name" />
+</row>
+<row name="DayMask" null="0" autoincrement="0">
+<datatype>INTEGER</datatype>
+</row>
+<row name="ActuatorOn" null="0" autoincrement="0">
+<datatype>BINARY</datatype>
+<default>'NULL'</default></row>
+<row name="Priority" null="0" autoincrement="0">
+<datatype>INTEGER</datatype>
+</row>
+<row name="Rule" null="1" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+<default>NULL</default><relation table="DayScheduleRule" row="Name" />
+</row>
+<key type="PRIMARY" name="">
+<part>ScheduleName</part>
+</key>
+</table>
+<table x="621" y="278" name="SpecialSchedule">
+<row name="ScheduleName" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+</row>
+<row name="ActuatorName" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+<relation table="Actuator" row="Name" />
+</row>
+<row name="Day" null="0" autoincrement="0">
+<datatype>INTEGER</datatype>
+</row>
+<row name="Month" null="0" autoincrement="0">
+<datatype>INTEGER</datatype>
+</row>
+<row name="Year" null="0" autoincrement="0">
+<datatype>INTEGER</datatype>
+</row>
+<row name="Rule" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+<relation table="DayScheduleRule" row="Name" />
+</row>
+<row name="ActuatorOn" null="0" autoincrement="0">
+<datatype>BINARY</datatype>
+<default>'NULL'</default></row>
+<row name="Priority" null="0" autoincrement="0">
+<datatype>INTEGER</datatype>
+</row>
+<key type="PRIMARY" name="">
+<part>ScheduleName</part>
+</key>
+</table>
+<table x="1232" y="208" name="SensorReading">
 <row name="SensorName" null="0" autoincrement="0">
-<datatype>VARCHAR(50)</datatype>
+<datatype>VARCHAR(100)</datatype>
 <relation table="Sensor" row="SensorName" />
 </row>
-<row name="datetime" null="0" autoincrement="0">
-<datatype>DATETIME</datatype>
-<default>'NULL'</default></row>
-<row name="reading" null="0" autoincrement="0">
-<datatype>DOUBLE</datatype>
+<row name="TimeStp" null="0" autoincrement="0">
+<datatype>TIMESTAMP</datatype>
+</row>
+<row name="DayInWeek" null="0" autoincrement="0">
+<datatype>INTEGER</datatype>
+</row>
+<row name="Day" null="0" autoincrement="0">
+<datatype>INTEGER</datatype>
+</row>
+<row name="Month" null="0" autoincrement="0">
+<datatype>INTEGER</datatype>
 <default>NULL</default></row>
+<row name="Year" null="0" autoincrement="0">
+<datatype>INTEGER</datatype>
+</row>
+<row name="Hour" null="0" autoincrement="0">
+<datatype>INTEGER</datatype>
+</row>
+<row name="Minute" null="0" autoincrement="0">
+<datatype>INTEGER</datatype>
+</row>
+<row name="Second" null="0" autoincrement="0">
+<datatype>INTEGER</datatype>
+</row>
+<row name="Value" null="0" autoincrement="0">
+<datatype>DOUBLE</datatype>
+</row>
 <key type="PRIMARY" name="">
 <part>SensorName</part>
-</key>
-</table>
-<table x="527" y="120" name="SensorGroup">
-<row name="GroupName" null="0" autoincrement="1">
-<datatype>VARCHAR(50)</datatype>
-</row>
-<row name="ReadingSensor" null="0" autoincrement="0">
-<datatype>VARCHAR(50)</datatype>
-</row>
-<row name="ActingSensor" null="0" autoincrement="0">
-<datatype>VARCHAR(50)</datatype>
-</row>
-<key type="UNIQUE" name="">
-<part>GroupName</part>
-<part>ReadingSensor</part>
-<part>ActingSensor</part>
-</key>
-<key type="PRIMARY" name="">
-<part>GroupName</part>
 </key>
 </table>
 </sql>

@@ -41,11 +41,10 @@ public class ServerThread extends Thread {
 						String received=new String(buffer,0,packetLength);
 						Logger.log("Listening Server - Received packet - "+received);
 						StringTokenizer st=new StringTokenizer(received,Config.SENSOR_DATA_DELIMITER);
-						if (st.countTokens()==3) {
-							String cName=st.nextToken();
+						if (st.countTokens()==2) {
 							String sName=st.nextToken();
 							double value=Double.parseDouble(st.nextToken());
-							ServerToDatabase.queueData(cName,sName,value);
+							ServerToDatabase.queueData(sName,value);
 						}
 					}
 					packet.setLength(buffer.length);

@@ -1,7 +1,6 @@
 USE Chi
 @
 CREATE TABLE SensorReading(
-	ControllerName varchar,
 	SensorName varchar,
 	TimeStp timestamp,
 	DayInWeek int,
@@ -12,5 +11,5 @@ CREATE TABLE SensorReading(
 	Minute int,
 	Second int,
 	Value double,
-	PRIMARY KEY ((ControllerName, SensorName, Year, Month, Day), Hour, Minute, Second)
+	PRIMARY KEY ((SensorName, Year, Month, Day), Hour, Minute, Second)
 )

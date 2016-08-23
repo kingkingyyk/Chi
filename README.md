@@ -18,4 +18,3 @@ Compile :
 + Eclipse
 
 ============================================
-Database Schema (Outdated) : http://ondras.zarovi.cz/sql/demo/
