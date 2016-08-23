@@ -176,6 +176,10 @@ public class MenuUI extends JFrame {
 		JButton btnDayScheduleRules = new JButton("Day Schedule Rules");
 		btnDayScheduleRules.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				FrameDayScheduleRuleManagement f=FrameDayScheduleRuleManagement.getInstance();
+				if (f.updateSuccess) {
+					f.setVisible(true);
+				}
 			}
 		});
 		btnDayScheduleRules.setBounds(10, 11, 127, 23);

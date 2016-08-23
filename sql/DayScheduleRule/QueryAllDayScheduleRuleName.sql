@@ -1,0 +1,1 @@
+SELECT RuleName From DayScheduleRule

@@ -75,7 +75,7 @@ public class DatabaseUser extends DatabaseHSQL {
 			c.close();
 			return true;
 		} catch (Exception e) {
-			Logger.log("DB Create User Credential - Error - "+e.getMessage());
+			Logger.log("DB Update User Credential - Error - "+e.getMessage());
 			e.printStackTrace();
 		}
 		return false;

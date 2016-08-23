@@ -83,8 +83,16 @@ public class Config {
 	public static final String DATABASE_DELETE_ACTUATOR_SQL_FILE_KEY="server.database.sql.actuator.delete.file";
 	public static final String DATABASE_UPDATE_ACTUATOR_SQL_FILE_KEY="server.database.sql.actuator.update.file";
 	public static final String DATABASE_UPDATE_ACTUATOR_STATUS_SQL_FILE_KEY="server.database.sql.actuator.updatestatus.file";
+	public static final String DATABASE_QUERY_ACTUATOR_SQL_FILE_KEY="server.database.sql.actuator.query.file";
 	public static final String DATABASE_QUERY_ACTUATOR_ALL_NAME_SQL_FILE_KEY="server.database.sql.actuator.queryallnames.file";
 	public static final String DATABASE_QUERY_ACTUATOR_ALL_SQL_FILE_KEY="server.database.sql.actuator.queryall.file";
+	
+	public static final String DATABASE_CREATE_DAY_SCHEDULE_RULE_SQL_FILE_KEY="server.database.sql.dayschedulerule.create.file";
+	public static final String DATABASE_DELETE_DAY_SCHEDULE_RULE_SQL_FILE_KEY="server.database.sql.dayschedulerule.delete.file";
+	public static final String DATABASE_UPDATE_DAY_SCHEDULE_RULE_SQL_FILE_KEY="server.database.sql.dayschedulerule.update.file";
+	public static final String DATABASE_QUERY_DAY_SCHEDULE_RULE_SQL_FILE_KEY="server.database.sql.dayschedulerule.query.file";
+	public static final String DATABASE_QUERY_DAY_SCHEDULE_RULE_ALL_NAME_SQL_FILE_KEY="server.database.sql.dayschedulerule.queryallnames.file";
+	public static final String DATABASE_QUERY_DAY_SCHEDULE_RULE_ALL_SQL_FILE_KEY="server.database.sql.dayschedulerule.queryall.file";
 	
 	//Default values.
 	public static final String CONFIG_DEFAULT_KEY=".default";
@@ -148,8 +156,16 @@ public class Config {
 	public static final String DATABASE_DELETE_ACTUATOR_SQL_FILE_DEFAULT="Actuator/DeleteActuator.sql";
 	public static final String DATABASE_UPDATE_ACTUATOR_SQL_FILE_DEFAULT="Actuator/UpdateActuator.sql";
 	public static final String DATABASE_UPDATE_ACTUATOR_STATUS_SQL_FILE_DEFAULT="Actuator/UpdateActuatorStatus.sql";
+	public static final String DATABASE_QUERY_ACTUATOR_SQL_FILE_DEFAULT="Actuator/QueryActuator.sql";
 	public static final String DATABASE_QUERY_ACTUATOR_ALL_SQL_FILE_DEFAULT="Actuator/QueryAllActuators.sql";
 	public static final String DATABASE_QUERY_ACTUATOR_ALL_NAME_SQL_FILE_DEFAULT="Actuator/QueryAllActuatorName.sql";
+	//Database - Day Schedule Rule
+	public static final String DATABASE_CREATE_DAY_SCHEDULE_RULE_SQL_FILE_DEFAULT="DayScheduleRule/InsertDayScheduleRule.sql";
+	public static final String DATABASE_DELETE_DAY_SCHEDULE_RULE_SQL_FILE_DEFAULT="DayScheduleRule/DeleteDayScheduleRule.sql";
+	public static final String DATABASE_UPDATE_DAY_SCHEDULE_RULE_SQL_FILE_DEFAULT="DayScheduleRule/UpdateDayScheduleRule.sql";
+	public static final String DATABASE_QUERY_DAY_SCHEDULE_RULE_SQL_FILE_DEFAULT="DayScheduleRule/QueryDayScheduleRule.sql";
+	public static final String DATABASE_QUERY_DAY_SCHEDULE_RULE_ALL_SQL_FILE_DEFAULT="DayScheduleRule/QueryAllDayScheduleRules.sql";
+	public static final String DATABASE_QUERY_DAY_SCHEDULE_RULE_ALL_NAME_SQL_FILE_DEFAULT="Actuator/QueryAllDayScheduleRuleName.sql";
 	//Database - Reading
 	public static final String DATABASE_RECORD_READING_SQL_FILE_DEFAULT="Reading/RecordReading.sql";
 	public static final String DATABASE_RECORD_GETTING_SQL_FILE_DEFAULT="Reading/QueryReading.sql";
@@ -245,8 +261,16 @@ public class Config {
 		Config.setConfig(DATABASE_DELETE_ACTUATOR_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_DELETE_ACTUATOR_SQL_FILE_DEFAULT);
 		Config.setConfig(DATABASE_UPDATE_ACTUATOR_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_UPDATE_ACTUATOR_SQL_FILE_DEFAULT);
 		Config.setConfig(DATABASE_UPDATE_ACTUATOR_STATUS_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_UPDATE_ACTUATOR_STATUS_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_QUERY_ACTUATOR_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_QUERY_ACTUATOR_SQL_FILE_DEFAULT);
 		Config.setConfig(DATABASE_QUERY_ACTUATOR_ALL_NAME_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_QUERY_ACTUATOR_ALL_NAME_SQL_FILE_DEFAULT);
 		Config.setConfig(DATABASE_QUERY_ACTUATOR_ALL_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_QUERY_ACTUATOR_ALL_SQL_FILE_DEFAULT);
+		
+		Config.setConfig(DATABASE_CREATE_DAY_SCHEDULE_RULE_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_CREATE_DAY_SCHEDULE_RULE_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_DELETE_DAY_SCHEDULE_RULE_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_DELETE_DAY_SCHEDULE_RULE_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_UPDATE_DAY_SCHEDULE_RULE_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_UPDATE_DAY_SCHEDULE_RULE_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_QUERY_DAY_SCHEDULE_RULE_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_QUERY_DAY_SCHEDULE_RULE_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_QUERY_DAY_SCHEDULE_RULE_ALL_NAME_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_QUERY_DAY_SCHEDULE_RULE_ALL_NAME_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_QUERY_DAY_SCHEDULE_RULE_ALL_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_QUERY_DAY_SCHEDULE_RULE_ALL_SQL_FILE_DEFAULT);
 		
 		//Real config
 		String [] keys=prop.keySet().toArray(new String[prop.keySet().size()]);

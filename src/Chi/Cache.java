@@ -198,4 +198,41 @@ public class Cache {
 		u.setVisible(true);
 		return actuatorUpdateSuccess;
 	}
+	
+	public static ArrayList<String> DayScheduleRuleList=new ArrayList<>();
+	public static HashSet<String> DayScheduleRuleSet=new HashSet<>();
+	public static ArrayList<Object []> DayScheduleRuleObj=new ArrayList<>();
+	private static boolean DayScheduleRuleUpdateSuccess=false;
+	
+	public static boolean updateDayScheduleRule() {
+		DayScheduleRuleUpdateSuccess=false;
+		WaitUI u=new WaitUI();
+		u.setText("Querying DayScheduleRule");
+		Thread t=new Thread() {
+			public void run () {
+				ResultSet rs=DatabaseDayScheduleRule.getDayScheduleRules();
+				DayScheduleRuleList.clear();
+				DayScheduleRuleSet.clear();
+				DayScheduleRuleObj.clear();
+				
+				try {
+					while (rs.next()) {
+						Object [] o={rs.getString(1),rs.getInt(2),rs.getInt(3),rs.getInt(4),rs.getInt(5)};
+						DayScheduleRuleList.add(rs.getString(1));
+						DayScheduleRuleSet.add(rs.getString(1));
+						DayScheduleRuleObj.add(o);
+					}
+					DayScheduleRuleUpdateSuccess=true;
+				} catch (Exception e) {
+					Logger.log("Cache.updateDayScheduleRule - Error - "+e.getMessage());
+					JOptionPane.showMessageDialog(null,"Fail to retrieve data from database.\nPlease refer to the console for more information.","Query DayScheduleRule",JOptionPane.ERROR_MESSAGE);
+				}
+				u.dispose();
+			}
+		};
+		t.start();
+		u.setVisible(true);
+		return DayScheduleRuleUpdateSuccess;
+	}
+	
 }
