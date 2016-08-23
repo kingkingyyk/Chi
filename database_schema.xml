@@ -61,7 +61,7 @@
 </row>
 <row name="PositionY" null="1" autoincrement="0">
 <datatype>DOUBLE</datatype>
-</row>
+<default>NULL</default></row>
 <row name="ReportTimeout" null="0" autoincrement="0">
 <datatype>INTEGER</datatype>
 </row>
@@ -135,6 +135,9 @@
 <row name="Controller" null="0" autoincrement="0">
 <datatype>VARCHAR(100)</datatype>
 <relation table="Controller" row="ControllerName" />
+</row>
+<row name="Status" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
 </row>
 <key type="PRIMARY" name="">
 <part>Name</part>

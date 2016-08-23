@@ -40,6 +40,7 @@ CREATE TABLE User(
 CREATE TABLE Actuator(
 	Name varchar(100) PRIMARY KEY,
 	Controller varchar(100),
+	Status varchar(100),
 	FOREIGN KEY (Controller) REFERENCES Controller(ControllerName)
 )
 @

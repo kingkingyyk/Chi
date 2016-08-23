@@ -165,7 +165,6 @@ public class Cache {
 	
 	public static ArrayList<String> actuatorList=new ArrayList<>();
 	public static HashSet<String> actuatorSet=new HashSet<>();
-	public static HashMap<String,String> actuatorToImgSet=new HashMap<>();
 	public static ArrayList<Object []> actuatorObj=new ArrayList<>();
 	private static boolean actuatorUpdateSuccess=false;
 	
@@ -182,10 +181,9 @@ public class Cache {
 				
 				try {
 					while (rs.next()) {
-						Object [] o={rs.getString(1),rs.getString(2)};
+						Object [] o={rs.getString(1),rs.getString(2),rs.getString(3)};
 						actuatorList.add(rs.getString(1));
 						actuatorSet.add(rs.getString(1));
-						actuatorToImgSet.put(rs.getString(1), rs.getString(2));
 						actuatorObj.add(o);
 					}
 					actuatorUpdateSuccess=true;

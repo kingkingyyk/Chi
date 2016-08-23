@@ -82,6 +82,7 @@ public class Config {
 	public static final String DATABASE_CREATE_ACTUATOR_SQL_FILE_KEY="server.database.sql.actuator.create.file";
 	public static final String DATABASE_DELETE_ACTUATOR_SQL_FILE_KEY="server.database.sql.actuator.delete.file";
 	public static final String DATABASE_UPDATE_ACTUATOR_SQL_FILE_KEY="server.database.sql.actuator.update.file";
+	public static final String DATABASE_UPDATE_ACTUATOR_STATUS_SQL_FILE_KEY="server.database.sql.actuator.updatestatus.file";
 	public static final String DATABASE_QUERY_ACTUATOR_ALL_NAME_SQL_FILE_KEY="server.database.sql.actuator.queryallnames.file";
 	public static final String DATABASE_QUERY_ACTUATOR_ALL_SQL_FILE_KEY="server.database.sql.actuator.queryall.file";
 	
@@ -146,6 +147,7 @@ public class Config {
 	public static final String DATABASE_CREATE_ACTUATOR_SQL_FILE_DEFAULT="Actuator/InsertActuator.sql";
 	public static final String DATABASE_DELETE_ACTUATOR_SQL_FILE_DEFAULT="Actuator/DeleteActuator.sql";
 	public static final String DATABASE_UPDATE_ACTUATOR_SQL_FILE_DEFAULT="Actuator/UpdateActuator.sql";
+	public static final String DATABASE_UPDATE_ACTUATOR_STATUS_SQL_FILE_DEFAULT="Actuator/UpdateActuatorStatus.sql";
 	public static final String DATABASE_QUERY_ACTUATOR_ALL_SQL_FILE_DEFAULT="Actuator/QueryAllActuators.sql";
 	public static final String DATABASE_QUERY_ACTUATOR_ALL_NAME_SQL_FILE_DEFAULT="Actuator/QueryAllActuatorName.sql";
 	//Database - Reading
@@ -242,6 +244,7 @@ public class Config {
 		Config.setConfig(DATABASE_CREATE_ACTUATOR_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_CREATE_ACTUATOR_SQL_FILE_DEFAULT);
 		Config.setConfig(DATABASE_DELETE_ACTUATOR_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_DELETE_ACTUATOR_SQL_FILE_DEFAULT);
 		Config.setConfig(DATABASE_UPDATE_ACTUATOR_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_UPDATE_ACTUATOR_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_UPDATE_ACTUATOR_STATUS_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_UPDATE_ACTUATOR_STATUS_SQL_FILE_DEFAULT);
 		Config.setConfig(DATABASE_QUERY_ACTUATOR_ALL_NAME_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_QUERY_ACTUATOR_ALL_NAME_SQL_FILE_DEFAULT);
 		Config.setConfig(DATABASE_QUERY_ACTUATOR_ALL_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_QUERY_ACTUATOR_ALL_SQL_FILE_DEFAULT);
 		

@@ -1,1 +1,1 @@
-SELECT * FROM Actuator WHERE Name=?
+SELECT Name,Controller,Status FROM Actuator WHERE Name=?

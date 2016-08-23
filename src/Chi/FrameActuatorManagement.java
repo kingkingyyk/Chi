@@ -31,7 +31,7 @@ public class FrameActuatorManagement extends JFrame {
 		public boolean isCellEditable(int row, int column){ return false;  }
 		
 		@SuppressWarnings("rawtypes")
-		private Class [] colClass={String.class,String.class,Double.class,Double.class,String.class,String.class};
+		private Class [] colClass={String.class,String.class,String.class};
 	    @Override
 	    public Class<?> getColumnClass(int colNum) {
 	    	return colClass[colNum];
@@ -40,7 +40,7 @@ public class FrameActuatorManagement extends JFrame {
 	}
 	
 	private static class ActuatorTableModel extends AbstractTreeTableModel {
-		public static final String [] COLUMNS= {"Name","Attached On"};
+		public static final String [] COLUMNS= {"Name","Attached On","Status"};
 		
 		public ActuatorTableModel (ActuatorTableRow r) {
 			super(r);
@@ -118,7 +118,7 @@ public class FrameActuatorManagement extends JFrame {
 		}
 	}
 	
-	private static class SiteTableCellRenderer extends DefaultTableCellRenderer {
+	private static class ActuatorTableCellRenderer extends DefaultTableCellRenderer {
 		private static final long serialVersionUID = 1L;
 		
 		@Override
@@ -247,12 +247,13 @@ public class FrameActuatorManagement extends JFrame {
 			}
 			updateSuccess=true;
 			
-			table.getColumn(0).setCellRenderer(new SiteTableCellRenderer());
-			table.getColumn(1).setCellRenderer(new SiteTableCellRenderer());
+			table.getColumn(0).setCellRenderer(new ActuatorTableCellRenderer());
+			table.getColumn(1).setCellRenderer(new ActuatorTableCellRenderer());
+			table.getColumn(2).setCellRenderer(new ActuatorTableCellRenderer());
 			
 			table.getColumnModel().getColumn(0).setPreferredWidth(133);
 			table.getColumnModel().getColumn(1).setPreferredWidth(266);
-
+			table.getColumnModel().getColumn(2).setPreferredWidth(54);
 		}
 	}
 	

@@ -173,6 +173,22 @@ public class MenuUI extends JFrame {
 		tabbedPane.addTab("Scheduling", null, panelScheduling, null);
 		panelScheduling.setLayout(null);
 		
+		JButton btnDayScheduleRules = new JButton("Day Schedule Rules");
+		btnDayScheduleRules.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		btnDayScheduleRules.setBounds(10, 11, 127, 23);
+		panelScheduling.add(btnDayScheduleRules);
+		
+		JButton btnRegularSchedules = new JButton("Regular Schedules");
+		btnRegularSchedules.setBounds(145, 11, 127, 23);
+		panelScheduling.add(btnRegularSchedules);
+		
+		JButton btnSpecialSchedules = new JButton("Special Schedules");
+		btnSpecialSchedules.setBounds(277, 11, 127, 23);
+		panelScheduling.add(btnSpecialSchedules);
+		
 		JPanel panelSQL = new JPanel();
 		tabbedPane.addTab("SQL", null, panelSQL, null);
 		panelSQL.setLayout(null);

@@ -28,6 +28,7 @@ public class DatabaseActuator extends DatabaseHSQL {
 				ps=c.prepareStatement(sql[1]);
 				ps.setString(1, n);
 				ps.setString(2, u);
+				ps.setString(3, "Pending Update");
 				Logger.log("DB Create Actuator - Execute "+ps.toString());
 				ps.execute();
 				
@@ -70,6 +71,36 @@ public class DatabaseActuator extends DatabaseHSQL {
 			return true;
 		} catch (Exception e) {
 			Logger.log("DB Update Actuator - Error - "+e.getMessage());
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public static boolean updateActuatorStatus (String n, String st) {
+		Logger.log("DB Update Actuator Status : "+Config.getConfig(Config.DATABASE_UPDATE_ACTUATOR_STATUS_SQL_FILE_KEY));
+		try {
+			Connection c = getConnection();
+			if (c!=null) {
+				Logger.log("DB Update Actuator Status - Database connection OK!");
+				String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_UPDATE_ACTUATOR_STATUS_SQL_FILE_KEY));
+				PreparedStatement ps=c.prepareStatement(sql[0]);
+				Logger.log("DB Update Actuator Status - Execute "+ps.toString());
+				ps.execute();
+				
+				ps=c.prepareStatement(sql[1]);
+				ps.setString(1, st);
+				ps.setString(2, n);
+				Logger.log("DB Update Actuator Status - Execute "+ps.toString());
+				ps.execute();
+				
+				ps=c.prepareStatement(sql[2]);
+				Logger.log("DB Update Actuator Status - Execute "+ps.toString());
+				ps.execute();
+			}
+			c.close();
+			return true;
+		} catch (Exception e) {
+			Logger.log("DB Update Actuator Status - Error - "+e.getMessage());
 			e.printStackTrace();
 		}
 		return false;
