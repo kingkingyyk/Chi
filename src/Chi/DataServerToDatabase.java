@@ -4,9 +4,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class ServerToDatabase {
+public class DataServerToDatabase {
 	private static final String TIMESTAMP_FORMAT="yyyy-MM-dd HH:mm:ss"; //format the time
-	private static SimpleDateFormat formatter=new SimpleDateFormat(ServerToDatabase.TIMESTAMP_FORMAT);
+	private static SimpleDateFormat formatter=new SimpleDateFormat(DataServerToDatabase.TIMESTAMP_FORMAT);
 	
 	private static class Data {
 		String sname;

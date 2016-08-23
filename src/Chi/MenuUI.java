@@ -20,8 +20,8 @@ import javax.swing.JTabbedPane;
 public class MenuUI extends JFrame {
 	private static final long serialVersionUID = -1439297640667763037L;
 	private JPanel contentPane;
-	private JButton btnStartServer;
-	private JButton btnStopServer;
+	private JButton btnStartDataServer;
+	private JButton btnStopDataServer;
 	private JTextField textFieldSQL;
 
 
@@ -56,34 +56,43 @@ public class MenuUI extends JFrame {
 		
 		JPanel panelServer = new JPanel();
 		tabbedPane.addTab("Server", null, panelServer, null);
+		panelServer.setLayout(null);
 		
-		btnStartServer = new JButton("Start Server");
-		panelServer.add(btnStartServer);
-		btnStartServer.addActionListener(new ActionListener() {
+		btnStartDataServer = new JButton("Start Data Server");
+		btnStartDataServer.setBounds(34, 26, 153, 23);
+		panelServer.add(btnStartDataServer);
+		btnStartDataServer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Server.start();
-				if (Server.started()) {
-					btnStartServer.setEnabled(false);
-					btnStopServer.setEnabled(true);
+				DataServer.start();
+				if (DataServer.started()) {
+					btnStartDataServer.setEnabled(false);
+					btnStopDataServer.setEnabled(true);
 				}
 			}
 		});
 		
-		btnStopServer = new JButton("Stop Server");
-		panelServer.add(btnStopServer);
-		btnStopServer.setEnabled(false);
+		btnStopDataServer = new JButton("Stop Data Server");
+		btnStopDataServer.setBounds(229, 26, 153, 23);
+		panelServer.add(btnStopDataServer);
+		btnStopDataServer.setEnabled(false);
 		
-		JButton btnConfig = new JButton("Config");
-		panelServer.add(btnConfig);
-		btnConfig.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Logger.log("Config UI started.");
-				ConfigUI ui=new ConfigUI();
-				Logger.log("Config UI done.");
-				ui.setVisible(true);
-				Logger.log("Config UI closed.");
-			}
-		});
+		JButton btnStartGWTServer = new JButton("Start GWT Server");
+		btnStartGWTServer.setBounds(34, 60, 153, 23);
+		panelServer.add(btnStartGWTServer);
+		
+		JButton btnStopGWTServer = new JButton("Stop GWT Server");
+		btnStopGWTServer.setEnabled(false);
+		btnStopGWTServer.setBounds(229, 60, 153, 23);
+		panelServer.add(btnStopGWTServer);
+		
+		JButton btnStartSchedulingServer = new JButton("Start Scheduling Server");
+		btnStartSchedulingServer.setBounds(34, 94, 153, 23);
+		panelServer.add(btnStartSchedulingServer);
+		
+		JButton btnStopSchedulingServer = new JButton("Stop Scheduling Server");
+		btnStopSchedulingServer.setEnabled(false);
+		btnStopSchedulingServer.setBounds(229, 94, 153, 23);
+		panelServer.add(btnStopSchedulingServer);
 		
 		JPanel panelDatabase = new JPanel();
 		tabbedPane.addTab("Database", null, panelDatabase, null);
@@ -187,9 +196,25 @@ public class MenuUI extends JFrame {
 		
 		JButton btnRegularSchedules = new JButton("Regular Schedules");
 		btnRegularSchedules.setBounds(145, 11, 127, 23);
+		btnRegularSchedules.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				FrameRegularScheduleManagement f=FrameRegularScheduleManagement.getInstance();
+				if (f.updateSuccess) {
+					f.setVisible(true);
+				}
+			}
+		});
 		panelScheduling.add(btnRegularSchedules);
 		
 		JButton btnSpecialSchedules = new JButton("Special Schedules");
+		btnSpecialSchedules.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				FrameSpecialScheduleManagement f=FrameSpecialScheduleManagement.getInstance();
+				if (f.updateSuccess) {
+					f.setVisible(true);
+				}
+			}
+		});
 		btnSpecialSchedules.setBounds(277, 11, 127, 23);
 		panelScheduling.add(btnSpecialSchedules);
 		
@@ -228,6 +253,23 @@ public class MenuUI extends JFrame {
 		JButton btnLoadSQLFromFile = new JButton("Run SQL From File");
 		btnLoadSQLFromFile.setBounds(10, 42, 377, 23);
 		panelSQL.add(btnLoadSQLFromFile);
+		
+		JPanel panelConfig = new JPanel();
+		tabbedPane.addTab("Configurations", null, panelConfig, null);
+		panelConfig.setLayout(null);
+		
+		JButton btnConfig = new JButton("Config");
+		btnConfig.setBounds(10, 11, 96, 23);
+		panelConfig.add(btnConfig);
+		btnConfig.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Logger.log("Config UI started.");
+				ConfigUI ui=new ConfigUI();
+				Logger.log("Config UI done.");
+				ui.setVisible(true);
+				Logger.log("Config UI closed.");
+			}
+		});
 		btnLoadSQLFromFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser fc=new JFileChooser();
@@ -315,12 +357,12 @@ public class MenuUI extends JFrame {
             	u.dispose();
 			}
 		});
-		btnStopServer.addActionListener(new ActionListener() {
+		btnStopDataServer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Server.stop();
-				if (!Server.started()) {
-					btnStartServer.setEnabled(true);
-					btnStopServer.setEnabled(false);
+				DataServer.stop();
+				if (!DataServer.started()) {
+					btnStartDataServer.setEnabled(true);
+					btnStopDataServer.setEnabled(false);
 				}
 			}
 		});

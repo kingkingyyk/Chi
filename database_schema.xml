@@ -163,7 +163,7 @@
 <part>Name</part>
 </key>
 </table>
-<table x="611" y="58" name="RegularSchedule">
+<table x="617" y="40" name="RegularSchedule">
 <row name="ScheduleName" null="0" autoincrement="0">
 <datatype>VARCHAR(100)</datatype>
 </row>
@@ -183,6 +183,9 @@
 <row name="Rule" null="1" autoincrement="0">
 <datatype>VARCHAR(100)</datatype>
 <default>NULL</default><relation table="DayScheduleRule" row="Name" />
+</row>
+<row name="Enabled" null="0" autoincrement="0">
+<datatype>bit</datatype>
 </row>
 <key type="PRIMARY" name="">
 <part>ScheduleName</part>
@@ -214,6 +217,9 @@
 <default>'NULL'</default></row>
 <row name="Priority" null="0" autoincrement="0">
 <datatype>INTEGER</datatype>
+</row>
+<row name="Enabled" null="0" autoincrement="0">
+<datatype>bit</datatype>
 </row>
 <key type="PRIMARY" name="">
 <part>ScheduleName</part>

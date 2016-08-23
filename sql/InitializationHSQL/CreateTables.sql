@@ -59,18 +59,20 @@ CREATE TABLE RegularSchedule (
 	Rule varchar(100),
 	ActuatorOn boolean,
 	Priority int,
+	Enabled boolean,
 	FOREIGN KEY (Rule) REFERENCES DayScheduleRule(RuleName)
 )
 @
 CREATE TABLE SpecialSchedule (
 	ScheduleName varchar(100) PRIMARY KEY,
 	ActuatorName varchar(100),
-	Day int,
-	Month int,
 	Year int,
+	Month int,
+	Day int,
 	Rule varchar(100),
 	ActuatorOn boolean,
 	Priority int,
+	Enabled boolean,
 	FOREIGN KEY (Rule) REFERENCES DayScheduleRule(RuleName)
 )
 @

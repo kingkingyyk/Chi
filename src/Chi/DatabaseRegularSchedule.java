@@ -1,0 +1,118 @@
+package Chi;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+public class DatabaseRegularSchedule extends DatabaseHSQL {
+
+	public static ResultSet getRegularScheduleName () {
+		return runSQLFromFileAndGetData("DB Get Regular Schedule Name",Config.getConfig(Config.DATABASE_QUERY_REGULAR_SCHEDULE_ALL_NAME_SQL_FILE_KEY));
+	}
+	
+	public static ResultSet getRegularSchedules () {
+		return runSQLFromFileAndGetData("DB Get Regular Schedules",Config.getConfig(Config.DATABASE_QUERY_REGULAR_SCHEDULE_ALL_SQL_FILE_KEY));
+	}
+	
+	public static boolean createRegularSchedule (String sn, String an, int day, String rn, boolean ao, int pr, boolean en) {
+		Logger.log("DB Create Regular Schedule : "+Config.getConfig(Config.DATABASE_CREATE_REGULAR_SCHEDULE_SQL_FILE_KEY));
+		try {
+			Connection c = getConnection();
+			if (c!=null) {
+				Logger.log("DB Create Regular Schedule - Database connection OK!");
+				String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_CREATE_REGULAR_SCHEDULE_SQL_FILE_KEY));
+				PreparedStatement ps=c.prepareStatement(sql[0]);
+				Logger.log("DB Create Regular Schedule - Execute "+ps.toString());
+				ps.execute();
+				
+				ps=c.prepareStatement(sql[1]);
+				ps.setString(1, sn);
+				ps.setString(2, an);
+				ps.setInt(3, day);
+				ps.setString(4, rn);
+				ps.setBoolean(5, ao);
+				ps.setInt(6, pr);
+				ps.setBoolean(7, en);
+				
+				Logger.log("DB Create Regular Schedule - Execute");
+				ps.execute();
+				
+				ps=c.prepareStatement(sql[2]);
+				Logger.log("DB Create Regular Schedule - Execute "+ps.toString());
+				ps.execute();
+			}
+			c.close();
+			return true;
+		} catch (Exception e) {
+			Logger.log("DB Create Regular Schedule - Error - "+e.getMessage());
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public static boolean updateRegularSchedule (String oldSN, String sn, String an, int day, String rn, boolean ao, int pr, boolean en) {
+		Logger.log("DB Update Regular Schedule : "+Config.getConfig(Config.DATABASE_UPDATE_REGULAR_SCHEDULE_SQL_FILE_KEY));
+		try {
+			Connection c = getConnection();
+			if (c!=null) {
+				Logger.log("DB Update Regular Schedule - Database connection OK!");
+				String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_UPDATE_REGULAR_SCHEDULE_SQL_FILE_KEY));
+				PreparedStatement ps=c.prepareStatement(sql[0]);
+				Logger.log("DB Update Regular Schedule - Execute "+ps.toString());
+				ps.execute();
+				
+				ps=c.prepareStatement(sql[1]);
+				ps.setString(1, sn);
+				ps.setString(2, an);
+				ps.setInt(3, day);
+				ps.setString(4, rn);
+				ps.setBoolean(5, ao);
+				ps.setInt(6, pr);
+				ps.setBoolean(7, en);
+				ps.setString(8, oldSN);
+				Logger.log("DB Update Regular Schedule - Execute "+ps.toString());
+				ps.execute();
+				
+				ps=c.prepareStatement(sql[2]);
+				Logger.log("DB Update Regular Schedule - Execute "+ps.toString());
+				ps.execute();
+			}
+			c.close();
+			return true;
+		} catch (Exception e) {
+			Logger.log("DB Update Regular Schedule - Error - "+e.getMessage());
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public static boolean deleteRegularSchedule (String sn) {
+		Logger.log("DB Delete Regular Schedule : "+Config.getConfig(Config.DATABASE_DELETE_REGULAR_SCHEDULE_SQL_FILE_KEY));
+		try {
+			Connection c = getConnection();
+			if (c!=null) {
+				Logger.log("DB Delete Regular Schedule - Database connection OK!");
+				String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_DELETE_REGULAR_SCHEDULE_SQL_FILE_KEY));
+				PreparedStatement ps=c.prepareStatement(sql[0]);
+				Logger.log("DB Delete Regular Schedule - Execute "+ps.toString());
+				ps.execute();
+				
+				ps=c.prepareStatement(sql[1]);
+				ps.setString(1, sn);
+				Logger.log("DB Delete Regular Schedule - Execute "+ps.toString());
+				ps.execute();
+				
+				ps=c.prepareStatement(sql[2]);
+				Logger.log("DB Delete Regular Schedule - Execute "+ps.toString());
+				ps.execute();
+			}
+			c.close();
+			return true;
+		} catch (Exception e) {
+			Logger.log("DB Delete Regular Schedule - Error - "+e.getMessage());
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+}

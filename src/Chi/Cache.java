@@ -235,4 +235,75 @@ public class Cache {
 		return DayScheduleRuleUpdateSuccess;
 	}
 	
+	public static ArrayList<String> RegularScheduleList=new ArrayList<>();
+	public static HashSet<String> RegularScheduleSet=new HashSet<>();
+	public static ArrayList<Object []> RegularScheduleObj=new ArrayList<>();
+	private static boolean RegularScheduleUpdateSuccess=false;
+	
+	public static boolean updateRegularSchedule() {
+		RegularScheduleUpdateSuccess=false;
+		WaitUI u=new WaitUI();
+		u.setText("Querying schedule");
+		Thread t=new Thread() {
+			public void run () {
+				ResultSet rs=DatabaseRegularSchedule.getRegularSchedules();
+				RegularScheduleList.clear();
+				RegularScheduleSet.clear();
+				RegularScheduleObj.clear();
+				
+				try {
+					while (rs.next()) {
+						Object [] o={rs.getString(1),rs.getString(2),rs.getInt(3),rs.getString(4),rs.getBoolean(5),rs.getInt(6),rs.getBoolean(7)};
+						RegularScheduleList.add(rs.getString(1));
+						RegularScheduleSet.add(rs.getString(1));
+						RegularScheduleObj.add(o);
+					}
+					RegularScheduleUpdateSuccess=true;
+				} catch (Exception e) {
+					Logger.log("Cache.updateRegularSchedule - Error - "+e.getMessage());
+					JOptionPane.showMessageDialog(null,"Fail to retrieve data from database.\nPlease refer to the console for more information.","Query Regular Schedule",JOptionPane.ERROR_MESSAGE);
+				}
+				u.dispose();
+			}
+		};
+		t.start();
+		u.setVisible(true);
+		return RegularScheduleUpdateSuccess;
+	}
+	
+	public static ArrayList<String> SpecialScheduleList=new ArrayList<>();
+	public static HashSet<String> SpecialScheduleSet=new HashSet<>();
+	public static ArrayList<Object []> SpecialScheduleObj=new ArrayList<>();
+	private static boolean SpecialScheduleUpdateSuccess=false;
+	
+	public static boolean updateSpecialSchedule() {
+		SpecialScheduleUpdateSuccess=false;
+		WaitUI u=new WaitUI();
+		u.setText("Querying schedule");
+		Thread t=new Thread() {
+			public void run () {
+				ResultSet rs=DatabaseSpecialSchedule.getSpecialSchedules();
+				SpecialScheduleList.clear();
+				SpecialScheduleSet.clear();
+				SpecialScheduleObj.clear();
+				
+				try {
+					while (rs.next()) {
+						Object [] o={rs.getString(1),rs.getString(2),rs.getInt(3),rs.getInt(4),rs.getInt(5),rs.getString(6),rs.getBoolean(7),rs.getInt(8),rs.getBoolean(9)};
+						SpecialScheduleList.add(rs.getString(1));
+						SpecialScheduleSet.add(rs.getString(1));
+						SpecialScheduleObj.add(o);
+					}
+					SpecialScheduleUpdateSuccess=true;
+				} catch (Exception e) {
+					Logger.log("Cache.updateSpecialSchedule - Error - "+e.getMessage());
+					JOptionPane.showMessageDialog(null,"Fail to retrieve data from database.\nPlease refer to the console for more information.","Query Special Schedule",JOptionPane.ERROR_MESSAGE);
+				}
+				u.dispose();
+			}
+		};
+		t.start();
+		u.setVisible(true);
+		return SpecialScheduleUpdateSuccess;
+	}
 }

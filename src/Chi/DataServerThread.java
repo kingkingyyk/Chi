@@ -7,7 +7,7 @@ import java.util.StringTokenizer;
 
 import javax.swing.JOptionPane;
 
-public class ServerThread extends Thread {
+public class DataServerThread extends Thread {
 	private boolean running;
 	
 	public void setFlag(boolean flag) {
@@ -27,7 +27,7 @@ public class ServerThread extends Thread {
 			Logger.log("Listening Server - StartP2 - Error - "+e.getMessage());
 		}
 		if (ss==null) {
-			Server.notifyListeningThreadFailure();
+			DataServer.notifyListeningThreadFailure();
 		} else {
 			Logger.log("Listening Server - StartP2 - Start OK!");
 			Logger.log("Listening Server - Run - Listening");
@@ -44,7 +44,7 @@ public class ServerThread extends Thread {
 						if (st.countTokens()==2) {
 							String sName=st.nextToken();
 							double value=Double.parseDouble(st.nextToken());
-							ServerToDatabase.queueData(sName,value);
+							DataServerToDatabase.queueData(sName,value);
 						}
 					}
 					packet.setLength(buffer.length);
