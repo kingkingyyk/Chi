@@ -52,7 +52,7 @@ public class DialogSensorClassEdit extends JDialog {
 					String txt=textFieldName.getText();
 					if (txt==null || txt.isEmpty()) { 
 						lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
-					} else if (classSet.contains(txt) && txt!=fillN) {
+					} else if (classSet.contains(txt) && !txt.equals(fillN)) {
 						lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 					} else {
 						lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
@@ -83,10 +83,10 @@ public class DialogSensorClassEdit extends JDialog {
 							JOptionPane.showMessageDialog(null,"Invalid name!",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
 						} else {
 							WaitUI u=new WaitUI();
-							u.setText("Creating sensor class");
+							u.setText("Updating sensor class");
 							Thread t=new Thread() {
 								public void run () {
-									flag=DatabaseSensorClass.createSensorClass(txt);
+									flag=DatabaseSensorClass.updateSensorClass(fillN,txt);
 									u.dispose();
 								}
 							};

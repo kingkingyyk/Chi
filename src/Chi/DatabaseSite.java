@@ -22,12 +22,16 @@ public class DatabaseSite extends DatabaseHSQL {
 				Logger.log("DB Create Site - Database connection OK!");
 				String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_CREATE_SITE_SQL_FILE_KEY));
 				PreparedStatement ps=c.prepareStatement(sql[0]);
+				Logger.log("DB Create Site - Execute "+ps.toString());
+				ps.execute();
+				
+				ps=c.prepareStatement(sql[1]);
 				ps.setString(1, n);
 				ps.setString(2, u);
 				Logger.log("DB Create Site - Execute "+ps.toString());
 				ps.execute();
 				
-				ps=c.prepareStatement(sql[1]);
+				ps=c.prepareStatement(sql[2]);
 				Logger.log("DB Create Site - Execute "+ps.toString());
 				ps.execute();
 			}
@@ -48,13 +52,17 @@ public class DatabaseSite extends DatabaseHSQL {
 				Logger.log("DB Update Site - Database connection OK!");
 				String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_UPDATE_SITE_SQL_FILE_KEY));
 				PreparedStatement ps=c.prepareStatement(sql[0]);
+				Logger.log("DB Update Site - Execute "+ps.toString());
+				ps.execute();
+				
+				ps=c.prepareStatement(sql[1]);
 				ps.setString(1, n);
 				ps.setString(2, u);
 				ps.setString(3, oldN);
 				Logger.log("DB Update Site - Execute "+ps.toString());
 				ps.execute();
 				
-				ps=c.prepareStatement(sql[1]);
+				ps=c.prepareStatement(sql[2]);
 				Logger.log("DB Update Site - Execute "+ps.toString());
 				ps.execute();
 			}
@@ -75,11 +83,15 @@ public class DatabaseSite extends DatabaseHSQL {
 				Logger.log("DB Delete Site - Database connection OK!");
 				String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_DELETE_SITE_SQL_FILE_KEY));
 				PreparedStatement ps=c.prepareStatement(sql[0]);
+				Logger.log("DB Delete Site - Execute "+ps.toString());
+				ps.execute();
+				
+				ps=c.prepareStatement(sql[1]);
 				ps.setString(1, n);
 				Logger.log("DB Delete Site - Execute - "+ps.toString());
 				ps.execute();
 				
-				ps=c.prepareStatement(sql[1]);
+				ps=c.prepareStatement(sql[2]);
 				Logger.log("DB Delete Site - Execute "+ps.toString());
 				ps.execute();
 			}

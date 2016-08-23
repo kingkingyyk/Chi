@@ -18,11 +18,15 @@ public class DatabaseSensorClass extends DatabaseHSQL {
 				Logger.log("DB Create Sensor Class - Database connection OK!");
 				String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_CREATE_SENSOR_CLASS_SQL_FILE_KEY));
 				PreparedStatement ps=c.prepareStatement(sql[0]);
-				ps.setString(1, name);
 				Logger.log("DB Create Sensor Class - Execute "+ps.toString());
 				ps.execute();
 				
 				ps=c.prepareStatement(sql[1]);
+				ps.setString(1, name);
+				Logger.log("DB Create Sensor Class - Execute "+ps.toString());
+				ps.execute();
+				
+				ps=c.prepareStatement(sql[2]);
 				Logger.log("DB Create Sensor Class - Execute "+ps.toString());
 				ps.execute();
 			}
@@ -43,13 +47,17 @@ public class DatabaseSensorClass extends DatabaseHSQL {
 				Logger.log("DB Update Sensor Class - Database connection OK!");
 				String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_UPDATE_SENSOR_CLASS_SQL_FILE_KEY));
 				PreparedStatement ps=c.prepareStatement(sql[0]);
-				Logger.log("DB Update Sensor Class - SQL : "+ps.toString());
+				Logger.log("DB Update Sensor Class - Execute "+ps.toString());
+				ps.execute();
+				
+				ps=c.prepareStatement(sql[1]);
+				Logger.log("DB Update Sensor Class - Execute : "+ps.toString());
 				ps.setString(1, oldN);
 				ps.setString(2, newN);
 				Logger.log("DB Update Sensor Class - Execute");
 				ps.execute();
 				
-				ps=c.prepareStatement(sql[1]);
+				ps=c.prepareStatement(sql[2]);
 				Logger.log("DB Update Sensor Class - Execute "+ps.toString());
 				ps.execute();
 			}
@@ -70,16 +78,20 @@ public class DatabaseSensorClass extends DatabaseHSQL {
 				Logger.log("DB Delete Sensor Class - Database connection OK!");
 				String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_DELETE_SENSOR_CLASS_SQL_FILE_KEY));
 				PreparedStatement ps=c.prepareStatement(sql[0]);
-				ps.setString(1, oldN);
-				Logger.log("DB Delete Sensor Class - Execute - "+ps.toString());
+				Logger.log("DB Update Sensor Class - Execute "+ps.toString());
 				ps.execute();
 				
 				ps=c.prepareStatement(sql[1]);
 				ps.setString(1, oldN);
 				Logger.log("DB Delete Sensor Class - Execute - "+ps.toString());
 				ps.execute();
-
+				
 				ps=c.prepareStatement(sql[2]);
+				ps.setString(1, oldN);
+				Logger.log("DB Delete Sensor Class - Execute - "+ps.toString());
+				ps.execute();
+
+				ps=c.prepareStatement(sql[3]);
 				Logger.log("DB Delete Sensor Class - Execute "+ps.toString());
 				ps.execute();
 			}

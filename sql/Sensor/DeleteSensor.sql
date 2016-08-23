@@ -1,3 +1,5 @@
+LOCK TABLE Sensor WRITE
+@
 DELETE FROM Sensor WHERE SensorName=?
 @
 COMMIT

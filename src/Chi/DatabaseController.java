@@ -23,6 +23,10 @@ public class DatabaseController extends DatabaseHSQL {
 				Logger.log("DB Create Controller - Database connection OK!");
 				String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_CREATE_CONTROLLER_SQL_FILE_KEY));
 				PreparedStatement ps=c.prepareStatement(sql[0]);
+				Logger.log("DB Create Controller - Execute "+ps.toString());
+				ps.execute();
+				
+				ps=c.prepareStatement(sql[1]);
 				ps.setString(1, n);
 				ps.setString(2, s);
 				ps.setDouble(3, x);
@@ -32,7 +36,7 @@ public class DatabaseController extends DatabaseHSQL {
 				Logger.log("DB Create Controller - Execute "+ps.toString());
 				ps.execute();
 				
-				ps=c.prepareStatement(sql[1]);
+				ps=c.prepareStatement(sql[2]);
 				Logger.log("DB Create Controller - Execute "+ps.toString());
 				ps.execute();
 			}
@@ -53,6 +57,10 @@ public class DatabaseController extends DatabaseHSQL {
 				Logger.log("DB Update Controller - Database connection OK!");
 				String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_UPDATE_CONTROLLER_SQL_FILE_KEY));
 				PreparedStatement ps=c.prepareStatement(sql[0]);
+				Logger.log("DB Update Controller - Execute "+ps.toString());
+				ps.execute();
+				
+				ps=c.prepareStatement(sql[1]);
 				ps.setString(1, s);
 				ps.setDouble(2, x);
 				ps.setDouble(3, y);
@@ -61,7 +69,7 @@ public class DatabaseController extends DatabaseHSQL {
 				Logger.log("DB Update Controller - Execute "+ps.toString());
 				ps.execute();
 				
-				ps=c.prepareStatement(sql[1]);
+				ps=c.prepareStatement(sql[2]);
 				Logger.log("DB Update Controller - Execute "+ps.toString());
 				ps.execute();
 			}
@@ -82,11 +90,15 @@ public class DatabaseController extends DatabaseHSQL {
 				Logger.log("DB Delete Controller - Database connection OK!");
 				String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_DELETE_CONTROLLER_SQL_FILE_KEY));
 				PreparedStatement ps=c.prepareStatement(sql[0]);
+				Logger.log("DB Delete Controller - Execute "+ps.toString());
+				ps.execute();
+				
+				ps=c.prepareStatement(sql[1]);
 				ps.setString(1, sn);
 				Logger.log("DB Delete Controller - Execute - "+ps.toString());
 				ps.execute();
 				
-				ps=c.prepareStatement(sql[1]);
+				ps=c.prepareStatement(sql[2]);
 				Logger.log("DB Delete Controller - Execute "+ps.toString());
 				ps.execute();
 			}

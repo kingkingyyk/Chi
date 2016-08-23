@@ -1,3 +1,5 @@
+LOCK TABLE Actuator WRITE
+@
 INSERT INTO Actuator VALUES(?,?)
 @
 COMMIT

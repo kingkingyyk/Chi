@@ -1,3 +1,5 @@
+LOCK TABLE Actuator WRITE
+@
 DELETE FROM Actuator WHERE Name=?
 
 @

@@ -22,6 +22,10 @@ public class DatabaseSensor extends DatabaseHSQL {
 				Logger.log("DB Create Sensor - Database connection OK!");
 				String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_CREATE_SENSOR_SQL_FILE_KEY));
 				PreparedStatement ps=c.prepareStatement(sql[0]);
+				Logger.log("DB Create Sensor - Execute "+ps.toString());
+				ps.execute();
+				
+				ps=c.prepareStatement(sql[1]);
 				ps.setString(1, sn);
 				ps.setString(2, cn);
 				ps.setDouble(3, min);
@@ -32,7 +36,7 @@ public class DatabaseSensor extends DatabaseHSQL {
 				Logger.log("DB Create Sensor - Execute "+ps.toString());
 				ps.execute();
 				
-				ps=c.prepareStatement(sql[1]);
+				ps=c.prepareStatement(sql[2]);
 				Logger.log("DB Create Sensor - Execute "+ps.toString());
 				ps.execute();
 			}
@@ -53,6 +57,10 @@ public class DatabaseSensor extends DatabaseHSQL {
 				Logger.log("DB Update Sensor - Database connection OK!");
 				String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_UPDATE_SENSOR_SQL_FILE_KEY));
 				PreparedStatement ps=c.prepareStatement(sql[0]);
+				Logger.log("DB Update Sensor - Execute "+ps.toString());
+				ps.execute();
+				
+				ps=c.prepareStatement(sql[1]);
 				ps.setString(1, cn);
 				ps.setDouble(2, min);
 				ps.setDouble(3, max);
@@ -63,7 +71,7 @@ public class DatabaseSensor extends DatabaseHSQL {
 				Logger.log("DB Update Sensor - Execute "+ps.toString());
 				ps.execute();
 				
-				ps=c.prepareStatement(sql[1]);
+				ps=c.prepareStatement(sql[2]);
 				Logger.log("DB Update Sensor - Execute "+ps.toString());
 				ps.execute();
 			}
@@ -84,11 +92,15 @@ public class DatabaseSensor extends DatabaseHSQL {
 				Logger.log("DB Delete Sensor - Database connection OK!");
 				String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_DELETE_SENSOR_SQL_FILE_KEY));
 				PreparedStatement ps=c.prepareStatement(sql[0]);
+				Logger.log("DB Delete Sensor - Execute "+ps.toString());
+				ps.execute();
+				
+				ps=c.prepareStatement(sql[1]);
 				ps.setString(1, sn);
 				Logger.log("DB Delete Sensor - Execute - "+ps.toString());
 				ps.execute();
 				
-				ps=c.prepareStatement(sql[1]);
+				ps=c.prepareStatement(sql[2]);
 				Logger.log("DB Delete Sensor - Execute "+ps.toString());
 				ps.execute();
 			}

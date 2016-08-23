@@ -348,6 +348,7 @@ public class DialogControllerAddEdit extends JDialog {
 	
 	private void uiActionsEdit(String n, String s) {
 		setTitle("Edit Controller "+n);
+		textFieldName.setEditable(false);
 		comboBoxSite.setSelectedItem(s);
 		lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
 		lblReportTimeoutInfo.setText("<html><font color=\"green\">OK!</font></html>");
