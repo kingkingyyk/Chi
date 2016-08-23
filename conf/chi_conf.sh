@@ -1,14 +1,16 @@
 #
-#Mon Aug 22 20:57:58 SGT 2016
+#Tue Aug 23 11:14:01 SGT 2016
 server.database.sql.hsql.createtables.file=sql/InitializationHSQL/CreateTables.sql
 server.database.sql.site.create.file=sql/Site/InsertSite.sql
 server.database.sql.actuator.create.file=sql/Actuator/InsertActuator.sql
+server.controller.ip=224.0.0.180
 server.database.sql.site.queryallnames.file=sql/Site/QueryAllSiteName.sql
 server.incoming.port.default=40000
 server.database.sql.actuator.queryallnames.file.default=sql/Actuator/QueryAllActuatorName.sql
 server.database.sql.user.queryall.file.default=sql/User/QueryAllUsers.sql
 server.database.sql.site.queryall.file.default=sql/Site/QueryAllSites.sql
 server.database.sql.user.queryallnames.file=sql/User/QueryAllUsernames.sql
+server.gwt.com.port.default=40001
 server.database.sql.site.queryall.file=sql/Site/QueryAllSites.sql
 server.database.cassandra.sql.reset.file.default=sql/InitializationCassandra/ResetDB.sql
 server.database.cassandra.hsql.reset.file=sql/InitializationHSQL/ResetDB.sql
@@ -28,6 +30,7 @@ server.database.sql.user.updateWOpassword.file=sql/User/UpdateUserWithoutPasswor
 server.database.cassandra.username.default=chi-admin
 server.database.cassandra.port=9042
 server.lock.file.name.default=CHI_LOCK
+server.gwt.com.port=40001
 server.database.sql.cassandra.createtables.file.default=sql/InitializationCassandra/CreateTables.sql
 server.database.sql.controller.create.file.default=sql/Controller/InsertController.sql
 server.database.hsql.username=chi-admin
@@ -36,6 +39,7 @@ server.database.sql.user.updateWpassword.file=sql/User/UpdateUserWithPassword.sq
 server.database.sql.controller.update.file=sql/Controller/UpdateController.sql
 server.database.sql.user.create.file.default=sql/User/InsertUser.sql
 server.database.sql.user.delete.file.default=sql/User/DeleteUser.sql
+server.controller.port.default=40002
 server.database.cassandra.username=chi-admin
 server.database.sql.actuator.queryall.file=sql/Actuator/QueryAllActuators.sql
 server.database.sql.sensorclass.queryall.file.default=sql/SensorClass/QueryAllClasses.sql
@@ -61,6 +65,7 @@ server.database.hsql.password.default=chi-admin
 server.database.sql.actuator.queryallnames.file=sql/Actuator/QueryAllActuatorName.sql
 server.database.cassandra.port.default=9042
 server.database.sql.sensorclass.queryall.file=sql/SensorClass/QueryAllClasses.sql
+server.controller.port=40002
 server.database.test.success.text=<html><font color\="green">Connection OK\!</font></html>
 server.database.cassandra.password.default=chi-admin
 server.database.sql.actuator.queryall.file.default=sql/Actuator/QueryAllActuators.sql
@@ -100,3 +105,4 @@ server.database.sql.actuator.create.file.default=sql/Actuator/InsertActuator.sql
 server.database.sql.actuator.delete.file.default=sql/Actuator/DeleteActuator.sql
 server.database.cassandra.ip.default=127.0.0.1
 server.database.sql.user.queryall.file=sql/User/QueryAllUsers.sql
+server.controller.ip.default=224.0.0.180
