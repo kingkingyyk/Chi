@@ -198,10 +198,10 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 	private void prefill(String n, int sh, int sm, int eh, int em) {
 		textFieldName.setText(n);
 		comboBoxStartHour.setSelectedIndex(sh%12);
-		comboBoxStartMinute.setSelectedIndex(sm%12);
+		comboBoxStartMinute.setSelectedIndex(sm);
 		comboBoxStartTimeAMPM.setSelectedIndex(sh/12);
 		comboBoxEndHour.setSelectedIndex(eh%12);
-		comboBoxEndMinute.setSelectedIndex(em%12);
+		comboBoxEndMinute.setSelectedIndex(em);
 		comboBoxEndTimeAMPM.setSelectedIndex(eh/12);
 	}
 	

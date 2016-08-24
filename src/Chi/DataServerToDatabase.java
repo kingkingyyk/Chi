@@ -26,7 +26,7 @@ public class DataServerToDatabase {
 		d.timestamp=LocalDateTime.now();
 		d.reading=r;
 		queue.add(d);
-		Logger.log("Database Writer - Queued Data : "+d.toString());
+		Logger.log("Data Server - Queued write to database : "+d.toString());
 		
 		if (queue.size()==1) {
 			Thread t=new Thread() {
@@ -44,7 +44,7 @@ public class DataServerToDatabase {
 			boolean success=DatabaseReading.storeReading(d.sname, d.timestamp, d.reading);
 			if (!success) {
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(5000);
 				} catch (InterruptedException e) {}
 			}
 		}

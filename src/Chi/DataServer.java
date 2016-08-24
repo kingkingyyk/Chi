@@ -20,21 +20,21 @@ public class DataServer {
 		Thread t=new Thread() {
 			public void run() {
 				try {
-					Logger.log("Listening Server - StartP1 - Checking lock file");
+					Logger.log("Data Server - StartP1 - Checking lock file");
 					File lockFile=new File(Config.getConfig(Config.CONFIG_SERVER_LOCK_FILE_KEY));
 					boolean unlocked=!lockFile.exists() || lockFile.delete();
 					if (unlocked && lockFile.createNewFile()) {
 						DataServer.fileLocker=new FileOutputStream(lockFile);
 						lockFile.deleteOnExit();
 						lockedFile=lockFile;
-						Logger.log("Listening Server - StartP1 - Start up queued.");
+						Logger.log("Data Server - StartP1 - Start up queued.");
 						isStarted=true;
 					} else {
-						Logger.log("Listening Server - StartP1 - Start failed. Unable to get the lock. Please stop any other instances.");
+						Logger.log("Data Server - StartP1 - Start failed. Unable to get the lock. Please stop any other instances.");
 						return;
 					}
 				} catch (IOException e) {
-					Logger.log("Listening Server - StartP1 - Start failed. "+e.getMessage());
+					Logger.log("Data Server - StartP1 - Start failed. "+e.getMessage());
 				}
 				attempted=true;
 			}
@@ -55,11 +55,11 @@ public class DataServer {
 	public static void stop() {
 		attempted=false;
 		try {
-			Logger.log("Listening server - StopP1 - Unlocking lock file.");
+			Logger.log("Data server - StopP1 - Unlocking lock file.");
 			DataServer.fileLocker.close();
-			Logger.log("Listening server - StopP1 - Deleting lock file.");
+			Logger.log("Data server - StopP1 - Deleting lock file.");
 			DataServer.lockedFile.delete();
-			Logger.log("Listening server - StopP1 - Stop queued.");
+			Logger.log("Data server - StopP1 - Stop queued.");
 			isStarted=false;
 			
 			DataServer.listeningThread.setFlag(false);
@@ -70,7 +70,7 @@ public class DataServer {
 			dsocket.send(packet);
 			dsocket.close();
 		} catch (IOException e) {
-			Logger.log("Listening server - StopP1 - "+e.getMessage());
+			Logger.log("Data server - StopP1 - "+e.getMessage());
 		}
 		attempted=true;
 	}
@@ -79,7 +79,7 @@ public class DataServer {
 		return DataServer.isStarted;
 	}
 	
-	public static void notifyListeningThreadFailure() {
+	public static void notifyDataThreadFailure() {
 		DataServer.stop();
 	}
 }

@@ -11,7 +11,7 @@ public class DataServerThread extends Thread {
 	private boolean running;
 	
 	public void setFlag(boolean flag) {
-		Logger.log("Listening Server - SetFlag - "+flag);
+		Logger.log("Data Server - SetFlag - "+flag);
 		this.running=flag;
 	}
 	
@@ -20,17 +20,17 @@ public class DataServerThread extends Thread {
 		byte [] buffer=new byte [8191];
 		DatagramPacket packet=new DatagramPacket(buffer,buffer.length);
 		try {
-			Logger.log("Listening Server - StartP2 - Opening port "+Config.getConfig(Config.CONFIG_SERVER_INCOMING_PORT_KEY));
+			Logger.log("Data Server - StartP2 - Opening port "+Config.getConfig(Config.CONFIG_SERVER_INCOMING_PORT_KEY));
 			ss=new DatagramSocket(Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_INCOMING_PORT_KEY)));
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "Fail to start server : "+e.getMessage(),Config.APP_NAME,JOptionPane.ERROR);
-			Logger.log("Listening Server - StartP2 - Error - "+e.getMessage());
+			Logger.log("Data Server - StartP2 - Error - "+e.getMessage());
 		}
 		if (ss==null) {
-			DataServer.notifyListeningThreadFailure();
+			DataServer.notifyDataThreadFailure();
 		} else {
-			Logger.log("Listening Server - StartP2 - Start OK!");
-			Logger.log("Listening Server - Run - Listening");
+			Logger.log("Data Server - StartP2 - Start OK!");
+			Logger.log("Data Server - Run - Data");
 			while (this.running) {
 				try {
 					ss.receive(packet);
@@ -39,7 +39,7 @@ public class DataServerThread extends Thread {
 						for (;buffer[packetLength]!=0 && packetLength<buffer.length;packetLength++) {
 						}
 						String received=new String(buffer,0,packetLength);
-						Logger.log("Listening Server - Received packet - "+received);
+						Logger.log("Data Server - Received packet - "+received);
 						StringTokenizer st=new StringTokenizer(received,Config.SENSOR_DATA_DELIMITER);
 						if (st.countTokens()==2) {
 							String sName=st.nextToken();
@@ -49,10 +49,10 @@ public class DataServerThread extends Thread {
 					}
 					packet.setLength(buffer.length);
 				} catch (Exception e) {
-					Logger.log("Listening Server - Error - "+e.getMessage());
+					Logger.log("Data Server - Error - "+e.getMessage());
 				}
 			}
-			Logger.log("Listening Server - StopP2 - Stop listening");
+			Logger.log("Data Server - StopP2 - Stop listening");
 			ss.close();
 		}
 	}

@@ -81,6 +81,29 @@ public class DatabaseDayScheduleRule extends DatabaseHSQL {
 		return false;
 	}
 	
+	public static Object [] getDayScheduleRule (String n) {
+		Logger.log("DB Get Day Schedule Rule : "+Config.getConfig(Config.DATABASE_QUERY_DAY_SCHEDULE_RULE_SQL_FILE_KEY));
+		try {
+			Connection c = getConnection();
+			Object [] o=null;
+			if (c!=null) {
+				Logger.log("DB Get Day Schedule Rule  - Database connection OK!");
+				String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_QUERY_DAY_SCHEDULE_RULE_SQL_FILE_KEY));
+				PreparedStatement ps=c.prepareStatement(sql[0]);
+				ps.setString(1, n);
+				Logger.log("DB Get Day Schedule Rule  - Execute "+ps.toString());
+				ResultSet rs=ps.executeQuery(); rs.next();
+				o=new Object [] {rs.getString(1),rs.getInt(2),rs.getInt(3),rs.getInt(4),rs.getInt(5)};
+			}
+			c.close();
+			return o;
+		} catch (Exception e) {
+			Logger.log("DB Create DayScheduleRule - Error - "+e.getMessage());
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	public static boolean deleteDayScheduleRule (String n) {
 		Logger.log("DB Delete DayScheduleRule : "+Config.getConfig(Config.DATABASE_DELETE_DAY_SCHEDULE_RULE_SQL_FILE_KEY));
 		try {

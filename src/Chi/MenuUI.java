@@ -23,6 +23,11 @@ public class MenuUI extends JFrame {
 	private JButton btnStartDataServer;
 	private JButton btnStopDataServer;
 	private JTextField textFieldSQL;
+	private JButton btnStopGWTServer;
+	private JButton btnStopSchedulingServer;
+	private JButton btnStartSchedulingServer;
+	private JButton btnStartGWTServer;
+	private JButton btnOngoingSchedules;
 
 
 	public MenuUI() {
@@ -74,24 +79,53 @@ public class MenuUI extends JFrame {
 		btnStopDataServer = new JButton("Stop Data Server");
 		btnStopDataServer.setBounds(229, 26, 153, 23);
 		panelServer.add(btnStopDataServer);
+		btnStopDataServer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DataServer.stop();
+				if (!DataServer.started()) {
+					btnStartDataServer.setEnabled(true);
+					btnStopDataServer.setEnabled(false);
+				}
+			}
+		});
 		btnStopDataServer.setEnabled(false);
 		
-		JButton btnStartGWTServer = new JButton("Start GWT Server");
+		btnStartGWTServer = new JButton("Start GWT Server");
 		btnStartGWTServer.setBounds(34, 60, 153, 23);
 		panelServer.add(btnStartGWTServer);
 		
-		JButton btnStopGWTServer = new JButton("Stop GWT Server");
+		btnStopGWTServer = new JButton("Stop GWT Server");
 		btnStopGWTServer.setEnabled(false);
 		btnStopGWTServer.setBounds(229, 60, 153, 23);
 		panelServer.add(btnStopGWTServer);
 		
-		JButton btnStartSchedulingServer = new JButton("Start Scheduling Server");
+		btnStartSchedulingServer = new JButton("Start Scheduling Server");
 		btnStartSchedulingServer.setBounds(34, 94, 153, 23);
 		panelServer.add(btnStartSchedulingServer);
+		btnStartSchedulingServer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SchedulingServer.start();
+				if (SchedulingServer.started()) {
+					btnStartSchedulingServer.setEnabled(false);
+					btnStopSchedulingServer.setEnabled(true);
+					btnOngoingSchedules.setEnabled(true);
+				}
+			}
+		});
 		
-		JButton btnStopSchedulingServer = new JButton("Stop Scheduling Server");
+		btnStopSchedulingServer = new JButton("Stop Scheduling Server");
 		btnStopSchedulingServer.setEnabled(false);
 		btnStopSchedulingServer.setBounds(229, 94, 153, 23);
+		btnStopSchedulingServer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SchedulingServer.stop();
+				if (!SchedulingServer.started()) {
+					btnStartSchedulingServer.setEnabled(true);
+					btnStopSchedulingServer.setEnabled(false);
+					btnOngoingSchedules.setEnabled(false);
+				}
+			}
+		});
 		panelServer.add(btnStopSchedulingServer);
 		
 		JPanel panelDatabase = new JPanel();
@@ -217,6 +251,19 @@ public class MenuUI extends JFrame {
 		});
 		btnSpecialSchedules.setBounds(277, 11, 127, 23);
 		panelScheduling.add(btnSpecialSchedules);
+		
+		btnOngoingSchedules = new JButton("Ongoing Schedules");
+		btnOngoingSchedules.setEnabled(false);
+		btnOngoingSchedules.setBounds(10, 110, 127, 23);
+		btnOngoingSchedules.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				FrameOngoingSchedules f=FrameOngoingSchedules.getInstance();
+				if (f.updateSuccess) {
+					f.setVisible(true);
+				}
+			}
+		});
+		panelScheduling.add(btnOngoingSchedules);
 		
 		JPanel panelSQL = new JPanel();
 		tabbedPane.addTab("SQL", null, panelSQL, null);
@@ -355,15 +402,6 @@ public class MenuUI extends JFrame {
 				t.start();
 				u.setVisible(true);
             	u.dispose();
-			}
-		});
-		btnStopDataServer.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				DataServer.stop();
-				if (!DataServer.started()) {
-					btnStartDataServer.setEnabled(true);
-					btnStopDataServer.setEnabled(false);
-				}
 			}
 		});
 	}

@@ -201,6 +201,7 @@ public class Cache {
 	
 	public static ArrayList<String> DayScheduleRuleList=new ArrayList<>();
 	public static HashSet<String> DayScheduleRuleSet=new HashSet<>();
+	public static HashMap<String,Object[]> DayScheduleRuleMap=new HashMap<>();
 	public static ArrayList<Object []> DayScheduleRuleObj=new ArrayList<>();
 	private static boolean DayScheduleRuleUpdateSuccess=false;
 	
@@ -213,6 +214,7 @@ public class Cache {
 				ResultSet rs=DatabaseDayScheduleRule.getDayScheduleRules();
 				DayScheduleRuleList.clear();
 				DayScheduleRuleSet.clear();
+				DayScheduleRuleMap.clear();
 				DayScheduleRuleObj.clear();
 				
 				try {
@@ -220,6 +222,7 @@ public class Cache {
 						Object [] o={rs.getString(1),rs.getInt(2),rs.getInt(3),rs.getInt(4),rs.getInt(5)};
 						DayScheduleRuleList.add(rs.getString(1));
 						DayScheduleRuleSet.add(rs.getString(1));
+						DayScheduleRuleMap.put(rs.getString(1),o);
 						DayScheduleRuleObj.add(o);
 					}
 					DayScheduleRuleUpdateSuccess=true;
