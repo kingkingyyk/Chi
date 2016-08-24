@@ -3,9 +3,47 @@ package Chi;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class DatabaseSpecialSchedule extends DatabaseHSQL {
 
+	public static interface OnCreateAction {
+		public void run (String sn, String an, int year, int month, int day, String rn, boolean ao, int pr, boolean en);
+	}
+	
+	public static interface OnUpdateAction {
+		public void run (String oldSN, String sn, String an, int year, int month, int day, String rn, boolean ao, int pr, boolean en);
+	}
+	
+	public static interface OnDeleteAction {
+		public void run (String sn);
+	}
+	
+	private static ArrayList<OnCreateAction> OnCreateList=new ArrayList<>();
+	private static ArrayList<OnUpdateAction> OnUpdateList=new ArrayList<>();
+	private static ArrayList<OnDeleteAction> OnDeleteList=new ArrayList<>();
+	
+	public static void registerOnCreateAction (OnCreateAction a) {
+		if (!OnCreateList.contains(a)) {
+			Logger.log("DatabaseSpecialSchedule - Registered "+a.toString()+" to OnCreate callback");
+			OnCreateList.add(a);
+		}
+	}
+	
+	public static void registerOnUpdateAction (OnUpdateAction a) {
+		if (!OnUpdateList.contains(a)) {
+			Logger.log("DatabaseSpecialSchedule - Registered "+a.toString()+" to OnUpdate callback");
+			OnUpdateList.add(a);
+		}
+	}
+	
+	public static void registerOnDeleteAction (OnDeleteAction a) {
+		if (!OnDeleteList.contains(a)) {
+			Logger.log("DatabaseSpecialSchedule - Registered "+a.toString()+" to OnDelete callback");
+			OnDeleteList.add(a);
+		}
+	}
+	
 	public static ResultSet getSpecialScheduleName () {
 		return runSQLFromFileAndGetData("DB Get Special Schedule Name",Config.getConfig(Config.DATABASE_QUERY_SPECIAL_SCHEDULE_ALL_NAME_SQL_FILE_KEY));
 	}
@@ -35,9 +73,13 @@ public class DatabaseSpecialSchedule extends DatabaseHSQL {
 				ps.setBoolean(7, ao);
 				ps.setInt(8, pr);
 				ps.setBoolean(9, en);
-				
 				Logger.log("DB Create Special Schedule - Execute");
 				ps.execute();
+				
+				Logger.log("DB Create Special Schedule - Execute Callbacks");
+				for (OnCreateAction a : OnCreateList) {
+					a.run(sn,an,year,month,day,rn,ao,pr,en);
+				}
 				
 				ps=c.prepareStatement(sql[2]);
 				Logger.log("DB Create Special Schedule - Execute "+ps.toString());
@@ -77,6 +119,11 @@ public class DatabaseSpecialSchedule extends DatabaseHSQL {
 				Logger.log("DB Update Special Schedule - Execute "+ps.toString());
 				ps.execute();
 				
+				Logger.log("DB Update Special Schedule - Execute Callbacks");
+				for (OnUpdateAction a : OnUpdateList) {
+					a.run(oldSN,sn,an,year,month,day,rn,ao,pr,en);
+				}
+				
 				ps=c.prepareStatement(sql[2]);
 				Logger.log("DB Update Special Schedule - Execute "+ps.toString());
 				ps.execute();
@@ -105,6 +152,11 @@ public class DatabaseSpecialSchedule extends DatabaseHSQL {
 				ps.setString(1, sn);
 				Logger.log("DB Delete Special Schedule - Execute "+ps.toString());
 				ps.execute();
+				
+				Logger.log("DB Delete Special Schedule - Execute Callbacks");
+				for (OnDeleteAction a : OnDeleteList) {
+					a.run(sn);
+				}
 				
 				ps=c.prepareStatement(sql[2]);
 				Logger.log("DB Delete Special Schedule - Execute "+ps.toString());
