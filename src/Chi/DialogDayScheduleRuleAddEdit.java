@@ -21,7 +21,6 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 	private JTextField textFieldName;
 	private JLabel lblNameInfo;
 	private JLabel lblTimeInfo;
-	public boolean updated=false;
 	private JButton okButton;
 	private JButton cancelButton;
 	private JComboBox<String> comboBoxStartHour;
@@ -265,7 +264,6 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 					u.setVisible(true);
 					
 					if (flag) {
-						updated=true;
 						dispose();
 					} else {
 						JOptionPane.showMessageDialog(null,"Database error, please check the console for more information.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
@@ -313,7 +311,6 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 					u.setVisible(true);
 					
 					if (flag) {
-						updated=true;
 						dispose();
 					} else {
 						JOptionPane.showMessageDialog(null,"Database error, please check the console for more information.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);

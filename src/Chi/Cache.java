@@ -10,34 +10,62 @@ import javax.swing.JOptionPane;
 public class Cache {
 	
 	public static ArrayList<String> usernameList=new ArrayList<>();
-	public static HashSet<String> usernameSet=new HashSet<>();
-	public static ArrayList<Object []> user=new ArrayList<>();
+	public static ArrayList<Object []> userClassObj=new ArrayList<>();
+	public static HashMap<String,Object[]> userMap=new HashMap<>();
+	private static boolean userUpdateSuccess=false;
 	
-	public static void updateUser() {
-		
+	public static boolean updateUser() {
+		userUpdateSuccess=false;
+		WaitUI u=new WaitUI();
+		u.setText("Querying user");
+		Thread t=new Thread() {
+			public void run () {
+				ResultSet rs=DatabaseUser.getUsers();
+				usernameList.clear();
+				userClassObj.clear();
+				userMap.clear();
+				
+				try {
+					while (rs.next()) {
+						Object [] o={rs.getString(1),rs.getString(2),rs.getInt(3),rs.getString(4),rs.getTimestamp(5)};
+						usernameList.add(rs.getString(1));
+						userClassObj.add(o);
+						userMap.put(rs.getString(1),o);
+					}
+					userUpdateSuccess=true;
+				} catch (Exception e) {
+					Logger.log("Cache.updateUser - Error - "+e.getMessage());
+					JOptionPane.showMessageDialog(null,"Fail to retrieve data from database.\nPlease refer to the console for more information.","Query User",JOptionPane.ERROR_MESSAGE);
+				}
+				u.dispose();
+			}
+		};
+		t.start();
+		u.setVisible(true);
+		return userUpdateSuccess;
 	}
 	
 	public static ArrayList<String> sensorClassList=new ArrayList<>();
-	public static HashSet<String> sensorClassSet=new HashSet<>();
+	public static HashMap<String,Object[]> sensorClassMap=new HashMap<>();
 	public static ArrayList<Object []> sensorClassObj=new ArrayList<>();
 	private static boolean sensorClassUpdateSuccess=false;
 	
 	public static boolean updateSensorClass() {
-		sensorUpdateSuccess=false;
+		sensorClassUpdateSuccess=false;
 		WaitUI u=new WaitUI();
 		u.setText("Querying sensor class");
 		Thread t=new Thread() {
 			public void run () {
 				ResultSet rs=DatabaseSensorClass.getSensorClass();
 				sensorClassList.clear();
-				sensorClassSet.clear();
+				sensorClassMap.clear();
 				sensorClassObj.clear();
 				
 				try {
 					while (rs.next()) {
 						Object [] o={rs.getString(1)};
 						sensorClassList.add(rs.getString(1));
-						sensorClassSet.add(rs.getString(1));
+						sensorClassMap.put(rs.getString(1),o);
 						sensorClassObj.add(o);
 					}
 					sensorClassUpdateSuccess=true;
@@ -54,7 +82,7 @@ public class Cache {
 	}
 	
 	public static ArrayList<String> sensorList=new ArrayList<>();
-	public static HashSet<String> sensorSet=new HashSet<>();
+	public static HashMap<String,Object []> sensorMap=new HashMap<>();
 	public static ArrayList<Object []> sensorObj=new ArrayList<>();
 	private static boolean sensorUpdateSuccess=false;
 	
@@ -66,14 +94,14 @@ public class Cache {
 			public void run () {
 				ResultSet rs=DatabaseSensor.getSensors();
 				sensorList.clear();
-				sensorSet.clear();
+				sensorMap.clear();
 				sensorObj.clear();
 				
 				try {
 					while (rs.next()) {
-						Object [] o={rs.getString(1),rs.getString(2),rs.getDouble(3),rs.getDouble(4),rs.getDouble(5),rs.getString(6),rs.getString(6)};
+						Object [] o={rs.getString(1),rs.getString(2),rs.getDouble(3),rs.getDouble(4),rs.getDouble(5),rs.getString(6),rs.getString(7)};
 						sensorList.add(rs.getString(1));
-						sensorSet.add(rs.getString(1));
+						sensorMap.put(rs.getString(1),o);
 						sensorObj.add(o);
 					}
 					sensorUpdateSuccess=true;
@@ -90,7 +118,7 @@ public class Cache {
 	}
 	
 	public static ArrayList<String> controllerList=new ArrayList<>();
-	public static HashSet<String> controllerSet=new HashSet<>();
+	public static HashMap<String, Object[]> controllerMap=new HashMap<>();
 	public static ArrayList<Object []> controllerObj=new ArrayList<>();
 	private static boolean controllerUpdateSuccess=false;
 	
@@ -102,14 +130,14 @@ public class Cache {
 			public void run () {
 				ResultSet rs=DatabaseController.getControllers();
 				controllerList.clear();
-				controllerSet.clear();
+				controllerMap.clear();
 				controllerObj.clear();
 				
 				try {
 					while (rs.next()) {
 						Object [] o={rs.getString(1),rs.getString(2),rs.getDouble(3),rs.getDouble(4),rs.getInt(5),rs.getDate(6)};
 						controllerList.add(rs.getString(1));
-						controllerSet.add(rs.getString(1));
+						controllerMap.put(rs.getString(1),o);
 						controllerObj.add(o);
 					}
 					controllerUpdateSuccess=true;
@@ -126,8 +154,7 @@ public class Cache {
 	}
 	
 	public static ArrayList<String> siteList=new ArrayList<>();
-	public static HashSet<String> siteSet=new HashSet<>();
-	public static HashMap<String,String> siteToImgSet=new HashMap<>();
+	public static HashMap<String,Object []> siteMap=new HashMap<>();
 	public static ArrayList<Object []> siteObj=new ArrayList<>();
 	private static boolean siteUpdateSuccess=false;
 	
@@ -139,15 +166,14 @@ public class Cache {
 			public void run () {
 				ResultSet rs=DatabaseSite.getSites();
 				siteList.clear();
-				siteSet.clear();
+				siteMap.clear();
 				siteObj.clear();
 				
 				try {
 					while (rs.next()) {
 						Object [] o={rs.getString(1),rs.getString(2)};
 						siteList.add(rs.getString(1));
-						siteSet.add(rs.getString(1));
-						siteToImgSet.put(rs.getString(1), rs.getString(2));
+						siteMap.put(rs.getString(1),o);
 						siteObj.add(o);
 					}
 					siteUpdateSuccess=true;
@@ -164,7 +190,7 @@ public class Cache {
 	}
 	
 	public static ArrayList<String> actuatorList=new ArrayList<>();
-	public static HashSet<String> actuatorSet=new HashSet<>();
+	public static HashMap<String,Object []> actuatorMap=new HashMap<>();
 	public static ArrayList<Object []> actuatorObj=new ArrayList<>();
 	private static boolean actuatorUpdateSuccess=false;
 	
@@ -176,14 +202,14 @@ public class Cache {
 			public void run () {
 				ResultSet rs=DatabaseActuator.getActuators();
 				actuatorList.clear();
-				actuatorSet.clear();
+				actuatorMap.clear();
 				actuatorObj.clear();
 				
 				try {
 					while (rs.next()) {
 						Object [] o={rs.getString(1),rs.getString(2),rs.getString(3)};
 						actuatorList.add(rs.getString(1));
-						actuatorSet.add(rs.getString(1));
+						actuatorMap.put(rs.getString(1),o);
 						actuatorObj.add(o);
 					}
 					actuatorUpdateSuccess=true;
@@ -200,7 +226,6 @@ public class Cache {
 	}
 	
 	public static ArrayList<String> DayScheduleRuleList=new ArrayList<>();
-	public static HashSet<String> DayScheduleRuleSet=new HashSet<>();
 	public static HashMap<String,Object[]> DayScheduleRuleMap=new HashMap<>();
 	public static ArrayList<Object []> DayScheduleRuleObj=new ArrayList<>();
 	private static boolean DayScheduleRuleUpdateSuccess=false;
@@ -213,7 +238,6 @@ public class Cache {
 			public void run () {
 				ResultSet rs=DatabaseDayScheduleRule.getDayScheduleRules();
 				DayScheduleRuleList.clear();
-				DayScheduleRuleSet.clear();
 				DayScheduleRuleMap.clear();
 				DayScheduleRuleObj.clear();
 				
@@ -221,7 +245,6 @@ public class Cache {
 					while (rs.next()) {
 						Object [] o={rs.getString(1),rs.getInt(2),rs.getInt(3),rs.getInt(4),rs.getInt(5)};
 						DayScheduleRuleList.add(rs.getString(1));
-						DayScheduleRuleSet.add(rs.getString(1));
 						DayScheduleRuleMap.put(rs.getString(1),o);
 						DayScheduleRuleObj.add(o);
 					}

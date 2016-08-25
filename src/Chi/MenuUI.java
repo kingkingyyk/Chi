@@ -29,7 +29,6 @@ public class MenuUI extends JFrame {
 	private JButton btnStartGWTServer;
 	private JButton btnOngoingSchedules;
 
-
 	public MenuUI() {
 		setTitle(Config.APP_NAME);
 		setResizable(false);

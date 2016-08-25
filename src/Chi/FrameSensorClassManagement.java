@@ -2,11 +2,7 @@ package Chi;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashSet;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -45,10 +41,16 @@ public class FrameSensorClassManagement extends JFrame {
 		return FrameSensorClassManagement.currInstance;
 	}
 	
+	public static void refresh() {
+		if (FrameSensorClassManagement.currInstance!=null) {
+			FrameSensorClassManagement.currInstance.updateSensorClassTable();
+			FrameSensorClassManagement.currInstance.repaint();
+		}
+	}
+	
 	private JPanel contentPane;
 	private SensorClassTable table;
 	private ArrayList<Object []> list=new ArrayList<>();
-	public HashSet<String> classDB=new HashSet<>();
 	public boolean updateSuccess;
 	private JScrollPane scrollPane;
 
@@ -113,42 +115,19 @@ public class FrameSensorClassManagement extends JFrame {
 	}
 	
 	public void updateSensorClassTable() {
-		WaitUI u=new WaitUI();
-		u.setText("Populating sensor class");
-		updateSuccess=false;
-		Thread t=new Thread() {
-			public void run () {
-				classDB=new HashSet<>();
-				ResultSet rs=DatabaseSensorClass.getSensorClass();
-				if (rs!=null) {
-					list.clear();
-					try {
-						while (rs.next()) {
-							list.add(new Object [] {rs.getString(1)});
-							classDB.add(rs.getString(1));
-						}
-					} catch (SQLException e) {e.printStackTrace();}
-					
-					int lastSelectedRow=-1;
-					if (table!=null) {
-						 lastSelectedRow=table.getSelectedRow();
-					}
-					createTable();
-					if (lastSelectedRow>=0 && list.size()>0) {
-						lastSelectedRow=Math.min(lastSelectedRow,list.size()-1);
-						table.setRowSelectionInterval(lastSelectedRow,lastSelectedRow);
-					}
-					
-					updateSuccess=true;
-				}
-				u.dispose();
+		if (Cache.updateSensorClass()) {
+			list.clear();
+			list.addAll(Cache.sensorClassObj);
+			int lastSelectedRow=-1;
+			if (table!=null) {
+				 lastSelectedRow=table.getSelectedRow();
 			}
-		};
-		t.start();
-		u.setVisible(true);
-		
-		if (updateSuccess) {
-			table.getColumnModel().getColumn(0).setPreferredWidth(133);
+			createTable();
+			if (lastSelectedRow>=0 && list.size()>0) {
+				lastSelectedRow=Math.min(lastSelectedRow,list.size()-1);
+				table.setRowSelectionInterval(lastSelectedRow,lastSelectedRow);
+			}
+			updateSuccess=true;
 		}
 	}
 	

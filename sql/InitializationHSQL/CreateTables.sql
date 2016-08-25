@@ -10,7 +10,7 @@ CREATE TABLE Controller(
 	PositionY double,
 	ReportTimeout integer,
 	LastReportTime timestamp,
-	FOREIGN KEY (Site) REFERENCES Site(SiteName)
+	FOREIGN KEY (Site) REFERENCES Site(SiteName) ON UPDATE CASCADE
 )
 @
 CREATE TABLE SensorClass (
@@ -25,8 +25,8 @@ CREATE TABLE Sensor(
 	TransformationFactor double,
 	Unit varchar(10),
 	Controller varchar(100),
-	FOREIGN KEY (Class) REFERENCES SensorClass(ClassName),
-	FOREIGN KEY (Controller) REFERENCES Controller(ControllerName)
+	FOREIGN KEY (Class) REFERENCES SensorClass(ClassName) ON UPDATE CASCADE,
+	FOREIGN KEY (Controller) REFERENCES Controller(ControllerName) ON UPDATE CASCADE
 )
 @
 CREATE TABLE User(
@@ -41,7 +41,7 @@ CREATE TABLE Actuator(
 	Name varchar(100) PRIMARY KEY,
 	Controller varchar(100),
 	Status varchar(100),
-	FOREIGN KEY (Controller) REFERENCES Controller(ControllerName)
+	FOREIGN KEY (Controller) REFERENCES Controller(ControllerName)  ON UPDATE CASCADE
 )
 @
 CREATE TABLE DayScheduleRule(
@@ -60,7 +60,7 @@ CREATE TABLE RegularSchedule (
 	ActuatorOn boolean,
 	Priority int,
 	Enabled boolean,
-	FOREIGN KEY (Rule) REFERENCES DayScheduleRule(RuleName)
+	FOREIGN KEY (Rule) REFERENCES DayScheduleRule(RuleName)  ON UPDATE CASCADE
 )
 @
 CREATE TABLE SpecialSchedule (
@@ -73,7 +73,7 @@ CREATE TABLE SpecialSchedule (
 	ActuatorOn boolean,
 	Priority int,
 	Enabled boolean,
-	FOREIGN KEY (Rule) REFERENCES DayScheduleRule(RuleName)
+	FOREIGN KEY (Rule) REFERENCES DayScheduleRule(RuleName) ON UPDATE CASCADE
 )
 @
 INSERT INTO Site VALUES ('DefaultSite','http://i.imgur.com/Ep8mS4K.jpg')

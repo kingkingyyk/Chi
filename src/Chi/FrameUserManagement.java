@@ -5,18 +5,16 @@ import java.awt.Component;
 import java.awt.SystemColor;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.GroupLayout;
@@ -156,11 +154,16 @@ public class FrameUserManagement extends JFrame {
 		return FrameUserManagement.currInstance;
 	}
 	
+	public static void refresh() {
+		if (FrameUserManagement.currInstance!=null) {
+			FrameUserManagement.currInstance.updateUserTable();
+			FrameUserManagement.currInstance.repaint();
+		}
+	}
 	private JPanel contentPane;
 	private UserTable table;
 	private UserTableRow rootRow;
 	private ArrayList<Object []> list=new ArrayList<>();
-	public HashSet<String> usernameDB=new HashSet<>();
 	public boolean updateSuccess;
 	private JScrollPane scrollPane;
 
@@ -225,44 +228,29 @@ public class FrameUserManagement extends JFrame {
 	}
 	
 	public void updateUserTable() {
-		WaitUI u=new WaitUI();
-		u.setText("Populating user list");
-		updateSuccess=false;
-		usernameDB=new HashSet<>();
-		Thread t=new Thread() {
-			public void run () {
-				ResultSet rs=DatabaseUser.getUsers();
-				if (rs!=null) {
-					rootRow=new UserTableRow(null);
-					list.clear();
-					try {
-						while (rs.next()) {
-							usernameDB.add(rs.getString(1));
-							Object [] o={rs.getString(1),rs.getString(2),rs.getInt(3),rs.getString(4),rs.getTimestamp(5)};
-							UserTableRow utr=new UserTableRow(o);
-							rootRow.addRow(utr);
-							list.add(o);
-						}
-					} catch (SQLException e) {e.printStackTrace();}
-					int lastSelectedRow=-1;
-					if (table!=null) {
-						lastSelectedRow=table.getSelectedRow();
-					}
-					
-					createTable();
-					table.setTreeTableModel(new UserTableModel(rootRow));
-					
-					if (lastSelectedRow>=0 && usernameDB.size()>0) {
-						lastSelectedRow=Math.min(lastSelectedRow,usernameDB.size()-1);
-						table.setRowSelectionInterval(lastSelectedRow,lastSelectedRow);
-					}
-					updateSuccess=true;
-				}
-				u.dispose();
-			}
-		};
-		t.start();
-		u.setVisible(true);
+		Cache.updateUser();
+		rootRow=new UserTableRow(null);
+		this.list.clear();
+		this.list.addAll(Cache.userClassObj);
+		
+		for (Object [] o : this.list) {
+			UserTableRow utr=new UserTableRow(o);
+			rootRow.addRow(utr);
+		}
+		
+		int lastSelectedRow=-1;
+		if (table!=null) {
+			lastSelectedRow=table.getSelectedRow();
+		}
+		createTable();
+		table.setAutoCreateRowSorter(true);
+		table.setTreeTableModel(new UserTableModel(rootRow));
+		
+		if (lastSelectedRow>=0 && Cache.RegularScheduleList.size()>0) {
+			lastSelectedRow=Math.min(lastSelectedRow,Cache.RegularScheduleList.size()-1);
+			table.setRowSelectionInterval(lastSelectedRow,lastSelectedRow);
+		}
+		updateSuccess=true;
 		
 		if (updateSuccess) {
 			table.getColumn(0).setCellRenderer(new UserTableCellRenderer());

@@ -76,14 +76,14 @@ public class DatabaseSpecialSchedule extends DatabaseHSQL {
 				Logger.log("DB Create Special Schedule - Execute");
 				ps.execute();
 				
+				ps=c.prepareStatement(sql[2]);
+				Logger.log("DB Create Special Schedule - Execute "+ps.toString());
+				ps.execute();
+				
 				Logger.log("DB Create Special Schedule - Execute Callbacks");
 				for (OnCreateAction a : OnCreateList) {
 					a.run(sn,an,year,month,day,rn,ao,pr,en);
 				}
-				
-				ps=c.prepareStatement(sql[2]);
-				Logger.log("DB Create Special Schedule - Execute "+ps.toString());
-				ps.execute();
 			}
 			c.close();
 			return true;
@@ -119,14 +119,14 @@ public class DatabaseSpecialSchedule extends DatabaseHSQL {
 				Logger.log("DB Update Special Schedule - Execute "+ps.toString());
 				ps.execute();
 				
+				ps=c.prepareStatement(sql[2]);
+				Logger.log("DB Update Special Schedule - Execute "+ps.toString());
+				ps.execute();
+				
 				Logger.log("DB Update Special Schedule - Execute Callbacks");
 				for (OnUpdateAction a : OnUpdateList) {
 					a.run(oldSN,sn,an,year,month,day,rn,ao,pr,en);
 				}
-				
-				ps=c.prepareStatement(sql[2]);
-				Logger.log("DB Update Special Schedule - Execute "+ps.toString());
-				ps.execute();
 			}
 			c.close();
 			return true;
@@ -153,14 +153,14 @@ public class DatabaseSpecialSchedule extends DatabaseHSQL {
 				Logger.log("DB Delete Special Schedule - Execute "+ps.toString());
 				ps.execute();
 				
+				ps=c.prepareStatement(sql[2]);
+				Logger.log("DB Delete Special Schedule - Execute "+ps.toString());
+				ps.execute();
+				
 				Logger.log("DB Delete Special Schedule - Execute Callbacks");
 				for (OnDeleteAction a : OnDeleteList) {
 					a.run(sn);
 				}
-				
-				ps=c.prepareStatement(sql[2]);
-				Logger.log("DB Delete Special Schedule - Execute "+ps.toString());
-				ps.execute();
 			}
 			c.close();
 			return true;

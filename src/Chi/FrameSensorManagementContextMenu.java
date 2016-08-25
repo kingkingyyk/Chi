@@ -23,9 +23,6 @@ public class FrameSensorManagementContextMenu extends JPopupMenu {
 				if (Cache.updateController() && Cache.updateSensorClass() && Cache.updateSensor()) {
 					DialogSensorAddEdit diag=new DialogSensorAddEdit();
 					diag.setVisible(true);
-					if (diag.updated) {
-						m.updateSensorTable();
-					}
 				}
 			}
 		});
@@ -38,9 +35,6 @@ public class FrameSensorManagementContextMenu extends JPopupMenu {
 					Object [] o=m.getSelectedObj();
 					DialogSensorAddEdit diag=new DialogSensorAddEdit((String)o[0],(String)o[1],(Double)o[2],(Double)o[3],(Double)o[4],(String)o[5],(String)o[6]);
 					diag.setVisible(true);
-					if (diag.updated) {
-						m.updateSensorTable();
-					}
 				}
 			}
 		});

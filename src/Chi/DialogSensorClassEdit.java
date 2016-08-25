@@ -11,13 +11,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.HashSet;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 
 public class DialogSensorClassEdit extends JDialog {
 	private static final long serialVersionUID = 2263148230107556625L;
-	public HashSet<String> classSet;
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textFieldName;
 	private JLabel lblNameInfo;
@@ -52,7 +50,7 @@ public class DialogSensorClassEdit extends JDialog {
 					String txt=textFieldName.getText();
 					if (txt==null || txt.isEmpty()) { 
 						lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
-					} else if (classSet.contains(txt) && !txt.equals(fillN)) {
+					} else if (Cache.sensorClassMap.containsKey(txt) && !txt.equals(fillN)) {
 						lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 					} else {
 						lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
@@ -79,7 +77,7 @@ public class DialogSensorClassEdit extends JDialog {
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
 						String txt=textFieldName.getText();
-						if (txt==null || txt.isEmpty() || (classSet.contains(txt) && !txt.equals(fillN))) {
+						if (txt==null || txt.isEmpty() || (Cache.sensorClassMap.containsKey(txt) && !txt.equals(fillN))) {
 							JOptionPane.showMessageDialog(null,"Invalid name!",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
 						} else {
 							WaitUI u=new WaitUI();

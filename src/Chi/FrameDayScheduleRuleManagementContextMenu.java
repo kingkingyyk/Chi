@@ -23,9 +23,6 @@ public class FrameDayScheduleRuleManagementContextMenu extends JPopupMenu {
 				if (Cache.updateDayScheduleRule()) {
 					DialogDayScheduleRuleAddEdit diag=new DialogDayScheduleRuleAddEdit();
 					diag.setVisible(true);
-					if (diag.updated) {
-						m.updateDayScheduleRuleTable();
-					}
 				}
 			}
 		});
@@ -38,9 +35,6 @@ public class FrameDayScheduleRuleManagementContextMenu extends JPopupMenu {
 					Object [] o=m.getSelectedObj();
 					DialogDayScheduleRuleAddEdit diag=new DialogDayScheduleRuleAddEdit((String)o[0],(Integer)o[1],(Integer)o[2],(Integer)o[3],(Integer)o[4]);
 					diag.setVisible(true);
-					if (diag.updated) {
-						m.updateDayScheduleRuleTable();
-					}
 				}
 			}
 		});

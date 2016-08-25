@@ -23,11 +23,7 @@ public class FrameSensorClassManagementContextMenu extends JPopupMenu {
 			public void actionPerformed(ActionEvent arg0) {
 				if (Cache.updateSensorClass()) {
 					DialogSensorClassAdd diag=new DialogSensorClassAdd();
-					diag.classSet=Cache.sensorClassSet;
 					diag.setVisible(true);
-					if (diag.classAdded) {
-						m.updateSensorClassTable();
-					}
 				}
 			}
 		});
@@ -39,11 +35,7 @@ public class FrameSensorClassManagementContextMenu extends JPopupMenu {
 				if (Cache.updateSensorClass()) {
 					Object [] o=m.getSelectedObj();
 					DialogSensorClassEdit diag=new DialogSensorClassEdit(o[0].toString());
-					diag.classSet=Cache.sensorClassSet;
 					diag.setVisible(true);
-					if (diag.classEdited) {
-						m.updateSensorClassTable();
-					}
 				}
 			}
 		});

@@ -22,6 +22,17 @@ public class Chi {
 		Theme.initialize();
 		Logger.log("Loading theme done.");
 		
+		Logger.log("GUI & data binding started.");
+		//In topological order
+		FrameUserManagementBind.initialize();
+		FrameSiteManagementBind.initialize();
+		FrameControllerManagementBind.initialize();
+		FrameSensorClassManagementBind.initialize();
+		FrameSensorManagementBind.initialize();
+		FrameActuatorManagementBind.initialize();
+		FrameDayScheduleRuleManagementBind.initialize();
+		Logger.log("GUI & data binding done.");
+		
 		Logger.log("MainUI started.");
 		MenuUI ss=new MenuUI();
 		ss.setLocationRelativeTo(null);

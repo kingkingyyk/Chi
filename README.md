@@ -1,21 +1,40 @@
 # Chi
-A system built for Internet of Things that focuses on scalability
-+ Supports remote management
-+ Supports automated management
-+ Web based UI
-+ Server UI control
+A system built for Internet of Things
++ Supports remote management (GWT Web-based UI)
++ Supports automated management (Server GUI + GWT Web-based UI)
 
 Requires :
-+ Apache Cassandra NoSQL
-+ HSQL
++ Apache Cassandra
++ HSQLDB
 + GWT
 
 Server Requirement :
-+ Windows at the moment
-+ Java 8
++ Main Server (Tested On : Windows 10)
++ HSQLDB (Tested On : Windows 10, Ubuntu 15)
++ Apache Cassandra (Tested On : Ubuntu 15)
++ Java 8 (Built On Update 92)
 
 Compile :
-+ Eclipse
++ Eclipse MARS.2
 
 Database Schema (Paste the XML) :
 + http://ondras.zarovi.cz/sql/demo/ 
+
+Current Working Stuffs :
++ Create database tables
++ Reset database tables
++ User Modelling (+ Store in database)
++ Sensor Modelling (+ Store in database)
++ Site Modelling (+ Store in database)
++ Controller Modelling (+ Store in database)
++ Sensor Class Modelling (+ Store in database)
++ Actuator Modelling (+ Store in database)
++ Day Schedule Rules Modelling (+ Store in database)
++ Regular Schedules Modelling (+ Store in database)
++ Special Schedules Modelling (+ Store in database)
++ Scheduling Time Logic
+
+To-Do-List :
++ Fix logged issues
++ Implement automated value propagation
++ SSL Socket Programming to talk to GWT Server

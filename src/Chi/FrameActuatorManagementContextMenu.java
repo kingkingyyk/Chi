@@ -23,10 +23,6 @@ public class FrameActuatorManagementContextMenu extends JPopupMenu {
 				if (Cache.updateController() & Cache.updateActuator()) {
 					DialogActuatorAddEdit diag=new DialogActuatorAddEdit();
 					diag.setVisible(true);
-					if (diag.updated) {
-						m.updateActuatorTable();
-						FrameActuatorManagement.refresh();
-					}
 				}
 			}
 		});
@@ -39,10 +35,6 @@ public class FrameActuatorManagementContextMenu extends JPopupMenu {
 					Object [] o=m.getSelectedObj();
 					DialogActuatorAddEdit diag=new DialogActuatorAddEdit((String)o[0],(String)o[1]);
 					diag.setVisible(true);
-					if (diag.updated) {
-						m.updateActuatorTable();
-						FrameActuatorManagement.refresh();
-					}
 				}
 			}
 		});

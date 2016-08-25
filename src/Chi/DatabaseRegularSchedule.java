@@ -74,14 +74,14 @@ public class DatabaseRegularSchedule extends DatabaseHSQL {
 				Logger.log("DB Create Regular Schedule - Execute "+ps.toString());
 				ps.execute();
 				
+				ps=c.prepareStatement(sql[2]);
+				Logger.log("DB Create Regular Schedule - Execute "+ps.toString());
+				ps.execute();
+				
 				Logger.log("DB Create Regular Schedule - Execute Callbacks");
 				for (OnCreateAction a : OnCreateList) {
 					a.run(sn,an,day,rn,ao,pr,en);
 				}
-				
-				ps=c.prepareStatement(sql[2]);
-				Logger.log("DB Create Regular Schedule - Execute "+ps.toString());
-				ps.execute();
 			}
 			c.close();
 			return true;
@@ -112,8 +112,10 @@ public class DatabaseRegularSchedule extends DatabaseHSQL {
 				ps.setInt(6, pr);
 				ps.setBoolean(7, en);
 				ps.setString(8, oldSN);
+				Logger.log("DB Update Regular Schedule - Execute "+ps.toString());
+				ps.execute();
 				
-
+				ps=c.prepareStatement(sql[2]);
 				Logger.log("DB Update Regular Schedule - Execute "+ps.toString());
 				ps.execute();
 				
@@ -121,10 +123,6 @@ public class DatabaseRegularSchedule extends DatabaseHSQL {
 				for (OnUpdateAction a : OnUpdateList) {
 					a.run(oldSN,sn,an,day,rn,ao,pr,en);
 				}
-				
-				ps=c.prepareStatement(sql[2]);
-				Logger.log("DB Update Regular Schedule - Execute "+ps.toString());
-				ps.execute();
 			}
 			c.close();
 			return true;
@@ -151,14 +149,14 @@ public class DatabaseRegularSchedule extends DatabaseHSQL {
 				Logger.log("DB Delete Regular Schedule - Execute "+ps.toString());
 				ps.execute();
 				
+				ps=c.prepareStatement(sql[2]);
+				Logger.log("DB Delete Regular Schedule - Execute "+ps.toString());
+				ps.execute();
+				
 				Logger.log("DB Delete Regular Schedule - Execute Callbacks");
 				for (OnDeleteAction a : OnDeleteList) {
 					a.run(sn);
 				}
-				
-				ps=c.prepareStatement(sql[2]);
-				Logger.log("DB Delete Regular Schedule - Execute "+ps.toString());
-				ps.execute();
 			}
 			c.close();
 			return true;

@@ -31,7 +31,7 @@ public class FrameSensorManagement extends JFrame {
 		public boolean isCellEditable(int row, int column){ return false;  }
 		
 		@SuppressWarnings("rawtypes")
-		private Class [] colClass={String.class,String.class,Double.class,Double.class,Double.class,String.class};
+		private Class [] colClass={String.class,String.class,Double.class,Double.class,Double.class,String.class,String.class};
 	    @Override
 	    public Class<?> getColumnClass(int colNum) {
 	    	return colClass[colNum];

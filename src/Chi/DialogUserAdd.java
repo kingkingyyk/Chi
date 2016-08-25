@@ -12,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.HashSet;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
@@ -20,7 +19,6 @@ import javax.swing.DefaultComboBoxModel;
 
 public class DialogUserAdd extends JDialog {
 	private static final long serialVersionUID = 2263148230107556625L;
-	public HashSet<String> usernameSet;
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textFieldUsername;
 	private JPasswordField textFieldPassword;
@@ -59,7 +57,7 @@ public class DialogUserAdd extends JDialog {
 					String txt=textFieldUsername.getText();
 					if (txt==null || txt.isEmpty()) { 
 						lblUsernameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
-					} else if (usernameSet.contains(txt)) {
+					} else if (Cache.userMap.containsKey(txt)) {
 						lblUsernameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 					} else {
 						lblUsernameInfo.setText("<html><font color=\"green\">OK!</font></html>");
@@ -141,7 +139,7 @@ public class DialogUserAdd extends JDialog {
 					public void actionPerformed(ActionEvent arg0) {
 						String txt=textFieldUsername.getText();
 						char [] pw=textFieldPassword.getPassword();
-						if (txt==null || txt.isEmpty() || usernameSet.contains(txt) || pw==null || pw.length==0) {
+						if (txt==null || txt.isEmpty() || Cache.userMap.containsKey(txt) || pw==null || pw.length==0) {
 							JOptionPane.showMessageDialog(null,"Invalid credential!",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
 						} else {
 							WaitUI u=new WaitUI();

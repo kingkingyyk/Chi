@@ -20,7 +20,6 @@ public class DialogActuatorAddEdit extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textFieldName;
 	private JLabel lblNameInfo;
-	public boolean updated=false;
 	private JButton okButton;
 	private JButton cancelButton;
 	private JComboBox<String> comboBoxController;
@@ -120,7 +119,7 @@ public class DialogActuatorAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
-				} else if (Cache.actuatorSet.contains(txt)) {
+				} else if (Cache.actuatorMap.containsKey(txt)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
@@ -149,7 +148,6 @@ public class DialogActuatorAddEdit extends JDialog {
 					u.setVisible(true);
 					
 					if (flag) {
-						updated=true;
 						dispose();
 					} else {
 						JOptionPane.showMessageDialog(null,"Database error, please check the console for more information.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
@@ -167,7 +165,7 @@ public class DialogActuatorAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
-				} else if (Cache.siteSet.contains(txt) && !txt.equals(n)) {
+				} else if (Cache.actuatorMap.containsKey(txt) && !txt.equals(n)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
@@ -196,7 +194,6 @@ public class DialogActuatorAddEdit extends JDialog {
 					u.setVisible(true);
 					
 					if (flag) {
-						updated=true;
 						dispose();
 					} else {
 						JOptionPane.showMessageDialog(null,"Database error, please check the console for more information.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);

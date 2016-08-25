@@ -125,8 +125,9 @@ public class DialogControllerAddEdit extends JDialog {
 		comboBoxSite.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (currentMapURL==null || !currentMapURL.equals(Cache.siteToImgSet.get(comboBoxSite.getSelectedItem()))) {
-					currentMapURL=Cache.siteToImgSet.get(comboBoxSite.getSelectedItem());
+				String url=(String)Cache.siteMap.get(comboBoxSite.getSelectedItem())[1];
+				if (currentMapURL==null || !currentMapURL.equals(url)) {
+					currentMapURL=url;
 					drawMap(currentMapURL);
 				}
 			}
@@ -301,7 +302,7 @@ public class DialogControllerAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
-				} else if (Cache.controllerSet.contains(txt)) {
+				} else if (Cache.controllerMap.containsKey(txt)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
@@ -358,7 +359,7 @@ public class DialogControllerAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
-				} else if (Cache.controllerSet.contains(txt) && !txt.equals(n)) {
+				} else if (Cache.controllerMap.containsKey(txt) && !txt.equals(n)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");

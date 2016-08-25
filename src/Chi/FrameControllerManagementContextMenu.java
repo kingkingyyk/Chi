@@ -23,9 +23,6 @@ public class FrameControllerManagementContextMenu extends JPopupMenu {
 				if (Cache.updateController() && Cache.updateSite()) {
 					DialogControllerAddEdit diag=new DialogControllerAddEdit();
 					diag.setVisible(true);
-					if (diag.updated) {
-						m.updateControllerTable();
-					}
 				}
 			}
 		});
@@ -38,9 +35,6 @@ public class FrameControllerManagementContextMenu extends JPopupMenu {
 					Object [] o=m.getSelectedObj();
 					DialogControllerAddEdit diag=new DialogControllerAddEdit((String)o[0],(String)o[1],(Double)o[2],(Double)o[3],(Integer)o[4]);
 					diag.setVisible(true);
-					if (diag.updated) {
-						m.updateControllerTable();
-					}
 				}
 			}
 		});

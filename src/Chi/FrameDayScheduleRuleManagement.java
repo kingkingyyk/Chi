@@ -154,6 +154,13 @@ public class FrameDayScheduleRuleManagement extends JFrame {
 		return FrameDayScheduleRuleManagement.currInstance;
 	}
 	
+	public static void refresh() {
+		if (FrameDayScheduleRuleManagement.currInstance!=null) {
+			FrameDayScheduleRuleManagement.currInstance.updateDayScheduleRuleTable();
+			FrameDayScheduleRuleManagement.currInstance.repaint();
+		}
+	}
+	
 	private JPanel contentPane;
 	private DayScheduleRuleTable table;
 	private DayScheduleRuleTableRow rootRow;

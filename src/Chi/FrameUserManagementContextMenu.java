@@ -21,12 +21,11 @@ public class FrameUserManagementContextMenu extends JPopupMenu {
 		newMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				DialogUserAdd diag=new DialogUserAdd();
-				diag.usernameSet=m.usernameDB;
-				diag.setVisible(true);
-				if (diag.userAdded) {
-					m.updateUserTable();
+				if (Cache.updateUser()) {
+					DialogUserAdd diag=new DialogUserAdd();
+					diag.setVisible(true);
 				}
+
 			}
 		});
 		
@@ -34,11 +33,10 @@ public class FrameUserManagementContextMenu extends JPopupMenu {
 		editMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Object [] o=m.getSelectedObj();
-				DialogUserEdit diag=new DialogUserEdit(o[0].toString(),(Integer)o[2],o[3].toString());
-				diag.setVisible(true);
-				if (diag.userEdited) {
-					m.updateUserTable();
+				if (Cache.updateUser()) {
+					Object [] o=m.getSelectedObj();
+					DialogUserEdit diag=new DialogUserEdit(o[0].toString(),(Integer)o[2],o[3].toString());
+					diag.setVisible(true);
 				}
 			}
 		});
