@@ -13,6 +13,20 @@ public class SchedulingThread extends Thread {
 		this.stopQueued=true;
 	}
 	
+	public class OnDayScheduleRuleUpdate implements DatabaseDayScheduleRule.OnUpdateAction {
+		@Override
+		public void run(String oldN, String n, int sh, int sm, int eh, int em) {
+			for (SchedulingData d : data.values()) {
+				if (!d.getTimeRule().equals(oldN)) {
+					d.setTimeRule(n);
+				} else {
+					d.updateScheduler(true);
+				}
+			}
+			FrameOngoingSchedules.refresh();
+		}
+	}
+	
 	public class OnRegularScheduleCreate implements DatabaseRegularSchedule.OnCreateAction {
 		@Override
 		public void run(String sn, String an, int day, String rn, boolean ao, int pr, boolean en) {
@@ -145,11 +159,17 @@ public class SchedulingThread extends Thread {
 	}
 	
 	public void run () {
+		OnDayScheduleRuleUpdate odsru=new OnDayScheduleRuleUpdate();
+		OnSpecialScheduleCreate ossc=new OnSpecialScheduleCreate();
+		OnSpecialScheduleUpdate ossu=new OnSpecialScheduleUpdate();
+		OnSpecialScheduleDelete ossd=new OnSpecialScheduleDelete();
+		
+		DatabaseDayScheduleRule.registerOnUpdateAction(odsru);
 		this.data=new HashMap<>();
 		
-		DatabaseSpecialSchedule.registerOnCreateAction(new OnSpecialScheduleCreate());
-		DatabaseSpecialSchedule.registerOnUpdateAction(new OnSpecialScheduleUpdate());
-		DatabaseSpecialSchedule.registerOnDeleteAction(new OnSpecialScheduleDelete());
+		DatabaseSpecialSchedule.registerOnCreateAction(ossc);
+		DatabaseSpecialSchedule.registerOnUpdateAction(ossu);
+		DatabaseSpecialSchedule.registerOnDeleteAction(ossd);
 		OnSpecialScheduleStart osss=new OnSpecialScheduleStart();
 		OnSpecialScheduleEnd osse=new OnSpecialScheduleEnd();
 		
@@ -167,9 +187,13 @@ public class SchedulingThread extends Thread {
 			e.printStackTrace();
 		}
 		
-		DatabaseRegularSchedule.registerOnCreateAction(new OnRegularScheduleCreate());
-		DatabaseRegularSchedule.registerOnUpdateAction(new OnRegularScheduleUpdate());
-		DatabaseRegularSchedule.registerOnDeleteAction(new OnRegularScheduleDelete());
+		OnRegularScheduleCreate orsc=new OnRegularScheduleCreate();
+		OnRegularScheduleUpdate orsu=new OnRegularScheduleUpdate();
+		OnRegularScheduleDelete orsd=new OnRegularScheduleDelete();
+		
+		DatabaseRegularSchedule.registerOnCreateAction(orsc);
+		DatabaseRegularSchedule.registerOnUpdateAction(orsu);
+		DatabaseRegularSchedule.registerOnDeleteAction(orsd);
 		OnRegularScheduleStart orss=new OnRegularScheduleStart();
 		OnRegularScheduleEnd orse=new OnRegularScheduleEnd();
 		
@@ -187,6 +211,16 @@ public class SchedulingThread extends Thread {
 		while (true) {
 			if (stopQueued) {
 				stopQueued=false;
+				DatabaseDayScheduleRule.unregisterOnUpdateAction(odsru);
+				
+				DatabaseSpecialSchedule.unregisterOnCreateAction(ossc);
+				DatabaseSpecialSchedule.unregisterOnUpdateAction(ossu);
+				DatabaseSpecialSchedule.unregisterOnDeleteAction(ossd);
+				
+				DatabaseRegularSchedule.unregisterOnCreateAction(orsc);
+				DatabaseRegularSchedule.unregisterOnUpdateAction(orsu);
+				DatabaseRegularSchedule.unregisterOnDeleteAction(orsd);
+				
 				SchedulingServer.notifyStop();
 			}
 			try { Thread.sleep(1000);

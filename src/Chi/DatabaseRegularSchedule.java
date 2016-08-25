@@ -3,7 +3,7 @@ package Chi;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class DatabaseRegularSchedule extends DatabaseHSQL {
 
@@ -19,14 +19,21 @@ public class DatabaseRegularSchedule extends DatabaseHSQL {
 		public void run (String sn);
 	}
 	
-	private static ArrayList<OnCreateAction> OnCreateList=new ArrayList<>();
-	private static ArrayList<OnUpdateAction> OnUpdateList=new ArrayList<>();
-	private static ArrayList<OnDeleteAction> OnDeleteList=new ArrayList<>();
+	private static LinkedList<OnCreateAction> OnCreateList=new LinkedList<>();
+	private static LinkedList<OnUpdateAction> OnUpdateList=new LinkedList<>();
+	private static LinkedList<OnDeleteAction> OnDeleteList=new LinkedList<>();
 	
 	public static void registerOnCreateAction (OnCreateAction a) {
 		if (!OnCreateList.contains(a)) {
 			Logger.log("DatabaseRegularSchedule - Registered "+a.toString()+" to OnCreate callback");
 			OnCreateList.add(a);
+		}
+	}
+	
+	public static void unregisterOnCreateAction (OnCreateAction a) {
+		if (OnCreateList.contains(a)) {
+			Logger.log("DatabaseRegularSchedule - Unregistered "+a.toString()+" to OnCreate callback");
+			OnCreateList.remove(a);
 		}
 	}
 	
@@ -37,10 +44,24 @@ public class DatabaseRegularSchedule extends DatabaseHSQL {
 		}
 	}
 	
+	public static void unregisterOnUpdateAction (OnUpdateAction a) {
+		if (OnUpdateList.contains(a)) {
+			Logger.log("DatabaseRegularSchedule - Unregistered "+a.toString()+" to OnUpdate callback");
+			OnUpdateList.remove(a);
+		}
+	}
+	
 	public static void registerOnDeleteAction (OnDeleteAction a) {
 		if (!OnDeleteList.contains(a)) {
 			Logger.log("DatabaseRegularSchedule - Registered "+a.toString()+" to OnDelete callback");
 			OnDeleteList.add(a);
+		}
+	}
+	
+	public static void unregisterOnDeleteAction (OnDeleteAction a) {
+		if (OnDeleteList.contains(a)) {
+			Logger.log("DatabaseRegularSchedule - Unregistered "+a.toString()+" to OnDelete callback");
+			OnDeleteList.remove(a);
 		}
 	}
 	
