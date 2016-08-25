@@ -40,19 +40,27 @@ public class SchedulingThread extends Thread {
 		@Override
 		public void run(String oldSN, String sn, String an, int day, String rn, boolean ao, int pr, boolean en) {
 			SchedulingDataRegular d=(SchedulingDataRegular)data.get(oldSN);
-			if (!d.getName().equals(sn)) {
-				d.setName(sn);
-				data.remove(oldSN);
-				data.put(sn,d);
-			}
-			d.setActuatorName(an);
-			d.setDay(day);
-			d.setTimeRule(rn);
-			d.setActuatorFlag(ao);
-			if (d.isEnabled()!=en) {
-				d.setEnabled(en);
-				if (en) data.put(sn,d);
-				else data.remove(sn);
+			if (d==null) {
+				d=new SchedulingDataRegular(sn,an,day,rn,ao,pr,en);
+				if (d.enabled) {
+					data.put(sn,d);
+					FrameOngoingSchedules.refresh();
+				}
+			} else {
+				if (!d.getName().equals(sn)) {
+					d.setName(sn);
+					data.remove(oldSN);
+					data.put(sn,d);
+				}
+				d.setActuatorName(an);
+				d.setDay(day);
+				d.setTimeRule(rn);
+				d.setActuatorFlag(ao);
+				if (d.isEnabled()!=en) {
+					d.setEnabled(en);
+					if (en) data.put(sn,d);
+					else data.remove(sn);
+				}
 			}
 			FrameOngoingSchedules.refresh();
 		}
@@ -102,7 +110,7 @@ public class SchedulingThread extends Thread {
 			SchedulingDataSpecial d=(SchedulingDataSpecial)data.getOrDefault(oldSN,null);
 			if (d==null) {
 				d=new SchedulingDataSpecial(sn,an,year,month,day,rn,ao,pr,en);
-				if (d.getNextEndTime().compareTo(LocalDateTime.now())>0) {
+				if (d.getNextEndTime().compareTo(LocalDateTime.now())>0 && d.enabled) {
 					data.put(sn,d);
 					FrameOngoingSchedules.refresh();
 				}
@@ -177,7 +185,7 @@ public class SchedulingThread extends Thread {
 		try {
 			while (rs.next()) {
 				SchedulingDataSpecial d=new SchedulingDataSpecial(rs.getString("ScheduleName"),rs.getString("ActuatorName"),rs.getInt("Year"),rs.getInt("Month"),rs.getInt("Day"),rs.getString("Rule"),rs.getBoolean("ActuatorOn"),rs.getInt("Priority"),rs.getBoolean("Enabled"));
-				if (d.getNextEndTime().compareTo(LocalDateTime.now())>0) {
+				if (d.getNextEndTime().compareTo(LocalDateTime.now())>0 && d.isEnabled()) {
 					d.registerOnStartFunc(osss);
 					d.registerOnEndFunc(osse);
 					data.put(d.getName(),d);
@@ -201,9 +209,11 @@ public class SchedulingThread extends Thread {
 		try {
 			while (rs.next()) {
 				SchedulingDataRegular d=new SchedulingDataRegular(rs.getString("ScheduleName"),rs.getString("ActuatorName"),rs.getInt("DayMask"),rs.getString("Rule"),rs.getBoolean("ActuatorOn"),rs.getInt("Priority"),rs.getBoolean("Enabled"));
-				d.registerOnStartFunc(orss);
-				d.registerOnEndFunc(orse);
-				data.put(d.getName(),d);
+				if (d.getNextEndTime().compareTo(LocalDateTime.now())>0 && d.isEnabled()) {
+					d.registerOnStartFunc(orss);
+					d.registerOnEndFunc(orse);
+					data.put(d.getName(),d);
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
