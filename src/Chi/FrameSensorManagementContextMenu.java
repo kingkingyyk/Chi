@@ -57,8 +57,6 @@ public class FrameSensorManagementContextMenu extends JPopupMenu {
 					};
 					t.start();
 					u.setVisible(true);
-					
-					m.updateSensorTable();
 				}
 			}
 		});

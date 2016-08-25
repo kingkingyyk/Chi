@@ -23,9 +23,6 @@ public class FrameSpecialScheduleManagementContextMenu extends JPopupMenu {
 				if (Cache.updateActuator() && Cache.updateDayScheduleRule() && Cache.updateSpecialSchedule()) {
 					DialogSpecialScheduleAddEdit diag=new DialogSpecialScheduleAddEdit();
 					diag.setVisible(true);
-					if (diag.updated) {
-						m.updateSpecialScheduleTable();
-					}
 				}
 			}
 		});
@@ -38,9 +35,6 @@ public class FrameSpecialScheduleManagementContextMenu extends JPopupMenu {
 					Object [] o=m.getSelectedObj();
 					DialogSpecialScheduleAddEdit diag=new DialogSpecialScheduleAddEdit((String)o[0],(String)o[1],(Integer)o[2],(Integer)o[3],(Integer)o[4],(String)o[5],(Boolean)o[6],(Integer)o[7],(Boolean)o[8]);
 					diag.setVisible(true);
-					if (diag.updated) {
-						m.updateSpecialScheduleTable();
-					}
 				}
 			}
 		});
@@ -63,7 +57,6 @@ public class FrameSpecialScheduleManagementContextMenu extends JPopupMenu {
 					};
 					t.start();
 					u.setVisible(true);
-					m.updateSpecialScheduleTable();
 				}
 			}
 		});

@@ -57,8 +57,6 @@ public class FrameActuatorManagementContextMenu extends JPopupMenu {
 					};
 					t.start();
 					u.setVisible(true);
-					
-					m.updateActuatorTable();
 				}
 			}
 		});

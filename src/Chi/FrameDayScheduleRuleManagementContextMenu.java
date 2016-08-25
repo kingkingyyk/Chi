@@ -57,8 +57,6 @@ public class FrameDayScheduleRuleManagementContextMenu extends JPopupMenu {
 					};
 					t.start();
 					u.setVisible(true);
-					
-					m.updateDayScheduleRuleTable();
 				}
 			}
 		});

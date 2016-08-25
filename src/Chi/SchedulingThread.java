@@ -13,6 +13,24 @@ public class SchedulingThread extends Thread {
 		this.stopQueued=true;
 	}
 	
+	public class OnActuatorUpdate implements DatabaseActuator.OnUpdateAction {
+		@Override
+		public void run(String oldN, String n, String u) {
+			for (SchedulingData d : data.values()) {
+				if (d.getActuatorName().equals(oldN)) {
+					d.setActuatorName(n);
+				}
+			}
+			FrameOngoingSchedules.refresh();
+		}
+	}
+	
+	public class OnActuatorDelete implements DatabaseActuator.OnDeleteAction {
+		public void run (String sn) {
+			FrameOngoingSchedules.refresh();
+		}
+	}
+	
 	public class OnDayScheduleRuleUpdate implements DatabaseDayScheduleRule.OnUpdateAction {
 		@Override
 		public void run(String oldN, String n, int sh, int sm, int eh, int em) {
@@ -31,8 +49,10 @@ public class SchedulingThread extends Thread {
 		@Override
 		public void run(String sn, String an, int day, String rn, boolean ao, int pr, boolean en) {
 			SchedulingData d=new SchedulingDataRegular(sn,an,day,rn,ao,pr,en);
-			data.put(sn,d);
-			FrameOngoingSchedules.refresh();
+			if (en && day!=0) {
+				data.put(sn,d);
+				FrameOngoingSchedules.refresh();
+			}
 		}
 	}
 	
@@ -42,7 +62,7 @@ public class SchedulingThread extends Thread {
 			SchedulingDataRegular d=(SchedulingDataRegular)data.get(oldSN);
 			if (d==null) {
 				d=new SchedulingDataRegular(sn,an,day,rn,ao,pr,en);
-				if (d.enabled) {
+				if (d.enabled && day!=0) {
 					data.put(sn,d);
 					FrameOngoingSchedules.refresh();
 				}
@@ -58,9 +78,9 @@ public class SchedulingThread extends Thread {
 				d.setActuatorFlag(ao);
 				if (d.isEnabled()!=en) {
 					d.setEnabled(en);
-					if (en) data.put(sn,d);
-					else data.remove(sn);
 				}
+				if (en && day!=0) data.put(sn,d);
+				else data.remove(sn);
 			}
 			FrameOngoingSchedules.refresh();
 		}
@@ -97,7 +117,7 @@ public class SchedulingThread extends Thread {
 		@Override
 		public void run(String sn, String an, int year, int month, int day, String rn, boolean ao, int pr, boolean en) {
 			SchedulingData d=new SchedulingDataSpecial(sn,an,year,month,day,rn,ao,pr,en);
-			if (d.getNextEndTime().compareTo(LocalDateTime.now())>0) {
+			if (d.getNextEndTime().compareTo(LocalDateTime.now())>0 && en) {
 				data.put(sn,d);
 				FrameOngoingSchedules.refresh();
 			}
@@ -110,7 +130,7 @@ public class SchedulingThread extends Thread {
 			SchedulingDataSpecial d=(SchedulingDataSpecial)data.getOrDefault(oldSN,null);
 			if (d==null) {
 				d=new SchedulingDataSpecial(sn,an,year,month,day,rn,ao,pr,en);
-				if (d.getNextEndTime().compareTo(LocalDateTime.now())>0 && d.enabled) {
+				if (d.getNextEndTime().compareTo(LocalDateTime.now())>0 && d.enabled && day!=0) {
 					data.put(sn,d);
 					FrameOngoingSchedules.refresh();
 				}
@@ -168,13 +188,18 @@ public class SchedulingThread extends Thread {
 	
 	public void run () {
 		OnDayScheduleRuleUpdate odsru=new OnDayScheduleRuleUpdate();
-		OnSpecialScheduleCreate ossc=new OnSpecialScheduleCreate();
-		OnSpecialScheduleUpdate ossu=new OnSpecialScheduleUpdate();
-		OnSpecialScheduleDelete ossd=new OnSpecialScheduleDelete();
-		
 		DatabaseDayScheduleRule.registerOnUpdateAction(odsru);
 		this.data=new HashMap<>();
 		
+		OnActuatorUpdate oau=new OnActuatorUpdate();
+		OnActuatorDelete oae=new OnActuatorDelete();
+		DatabaseActuator.registerOnUpdateAction(oau);
+		DatabaseActuator.registerOnDeleteAction(oae);
+		
+		
+		OnSpecialScheduleCreate ossc=new OnSpecialScheduleCreate();
+		OnSpecialScheduleUpdate ossu=new OnSpecialScheduleUpdate();
+		OnSpecialScheduleDelete ossd=new OnSpecialScheduleDelete();
 		DatabaseSpecialSchedule.registerOnCreateAction(ossc);
 		DatabaseSpecialSchedule.registerOnUpdateAction(ossu);
 		DatabaseSpecialSchedule.registerOnDeleteAction(ossd);
@@ -209,7 +234,7 @@ public class SchedulingThread extends Thread {
 		try {
 			while (rs.next()) {
 				SchedulingDataRegular d=new SchedulingDataRegular(rs.getString("ScheduleName"),rs.getString("ActuatorName"),rs.getInt("DayMask"),rs.getString("Rule"),rs.getBoolean("ActuatorOn"),rs.getInt("Priority"),rs.getBoolean("Enabled"));
-				if (d.getNextEndTime().compareTo(LocalDateTime.now())>0 && d.isEnabled()) {
+				if (d.getNextEndTime().compareTo(LocalDateTime.now())>0 && d.isEnabled() && d.getDay()!=0) {
 					d.registerOnStartFunc(orss);
 					d.registerOnEndFunc(orse);
 					data.put(d.getName(),d);

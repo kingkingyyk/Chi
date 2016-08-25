@@ -60,6 +60,7 @@ CREATE TABLE RegularSchedule (
 	ActuatorOn boolean,
 	Priority int,
 	Enabled boolean,
+	FOREIGN KEY (ActuatorName) REFERENCES Actuator(Name) ON UPDATE CASCADE,
 	FOREIGN KEY (Rule) REFERENCES DayScheduleRule(RuleName)  ON UPDATE CASCADE
 )
 @
@@ -73,6 +74,7 @@ CREATE TABLE SpecialSchedule (
 	ActuatorOn boolean,
 	Priority int,
 	Enabled boolean,
+	FOREIGN KEY (ActuatorName) REFERENCES Actuator(Name) ON UPDATE CASCADE,
 	FOREIGN KEY (Rule) REFERENCES DayScheduleRule(RuleName) ON UPDATE CASCADE
 )
 @

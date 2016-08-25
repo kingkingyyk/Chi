@@ -57,8 +57,6 @@ public class FrameControllerManagementContextMenu extends JPopupMenu {
 					};
 					t.start();
 					u.setVisible(true);
-					
-					m.updateControllerTable();
 				}
 			}
 		});
