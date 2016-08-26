@@ -34,7 +34,14 @@ Current Working Stuffs :
 + Special Schedules Modelling (+ Store in database)
 + Scheduling Time Logic
 
-To-Do-List :
-+ Fix logged issues
-+ Implement automated value propagation
+v1 To-Do-List :
++ GWT Server communication encoding / decoding
 + SSL Socket Programming to talk to GWT Server
++ Controller communication encoding / decoding
++ Listen to controller "I-Am-Alive" packet
++ Send actuator triggering packet
+
+v1.1 To-Do-List :
++ Rewrite dataset store & caching mehanism to improve UI latency
++ Implement automated value propagation
++ Controller network programming

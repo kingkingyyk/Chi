@@ -10,7 +10,7 @@ public class Config {
 
 	//Unchangeable via configuration file
 	public static final String APP_NAME="Chi";
-	public static final String VERSION="build 000";
+	public static final String VERSION="v1.0";
 	
 	public static final String CONFIG_FOLDER_PATH="conf";
 	public static final String CONFIG_FILE_NAME="chi_conf.sh";
