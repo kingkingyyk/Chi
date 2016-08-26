@@ -35,13 +35,10 @@ Current Working Stuffs :
 + Scheduling Time Logic
 
 v1 To-Do-List :
-+ GWT Server communication encoding / decoding
-+ SSL Socket Programming to talk to GWT Server
-+ Controller communication encoding / decoding
-+ Listen to controller "I-Am-Alive" packet
-+ Send actuator triggering packet
++ GWT Server communication implementation [Refer to PacketFormats.xlsx]
++ Controller communication implementation [Refer to PacketFormats.xlsx]
 
 v1.1 To-Do-List :
 + Rewrite dataset store & caching mehanism to improve UI latency
 + Implement automated value propagation
-+ Controller network programming
++ Secure communication between controller & server
