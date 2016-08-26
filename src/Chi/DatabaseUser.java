@@ -97,14 +97,14 @@ public class DatabaseUser extends DatabaseHSQL {
 		}
 	}
 	
-	public static boolean updateUserCredentialPassword (String user, String pw, int lvl, String status) {
+	public static boolean updateUserCredentialPassword (String oldN, String user, String pw, int lvl, String status) {
 		Logger.log("DB Update User : "+Config.getConfig(Config.DATABASE_UPDATE_USER_W_PASSWORD_SQL_FILE_KEY));
-		if (!Cache.userMap.containsKey(user)) {
+		if (!Cache.userMap.containsKey(oldN)) {
 			Logger.log("DB Update User[Cache] - User doesn't exist!");
 			return false;
 		} else {
-			Object [] o=Cache.userMap.get(user);
-			if (o[1].equals(pw) && o[2].equals(lvl) && o[3].equals(status)) {
+			Object [] o=Cache.userMap.get(oldN);
+			if (o[0].equals(user) && o[1].equals(pw) && o[2].equals(lvl) && o[3].equals(status)) {
 				Logger.log("DB Update User[Cache] - User information didn't change!");
 				return true;
 			} else {
@@ -118,10 +118,11 @@ public class DatabaseUser extends DatabaseHSQL {
 						ps.execute();
 						
 						ps=c.prepareStatement(sql[1]);
-						ps.setString(1, pw);
-						ps.setInt(2, lvl);
-						ps.setString(3, status);
-						ps.setString(4, user);
+						ps.setString(1, user);
+						ps.setString(2, pw);
+						ps.setInt(3, lvl);
+						ps.setString(4, status);
+						ps.setString(5,oldN);
 						Logger.log("DB Update User - Execute "+ps.toString());
 						ps.execute();
 						
@@ -145,14 +146,14 @@ public class DatabaseUser extends DatabaseHSQL {
 		}
 	}
 	
-	public static boolean updateUserCredentialNoPassword (String user, int lvl, String status) {
+	public static boolean updateUserCredentialNoPassword (String oldN, String user, int lvl, String status) {
 		Logger.log("DB Update User Credential/2 : "+Config.getConfig(Config.DATABASE_UPDATE_USER_WO_PASSWORD_SQL_FILE_KEY));
-		if (!Cache.userMap.containsKey(user)) {
+		if (!Cache.userMap.containsKey(oldN)) {
 			Logger.log("DB Update User/2[Cache] - User doesn't exists!");
 			return false;
 		} else {
-			Object [] o=Cache.userMap.get(user);
-			if (o[2].equals(lvl) && o[3].equals(status)) {
+			Object [] o=Cache.userMap.get(oldN);
+			if (o[0].equals(user) && o[2].equals(lvl) && o[3].equals(status)) {
 				Logger.log("DB Update User/2[Cache] - User information didn't change!");
 				return true;
 			} else {
@@ -166,9 +167,10 @@ public class DatabaseUser extends DatabaseHSQL {
 						ps.execute();
 						
 						ps=c.prepareStatement(sql[1]);
-						ps.setInt(1, lvl);
-						ps.setString(2, status);
-						ps.setString(3, user);
+						ps.setString(1,user);
+						ps.setInt(2,lvl);
+						ps.setString(3, status);
+						ps.setString(4, oldN);
 						Logger.log("DB Update User/2 - Execute "+ps.toString());
 						ps.execute();
 						

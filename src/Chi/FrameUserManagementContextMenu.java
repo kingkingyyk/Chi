@@ -22,7 +22,7 @@ public class FrameUserManagementContextMenu extends JPopupMenu {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (Cache.updateUser()) {
-					DialogUserAdd diag=new DialogUserAdd();
+					DialogUserAddEdit diag=new DialogUserAddEdit();
 					diag.setVisible(true);
 				}
 
@@ -35,7 +35,7 @@ public class FrameUserManagementContextMenu extends JPopupMenu {
 			public void actionPerformed(ActionEvent arg0) {
 				if (Cache.updateUser()) {
 					Object [] o=m.getSelectedObj();
-					DialogUserEdit diag=new DialogUserEdit(o[0].toString(),(Integer)o[2],o[3].toString());
+					DialogUserAddEdit diag=new DialogUserAddEdit(o[0].toString(),(Integer)o[2],o[3].toString());
 					diag.setVisible(true);
 				}
 			}

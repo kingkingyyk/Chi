@@ -20,7 +20,7 @@ public class FrameRegularScheduleManagementContextMenu extends JPopupMenu {
 		newMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.updateActuator() && Cache.updateDayScheduleRule() && Cache.updateRegularSchedule()) {
+				if (Cache.updateActuator() && Cache.updateDayScheduleRule() && Cache.updateRegularSchedule() && Cache.updateSpecialSchedule()) {
 					DialogRegularScheduleAddEdit diag=new DialogRegularScheduleAddEdit();
 					diag.setVisible(true);
 				}
@@ -31,7 +31,7 @@ public class FrameRegularScheduleManagementContextMenu extends JPopupMenu {
 		editMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.updateActuator() && Cache.updateDayScheduleRule() && Cache.updateRegularSchedule()) {
+				if (Cache.updateActuator() && Cache.updateDayScheduleRule() && Cache.updateRegularSchedule() && Cache.updateSpecialSchedule()) {
 					Object [] o=m.getSelectedObj();
 					DialogRegularScheduleAddEdit diag=new DialogRegularScheduleAddEdit((String)o[0],(String)o[1],(Integer)o[2],(String)o[3],(Boolean)o[4],(Integer)o[5],(Boolean)o[6]);
 					diag.setVisible(true);

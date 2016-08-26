@@ -1,5 +1,5 @@
 LOCK TABLE User WRITE
 @
-UPDATE User SET Level=?, Status=? WHERE Username=?
+UPDATE User SET Username=?, Level=?, Status=? WHERE Username=?
 @
 COMMIT
