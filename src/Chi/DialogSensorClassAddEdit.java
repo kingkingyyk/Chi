@@ -40,10 +40,10 @@ public class DialogSensorClassAddEdit extends JDialog {
 		setModal(true);
 		setResizable(false);
 		setIconImage(Theme.getIcon("ChiLogo").getImage());
-		setBounds(100, 100, 448, 118);
+		setBounds(100, 100, 466, 118);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(null);
-		contentPanel.setBounds(0, 11, 444, 130);
+		contentPanel.setBounds(0, 11, 460, 78);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel);
 		contentPanel.setLayout(null);
@@ -61,12 +61,12 @@ public class DialogSensorClassAddEdit extends JDialog {
 		}
 		{
 			lblNameInfo = new JLabel();
-			lblNameInfo.setBounds(331, 10, 89, 16);
+			lblNameInfo.setBounds(331, 10, 127, 16);
 			contentPanel.add(lblNameInfo);
 		}
 		{
 			JPanel buttonPane = new JPanel();
-			buttonPane.setBounds(0, 47, 444, 33);
+			buttonPane.setBounds(0, 47, 458, 33);
 			contentPanel.add(buttonPane);
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			{
@@ -101,6 +101,8 @@ public class DialogSensorClassAddEdit extends JDialog {
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
 				} else if (Cache.sensorClassMap.containsKey(txt)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
+				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
 				}
@@ -112,7 +114,7 @@ public class DialogSensorClassAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || Cache.sensorClassMap.containsKey(txt)) {
+				if (txt==null || txt.isEmpty() || Cache.sensorClassMap.containsKey(txt) || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid name!",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -147,6 +149,8 @@ public class DialogSensorClassAddEdit extends JDialog {
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
 				} else if (Cache.sensorClassMap.containsKey(txt) && !txt.equals(fillN)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
+				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
 				}
@@ -158,7 +162,7 @@ public class DialogSensorClassAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || (Cache.sensorClassMap.containsKey(txt) && !txt.equals(fillN))) {
+				if (txt==null || txt.isEmpty() || (Cache.sensorClassMap.containsKey(txt) && !txt.equals(fillN)) || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid name!",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

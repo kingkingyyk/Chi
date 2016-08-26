@@ -17,7 +17,7 @@ public class DataServerThread extends Thread {
 	
 	public void run() {
 		DatagramSocket ss=null;
-		byte [] buffer=new byte [8191];
+		byte [] buffer=new byte [Config.PACKET_MAX_BYTE];
 		DatagramPacket packet=new DatagramPacket(buffer,buffer.length);
 		try {
 			Logger.log("Data Server - StartP2 - Opening port "+Config.getConfig(Config.CONFIG_SERVER_INCOMING_PORT_KEY));
@@ -40,7 +40,7 @@ public class DataServerThread extends Thread {
 						}
 						String received=new String(buffer,0,packetLength);
 						Logger.log("Data Server - Received packet - "+received);
-						StringTokenizer st=new StringTokenizer(received,Config.SENSOR_DATA_DELIMITER);
+						StringTokenizer st=new StringTokenizer(received,Config.PACKET_FIELD_DELIMITER);
 						if (st.countTokens()==2) {
 							String sName=st.nextToken();
 							double value=Double.parseDouble(st.nextToken());

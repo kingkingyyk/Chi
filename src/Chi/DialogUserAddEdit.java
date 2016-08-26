@@ -49,10 +49,10 @@ public class DialogUserAddEdit extends JDialog {
 		setResizable(false);
 		setTitle("Add User");
 		setIconImage(Theme.getIcon("ChiLogo").getImage());
-		setBounds(100, 100, 448, 222);
+		setBounds(100, 100, 493, 222);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(null);
-		contentPanel.setBounds(0, 11, 444, 130);
+		contentPanel.setBounds(0, 11, 486, 130);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel);
 		contentPanel.setLayout(null);
@@ -70,7 +70,7 @@ public class DialogUserAddEdit extends JDialog {
 		}
 		{
 			lblUsernameInfo = new JLabel();
-			lblUsernameInfo.setBounds(345, 9, 89, 16);
+			lblUsernameInfo.setBounds(345, 9, 129, 16);
 			contentPanel.add(lblUsernameInfo);
 		}
 		{
@@ -87,7 +87,7 @@ public class DialogUserAddEdit extends JDialog {
 		}
 		{
 			lblPasswordInfo = new JLabel();
-			lblPasswordInfo.setBounds(345, 38, 89, 20);
+			lblPasswordInfo.setBounds(345, 38, 144, 20);
 			contentPanel.add(lblPasswordInfo);
 		}
 		{
@@ -119,7 +119,7 @@ public class DialogUserAddEdit extends JDialog {
 		contentPanel.add(comboBoxStatus);
 		{
 			JPanel buttonPane = new JPanel();
-			buttonPane.setBounds(0, 160, 444, 33);
+			buttonPane.setBounds(0, 160, 486, 33);
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane);
 			{
@@ -172,6 +172,8 @@ public class DialogUserAddEdit extends JDialog {
 					lblUsernameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
 				} else if (Cache.userMap.containsKey(txt)) {
 					lblUsernameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
+				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+					lblUsernameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
 				} else {
 					lblUsernameInfo.setText("<html><font color=\"green\">OK!</font></html>");
 				}
@@ -184,7 +186,7 @@ public class DialogUserAddEdit extends JDialog {
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldUsername.getText();
 				char [] pw=textFieldPassword.getPassword();
-				if (txt==null || txt.isEmpty() || Cache.userMap.containsKey(txt) || pw==null || pw.length==0) {
+				if (txt==null || txt.isEmpty() || Cache.userMap.containsKey(txt) || pw==null || pw.length==0 || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid credential!",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -218,6 +220,8 @@ public class DialogUserAddEdit extends JDialog {
 					lblUsernameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
 				} else if (Cache.userMap.containsKey(txt) && !txt.equals(fillN)) {
 					lblUsernameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
+				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+					lblUsernameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
 				} else {
 					lblUsernameInfo.setText("<html><font color=\"green\">OK!</font></html>");
 				}
@@ -230,7 +234,7 @@ public class DialogUserAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				char [] pw=textFieldPassword.getPassword();
-				if (pw==null || pw.length==0) {
+				if (pw==null || pw.length==0 || textFieldUsername.getText().contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid credential!",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

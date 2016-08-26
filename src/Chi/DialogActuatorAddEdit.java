@@ -42,10 +42,10 @@ public class DialogActuatorAddEdit extends JDialog {
 		setModal(true);
 		setResizable(false);
 		setIconImage(Theme.getIcon("ChiLogo").getImage());
-		setBounds(100, 100, 422, 154);
+		setBounds(100, 100, 445, 154);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(null);
-		contentPanel.setBounds(0, 11, 418, 114);
+		contentPanel.setBounds(0, 11, 439, 114);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel);
 		contentPanel.setLayout(null);
@@ -63,7 +63,7 @@ public class DialogActuatorAddEdit extends JDialog {
 		}
 		{
 			lblNameInfo = new JLabel("");
-			lblNameInfo.setBounds(314, 9, 104, 16);
+			lblNameInfo.setBounds(314, 9, 125, 16);
 			contentPanel.add(lblNameInfo);
 		}
 		
@@ -73,7 +73,7 @@ public class DialogActuatorAddEdit extends JDialog {
 		contentPanel.add(lblController);
 		{
 			JPanel buttonPane = new JPanel();
-			buttonPane.setBounds(0, 84, 418, 33);
+			buttonPane.setBounds(0, 84, 439, 33);
 			contentPanel.add(buttonPane);
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			{
@@ -129,6 +129,8 @@ public class DialogActuatorAddEdit extends JDialog {
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
 				} else if (Cache.actuatorMap.containsKey(txt)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
+				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
 				}
@@ -141,7 +143,7 @@ public class DialogActuatorAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || Cache.actuatorList.contains(txt)) {
+				if (txt==null || txt.isEmpty() || Cache.actuatorList.contains(txt) || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Actuator",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -175,6 +177,8 @@ public class DialogActuatorAddEdit extends JDialog {
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
 				} else if (Cache.actuatorMap.containsKey(txt) && !txt.equals(n)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
+				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
 				}
@@ -187,7 +191,7 @@ public class DialogActuatorAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || (Cache.siteList.contains(txt) && !txt.equals(n))) {
+				if (txt==null || txt.isEmpty() || (Cache.siteList.contains(txt) && !txt.equals(n)) || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Edit Actuator",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

@@ -57,10 +57,10 @@ public class DialogSpecialScheduleAddEdit extends JDialog {
 		setModal(true);
 		setResizable(false);
 		setIconImage(Theme.getIcon("ChiLogo").getImage());
-		setBounds(100, 100, 432, 286);
+		setBounds(100, 100, 463, 286);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(null);
-		contentPanel.setBounds(0, 11, 426, 216);
+		contentPanel.setBounds(0, 11, 457, 216);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel);
 		contentPanel.setLayout(null);
@@ -78,7 +78,7 @@ public class DialogSpecialScheduleAddEdit extends JDialog {
 		}
 		{
 			lblNameInfo = new JLabel("");
-			lblNameInfo.setBounds(314, 9, 104, 16);
+			lblNameInfo.setBounds(314, 9, 133, 16);
 			contentPanel.add(lblNameInfo);
 		}
 		
@@ -127,7 +127,7 @@ public class DialogSpecialScheduleAddEdit extends JDialog {
 		contentPanel.add(chckbxEnabled);
 		
 		lblPriorityInfo = new JLabel("");
-		lblPriorityInfo.setBounds(314, 168, 104, 16);
+		lblPriorityInfo.setBounds(314, 168, 133, 16);
 		contentPanel.add(lblPriorityInfo);
 		
 		lblTimeRule = new JLabel("Time Rule :");
@@ -144,7 +144,7 @@ public class DialogSpecialScheduleAddEdit extends JDialog {
 		contentPanel.add(datePickerDate);
 		{
 			JPanel buttonPane = new JPanel();
-			buttonPane.setBounds(0, 225, 426, 33);
+			buttonPane.setBounds(0, 225, 457, 33);
 			getContentPane().add(buttonPane);
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			{
@@ -223,7 +223,6 @@ public class DialogSpecialScheduleAddEdit extends JDialog {
 		} while (Cache.SpecialScheduleMap.containsKey(s) || Cache.RegularScheduleMap.containsKey(s));
 		textFieldName.setText(s);
 		
-		textFieldName.setText("Schedule 1");
 		textFieldPriority.setText("1");
 		chckbxEnabled.setEnabled(true);
 		
@@ -234,6 +233,8 @@ public class DialogSpecialScheduleAddEdit extends JDialog {
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
 				} else if (Cache.SpecialScheduleMap.containsKey(txt) || Cache.RegularScheduleMap.containsKey(txt)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
+				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
 				}
@@ -252,7 +253,7 @@ public class DialogSpecialScheduleAddEdit extends JDialog {
 					priorityOK=(i>0);
 				} catch (NumberFormatException e) {};
 				
-				if (txt==null || txt.isEmpty() || Cache.SpecialScheduleMap.containsKey(txt) || Cache.RegularScheduleMap.containsKey(txt) || !priorityOK) {
+				if (txt==null || txt.isEmpty() || Cache.SpecialScheduleMap.containsKey(txt) || Cache.RegularScheduleMap.containsKey(txt) || !priorityOK || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Special Schedule",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -291,6 +292,8 @@ public class DialogSpecialScheduleAddEdit extends JDialog {
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
 				} else if ((Cache.SpecialScheduleMap.containsKey(txt) || Cache.RegularScheduleMap.containsKey(txt)) && !txt.equals(n)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
+				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
 				}
@@ -308,7 +311,7 @@ public class DialogSpecialScheduleAddEdit extends JDialog {
 					int i=Integer.parseInt(textFieldPriority.getText());
 					priorityOK=(i>0);
 				} catch (NumberFormatException e) {};
-				if (txt==null || txt.isEmpty() || (Cache.SpecialScheduleMap.containsKey(txt) || Cache.RegularScheduleMap.containsKey(txt) && !txt.equals(n)) || !priorityOK) {
+				if (txt==null || txt.isEmpty() || (Cache.SpecialScheduleMap.containsKey(txt) || Cache.RegularScheduleMap.containsKey(txt) && !txt.equals(n)) || !priorityOK || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Edit Special Schedule",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

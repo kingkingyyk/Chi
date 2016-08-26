@@ -60,10 +60,10 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 		setModal(true);
 		setResizable(false);
 		setIconImage(Theme.getIcon("ChiLogo").getImage());
-		setBounds(100, 100, 432, 353);
+		setBounds(100, 100, 475, 353);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(null);
-		contentPanel.setBounds(0, 11, 426, 280);
+		contentPanel.setBounds(0, 11, 469, 280);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel);
 		contentPanel.setLayout(null);
@@ -81,7 +81,7 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 		}
 		{
 			lblNameInfo = new JLabel("");
-			lblNameInfo.setBounds(314, 9, 104, 16);
+			lblNameInfo.setBounds(314, 9, 145, 16);
 			contentPanel.add(lblNameInfo);
 		}
 		
@@ -166,7 +166,7 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 		contentPanel.add(chckbxEnabled);
 		
 		lblPriorityInfo = new JLabel("");
-		lblPriorityInfo.setBounds(314, 213, 104, 16);
+		lblPriorityInfo.setBounds(314, 213, 145, 16);
 		contentPanel.add(lblPriorityInfo);
 		
 		lblTimeRule = new JLabel("Time Rule :");
@@ -179,7 +179,7 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 		contentPanel.add(comboBoxTimeRule);
 		{
 			JPanel buttonPane = new JPanel();
-			buttonPane.setBounds(0, 291, 426, 33);
+			buttonPane.setBounds(0, 291, 469, 33);
 			getContentPane().add(buttonPane);
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			{
@@ -300,6 +300,8 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
 				} else if (Cache.RegularScheduleMap.containsKey(txt) || Cache.SpecialScheduleMap.containsKey(txt)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
+				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
 				}
@@ -318,7 +320,7 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 					priorityOK=(i>0);
 				} catch (NumberFormatException e) {};
 				
-				if (txt==null || txt.isEmpty() || Cache.RegularScheduleMap.containsKey(txt) || Cache.SpecialScheduleMap.containsKey(txt) || !priorityOK) {
+				if (txt==null || txt.isEmpty() || Cache.RegularScheduleMap.containsKey(txt) || Cache.SpecialScheduleMap.containsKey(txt) || !priorityOK || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Regular Schedule",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -362,6 +364,8 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
 				} else if ((Cache.RegularScheduleMap.containsKey(txt) || Cache.SpecialScheduleMap.containsKey(txt)) && !txt.equals(n)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
+				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
 				}
@@ -379,7 +383,7 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 					int i=Integer.parseInt(textFieldPriority.getText());
 					priorityOK=(i>0);
 				} catch (NumberFormatException e) {};
-				if (txt==null || txt.isEmpty() || (Cache.RegularScheduleMap.containsKey(txt) || Cache.SpecialScheduleMap.containsKey(txt) && !txt.equals(n)) || !priorityOK) {
+				if (txt==null || txt.isEmpty() || (Cache.RegularScheduleMap.containsKey(txt) || Cache.SpecialScheduleMap.containsKey(txt) && !txt.equals(n)) || !priorityOK || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Edit Regular Schedule",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

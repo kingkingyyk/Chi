@@ -94,7 +94,7 @@ public class DialogControllerAddEdit extends JDialog {
 		}
 		{
 			lblNameInfo = new JLabel("");
-			lblNameInfo.setBounds(356, 9, 104, 16);
+			lblNameInfo.setBounds(356, 9, 238, 16);
 			contentPanel.add(lblNameInfo);
 		}
 		
@@ -312,6 +312,8 @@ public class DialogControllerAddEdit extends JDialog {
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
 				} else if (Cache.controllerMap.containsKey(txt)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
+				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
 				}
@@ -330,7 +332,7 @@ public class DialogControllerAddEdit extends JDialog {
 					reportTimeOK=(i>0);
 				} catch (NumberFormatException e) {};
 				
-				if (txt==null || txt.isEmpty() || Cache.controllerList.contains(txt) || !reportTimeOK) {
+				if (txt==null || txt.isEmpty() || Cache.controllerList.contains(txt) || !reportTimeOK || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Site",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -369,6 +371,8 @@ public class DialogControllerAddEdit extends JDialog {
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
 				} else if (Cache.controllerMap.containsKey(txt) && !txt.equals(n)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
+				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
 				}
@@ -387,7 +391,7 @@ public class DialogControllerAddEdit extends JDialog {
 					reportTimeOK=(i>0);
 				} catch (NumberFormatException e) {};
 				
-				if (txt==null || txt.isEmpty() || (Cache.controllerList.contains(txt) && !txt.equals(n)) || !reportTimeOK) {
+				if (txt==null || txt.isEmpty() || (Cache.controllerList.contains(txt) && !txt.equals(n)) || !reportTimeOK || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Site",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

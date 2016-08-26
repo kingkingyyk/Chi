@@ -44,10 +44,10 @@ public class DialogSiteAddEdit extends JDialog {
 		setResizable(false);
 		setTitle("Add Site");
 		setIconImage(Theme.getIcon("ChiLogo").getImage());
-		setBounds(100, 100, 422, 154);
+		setBounds(100, 100, 460, 154);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(null);
-		contentPanel.setBounds(0, 11, 418, 114);
+		contentPanel.setBounds(0, 11, 454, 114);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel);
 		contentPanel.setLayout(null);
@@ -65,7 +65,7 @@ public class DialogSiteAddEdit extends JDialog {
 		}
 		{
 			lblNameInfo = new JLabel("");
-			lblNameInfo.setBounds(314, 9, 104, 16);
+			lblNameInfo.setBounds(314, 9, 132, 16);
 			contentPanel.add(lblNameInfo);
 		}
 		
@@ -80,11 +80,11 @@ public class DialogSiteAddEdit extends JDialog {
 		contentPanel.add(lblURL);
 		
 		lblURLInfo = new JLabel();
-		lblURLInfo.setBounds(314, 41, 104, 16);
+		lblURLInfo.setBounds(314, 41, 132, 16);
 		contentPanel.add(lblURLInfo);
 		{
 			JPanel buttonPane = new JPanel();
-			buttonPane.setBounds(0, 84, 418, 33);
+			buttonPane.setBounds(0, 84, 456, 33);
 			contentPanel.add(buttonPane);
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			{
@@ -146,6 +146,8 @@ public class DialogSiteAddEdit extends JDialog {
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
 				} else if (Cache.siteMap.containsKey(txt)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
+				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
 				}
@@ -158,7 +160,7 @@ public class DialogSiteAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || Cache.siteList.contains(txt) || lblURLInfo.getText().isEmpty()) {
+				if (txt==null || txt.isEmpty() || Cache.siteList.contains(txt) || lblURLInfo.getText().isEmpty() || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Site",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -198,6 +200,8 @@ public class DialogSiteAddEdit extends JDialog {
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
 				} else if (Cache.siteMap.containsKey(txt) && !txt.equals(n)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
+				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
 				}
@@ -210,7 +214,7 @@ public class DialogSiteAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || (Cache.siteList.contains(txt) && !txt.equals(n)) || lblURLInfo.getText().isEmpty()) {
+				if (txt==null || txt.isEmpty() || (Cache.siteList.contains(txt) && !txt.equals(n)) || lblURLInfo.getText().isEmpty() || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Site",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

@@ -15,7 +15,8 @@ public class Config {
 	public static final String CONFIG_FOLDER_PATH="conf";
 	public static final String CONFIG_FILE_NAME="chi_conf.sh";
 
-	public static final String SENSOR_DATA_DELIMITER=":";
+	public static final String PACKET_FIELD_DELIMITER=";";
+	public static final int PACKET_MAX_BYTE=512;
 	public static final String DATABASE_SQL_PATH="sql";
 	public static final String ICON_TEXTURE_PATH="/images";
 	
@@ -123,6 +124,7 @@ public class Config {
 	private static final String CONFIG_SERVER_DATABASE_HSQL_PASSWORD_DEFAULT="chi-admin";
 	private static final String CONFIG_SERVER_DATABASE_TEST_OK_DEFAULT="<html><font color=\"green\">Connection OK!</font></html>";
 	private static final String CONFIG_SERVER_DATABASE_TEST_FAIL_DEFAULT="<html><font color=\"red\">Connection fail!</font></html>";
+	
 	//Listening server
 	public static final String CONFIG_SERVER_LOCK_FILE_DEFAULT="CHI_LOCK";
 	//Database - Init

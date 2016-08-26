@@ -100,14 +100,28 @@ public class SchedulingThread extends Thread {
 	public class OnRegularScheduleStart extends ScheduleOnStartAction {
 		@Override
 		public void run() {
-			System.out.println("SchedulingThread.OnRegularScheduleStart : "+this.dat.actuatorName+" SET STATUS TO "+this.dat.actuatorFlag);
+			boolean hasConflict=false;
+			for (SchedulingData d : data.values()) {
+				if (d.getActuatorName().equals(dat.getActuatorName()) && d.getNextEndTime().compareTo(dat.getNextStartTime())>0 && d.getPriority()>dat.getPriority()) {
+					hasConflict=true;
+					break;
+				}
+			}
+			
+			if (!hasConflict) {
+				Logger.log("RegularSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.actuatorFlag+". [SET]");
+				Cache.updateActuator();
+				TriggerActuator((String)(Cache.actuatorMap.get(dat.actuatorName)[1]),this.dat.actuatorName,this.dat.actuatorFlag);
+			} else {
+				Logger.log("RegularSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.actuatorFlag+". [NOT SET DUE TO LOW PRIORITY]");
+			}
 		}
 	}
 	
 	public class OnRegularScheduleEnd extends ScheduleOnEndAction {
 		@Override
 		public void run() {
-			System.out.println("SchedulingThread.OnRegularScheduleEnd : "+this.dat.actuatorName+" SET STATUS TO "+!this.dat.actuatorFlag);
+			Logger.log("RegularSchedule ("+this.dat.name+") : Ended");
 			FrameOngoingSchedules.refresh();
 		}
 	}
@@ -174,16 +188,38 @@ public class SchedulingThread extends Thread {
 	public class OnSpecialScheduleStart extends ScheduleOnStartAction {
 		@Override
 		public void run() {
-			System.out.println("START : "+this.dat.actuatorName+" SET STATUS TO "+this.dat.actuatorFlag);
+			boolean hasConflict=false;
+			for (SchedulingData d : data.values()) {
+				if (d instanceof SchedulingDataSpecial && d.getActuatorName().equals(dat.getActuatorName()) && d.getNextEndTime().compareTo(dat.getNextStartTime())>0 && d.getPriority()>dat.getPriority()) {
+					hasConflict=true;
+					break;
+				}
+			}
+			
+			if (!hasConflict) {
+				Logger.log("SpecialSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.actuatorFlag+". [SET]");
+				Cache.updateActuator();
+				TriggerActuator((String)(Cache.actuatorMap.get(dat.actuatorName)[1]),this.dat.actuatorName,this.dat.actuatorFlag);
+			} else {
+				Logger.log("SpecialSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.actuatorFlag+". [NOT SET DUE TO LOW PRIORITY]");
+			}
 		}
 	}
 	
 	public class OnSpecialScheduleEnd extends ScheduleOnEndAction {
 		@Override
 		public void run() {
-			System.out.println("END : "+this.dat.actuatorName+" SET STATUS TO "+!this.dat.actuatorFlag);
+			Logger.log("SpecialSchedule ("+this.dat.name+") : Ended");
 			FrameOngoingSchedules.refresh();
 		}
+	}
+	
+	private static void TriggerActuator (String cn, String sn, boolean flag) {
+		String status;
+		if (flag) status="ON";
+		else status="OFF";
+		SchedulingThreadActuatorTrigger trig=new SchedulingThreadActuatorTrigger(cn,sn,status);
+		trig.trigger();
 	}
 	
 	public void run () {

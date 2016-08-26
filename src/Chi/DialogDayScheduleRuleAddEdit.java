@@ -82,10 +82,10 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 		setModal(true);
 		setResizable(false);
 		setIconImage(Theme.getIcon("ChiLogo").getImage());
-		setBounds(100, 100, 422, 175);
+		setBounds(100, 100, 439, 175);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(null);
-		contentPanel.setBounds(0, 11, 418, 102);
+		contentPanel.setBounds(0, 11, 433, 102);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel);
 		contentPanel.setLayout(null);
@@ -103,7 +103,7 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 		}
 		{
 			lblNameInfo = new JLabel("");
-			lblNameInfo.setBounds(292, 9, 116, 16);
+			lblNameInfo.setBounds(292, 9, 131, 16);
 			contentPanel.add(lblNameInfo);
 		}
 		
@@ -126,7 +126,7 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 		contentPanel.add(lblEndTimeSep);
 		
 		lblTimeInfo = new JLabel("");
-		lblTimeInfo.setBounds(285, 36, 123, 52);
+		lblTimeInfo.setBounds(292, 36, 131, 52);
 		contentPanel.add(lblTimeInfo);
 		
 		comboBoxStartHour = new JComboBox<>();
@@ -170,7 +170,7 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 		contentPanel.add(comboBoxEndMinute);
 		
 		comboBoxStartTimeAMPM = new JComboBox<>();
-		comboBoxStartTimeAMPM.setBounds(227, 39, 49, 20);
+		comboBoxStartTimeAMPM.setBounds(227, 39, 56, 20);
 		comboBoxStartTimeAMPM.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -180,7 +180,7 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 		contentPanel.add(comboBoxStartTimeAMPM);
 		
 		comboBoxEndTimeAMPM = new JComboBox<>();
-		comboBoxEndTimeAMPM.setBounds(228, 71, 49, 20);
+		comboBoxEndTimeAMPM.setBounds(228, 71, 55, 20);
 		comboBoxEndTimeAMPM.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -190,7 +190,7 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 		contentPanel.add(comboBoxEndTimeAMPM);
 		{
 			JPanel buttonPane = new JPanel();
-			buttonPane.setBounds(0, 115, 418, 33);
+			buttonPane.setBounds(0, 115, 433, 33);
 			getContentPane().add(buttonPane);
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			{
@@ -247,6 +247,8 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
 				} else if (Cache.DayScheduleRuleList.contains(txt)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
+				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
 				}
@@ -259,7 +261,7 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || Cache.DayScheduleRuleList.contains(txt)) {
+				if (txt==null || txt.isEmpty() || !lblTimeInfo.getText().contains("OK") || Cache.DayScheduleRuleList.contains(txt) || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Day Schedule Rule",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -294,6 +296,8 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
 				} else if (Cache.DayScheduleRuleList.contains(txt) && !txt.equals(n)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
+				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
 				}
@@ -306,7 +310,7 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || (Cache.DayScheduleRuleList.contains(txt) && !txt.equals(n))) {
+				if (txt==null || txt.isEmpty() || !lblTimeInfo.getText().contains("OK") || (Cache.DayScheduleRuleList.contains(txt) && !txt.equals(n)) || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Edit Day Schedule Rule",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
