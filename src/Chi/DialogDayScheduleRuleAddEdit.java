@@ -33,7 +33,18 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 	public DialogDayScheduleRuleAddEdit() {
 		create();
 		uiActionsNormal();
-		prefill("Rule 1",0,0,0,1);
+		
+		String s;
+		int count=1;
+		do {
+			StringBuilder sb=new StringBuilder();
+			sb.append("Time Rule ");
+			sb.append(count++);
+			s=sb.toString();
+		} while (Cache.DayScheduleRuleMap.containsKey(s));
+		textFieldName.setText(s);
+		
+		prefill(s,0,0,0,1);
 		uiActionsAdd();
 	}
 	

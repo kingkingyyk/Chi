@@ -36,7 +36,17 @@ public class DialogSensorAddEdit extends JDialog {
 
 	public DialogSensorAddEdit() {
 		create();
-		prefill("Sensor 1","DefaultClass",0,1,1,"","");
+		
+		String s;
+		int count=1;
+		do {
+			StringBuilder sb=new StringBuilder();
+			sb.append("Sensor");
+			sb.append(count++);
+			s=sb.toString();
+		} while (Cache.sensorMap.containsKey(s));
+		
+		prefill(s,"DefaultClass",0,1,1,"","");
 		uiActionsNormal();
 		uiActionsAdd();
 	}

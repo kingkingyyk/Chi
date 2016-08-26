@@ -3,8 +3,6 @@ package Chi;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-
 import javax.swing.JOptionPane;
 
 public class Cache {
@@ -262,7 +260,7 @@ public class Cache {
 	}
 	
 	public static ArrayList<String> RegularScheduleList=new ArrayList<>();
-	public static HashSet<String> RegularScheduleSet=new HashSet<>();
+	public static HashMap<String, Object []> RegularScheduleMap=new HashMap<>();
 	public static ArrayList<Object []> RegularScheduleObj=new ArrayList<>();
 	private static boolean RegularScheduleUpdateSuccess=false;
 	
@@ -274,14 +272,14 @@ public class Cache {
 			public void run () {
 				ResultSet rs=DatabaseRegularSchedule.getRegularSchedules();
 				RegularScheduleList.clear();
-				RegularScheduleSet.clear();
+				RegularScheduleMap.clear();
 				RegularScheduleObj.clear();
 				
 				try {
 					while (rs.next()) {
 						Object [] o={rs.getString(1),rs.getString(2),rs.getInt(3),rs.getString(4),rs.getBoolean(5),rs.getInt(6),rs.getBoolean(7)};
 						RegularScheduleList.add(rs.getString(1));
-						RegularScheduleSet.add(rs.getString(1));
+						RegularScheduleMap.put(rs.getString(1),o);
 						RegularScheduleObj.add(o);
 					}
 					RegularScheduleUpdateSuccess=true;
@@ -298,7 +296,7 @@ public class Cache {
 	}
 	
 	public static ArrayList<String> SpecialScheduleList=new ArrayList<>();
-	public static HashSet<String> SpecialScheduleSet=new HashSet<>();
+	public static HashMap<String, Object[]> SpecialScheduleMap=new HashMap<>();
 	public static ArrayList<Object []> SpecialScheduleObj=new ArrayList<>();
 	private static boolean SpecialScheduleUpdateSuccess=false;
 	
@@ -310,14 +308,14 @@ public class Cache {
 			public void run () {
 				ResultSet rs=DatabaseSpecialSchedule.getSpecialSchedules();
 				SpecialScheduleList.clear();
-				SpecialScheduleSet.clear();
+				SpecialScheduleMap.clear();
 				SpecialScheduleObj.clear();
 				
 				try {
 					while (rs.next()) {
 						Object [] o={rs.getString(1),rs.getString(2),rs.getInt(3),rs.getInt(4),rs.getInt(5),rs.getString(6),rs.getBoolean(7),rs.getInt(8),rs.getBoolean(9)};
 						SpecialScheduleList.add(rs.getString(1));
-						SpecialScheduleSet.add(rs.getString(1));
+						SpecialScheduleMap.put(rs.getString(1),o);
 						SpecialScheduleObj.add(o);
 					}
 					SpecialScheduleUpdateSuccess=true;

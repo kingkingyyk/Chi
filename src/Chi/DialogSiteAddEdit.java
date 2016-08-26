@@ -59,7 +59,6 @@ public class DialogSiteAddEdit extends JDialog {
 		}
 		{
 			textFieldName = new JTextField();
-			textFieldName.setText("Site 1");
 			textFieldName.setBounds(72, 8, 232, 20);
 			contentPanel.add(textFieldName);
 			textFieldName.setColumns(30);
@@ -127,6 +126,17 @@ public class DialogSiteAddEdit extends JDialog {
 	
 	private void uiActionsAdd() {
 		setTitle("Add Site");
+		
+		String s;
+		int count=1;
+		do {
+			StringBuilder sb=new StringBuilder();
+			sb.append("Site ");
+			sb.append(count++);
+			s=sb.toString();
+		} while (Cache.siteMap.containsKey(s));
+		textFieldName.setText(s);
+		
 		lblURLInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
 		
 		textFieldName.addKeyListener(new KeyAdapter() {

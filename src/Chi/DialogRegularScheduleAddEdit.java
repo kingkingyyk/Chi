@@ -33,8 +33,8 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 	private JCheckBox chckbxFriday;
 	private JCheckBox chckbxSaturday;
 	private JCheckBox chckbxSunday;
-	private JCheckBox chckbxWeekdays;
 	private JCheckBox chckbxWeekends;
+	private JCheckBox chckbxWeekdays ;
 	private JCheckBox [] chckbxDays;
 	private JComboBox<String> comboBoxSwitch;
 	private JLabel lblPriorityInfo;
@@ -279,7 +279,17 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 	
 	private void uiActionsAdd() {
 		setTitle("Add Regular Schedule");
-		textFieldName.setText("Schedule 1");
+		
+		String s;
+		int count=1;
+		do {
+			StringBuilder sb=new StringBuilder();
+			sb.append("Regular Schedule ");
+			sb.append(count++);
+			s=sb.toString();
+		} while (Cache.RegularScheduleMap.containsKey(s) || Cache.SpecialScheduleMap.containsKey(s));
+		textFieldName.setText(s);
+		
 		textFieldPriority.setText("1");
 		chckbxEnabled.setEnabled(true);
 		
@@ -288,7 +298,7 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
-				} else if (Cache.RegularScheduleSet.contains(txt)) {
+				} else if (Cache.RegularScheduleMap.containsKey(txt) || Cache.SpecialScheduleMap.containsKey(txt)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
@@ -308,7 +318,7 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 					priorityOK=(i>0);
 				} catch (NumberFormatException e) {};
 				
-				if (txt==null || txt.isEmpty() || Cache.RegularScheduleSet.contains(txt) || !priorityOK) {
+				if (txt==null || txt.isEmpty() || Cache.RegularScheduleMap.containsKey(txt) || Cache.SpecialScheduleMap.containsKey(txt) || !priorityOK) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Regular Schedule",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -350,7 +360,7 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
-				} else if (Cache.RegularScheduleSet.contains(txt) && !txt.equals(n)) {
+				} else if ((Cache.RegularScheduleMap.containsKey(txt) || Cache.SpecialScheduleMap.containsKey(txt)) && !txt.equals(n)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
@@ -369,7 +379,7 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 					int i=Integer.parseInt(textFieldPriority.getText());
 					priorityOK=(i>0);
 				} catch (NumberFormatException e) {};
-				if (txt==null || txt.isEmpty() || (Cache.RegularScheduleSet.contains(txt) && !txt.equals(n)) || !priorityOK) {
+				if (txt==null || txt.isEmpty() || (Cache.RegularScheduleMap.containsKey(txt) || Cache.SpecialScheduleMap.containsKey(txt) && !txt.equals(n)) || !priorityOK) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Edit Regular Schedule",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

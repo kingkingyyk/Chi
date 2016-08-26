@@ -112,7 +112,15 @@ public class DialogActuatorAddEdit extends JDialog {
 	
 	private void uiActionsAdd() {
 		setTitle("Add Actuator");
-		textFieldName.setText("Actuator 1");
+		String s;
+		int count=1;
+		do {
+			StringBuilder sb=new StringBuilder();
+			sb.append("Actuator ");
+			sb.append(count++);
+			s=sb.toString();
+		} while (Cache.actuatorMap.containsKey(s));
+		textFieldName.setText(s);
 		
 		textFieldName.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {

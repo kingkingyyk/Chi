@@ -88,7 +88,6 @@ public class DialogControllerAddEdit extends JDialog {
 		}
 		{
 			textFieldName = new JTextField();
-			textFieldName.setText("Controller 1");
 			textFieldName.setBounds(105, 8, 241, 20);
 			contentPanel.add(textFieldName);
 			textFieldName.setColumns(30);
@@ -296,6 +295,15 @@ public class DialogControllerAddEdit extends JDialog {
 	
 	private void uiActionsAdd() {
 		setTitle("Add Controller");
+		String s;
+		int count=1;
+		do {
+			StringBuilder sb=new StringBuilder();
+			sb.append("Controller ");
+			sb.append(count++);
+			s=sb.toString();
+		} while (Cache.controllerMap.containsKey(s));
+		textFieldName.setText(s);
 		
 		textFieldName.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
