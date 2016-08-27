@@ -14,6 +14,12 @@ public class FrameControllerManagementBind {
 		}
 	}
 	
+	public static class OnControllerReport implements DatabaseController.OnReportAction {
+		public void run (String n) {
+			FrameControllerManagement.refresh();
+		}
+	}
+	
 	public static class OnControllerDelete implements DatabaseController.OnDeleteAction {
 		public void run (String name) {
 			FrameControllerManagement.refresh();
@@ -41,6 +47,7 @@ public class FrameControllerManagementBind {
 	public static void initialize() {
 		DatabaseController.registerOnCreateAction(new OnControllerCreate());
 		DatabaseController.registerOnUpdateAction(new OnControllerUpdate());
+		DatabaseController.registerOnReportAction(new OnControllerReport());
 		DatabaseController.registerOnDeleteAction(new OnControllerDelete());
 		
 		DatabaseSite.registerOnCreateAction(new OnSiteCreate());

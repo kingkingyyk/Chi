@@ -2,6 +2,9 @@ package Chi;
 
 import java.awt.Image;
 import java.security.MessageDigest;
+import java.sql.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import javax.swing.ImageIcon;
 
@@ -21,6 +24,10 @@ public class Utility {
     	return "";
     }
 
+    public static Date localDateTimeToDate (LocalDateTime dt) {
+        return new Date(dt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+    }
+    
 	public static String [] Days={"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"};
 	public static String [] DaysShort={"Mo","Tu","We","Th","Fr","Sa","Su"};
     public static String [] Hours={"12","01","02","03","04","05","06","07","08","09","10","11"};

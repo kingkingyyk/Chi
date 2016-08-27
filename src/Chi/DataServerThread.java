@@ -41,10 +41,28 @@ public class DataServerThread extends Thread {
 						String received=new String(buffer,0,packetLength);
 						Logger.log("Data Server - Received packet - "+received);
 						StringTokenizer st=new StringTokenizer(received,Config.PACKET_FIELD_DELIMITER);
-						if (st.countTokens()==2) {
-							String sName=st.nextToken();
-							double value=Double.parseDouble(st.nextToken());
-							DataServerToDatabase.queueData(sName,value);
+						String id=st.nextToken();
+						switch (id) {
+							case "0" : {
+								try {
+									st.nextToken(); //controller name
+									DataServerReadingToDatabase.queueData(st.nextToken(),Double.parseDouble(st.nextToken()));
+								} catch (NumberFormatException e) {}
+							}
+							case "1" : {
+								DataServerControllerAliveToDatabase.queueData(st.nextToken());
+							}
+							case "2" : {
+								try {
+									DataServerActuatorStatusToDatabase.queueData(st.nextToken(),st.nextToken());
+								} catch (NumberFormatException e) {}
+							}
+							case "3" : {
+								
+							}
+							case "4" : {
+								
+							}
 						}
 					}
 					packet.setLength(buffer.length);

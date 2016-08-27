@@ -4,9 +4,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class DataServerToDatabase {
+public class DataServerReadingToDatabase {
 	private static final String TIMESTAMP_FORMAT="yyyy-MM-dd HH:mm:ss"; //format the time
-	private static SimpleDateFormat formatter=new SimpleDateFormat(DataServerToDatabase.TIMESTAMP_FORMAT);
+	private static SimpleDateFormat formatter=new SimpleDateFormat(DataServerReadingToDatabase.TIMESTAMP_FORMAT);
 	
 	private static class Data {
 		String sname;
@@ -26,7 +26,7 @@ public class DataServerToDatabase {
 		d.timestamp=LocalDateTime.now();
 		d.reading=r;
 		queue.add(d);
-		Logger.log("Data Server - Queued write to database : "+d.toString());
+		Logger.log("Data Server - Queued write reading to database : "+d.toString());
 		
 		if (queue.size()==1) {
 			Thread t=new Thread() {

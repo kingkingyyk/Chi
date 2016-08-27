@@ -13,6 +13,7 @@ public class FrameControllerManagementContextMenu extends JPopupMenu {
 	private static final long serialVersionUID = 1L;
 	private JMenuItem newMenu;
 	private JMenuItem editMenu;
+	private JMenuItem helloMenu;
 	private JMenuItem deleteMenu;
 	
 	public FrameControllerManagementContextMenu (FrameControllerManagement m) {
@@ -23,6 +24,20 @@ public class FrameControllerManagementContextMenu extends JPopupMenu {
 				if (Cache.updateController() && Cache.updateSite()) {
 					DialogControllerAddEdit diag=new DialogControllerAddEdit();
 					diag.setVisible(true);
+				}
+			}
+		});
+		
+		this.helloMenu=new JMenuItem("Force report alive",Utility.resizeImageIcon(new ImageIcon(getClass().getResource(Config.ICON_TEXTURE_PATH+"/HELLO.png")),14,14));
+		helloMenu.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if (Cache.updateController()) {
+					final String cname=(String)m.getSelectedObj()[0];
+					ControllerPacketRequestAlive p=new ControllerPacketRequestAlive(cname);
+					if (p.send()) {
+						JOptionPane.showMessageDialog(null,"Request sent successfully.\nThe last report time will be updated once the controller has replied","Force report alive",JOptionPane.INFORMATION_MESSAGE);
+					}
 				}
 			}
 		});
@@ -62,6 +77,7 @@ public class FrameControllerManagementContextMenu extends JPopupMenu {
 		});
 		
 		this.add(newMenu);
+		this.add(helloMenu);
 		this.add(editMenu);
 		this.add(deleteMenu);
 		this.addPopupMenuListener(new PopupMenuListener() {
@@ -74,6 +90,7 @@ public class FrameControllerManagementContextMenu extends JPopupMenu {
 			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
 				editMenu.setEnabled(m.getSelectedRow()!=-1 && !m.getSelectedObj()[0].equals("DefaultController"));
+				helloMenu.setEnabled(m.getSelectedRow()!=-1 && !m.getSelectedObj()[0].equals("DefaultController"));
 				deleteMenu.setEnabled(m.getSelectedRow()!=-1 && !m.getSelectedObj()[0].equals("DefaultController"));
 			};
 		

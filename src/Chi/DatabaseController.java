@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class DatabaseController extends DatabaseHSQL {
@@ -16,12 +17,17 @@ public class DatabaseController extends DatabaseHSQL {
 		public void run (String oldN, String n, String s, double x, double y, int t);
 	}
 	
+	public static interface OnReportAction {
+		public void run (String n);
+	}
+	
 	public static interface OnDeleteAction {
 		public void run (String n);
 	}
 	
 	private static ArrayList<OnCreateAction> OnCreateList=new ArrayList<>();
 	private static ArrayList<OnUpdateAction> OnUpdateList=new ArrayList<>();
+	private static ArrayList<OnReportAction> OnReportList=new ArrayList<>();
 	private static ArrayList<OnDeleteAction> OnDeleteList=new ArrayList<>();
 	
 	public static void registerOnCreateAction (OnCreateAction a) {
@@ -35,6 +41,13 @@ public class DatabaseController extends DatabaseHSQL {
 		if (!OnUpdateList.contains(a)) {
 			Logger.log("DatabaseController - Registered "+a.toString()+" to OnUpdate callback");
 			OnUpdateList.add(a);
+		}
+	}
+	
+	public static void registerOnReportAction (OnReportAction a) {
+		if (!OnReportList.contains(a)) {
+			Logger.log("DatabaseController - Registered "+a.toString()+" to OnReport callback");
+			OnReportList.add(a);
 		}
 	}
 	
@@ -141,6 +154,45 @@ public class DatabaseController extends DatabaseHSQL {
 				}
 				return false;
 			}
+		}
+	}
+	
+	public static boolean updateControllerReportTime (String n, LocalDateTime dt) {
+		Logger.log("DB Update Controller Report Time : "+Config.getConfig(Config.DATABASE_UPDATE_CONTROLLER_REPORT_TIME_SQL_FILE_KEY));
+		if (!Cache.controllerMap.containsKey(n)) {
+			Logger.log("DB Update Controller Report Time [Cache] - Controller doesn't exist!");
+			return false;
+		} else {
+				try {
+					Connection c = getConnection();
+					if (c!=null) {
+						Logger.log("DB Update Controller Report Time - Database connection OK!");
+						String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_UPDATE_CONTROLLER_SQL_FILE_KEY));
+						PreparedStatement ps=c.prepareStatement(sql[0]);
+						Logger.log("DB Update Controller Report Time - Execute "+ps.toString());
+						ps.execute();
+						
+						ps=c.prepareStatement(sql[1]);
+						ps.setDate(1, Utility.localDateTimeToDate(dt));
+						ps.setString(2, n);
+						Logger.log("DB Update Controller Report Time - Execute "+ps.toString());
+						ps.execute();
+						
+						ps=c.prepareStatement(sql[2]);
+						Logger.log("DB Update Controller Report Time - Execute "+ps.toString());
+						ps.execute();
+						
+						for (OnReportAction a : OnReportList) {
+							a.run(n);
+						}
+					}
+					c.close();
+					return true;
+				} catch (Exception e) {
+					Logger.log("DB Update Controller - Error - "+e.getMessage());
+					e.printStackTrace();
+				}
+				return false;
 		}
 	}
 	

@@ -14,6 +14,12 @@ public class FrameActuatorManagementBind {
 			FrameActuatorManagement.refresh();
 		}
 	}
+	public static class OnActuatorUpdateStatus implements DatabaseActuator.OnUpdateStatusAction {
+		@Override
+		public void run(String n, String s) {
+			FrameActuatorManagement.refresh();
+		}
+	}
 	public static class OnActuatorDelete implements DatabaseActuator.OnDeleteAction {
 		public void run (String sn) {
 			FrameActuatorManagement.refresh();
@@ -41,6 +47,7 @@ public class FrameActuatorManagementBind {
 	public static void initialize() {
 		DatabaseActuator.registerOnCreateAction(new OnActuatorCreate());
 		DatabaseActuator.registerOnUpdateAction(new OnActuatorUpdate());
+		DatabaseActuator.registerOnUpdateStatusAction(new OnActuatorUpdateStatus());
 		DatabaseActuator.registerOnDeleteAction(new OnActuatorDelete());
 
 		DatabaseController.registerOnCreateAction(new OnControllerCreate());

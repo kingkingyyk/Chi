@@ -15,12 +15,17 @@ public class DatabaseActuator extends DatabaseHSQL {
 		public void run (String oldN, String n, String u);
 	}
 	
+	public static interface OnUpdateStatusAction {
+		public void run (String n, String status);
+	}
+	
 	public static interface OnDeleteAction {
 		public void run (String n);
 	}
 	
 	private static ArrayList<OnCreateAction> OnCreateList=new ArrayList<>();
 	private static ArrayList<OnUpdateAction> OnUpdateList=new ArrayList<>();
+	private static ArrayList<OnUpdateStatusAction> OnUpdateStatusList=new ArrayList<>();
 	private static ArrayList<OnDeleteAction> OnDeleteList=new ArrayList<>();
 	
 	public static void registerOnCreateAction (OnCreateAction a) {
@@ -34,6 +39,13 @@ public class DatabaseActuator extends DatabaseHSQL {
 		if (!OnUpdateList.contains(a)) {
 			Logger.log("DatabaseActuator - Registered "+a.toString()+" to OnUpdate callback");
 			OnUpdateList.add(a);
+		}
+	}
+	
+	public static void registerOnUpdateStatusAction (OnUpdateStatusAction a) {
+		if (!OnUpdateStatusList.contains(a)) {
+			Logger.log("DatabaseActuator - Registered "+a.toString()+" to OnUpdateStatus callback");
+			OnUpdateStatusList.add(a);
 		}
 	}
 	
@@ -168,8 +180,8 @@ public class DatabaseActuator extends DatabaseHSQL {
 						Logger.log("DB Update Actuator Status - Execute "+ps.toString());
 						ps.execute();
 						
-						for (OnUpdateAction a : OnUpdateList) {
-							a.run(n,n,(String)o[1]);
+						for (OnUpdateStatusAction a : OnUpdateStatusList) {
+							a.run(n,st);
 						}
 					}
 					c.close();

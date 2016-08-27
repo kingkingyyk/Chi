@@ -34,6 +34,7 @@ public class ControllerPacket {
 				DatagramSocket dsocket=new DatagramSocket();
 				dsocket.send(packet);
 				dsocket.close();
+				Logger.log("Controller Packet Info - Sent content "+toSend);
 				return true;
 			} catch (Exception e) {
 				Logger.log("Controller Packet Error - Attempting to send packet. "+e.getMessage());
