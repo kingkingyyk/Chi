@@ -33,12 +33,15 @@ Current Working Stuffs :
 + Regular Schedules Modelling (+ Store in database)
 + Special Schedules Modelling (+ Store in database)
 + Scheduling Time Logic
++ Controller Status Reporting
++ Actuator Status Reporting
++ Actuator control (Manual / Scheduled)
 
 v1 To-Do-List :
 + GWT Server communication implementation [Refer to PacketFormats.xlsx]
-+ Controller communication implementation [Refer to PacketFormats.xlsx]
 
 v1.1 To-Do-List :
 + Rewrite dataset store & caching mehanism to improve UI latency
 + Implement automated value propagation
 + Secure communication between controller & server
++ Controller communication implementation [Refer to PacketFormats.xlsx]

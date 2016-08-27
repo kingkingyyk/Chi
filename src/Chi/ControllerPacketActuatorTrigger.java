@@ -1,26 +1,26 @@
 package Chi;
 
-public class SchedulingThreadActuatorTrigger extends Thread {
+public class ControllerPacketActuatorTrigger extends Thread {
 	private String controllerName;
 	private String actuatorName;
 	private String status;
 	
-	public SchedulingThreadActuatorTrigger(String cn, String an, String s) {
+	public ControllerPacketActuatorTrigger(String cn, String an, String s) {
 		this.controllerName=cn;
 		this.actuatorName=an;
 		this.status=s;
 	}
 	
 	public void trigger() {
-		Logger.log("SchedulingThreadActuatorTrigger - Actuator trigger packet queued");
+		Logger.log("ControllerPacketActuatorTrigger - Actuator trigger packet queued");
 		this.run();
 	}
 	
 	public void run() {
 		String [] data={controllerName,actuatorName,status};
 		ControllerPacket p=new ControllerPacket(ControllerPacket.Type.SetActuator,data);
-		Logger.log("SchedulingThreadActuatorTrigger - Send packet");
-		if (p.send()) Logger.log("SchedulingThreadActuatorTrigger - Packet sent successfully");
+		Logger.log("ControllerPacketActuatorTrigger - Send packet");
+		if (p.send()) Logger.log("ControllerPacketActuatorTrigger - Packet sent successfully");
 
 	}
 }

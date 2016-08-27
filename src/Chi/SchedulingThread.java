@@ -218,7 +218,7 @@ public class SchedulingThread extends Thread {
 		String status;
 		if (flag) status="ON";
 		else status="OFF";
-		SchedulingThreadActuatorTrigger trig=new SchedulingThreadActuatorTrigger(cn,sn,status);
+		ControllerPacketActuatorTrigger trig=new ControllerPacketActuatorTrigger(cn,sn,status);
 		trig.trigger();
 	}
 	
