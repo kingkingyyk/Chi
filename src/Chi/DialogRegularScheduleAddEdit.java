@@ -383,7 +383,7 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 					int i=Integer.parseInt(textFieldPriority.getText());
 					priorityOK=(i>0);
 				} catch (NumberFormatException e) {};
-				if (txt==null || txt.isEmpty() || (Cache.RegularScheduleMap.containsKey(txt) || Cache.SpecialScheduleMap.containsKey(txt) && !txt.equals(n)) || !priorityOK || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+				if (txt==null || txt.isEmpty() || ((Cache.RegularScheduleMap.containsKey(txt) || Cache.SpecialScheduleMap.containsKey(txt)) && !txt.equals(n)) || !priorityOK || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Edit Regular Schedule",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

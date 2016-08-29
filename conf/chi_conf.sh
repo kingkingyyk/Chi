@@ -1,5 +1,5 @@
 #
-#Tue Aug 23 22:01:28 SGT 2016
+#Mon Aug 29 19:56:11 SGT 2016
 server.database.sql.schedule.dayrule.queryall.file=sql/DayScheduleRule/QueryAllDayScheduleRules.sql
 server.database.sql.controller.queryname.file.default=sql/Controller/QueryControllerName.sql
 server.database.sql.actuator.updatestatus.file.default=sql/Actuator/UpdateActuatorStatus.sql
@@ -17,12 +17,14 @@ server.database.test.fail.text.default=<html><font color\="red">Connection fail\
 server.database.sql.actuator.queryall.file.default=sql/Actuator/QueryAllActuators.sql
 server.database.sql.sensor.create.file=sql/Sensor/InsertSensor.sql
 server.database.cassandra.username=chi-admin
+server.controller.password.default=chi-admin
 server.database.hsql.password=chi-admin
 server.database.sql.sensorclass.delete.file.default=sql/SensorClass/DeleteSensorClass.sql
 server.database.sql.sensor.delete.file.default=sql/Sensor/DeleteSensor.sql
 server.database.sql.recordreading.default=sql/Reading/RecordReading.sql
 server.database.sql.schedule.special.update.file=sql/SpecialSchedule/UpdateSpecialSchedule.sql
 server.database.sql.sensor.queryall.file.default=sql/Sensor/QueryAllSensors.sql
+server.controller.username.default=chi-admin
 server.database.sql.user.delete.file=sql/User/DeleteUser.sql
 server.database.cassandra.port=9042
 server.database.sql.user.updateWpassword.file=sql/User/UpdateUserWithPassword.sql
@@ -38,6 +40,7 @@ server.database.sql.sensor.queryname.file.default=sql/Sensor/QuerySensorName.sql
 server.database.sql.user.updateWOpassword.file=sql/User/UpdateUserWithoutPassword.sql
 server.database.sql.sensorclass.delete.file=sql/SensorClass/DeleteSensorClass.sql
 server.database.sql.schedule.regular.update.file.default=sql/RegularSchedule/UpdateRegularSchedule.sql
+server.controller.password=chi-admin
 server.database.sql.cassandra.createtables.file.default=sql/InitializationCassandra/CreateTables.sql
 server.database.sql.site.queryallnames.file=sql/Site/QueryAllSiteName.sql
 server.database.sql.actuator.update.file.default=sql/Actuator/UpdateActuator.sql
@@ -74,16 +77,16 @@ server.incoming.port=40000
 server.database.sql.schedule.special.update.file.default=sql/SpecialSchedule/UpdateSpecialSchedule.sql
 server.database.sql.schedule.regular.queryallnames.file.default=sql/RegularSchedule/QueryAllRegularScheduleName.sql
 server.database.sql.site.queryall.file=sql/Site/QueryAllSites.sql
-server.database.sql.schedule.dayrule.create.file=sql/DayScheduleRule/InsertDayScheduleRule.sql
 server.database.sql.actuator.create.file=sql/Actuator/InsertActuator.sql
+server.database.sql.schedule.dayrule.create.file=sql/DayScheduleRule/InsertDayScheduleRule.sql
 server.database.hsql.username=chi-admin
 server.database.sql.schedule.regular.query.file.default=sql/RegularSchedule/QueryRegularSchedule.sql
 server.database.sql.special.regular.queryallnames.file=sql/SpecialSchedule/QueryAllSpecialScheduleName.sql
 server.database.sql.schedule.special.delete.file=sql/SpecialSchedule/DeleteSpecialSchedule.sql
 server.database.sql.controller.update.file.default=sql/Controller/UpdateController.sql
 server.database.cassandra.sql.reset.file.default=sql/InitializationCassandra/ResetDB.sql
-server.database.sql.schedule.regular.update.file=sql/RegularSchedule/UpdateRegularSchedule.sql
 server.database.sql.site.delete.file=sql/Site/DeleteSite.sql
+server.database.sql.schedule.regular.update.file=sql/RegularSchedule/UpdateRegularSchedule.sql
 server.database.sql.recordgetting.default=sql/Reading/QueryReading.sql
 server.database.sql.sensor.queryall.file=sql/Sensor/QueryAllSensors.sql
 server.database.sql.site.update.file.default=sql/Site/UpdateSite.sql
@@ -99,6 +102,7 @@ server.database.sql.actuator.delete.file.default=sql/Actuator/DeleteActuator.sql
 server.database.test.success.text=<html><font color\="green">Connection OK\!</font></html>
 server.database.sql.schedule.dayrule.queryall.file.default=sql/DayScheduleRule/QueryAllDayScheduleRules.sql
 server.database.sql.sensorclass.queryall.file=sql/SensorClass/QueryAllClasses.sql
+server.controller.username=chi-admin
 server.database.sql.schedule.dayrule.queryallnames.file.default=sql/DayScheduleRule/QueryAllDayScheduleRuleName.sql
 server.database.sql.site.queryall.file.default=sql/Site/QueryAllSites.sql
 server.database.cassandra.password.default=chi-admin
@@ -145,4 +149,6 @@ server.database.sql.schedule.dayrule.create.file.default=sql/DayScheduleRule/Ins
 server.database.sql.cassandra.init.file=sql/InitializationCassandra/InitDB.sql
 server.database.sql.user.create.file=sql/User/InsertUser.sql
 server.database.sql.sensor.update.file=sql/Sensor/UpdateSensor.sql
+server.database.sql.controller.update.reporttime.file.default=sql/Controller/UpdateControllerLastReportTime.sql
 server.controller.port.default=40002
+server.database.sql.controller.update.reporttime.file=sql/Controller/UpdateControllerLastReportTime.sql

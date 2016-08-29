@@ -254,6 +254,7 @@ public class SchedulingThread extends Thread {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			stopQueued=true;
 		}
 		
 		OnRegularScheduleCreate orsc=new OnRegularScheduleCreate();
@@ -278,6 +279,12 @@ public class SchedulingThread extends Thread {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			stopQueued=true;
+		}
+		if (stopQueued) {
+			Logger.log("SchedulingThread unable to connect to database.");
+		} else {
+			SchedulingServer.isStarted=true;
 		}
 		while (true) {
 			if (stopQueued) {

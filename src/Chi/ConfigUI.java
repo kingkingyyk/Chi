@@ -32,6 +32,7 @@ public class ConfigUI extends JDialog {
 	private JTextField textFieldControllerIP;
 	private JTextField textFieldControllerPort;
 	private JTextField textFieldGWTPort;
+	private JPasswordField passwordFieldGWTPassword;
 
 	public ConfigUI() {
 		setModal(true);
@@ -72,26 +73,6 @@ public class ConfigUI extends JDialog {
 		});
 		btnListeningPort.setBounds(198, 7, 24, 20);
 		panelServerSettings.add(btnListeningPort);
-		
-		JLabel lblGWTPort = new JLabel("GWT Port :");
-		lblGWTPort.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblGWTPort.setBounds(10, 43, 82, 14);
-		panelServerSettings.add(lblGWTPort);
-		
-		textFieldGWTPort = new JTextField(Config.getConfig(Config.CONFIG_SERVER_GWT_PORT_KEY));
-		textFieldGWTPort.setToolTipText("The port to communicate with GWT server");
-		textFieldGWTPort.setColumns(10);
-		textFieldGWTPort.setBounds(102, 40, 86, 20);
-		panelServerSettings.add(textFieldGWTPort);
-		
-		JButton btnGWTPort = new JButton(Theme.getIcon("Reset-16x16"));
-		btnGWTPort.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				textFieldGWTPort.setText(Config.getConfig(Config.CONFIG_SERVER_GWT_PORT_KEY+Config.CONFIG_DEFAULT_KEY));
-			}
-		});
-		btnGWTPort.setBounds(198, 39, 24, 20);
-		panelServerSettings.add(btnGWTPort);
 		
 		JPanel panelHSQLSettings = new JPanel();
 		panelHSQLSettings.setLayout(null);
@@ -336,6 +317,40 @@ public class ConfigUI extends JDialog {
 		});
 		panelControllerSettings.add(btnControllerPort);
 		
+		JPanel panelGWTSettings = new JPanel();
+		tabbedPane.addTab("GWT", null, panelGWTSettings, null);
+		panelGWTSettings.setLayout(null);
+		
+		textFieldGWTPort = new JTextField(Config.getConfig(Config.CONFIG_SERVER_GWT_PORT_KEY));
+		textFieldGWTPort.setBounds(82, 11, 86, 20);
+		panelGWTSettings.add(textFieldGWTPort);
+		textFieldGWTPort.setToolTipText("The port to communicate with GWT server");
+		textFieldGWTPort.setColumns(10);
+		
+		JButton btnGWTPort = new JButton(Theme.getIcon("Reset-16x16"));
+		btnGWTPort.setBounds(178, 11, 24, 20);
+		panelGWTSettings.add(btnGWTPort);
+		
+		JLabel lblGWTPort = new JLabel("GWT Port :");
+		lblGWTPort.setBounds(10, 14, 62, 14);
+		panelGWTSettings.add(lblGWTPort);
+		lblGWTPort.setHorizontalAlignment(SwingConstants.RIGHT);
+		
+		JLabel lblGWTPassword = new JLabel("Password :");
+		lblGWTPassword.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblGWTPassword.setBounds(10, 45, 62, 14);
+		panelGWTSettings.add(lblGWTPassword);
+		
+		passwordFieldGWTPassword = new JPasswordField(Config.getConfig(Config.CONFIG_SERVER_GWT_PASSWORD_KEY));
+		passwordFieldGWTPassword.setToolTipText("The password for GWT server to connect.");
+		passwordFieldGWTPassword.setBounds(82, 42, 86, 20);
+		panelGWTSettings.add(passwordFieldGWTPassword);
+		btnGWTPort.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				textFieldGWTPort.setText(Config.getConfig(Config.CONFIG_SERVER_GWT_PORT_KEY+Config.CONFIG_DEFAULT_KEY));
+			}
+		});
+		
 		JButton btnApply = new JButton("Apply");
 		btnApply.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -384,6 +399,7 @@ public class ConfigUI extends JDialog {
 	private void saveConfigurations() {
 		Config.setConfig(Config.CONFIG_SERVER_INCOMING_PORT_KEY, textFieldListeningPort.getText());
 		Config.setConfig(Config.CONFIG_SERVER_GWT_PORT_KEY, textFieldGWTPort.getText());
+		Config.setConfig(Config.CONFIG_SERVER_GWT_PASSWORD_KEY, new String(passwordFieldGWTPassword.getPassword()));
 		
 		Config.setConfig(Config.CONFIG_SERVER_CONTROLLER_IP_KEY, textFieldControllerIP.getText());
 		Config.setConfig(Config.CONFIG_SERVER_CONTROLLER_PORT_KEY, textFieldControllerPort.getText());

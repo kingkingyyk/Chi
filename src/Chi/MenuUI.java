@@ -90,10 +90,30 @@ public class MenuUI extends JFrame {
 		btnStopDataServer.setEnabled(false);
 		
 		btnStartGWTServer = new JButton("Start GWT Server");
+		btnStartGWTServer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (GWTServer.start()) {
+					btnStartGWTServer.setEnabled(false);
+					btnStopGWTServer.setEnabled(true);
+				} else {
+					JOptionPane.showMessageDialog(null,"Failed to start GWT server.","GWT Server",JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
 		btnStartGWTServer.setBounds(34, 60, 153, 23);
 		panelServer.add(btnStartGWTServer);
 		
 		btnStopGWTServer = new JButton("Stop GWT Server");
+		btnStopGWTServer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (GWTServer.stop()) {
+					btnStopGWTServer.setEnabled(false);
+					btnStartGWTServer.setEnabled(true);
+				} else {
+					JOptionPane.showMessageDialog(null,"Failed to stop GWT server.","GWT Server",JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
 		btnStopGWTServer.setEnabled(false);
 		btnStopGWTServer.setBounds(229, 60, 153, 23);
 		panelServer.add(btnStopGWTServer);
@@ -103,11 +123,12 @@ public class MenuUI extends JFrame {
 		panelServer.add(btnStartSchedulingServer);
 		btnStartSchedulingServer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SchedulingServer.start();
-				if (SchedulingServer.started()) {
+				if (SchedulingServer.start()) {
 					btnStartSchedulingServer.setEnabled(false);
 					btnStopSchedulingServer.setEnabled(true);
 					btnOngoingSchedules.setEnabled(true);
+				} else {
+					JOptionPane.showMessageDialog(null,"Failed to connect to database. Server will now shut down.","Scheduling Server",JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});

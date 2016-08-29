@@ -24,7 +24,6 @@ public class Config {
 	
 	//Changeable via configuration file
 	public static final String CONFIG_SERVER_INCOMING_PORT_KEY="server.incoming.port";
-	public static final String CONFIG_SERVER_GWT_PORT_KEY="server.gwt.com.port";
 	public static final String CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY="server.database.cassandra.ip";
 	public static final String CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY="server.database.cassandra.port";
 	public static final String CONFIG_SERVER_DATABASE_HSQL_IP_KEY="server.hsql.ip";
@@ -37,6 +36,9 @@ public class Config {
 	public static final String CONFIG_SERVER_DATABASE_TEST_FAIL_KEY="server.database.test.fail.text";
 	public static final String CONFIG_SERVER_CONTROLLER_IP_KEY="server.controller.ip";
 	public static final String CONFIG_SERVER_CONTROLLER_PORT_KEY="server.controller.port";
+	public static final String CONFIG_SERVER_GWT_PORT_KEY="server.gwt.com.port";
+	public static final String CONFIG_SERVER_GWT_KEY_FILE_KEY="server.controller.keyfile";
+	public static final String CONFIG_SERVER_GWT_PASSWORD_KEY="server.controller.password";
 	//Listening server config
 	public static final String CONFIG_SERVER_LOCK_FILE_KEY="server.lock.file.name";
 	//Database
@@ -112,7 +114,6 @@ public class Config {
 	//Default values.
 	public static final String CONFIG_DEFAULT_KEY=".default";
 	private static final String CONFIG_SERVER_INCOMING_PORT_DEFAULT="40000";
-	private static final String CONFIG_SERVER_GWT_PORT_DEFAULT="40001";
 	private static final String CONFIG_SERVER_CONTROLLER_IP_DEFAULT="224.0.0.180";
 	private static final String CONFIG_SERVER_CONTROLLER_PORT_DEFAULT="40002";
 	private static final String CONFIG_SERVER_DATABASE_CASSANDRA_IP_DEFAULT="127.0.0.1";
@@ -125,6 +126,9 @@ public class Config {
 	private static final String CONFIG_SERVER_DATABASE_HSQL_PASSWORD_DEFAULT="chi-admin";
 	private static final String CONFIG_SERVER_DATABASE_TEST_OK_DEFAULT="<html><font color=\"green\">Connection OK!</font></html>";
 	private static final String CONFIG_SERVER_DATABASE_TEST_FAIL_DEFAULT="<html><font color=\"red\">Connection fail!</font></html>";
+	private static final String CONFIG_SERVER_GWT_PORT_DEFAULT="40001";
+	private static final String CONFIG_SERVER_GWT_KEY_FILE_DEFAULT="chikey";
+	private static final String CONFIG_SERVER_GWT_PASSWORD_DEFAULT="chi-admin";
 	
 	//Listening server
 	public static final String CONFIG_SERVER_LOCK_FILE_DEFAULT="CHI_LOCK";
@@ -233,7 +237,6 @@ public class Config {
 		
 		//Default values
 		Config.setConfig(CONFIG_SERVER_INCOMING_PORT_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_INCOMING_PORT_DEFAULT);
-		Config.setConfig(CONFIG_SERVER_GWT_PORT_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_GWT_PORT_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_CONTROLLER_IP_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_CONTROLLER_IP_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_CONTROLLER_PORT_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_CONTROLLER_PORT_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_CASSANDRA_IP_DEFAULT);
@@ -247,6 +250,9 @@ public class Config {
 		Config.setConfig(CONFIG_SERVER_DATABASE_TEST_OK_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_TEST_OK_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_DATABASE_TEST_FAIL_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_TEST_FAIL_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_LOCK_FILE_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_LOCK_FILE_DEFAULT);
+		Config.setConfig(CONFIG_SERVER_GWT_PORT_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_GWT_PORT_DEFAULT);
+		Config.setConfig(CONFIG_SERVER_GWT_KEY_FILE_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_GWT_KEY_FILE_DEFAULT);
+		Config.setConfig(CONFIG_SERVER_GWT_PASSWORD_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_GWT_PASSWORD_DEFAULT);
 		
 		Config.setConfig(DATABASE_INIT_SQL_CASSANDRA_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_INIT_SQL_CASSANDRA_FILE_DEFAULT);
 		Config.setConfig(DATABASE_CREATE_TABLES_SQL_CASSANDRA_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_CREATE_TABLES_SQL_CASSANDRA_FILE_DEFAULT);

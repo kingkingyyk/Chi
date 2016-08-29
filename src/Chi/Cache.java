@@ -12,29 +12,33 @@ public class Cache {
 	public static HashMap<String,Object[]> userMap=new HashMap<>();
 	private static boolean userUpdateSuccess=false;
 	
+	public static void updateUserSilent () {
+		ResultSet rs=DatabaseUser.getUsers();
+		usernameList.clear();
+		userClassObj.clear();
+		userMap.clear();
+		
+		try {
+			while (rs.next()) {
+				Object [] o={rs.getString(1),rs.getString(2),rs.getInt(3),rs.getString(4),rs.getTimestamp(5)};
+				usernameList.add(rs.getString(1));
+				userClassObj.add(o);
+				userMap.put(rs.getString(1),o);
+			}
+			userUpdateSuccess=true;
+		} catch (Exception e) {
+			Logger.log("Cache.updateUser - Error - "+e.getMessage());
+			JOptionPane.showMessageDialog(null,"Fail to retrieve data from database.\nPlease refer to the console for more information.","Query User",JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
 	public static boolean updateUser() {
 		userUpdateSuccess=false;
 		WaitUI u=new WaitUI();
 		u.setText("Querying user");
 		Thread t=new Thread() {
 			public void run () {
-				ResultSet rs=DatabaseUser.getUsers();
-				usernameList.clear();
-				userClassObj.clear();
-				userMap.clear();
-				
-				try {
-					while (rs.next()) {
-						Object [] o={rs.getString(1),rs.getString(2),rs.getInt(3),rs.getString(4),rs.getTimestamp(5)};
-						usernameList.add(rs.getString(1));
-						userClassObj.add(o);
-						userMap.put(rs.getString(1),o);
-					}
-					userUpdateSuccess=true;
-				} catch (Exception e) {
-					Logger.log("Cache.updateUser - Error - "+e.getMessage());
-					JOptionPane.showMessageDialog(null,"Fail to retrieve data from database.\nPlease refer to the console for more information.","Query User",JOptionPane.ERROR_MESSAGE);
-				}
+				updateUserSilent();
 				u.dispose();
 			}
 		};
