@@ -22,6 +22,9 @@ public class Chi {
 		Theme.initialize();
 		Logger.log("Loading theme done.");
 		
+		Logger.log("Initializing Cache");
+		Cache.initialize();
+		
 		Logger.log("GUI & data binding started.");
 		//In topological order
 		FrameUserManagementBind.initialize();
@@ -41,7 +44,7 @@ public class Chi {
 		ss.setLocationRelativeTo(null);
 		Logger.log("MainUI done.");
 		ss.setVisible(true);
-		Logger.log("MainUI closed.");
+		//Logger.log("MainUI closed.");
 	}
 	
 }

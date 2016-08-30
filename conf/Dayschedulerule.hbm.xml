@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 30, 2016 1:51:22 PM by Hibernate Tools 5.1.0.Alpha1 -->
+<hibernate-mapping>
+    <class name="Chi.Dayschedulerule" table="DAYSCHEDULERULE" schema="PUBLIC" catalog="PUBLIC" optimistic-lock="version">
+        <id name="rulename" type="string">
+            <column name="RULENAME" length="100" />
+            <generator class="assigned" />
+        </id>
+        <property name="starthour" type="java.lang.Integer">
+            <column name="STARTHOUR" />
+        </property>
+        <property name="startminute" type="java.lang.Integer">
+            <column name="STARTMINUTE" />
+        </property>
+        <property name="endhour" type="java.lang.Integer">
+            <column name="ENDHOUR" />
+        </property>
+        <property name="endminute" type="java.lang.Integer">
+            <column name="ENDMINUTE" />
+        </property>
+        <set name="regularschedules" table="REGULARSCHEDULE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="RULE" length="100" />
+            </key>
+            <one-to-many class="Chi.Regularschedule" />
+        </set>
+        <set name="specialschedules" table="SPECIALSCHEDULE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="RULE" length="100" />
+            </key>
+            <one-to-many class="Chi.Specialschedule" />
+        </set>
+    </class>
+</hibernate-mapping>

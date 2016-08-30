@@ -84,14 +84,14 @@ public class FrameUserManagement extends JFrame {
 		private ArrayList<UserTableRow> subRow;
 		public String [] renderText;
 		
-		public UserTableRow(Object [] o) {
-			if (o!=null) {
-				renderText=new String[o.length];
-				renderText[0]=(String)o[0];
-				renderText[1]=(String)o[1];
-				renderText[2]=String.valueOf(o[2]);
-				renderText[3]=(String)o[3];;
-				renderText[4]=FrameUserManagement.fomatter.format((Date)o[4]);
+		public UserTableRow(User u) {
+			if (u!=null) {
+				renderText=new String[5];
+				renderText[0]=u.getUsername();
+				renderText[1]=u.getPassword();
+				renderText[2]=u.getLevel().toString();
+				renderText[3]=u.getStatus();
+				renderText[4]=FrameUserManagement.fomatter.format(u.getDateadded());
 			} else {
 				renderText=new String [] {"root"};
 			}
@@ -163,7 +163,7 @@ public class FrameUserManagement extends JFrame {
 	private JPanel contentPane;
 	private UserTable table;
 	private UserTableRow rootRow;
-	private ArrayList<Object []> list=new ArrayList<>();
+	private ArrayList<User> list=new ArrayList<>();
 	public boolean updateSuccess;
 	private JScrollPane scrollPane;
 
@@ -231,10 +231,10 @@ public class FrameUserManagement extends JFrame {
 		Cache.updateUser();
 		rootRow=new UserTableRow(null);
 		this.list.clear();
-		this.list.addAll(Cache.userClassObj);
+		this.list.addAll(Cache.userObj);
 		
-		for (Object [] o : this.list) {
-			UserTableRow utr=new UserTableRow(o);
+		for (User u : this.list) {
+			UserTableRow utr=new UserTableRow(u);
 			rootRow.addRow(utr);
 		}
 		
@@ -271,7 +271,7 @@ public class FrameUserManagement extends JFrame {
 		return this.table.getSelectedRow();
 	}
 	
-	public Object [] getSelectedObj () {
+	public User getSelectedUser () {
 		return this.list.get(this.table.getSelectedRow());
 	}
 }

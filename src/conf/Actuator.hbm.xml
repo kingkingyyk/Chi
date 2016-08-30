@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 30, 2016 1:51:22 PM by Hibernate Tools 5.1.0.Alpha1 -->
+<hibernate-mapping>
+    <class name="Chi.Actuator" table="ACTUATOR" schema="PUBLIC" catalog="PUBLIC" optimistic-lock="version">
+        <id name="name" type="string">
+            <column name="NAME" length="100" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="controller" class="Chi.Controller" fetch="select">
+            <column name="CONTROLLER" length="100" />
+        </many-to-one>
+        <property name="status" type="string">
+            <column name="STATUS" length="100" />
+        </property>
+        <set name="regularschedules" table="REGULARSCHEDULE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ACTUATORNAME" length="100" />
+            </key>
+            <one-to-many class="Chi.Regularschedule" />
+        </set>
+        <set name="specialschedules" table="SPECIALSCHEDULE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ACTUATORNAME" length="100" />
+            </key>
+            <one-to-many class="Chi.Specialschedule" />
+        </set>
+    </class>
+</hibernate-mapping>

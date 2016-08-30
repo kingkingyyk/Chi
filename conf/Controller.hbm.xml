@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 30, 2016 1:51:22 PM by Hibernate Tools 5.1.0.Alpha1 -->
+<hibernate-mapping>
+    <class name="Chi.Controller" table="CONTROLLER" schema="PUBLIC" catalog="PUBLIC" optimistic-lock="version">
+        <id name="controllername" type="string">
+            <column name="CONTROLLERNAME" length="100" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="site" class="Chi.Site" fetch="select">
+            <column name="SITE" length="100" />
+        </many-to-one>
+        <property name="positionx" type="java.lang.Double">
+            <column name="POSITIONX" precision="64" scale="0" />
+        </property>
+        <property name="positiony" type="java.lang.Double">
+            <column name="POSITIONY" precision="64" scale="0" />
+        </property>
+        <property name="reporttimeout" type="java.lang.Integer">
+            <column name="REPORTTIMEOUT" />
+        </property>
+        <property name="lastreporttime" type="timestamp">
+            <column name="LASTREPORTTIME" length="26" />
+        </property>
+        <set name="sensors" table="SENSOR" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="CONTROLLER" length="100" />
+            </key>
+            <one-to-many class="Chi.Sensor" />
+        </set>
+        <set name="actuators" table="ACTUATOR" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="CONTROLLER" length="100" />
+            </key>
+            <one-to-many class="Chi.Actuator" />
+        </set>
+    </class>
+</hibernate-mapping>

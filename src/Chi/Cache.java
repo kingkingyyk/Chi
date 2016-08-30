@@ -3,42 +3,65 @@ package Chi;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
 import javax.swing.JOptionPane;
+
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 
 public class Cache {
 	
+	public static SessionFactory factory;
+
 	public static ArrayList<String> usernameList=new ArrayList<>();
-	public static ArrayList<Object []> userClassObj=new ArrayList<>();
-	public static HashMap<String,Object[]> userMap=new HashMap<>();
+	public static ArrayList<User> userObj=new ArrayList<>();
+	public static HashMap<String,User> userMap=new HashMap<>();
 	private static boolean userUpdateSuccess=false;
 	
-	public static void updateUserSilent () {
-		ResultSet rs=DatabaseUser.getUsers();
-		usernameList.clear();
-		userClassObj.clear();
-		userMap.clear();
-		
-		try {
-			while (rs.next()) {
-				Object [] o={rs.getString(1),rs.getString(2),rs.getInt(3),rs.getString(4),rs.getTimestamp(5)};
-				usernameList.add(rs.getString(1));
-				userClassObj.add(o);
-				userMap.put(rs.getString(1),o);
-			}
-			userUpdateSuccess=true;
-		} catch (Exception e) {
-			Logger.log("Cache.updateUser - Error - "+e.getMessage());
-			JOptionPane.showMessageDialog(null,"Fail to retrieve data from database.\nPlease refer to the console for more information.","Query User",JOptionPane.ERROR_MESSAGE);
-		}
+	public static void initialize() {
+	    try{
+	        factory = new Configuration().configure("/conf/hibernate.cfg.xml").buildSessionFactory();
+	     }catch (Throwable ex) { 
+	        System.err.println("Failed to create sessionFactory object." + ex);
+	        throw new ExceptionInInitializerError(ex); 
+	     }
 	}
 	
-	public static boolean updateUser() {
+	public static void updateUser () {
+		usernameList.clear(); userObj.clear(); userMap.clear();
+		Session session=factory.openSession();
+		Transaction tx=null;
+		try {
+			tx=session.beginTransaction();
+			@SuppressWarnings({"rawtypes" })
+			List users=session.createQuery("FROM User").getResultList();
+			for (Object o : users) {
+				User u=(User)o;
+				usernameList.add(u.getUsername());
+				userObj.add(u);
+				userMap.put(u.getUsername(),u);
+			}
+			userUpdateSuccess=true;
+		} catch (HibernateException e) {
+			userUpdateSuccess=false;
+	        Logger.log("Cache.updateUserSilent Error - "+e.getMessage());
+	        if (tx!=null) tx.rollback();
+	    } finally {
+	         session.close(); 
+	    }
+	}
+	
+	public static boolean updateUserWithWait() {
 		userUpdateSuccess=false;
 		WaitUI u=new WaitUI();
 		u.setText("Querying user");
 		Thread t=new Thread() {
 			public void run () {
-				updateUserSilent();
+				updateUser();
 				u.dispose();
 			}
 		};

@@ -21,7 +21,7 @@ public class FrameUserManagementContextMenu extends JPopupMenu {
 		newMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.updateUser()) {
+				if (Cache.updateUserWithWait()) {
 					DialogUserAddEdit diag=new DialogUserAddEdit();
 					diag.setVisible(true);
 				}
@@ -33,9 +33,9 @@ public class FrameUserManagementContextMenu extends JPopupMenu {
 		editMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.updateUser()) {
-					Object [] o=m.getSelectedObj();
-					DialogUserAddEdit diag=new DialogUserAddEdit(o[0].toString(),(Integer)o[2],o[3].toString());
+				if (Cache.updateUserWithWait()) {
+					User u=m.getSelectedUser();
+					DialogUserAddEdit diag=new DialogUserAddEdit(u.getUsername(),u.getLevel(),u.getStatus());
 					diag.setVisible(true);
 				}
 			}
@@ -45,12 +45,12 @@ public class FrameUserManagementContextMenu extends JPopupMenu {
 		deleteMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete user "+m.getSelectedObj()[0].toString()+"?","Delete user",JOptionPane.WARNING_MESSAGE)==JOptionPane.YES_OPTION) {
+				if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete user "+m.getSelectedUser().getUsername()+"?","Delete user",JOptionPane.WARNING_MESSAGE)==JOptionPane.YES_OPTION) {
 					WaitUI u=new WaitUI();
 					u.setText("Deleting user");
 					Thread t=new Thread() {
 						public void run () {
-							boolean flag=DatabaseUser.deleteUser(m.getSelectedObj()[0].toString());
+							boolean flag=DatabaseUser.deleteUser(m.getSelectedUser().getUsername());
 							if (!flag) {
 								JOptionPane.showMessageDialog(null,"Database error, please check the console for more information.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
 							}

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 30, 2016 1:51:22 PM by Hibernate Tools 5.1.0.Alpha1 -->
+<hibernate-mapping>
+    <class name="Chi.User" table="USER" schema="PUBLIC" catalog="PUBLIC" optimistic-lock="version">
+        <id name="username" type="string">
+            <column name="USERNAME" length="100" />
+            <generator class="assigned" />
+        </id>
+        <property name="password" type="string">
+            <column name="PASSWORD" length="100" />
+        </property>
+        <property name="level" type="java.lang.Integer">
+            <column name="LEVEL" />
+        </property>
+        <property name="status" type="string">
+            <column name="STATUS" length="100" />
+        </property>
+        <property name="dateadded" type="timestamp">
+            <column name="DATEADDED" length="26" />
+        </property>
+    </class>
+</hibernate-mapping>

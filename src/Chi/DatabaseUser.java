@@ -103,8 +103,8 @@ public class DatabaseUser extends DatabaseHSQL {
 			Logger.log("DB Update User[Cache] - User doesn't exist!");
 			return false;
 		} else {
-			Object [] o=Cache.userMap.get(oldN);
-			if (o[0].equals(user) && o[1].equals(pw) && o[2].equals(lvl) && o[3].equals(status)) {
+			User u=Cache.userMap.get(oldN);
+			if (u.getUsername().equals(user) && u.getPassword().equals(pw) && u.getLevel().equals(lvl) && u.getStatus().equals(status)) {
 				Logger.log("DB Update User[Cache] - User information didn't change!");
 				return true;
 			} else {
@@ -152,8 +152,8 @@ public class DatabaseUser extends DatabaseHSQL {
 			Logger.log("DB Update User/2[Cache] - User doesn't exists!");
 			return false;
 		} else {
-			Object [] o=Cache.userMap.get(oldN);
-			if (o[0].equals(user) && o[2].equals(lvl) && o[3].equals(status)) {
+			User u=Cache.userMap.get(oldN);
+			if (u.getUsername().equals(user) && u.getLevel().equals(lvl) && u.getStatus().equals(status)) {
 				Logger.log("DB Update User/2[Cache] - User information didn't change!");
 				return true;
 			} else {

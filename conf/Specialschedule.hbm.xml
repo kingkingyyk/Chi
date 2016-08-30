@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 30, 2016 1:51:22 PM by Hibernate Tools 5.1.0.Alpha1 -->
+<hibernate-mapping>
+    <class name="Chi.Specialschedule" table="SPECIALSCHEDULE" schema="PUBLIC" catalog="PUBLIC" optimistic-lock="version">
+        <id name="schedulename" type="string">
+            <column name="SCHEDULENAME" length="100" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="actuator" class="Chi.Actuator" fetch="select">
+            <column name="ACTUATORNAME" length="100" />
+        </many-to-one>
+        <many-to-one name="dayschedulerule" class="Chi.Dayschedulerule" fetch="select">
+            <column name="RULE" length="100" />
+        </many-to-one>
+        <property name="year" type="java.lang.Integer">
+            <column name="YEAR" />
+        </property>
+        <property name="month" type="java.lang.Integer">
+            <column name="MONTH" />
+        </property>
+        <property name="day" type="java.lang.Integer">
+            <column name="DAY" />
+        </property>
+        <property name="actuatoron" type="java.lang.Boolean">
+            <column name="ACTUATORON" />
+        </property>
+        <property name="priority" type="java.lang.Integer">
+            <column name="PRIORITY" />
+        </property>
+        <property name="enabled" type="java.lang.Boolean">
+            <column name="ENABLED" />
+        </property>
+    </class>
+</hibernate-mapping>
