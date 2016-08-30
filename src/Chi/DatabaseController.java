@@ -1,12 +1,14 @@
 package Chi;
 
-import java.sql.Connection;
 import java.sql.Date;
-import java.sql.PreparedStatement;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class DatabaseController extends DatabaseHSQL {
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+public class DatabaseController {
 
 	public static interface OnCreateAction {
 		public void run (String n, String s, double x, double y, int t);
@@ -58,165 +60,111 @@ public class DatabaseController extends DatabaseHSQL {
 	}
 	
 	public static boolean createController (String n, String s, double x, double y, int t) {
-		Logger.log("DB Create Controller : "+Config.getConfig(Config.DATABASE_CREATE_CONTROLLER_SQL_FILE_KEY));
-		if (Cache.Controllers.map.containsKey(n)) {
-			Logger.log("DB Create Controller[Cache] - Controller already exists!");
-			return false;
-		} else {
-			try {
-				Connection c = getConnection();
-				if (c!=null) {
-					Logger.log("DB Create Controller - Database connection OK!");
-					String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_CREATE_CONTROLLER_SQL_FILE_KEY));
-					PreparedStatement ps=c.prepareStatement(sql[0]);
-					Logger.log("DB Create Controller - Execute "+ps.toString());
-					ps.execute();
-					
-					ps=c.prepareStatement(sql[1]);
-					ps.setString(1, n);
-					ps.setString(2, s);
-					ps.setDouble(3, x);
-					ps.setDouble(4, y);
-					ps.setInt(5, t);
-					ps.setDate(6,new Date(0));
-					Logger.log("DB Create Controller - Execute "+ps.toString());
-					ps.execute();
-					
-					ps=c.prepareStatement(sql[2]);
-					Logger.log("DB Create Controller - Execute "+ps.toString());
-					ps.execute();
-					
-					for (OnCreateAction a : OnCreateList) {
-						a.run(n, s, x, y, t);
-					}
-				}
-				c.close();
-				return true;
-			} catch (Exception e) {
-				Logger.log("DB Create Controller - Error - "+e.getMessage());
-				e.printStackTrace();
-			}
-			return false;
-		}
+		Logger.log("DatabaseController - Create");
+		Session session = Cache.factory.openSession();
+		Transaction tx = null;
+		boolean flag=false;
+		try {
+			tx = session.beginTransaction();
+			Controller ctrl = (Controller) session.get(Controller.class,n);
+			if (ctrl==null) {
+				ctrl=new Controller(n);
+				ctrl.setSite((Site)session.get(Site.class,s));
+				ctrl.setPositionx(x);
+				ctrl.setPositiony(y);
+				ctrl.setReporttimeout(t);
+				ctrl.setLastreporttime(new Date(0));
+				session.save(ctrl);
+				tx.commit();
+	
+				Logger.log("DatabaseController - Create - Execute Callbacks");
+				for (OnCreateAction a : OnCreateList) a.run(n,s,x,y,t);
+				flag = true;
+			} else Logger.log("DB Create Controller - Controller already exists");
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			Logger.log("DatabaseController - Create - Error" + e.getMessage());
+		} finally {session.close();}
+		return flag;
 	}
 	
 	public static boolean updateController (String n, String s, double x, double y, int t) {
-		Logger.log("DB Update Controller : "+Config.getConfig(Config.DATABASE_UPDATE_CONTROLLER_SQL_FILE_KEY));
-		if (!Cache.Controllers.map.containsKey(n)) {
-			Logger.log("DB Update Controller[Cache] - Controller doesn't exist!");
-			return false;
-		} else {
-				try {
-					Connection c = getConnection();
-					if (c!=null) {
-						Logger.log("DB Update Controller - Database connection OK!");
-						String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_UPDATE_CONTROLLER_SQL_FILE_KEY));
-						PreparedStatement ps=c.prepareStatement(sql[0]);
-						Logger.log("DB Update Controller - Execute "+ps.toString());
-						ps.execute();
-						
-						ps=c.prepareStatement(sql[1]);
-						ps.setString(1, s);
-						ps.setDouble(2, x);
-						ps.setDouble(3, y);
-						ps.setInt(4, t);
-						ps.setString(5, n);
-						Logger.log("DB Update Controller - Execute "+ps.toString());
-						ps.execute();
-						
-						ps=c.prepareStatement(sql[2]);
-						Logger.log("DB Update Controller - Execute "+ps.toString());
-						ps.execute();
-						
-						for (OnUpdateAction a : OnUpdateList) {
-							a.run(n, n, s, x, y, t);
-						}
-					}
-					c.close();
-					return true;
-				} catch (Exception e) {
-					Logger.log("DB Update Controller - Error - "+e.getMessage());
-					e.printStackTrace();
-				}
-				return false;
-			}
+		Logger.log("DatabaseController - Update");
+		Session session = Cache.factory.openSession();
+		Transaction tx = null;
+		boolean flag=false;
+		try {
+			tx = session.beginTransaction();
+			Controller ctrl = (Controller) session.get(Controller.class,n);
+			if (ctrl!=null) {
+				ctrl.setSite((Site)session.get(Site.class,s));
+				ctrl.setPositionx(x);
+				ctrl.setPositiony(y);
+				ctrl.setReporttimeout(t);
+				ctrl.setLastreporttime(new Date(0));
+				session.update(ctrl);
+				tx.commit();
+	
+				Logger.log("DatabaseController - Update - Execute Callbacks");
+				for (OnUpdateAction a : OnUpdateList) a.run(n,n,s,x,y,t);
+				flag = true;
+			} else Logger.log("DB Update Controller - Controller doesn't exist");
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			Logger.log("DatabaseController - Update - Error" + e.getMessage());
+		} finally {session.close();}
+		return flag;
 	}
 	
 	public static boolean updateControllerReportTime (String n, LocalDateTime dt) {
-		Logger.log("DB Update Controller Report Time : "+Config.getConfig(Config.DATABASE_UPDATE_CONTROLLER_REPORT_TIME_SQL_FILE_KEY));
-		if (!Cache.Controllers.map.containsKey(n)) {
-			Logger.log("DB Update Controller Report Time [Cache] - Controller doesn't exist!");
-			return false;
-		} else {
-				try {
-					Connection c = getConnection();
-					if (c!=null) {
-						Logger.log("DB Update Controller Report Time - Database connection OK!");
-						String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_UPDATE_CONTROLLER_SQL_FILE_KEY));
-						PreparedStatement ps=c.prepareStatement(sql[0]);
-						Logger.log("DB Update Controller Report Time - Execute "+ps.toString());
-						ps.execute();
-						
-						ps=c.prepareStatement(sql[1]);
-						ps.setDate(1, Utility.localDateTimeToDate(dt));
-						ps.setString(2, n);
-						Logger.log("DB Update Controller Report Time - Execute "+ps.toString());
-						ps.execute();
-						
-						ps=c.prepareStatement(sql[2]);
-						Logger.log("DB Update Controller Report Time - Execute "+ps.toString());
-						ps.execute();
-						
-						for (OnReportAction a : OnReportList) {
-							a.run(n);
-						}
-					}
-					c.close();
-					return true;
-				} catch (Exception e) {
-					Logger.log("DB Update Controller - Error - "+e.getMessage());
-					e.printStackTrace();
-				}
-				return false;
-		}
+		Logger.log("DatabaseController - Update Report Time");
+		Session session = Cache.factory.openSession();
+		Transaction tx = null;
+		boolean flag=false;
+		try {
+			tx = session.beginTransaction();
+			Controller ctrl = (Controller) session.get(Controller.class,n);
+			if (ctrl!=null) {
+				ctrl.setLastreporttime(Utility.localDateTimeToDate(dt));
+				session.update(ctrl);
+				tx.commit();
+	
+				Logger.log("DatabaseController - Update Report Time - Execute Callbacks");
+				for (OnReportAction a : OnReportList) a.run(n);
+				flag = true;
+			} else Logger.log("DB Update Controller Report Time - Controller doesn't exist");
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			Logger.log("DatabaseController - Update Report Time - Error" + e.getMessage());
+		} finally {session.close();}
+		return flag;
 	}
 	
-	public static boolean deleteController (String sn) {
-		Logger.log("DB Delete Controller : "+Config.getConfig(Config.DATABASE_DELETE_CONTROLLER_SQL_FILE_KEY));
-		if (!Cache.Controllers.map.containsKey(sn)) {
-			Logger.log("DB Create Controller[Cache] - Controller doesn't exist!");
-			return false;
-		} else {
-			try {
-				Connection c = getConnection();
-				if (c!=null) {
-					Logger.log("DB Delete Controller - Database connection OK!");
-					String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_DELETE_CONTROLLER_SQL_FILE_KEY));
-					PreparedStatement ps=c.prepareStatement(sql[0]);
-					Logger.log("DB Delete Controller - Execute "+ps.toString());
-					ps.execute();
-					
-					ps=c.prepareStatement(sql[1]);
-					ps.setString(1, sn);
-					Logger.log("DB Delete Controller - Execute - "+ps.toString());
-					ps.execute();
-					
-					ps=c.prepareStatement(sql[2]);
-					Logger.log("DB Delete Controller - Execute "+ps.toString());
-					ps.execute();
-					
-					for (OnDeleteAction a : OnDeleteList) {
-						a.run(sn);
-					}
-				}
-				c.close();
-				return true;
-			} catch (Exception e) {
-				Logger.log("DB Delete Controller - Error - "+e.getMessage());
-				e.printStackTrace();
-			}
-			return false;
-		}
+	public static boolean deleteController (String n) {
+		Logger.log("DatabaseController - Delete");
+		Session session = Cache.factory.openSession();
+		Transaction tx = null;
+		boolean flag=false;
+		try {
+			tx = session.beginTransaction();
+			Controller ctrl = (Controller) session.get(Controller.class,n);
+			if (ctrl!=null) {
+				session.delete(ctrl);
+				tx.commit();
+	
+				Logger.log("DatabaseController - Delete - Execute Callbacks");
+				for (OnDeleteAction a : OnDeleteList) a.run(n);
+				flag = true;
+			} else Logger.log("DB Delete Controller - Controller doesn't exist");
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			Logger.log("DatabaseController - Delete - Error" + e.getMessage());
+		} finally {session.close();}
+		return flag;
 	}
 
 }

@@ -93,12 +93,12 @@ public class FrameControllerManagement extends JFrame {
 				
 				int period=ctrl.getReporttimeout();
 				StringBuilder sb=new StringBuilder();
-				if (period>3600) {
+				if (period>=3600) {
 					sb.append(period/3600);
 					sb.append("h ");
 					period%=3600;
 				}
-				if (period>60) {
+				if (period>=60) {
 					sb.append(period/60);
 					sb.append("m ");
 					period%=60;
