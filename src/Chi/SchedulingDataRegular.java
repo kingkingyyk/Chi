@@ -49,17 +49,18 @@ public class SchedulingDataRegular extends SchedulingData {
 		Cache.DayScheduleRules.update();
 		if (day!=0) {
 			LocalDateTime now=LocalDateTime.now();
-			Object [] o=DatabaseDayScheduleRule.getDayScheduleRule(this.rule);
-			LocalDateTime temp=LocalDateTime.of(now.getYear(),now.getMonthValue(),now.getDayOfMonth(),(int)o[3],(int)o[4]);
+			Cache.DayScheduleRules.update();
+			Dayschedulerule r=Cache.DayScheduleRules.map.get(this.rule);
+			LocalDateTime temp=LocalDateTime.of(now.getYear(),now.getMonthValue(),now.getDayOfMonth(),r.getEndhour(),r.getEndminute());
 			if (now.compareTo(temp)>=0) {
 				temp=temp.plusDays(1);
 			}
 			while ((day & (1 << temp.getDayOfWeek().getValue()))==0) {
 				temp=temp.plusDays(1);
 			}
-			if (o!=null) {
-				this.nextStartTime=LocalDateTime.of(temp.getYear(),temp.getMonthValue(),temp.getDayOfMonth(),(int)o[1],(int)o[2]);
-				this.nextEndTime=LocalDateTime.of(temp.getYear(),temp.getMonthValue(),temp.getDayOfMonth(),(int)o[3],(int)o[4]);
+			if (r!=null) {
+				this.nextStartTime=LocalDateTime.of(temp.getYear(),temp.getMonthValue(),temp.getDayOfMonth(),r.getStarthour(),r.getStartminute());
+				this.nextEndTime=LocalDateTime.of(temp.getYear(),temp.getMonthValue(),temp.getDayOfMonth(),r.getEndhour(),r.getEndminute());
 			}
 			if (this.isEnabled() && updateScheduler) {
 				this.onEndScheduler.purge();

@@ -1,10 +1,11 @@
 package Chi;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.util.LinkedList;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
-public class DatabaseRegularSchedule extends DatabaseHSQL {
+public class DatabaseRegularSchedule {
 
 	public static interface OnCreateAction {
 		public void run (String sn, String an, int day, String rn, boolean ao, int pr, boolean en);
@@ -65,118 +66,83 @@ public class DatabaseRegularSchedule extends DatabaseHSQL {
 	}
 	
 	public static boolean createRegularSchedule (String sn, String an, int day, String rn, boolean ao, int pr, boolean en) {
-		Logger.log("DB Create Regular Schedule : "+Config.getConfig(Config.DATABASE_CREATE_REGULAR_SCHEDULE_SQL_FILE_KEY));
+		Logger.log("DatabaseRegularSchedule - Create");
+		Session session = Cache.factory.openSession();
+		Transaction tx = null;
+		boolean flag=false;
 		try {
-			Connection c = getConnection();
-			if (c!=null) {
-				Logger.log("DB Create Regular Schedule - Database connection OK!");
-				String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_CREATE_REGULAR_SCHEDULE_SQL_FILE_KEY));
-				PreparedStatement ps=c.prepareStatement(sql[0]);
-				Logger.log("DB Create Regular Schedule - Execute "+ps.toString());
-				ps.execute();
-				
-				ps=c.prepareStatement(sql[1]);
-				ps.setString(1, sn);
-				ps.setString(2, an);
-				ps.setInt(3, day);
-				ps.setString(4, rn);
-				ps.setBoolean(5, ao);
-				ps.setInt(6, pr);
-				ps.setBoolean(7, en);
-				Logger.log("DB Create Regular Schedule - Execute "+ps.toString());
-				ps.execute();
-				
-				ps=c.prepareStatement(sql[2]);
-				Logger.log("DB Create Regular Schedule - Execute "+ps.toString());
-				ps.execute();
-				
-				Logger.log("DB Create Regular Schedule - Execute Callbacks");
-				for (OnCreateAction a : OnCreateList) {
-					a.run(sn,an,day,rn,ao,pr,en);
-				}
-			}
-			c.close();
-			return true;
-		} catch (Exception e) {
-			Logger.log("DB Create Regular Schedule - Error - "+e.getMessage());
-			e.printStackTrace();
-		}
-		return false;
+			tx = session.beginTransaction();
+			Regularschedule r = session.get(Regularschedule.class,sn);
+			if (r==null) {
+				r=new Regularschedule(sn,session.get(Actuator.class,an),session.get(Dayschedulerule.class,rn),day,ao,pr,en);
+				session.save(r);
+				tx.commit();
+	
+				Logger.log("DatabaseRegularSchedule - Create - Execute Callbacks");
+				for (OnCreateAction a : OnCreateList) a.run(sn,an,day,rn,ao,pr,en);
+				flag = true;
+			} else Logger.log("DB Create RegularSchedule - Schedule already exists");
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			Logger.log("DatabaseRegularSchedule - Create - Error" + e.getMessage());
+		} finally {session.close();}
+		return flag;
 	}
 	
 	public static boolean updateRegularSchedule (String oldSN, String sn, String an, int day, String rn, boolean ao, int pr, boolean en) {
-		Logger.log("DB Update Regular Schedule : "+Config.getConfig(Config.DATABASE_UPDATE_REGULAR_SCHEDULE_SQL_FILE_KEY));
+		Logger.log("DatabaseRegularSchedule - Update");
+		Session session = Cache.factory.openSession();
+		Transaction tx = null;
+		boolean flag=false;
 		try {
-			Connection c = getConnection();
-			if (c!=null) {
-				Logger.log("DB Update Regular Schedule - Database connection OK!");
-				String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_UPDATE_REGULAR_SCHEDULE_SQL_FILE_KEY));
-				PreparedStatement ps=c.prepareStatement(sql[0]);
-				Logger.log("DB Update Regular Schedule - Execute "+ps.toString());
-				ps.execute();
-				
-				ps=c.prepareStatement(sql[1]);
-				ps.setString(1, sn);
-				ps.setString(2, an);
-				ps.setInt(3, day);
-				ps.setString(4, rn);
-				ps.setBoolean(5, ao);
-				ps.setInt(6, pr);
-				ps.setBoolean(7, en);
-				ps.setString(8, oldSN);
-				Logger.log("DB Update Regular Schedule - Execute "+ps.toString());
-				ps.execute();
-				
-				ps=c.prepareStatement(sql[2]);
-				Logger.log("DB Update Regular Schedule - Execute "+ps.toString());
-				ps.execute();
-				
-				Logger.log("DB Update Regular Schedule - Execute Callbacks");
-				for (OnUpdateAction a : OnUpdateList) {
-					a.run(oldSN,sn,an,day,rn,ao,pr,en);
-				}
-			}
-			c.close();
-			return true;
-		} catch (Exception e) {
-			Logger.log("DB Update Regular Schedule - Error - "+e.getMessage());
-			e.printStackTrace();
-		}
-		return false;
+			tx = session.beginTransaction();
+			if (!oldSN.equals(sn)) session.createQuery("update Regularschedule set ScheduleName='"+sn+"' where ScheduleName='"+oldSN+"'").executeUpdate();
+			Regularschedule r = session.get(Regularschedule.class,sn);
+			if (r!=null) {
+				r.setActuator(session.get(Actuator.class,an));
+				r.setDaymask(day);
+				r.setDayschedulerule(session.get(Dayschedulerule.class,rn));
+				r.setActuatoron(ao);
+				r.setPriority(pr);
+				r.setEnabled(en);
+				session.update(r);
+				tx.commit();
+	
+				Logger.log("DatabaseRegularSchedule - Update - Execute Callbacks");
+				for (OnUpdateAction a : OnUpdateList) a.run(oldSN,sn,an,day,rn,ao,pr,en);
+				flag = true;
+			} else Logger.log("DB Update RegularSchedule - Schedule doesn't exist");
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			Logger.log("DatabaseRegularSchedule - Update - Error" + e.getMessage());
+		} finally {session.close();}
+		return flag;
 	}
 	
 	public static boolean deleteRegularSchedule (String sn) {
-		Logger.log("DB Delete Regular Schedule : "+Config.getConfig(Config.DATABASE_DELETE_REGULAR_SCHEDULE_SQL_FILE_KEY));
+		Logger.log("DatabaseRegularSchedule - Delete");
+		Session session = Cache.factory.openSession();
+		Transaction tx = null;
+		boolean flag=false;
 		try {
-			Connection c = getConnection();
-			if (c!=null) {
-				Logger.log("DB Delete Regular Schedule - Database connection OK!");
-				String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_DELETE_REGULAR_SCHEDULE_SQL_FILE_KEY));
-				PreparedStatement ps=c.prepareStatement(sql[0]);
-				Logger.log("DB Delete Regular Schedule - Execute "+ps.toString());
-				ps.execute();
-				
-				ps=c.prepareStatement(sql[1]);
-				ps.setString(1, sn);
-				Logger.log("DB Delete Regular Schedule - Execute "+ps.toString());
-				ps.execute();
-				
-				ps=c.prepareStatement(sql[2]);
-				Logger.log("DB Delete Regular Schedule - Execute "+ps.toString());
-				ps.execute();
-				
-				Logger.log("DB Delete Regular Schedule - Execute Callbacks");
-				for (OnDeleteAction a : OnDeleteList) {
-					a.run(sn);
-				}
-			}
-			c.close();
-			return true;
-		} catch (Exception e) {
-			Logger.log("DB Delete Regular Schedule - Error - "+e.getMessage());
-			e.printStackTrace();
-		}
-		return false;
+			tx = session.beginTransaction();
+			Regularschedule r = session.get(Regularschedule.class,sn);
+			if (r!=null) {
+				session.delete(r);
+				tx.commit();
+	
+				Logger.log("DatabaseRegularSchedule - Delete - Execute Callbacks");
+				for (OnDeleteAction a : OnDeleteList) a.run(sn);
+				flag = true;
+			} else Logger.log("DB Delete RegularSchedule - Schedule doesn't exist");
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			Logger.log("DatabaseRegularSchedule - Delete - Error" + e.getMessage());
+		} finally {session.close();}
+		return flag;
 	}
 
 }

@@ -324,7 +324,6 @@ public class DialogSensorAddEdit extends JDialog {
 	
 	public void uiActionsEdit(String n) {
 		setTitle("Edit Sensor "+n);
-		textFieldName.setEditable(false);
 		lblUnitInfo.setText("<html><font color=\"green\">OK!</font></html>");
 		
 		okButton.addActionListener(new ActionListener() {
@@ -339,7 +338,7 @@ public class DialogSensorAddEdit extends JDialog {
 					u.setText("Updating sensor");
 					Thread t=new Thread() {
 						public void run () {
-							flag=DatabaseSensor.updateSensor(textFieldName.getText(),(String)comboBoxClass.getSelectedItem(),Double.parseDouble(textFieldMinValue.getText()),Double.parseDouble(textFieldMaxValue.getText()),Double.parseDouble(textFieldTransFactor.getText()), textFieldUnit.getText(),(String)comboBoxController.getSelectedItem());
+							flag=DatabaseSensor.updateSensor(n,textFieldName.getText(),(String)comboBoxClass.getSelectedItem(),Double.parseDouble(textFieldMinValue.getText()),Double.parseDouble(textFieldMaxValue.getText()),Double.parseDouble(textFieldTransFactor.getText()), textFieldUnit.getText(),(String)comboBoxController.getSelectedItem());
 							u.dispose();
 						}
 					};

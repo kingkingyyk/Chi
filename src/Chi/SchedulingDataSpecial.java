@@ -53,10 +53,10 @@ public class SchedulingDataSpecial extends SchedulingData {
 	protected void updateScheduler(boolean updateScheduler) {
 		Logger.log("Scheduling Data Special - Calculating start & end time for "+this.name);
 		Cache.DayScheduleRules.update();
-		Object [] o=DatabaseDayScheduleRule.getDayScheduleRule(this.rule);
-		if (o!=null) {
-			this.nextStartTime=LocalDateTime.of(year,month,day,(int)o[1],(int)o[2]);
-			this.nextEndTime=LocalDateTime.of(year,month,day,(int)o[3],(int)o[4]);
+		Dayschedulerule r=Cache.DayScheduleRules.map.get(this.rule);
+		if (r!=null) {
+			this.nextStartTime=LocalDateTime.of(year,month,day,r.getStarthour(),r.getStartminute());
+			this.nextEndTime=LocalDateTime.of(year,month,day,r.getEndhour(),r.getEndminute());
 		}
 		if (this.isEnabled() && updateScheduler) {
 			this.onEndScheduler.purge();

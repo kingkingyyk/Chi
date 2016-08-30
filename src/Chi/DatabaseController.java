@@ -89,13 +89,14 @@ public class DatabaseController {
 		return flag;
 	}
 	
-	public static boolean updateController (String n, String s, double x, double y, int t) {
+	public static boolean updateController (String oldN, String n, String s, double x, double y, int t) {
 		Logger.log("DatabaseController - Update");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
 		boolean flag=false;
 		try {
 			tx = session.beginTransaction();
+			if (!oldN.equals(n)) session.createQuery("Update Controller set ControllerName='" + n + "' where ControllerName='" + oldN + "'").executeUpdate();
 			Controller ctrl = (Controller) session.get(Controller.class,n);
 			if (ctrl!=null) {
 				ctrl.setSite((Site)session.get(Site.class,s));

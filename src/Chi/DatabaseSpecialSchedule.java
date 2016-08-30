@@ -1,11 +1,12 @@
 package Chi;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.LinkedList;
 
-public class DatabaseSpecialSchedule extends DatabaseHSQL {
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+public class DatabaseSpecialSchedule {
 
 	public static interface OnCreateAction {
 		public void run (String sn, String an, int year, int month, int day, String rn, boolean ao, int pr, boolean en);
@@ -65,131 +66,86 @@ public class DatabaseSpecialSchedule extends DatabaseHSQL {
 		}
 	}
 	
-	public static ResultSet getSpecialScheduleName () {
-		return runSQLFromFileAndGetData("DB Get Special Schedule Name",Config.getConfig(Config.DATABASE_QUERY_SPECIAL_SCHEDULE_ALL_NAME_SQL_FILE_KEY));
-	}
-	
-	public static ResultSet getSpecialSchedules () {
-		return runSQLFromFileAndGetData("DB Get Special Schedules",Config.getConfig(Config.DATABASE_QUERY_SPECIAL_SCHEDULE_ALL_SQL_FILE_KEY));
-	}
-	
 	public static boolean createSpecialSchedule (String sn, String an, int year, int month, int day, String rn, boolean ao, int pr, boolean en) {
-		Logger.log("DB Create Special Schedule : "+Config.getConfig(Config.DATABASE_CREATE_SPECIAL_SCHEDULE_SQL_FILE_KEY));
+		Logger.log("DatabaseSpecialSchedule - Create");
+		Session session = Cache.factory.openSession();
+		Transaction tx = null;
+		boolean flag=false;
 		try {
-			Connection c = getConnection();
-			if (c!=null) {
-				Logger.log("DB Create Special Schedule - Database connection OK!");
-				String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_CREATE_SPECIAL_SCHEDULE_SQL_FILE_KEY));
-				PreparedStatement ps=c.prepareStatement(sql[0]);
-				Logger.log("DB Create Special Schedule - Execute "+ps.toString());
-				ps.execute();
-				
-				ps=c.prepareStatement(sql[1]);
-				ps.setString(1, sn);
-				ps.setString(2, an);
-				ps.setInt(3, year);
-				ps.setInt(4, month);
-				ps.setInt(5, day);
-				ps.setString(6, rn);
-				ps.setBoolean(7, ao);
-				ps.setInt(8, pr);
-				ps.setBoolean(9, en);
-				Logger.log("DB Create Special Schedule - Execute");
-				ps.execute();
-				
-				ps=c.prepareStatement(sql[2]);
-				Logger.log("DB Create Special Schedule - Execute "+ps.toString());
-				ps.execute();
-				
-				Logger.log("DB Create Special Schedule - Execute Callbacks");
-				for (OnCreateAction a : OnCreateList) {
-					a.run(sn,an,year,month,day,rn,ao,pr,en);
-				}
-			}
-			c.close();
-			return true;
-		} catch (Exception e) {
-			Logger.log("DB Create Special Schedule - Error - "+e.getMessage());
-			e.printStackTrace();
-		}
-		return false;
+			tx = session.beginTransaction();
+			Specialschedule ss = session.get(Specialschedule.class,sn);
+			if (ss==null) {
+				ss=new Specialschedule(sn,session.get(Actuator.class,an),session.get(Dayschedulerule.class,rn),year,month,day,ao,pr,en);
+				session.save(ss);
+				tx.commit();
+	
+				Logger.log("DatabaseSpecialSchedule - Create - Execute Callbacks");
+				for (OnCreateAction a : OnCreateList) a.run(sn,an,year,month,day,rn,ao,pr,en);
+				flag = true;
+			} else Logger.log("DB Create SpecialSchedule - Schedule already exists");
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			Logger.log("DatabaseSpecialSchedule - Create - Error" + e.getMessage());
+		} finally {session.close();}
+		return flag;
 	}
 	
 	public static boolean updateSpecialSchedule (String oldSN, String sn, String an, int year, int month, int day, String rn, boolean ao, int pr, boolean en) {
-		Logger.log("DB Update Special Schedule : "+Config.getConfig(Config.DATABASE_UPDATE_SPECIAL_SCHEDULE_SQL_FILE_KEY));
+		Logger.log("DatabaseSpecialSchedule - Update");
+		Session session = Cache.factory.openSession();
+		Transaction tx = null;
+		boolean flag=false;
 		try {
-			Connection c = getConnection();
-			if (c!=null) {
-				Logger.log("DB Update Special Schedule - Database connection OK!");
-				String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_UPDATE_SPECIAL_SCHEDULE_SQL_FILE_KEY));
-				PreparedStatement ps=c.prepareStatement(sql[0]);
-				Logger.log("DB Update Special Schedule - Execute "+ps.toString());
-				ps.execute();
-				
-				ps=c.prepareStatement(sql[1]);
-				ps.setString(1, sn);
-				ps.setString(2, an);
-				ps.setInt(3, year);
-				ps.setInt(4, month);
-				ps.setInt(5, day);
-				ps.setString(6, rn);
-				ps.setBoolean(7, ao);
-				ps.setInt(8, pr);
-				ps.setBoolean(9, en);
-				ps.setString(10, oldSN);
-				Logger.log("DB Update Special Schedule - Execute "+ps.toString());
-				ps.execute();
-				
-				ps=c.prepareStatement(sql[2]);
-				Logger.log("DB Update Special Schedule - Execute "+ps.toString());
-				ps.execute();
-				
-				Logger.log("DB Update Special Schedule - Execute Callbacks");
-				for (OnUpdateAction a : OnUpdateList) {
-					a.run(oldSN,sn,an,year,month,day,rn,ao,pr,en);
-				}
-			}
-			c.close();
-			return true;
-		} catch (Exception e) {
-			Logger.log("DB Update Special Schedule - Error - "+e.getMessage());
-			e.printStackTrace();
-		}
-		return false;
+			tx = session.beginTransaction();
+			if (!oldSN.equals(sn)) session.createQuery("update Specialschedule set ScheduleName='"+sn+"' where ScheduleName='"+oldSN+"'").executeUpdate();
+			Specialschedule ss = session.get(Specialschedule.class,sn);
+			if (ss!=null) {
+				ss.setActuator(session.get(Actuator.class,an));
+				ss.setYear(year);
+				ss.setMonth(month);
+				ss.setDay(day);
+				ss.setDayschedulerule(session.get(Dayschedulerule.class,rn));
+				ss.setActuatoron(ao);
+				ss.setPriority(pr);
+				ss.setEnabled(en);
+				session.update(ss);
+				tx.commit();
+	
+				Logger.log("DatabaseSpecialSchedule - Update - Execute Callbacks");
+				for (OnUpdateAction a : OnUpdateList) a.run(oldSN,sn,an,year,month,day,rn,ao,pr,en);
+				flag = true;
+			} else Logger.log("DB Update SpecialSchedule - Schedule doesn't exist");
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			Logger.log("DatabaseSpecialSchedule - Update - Error" + e.getMessage());
+		} finally {session.close();}
+		return flag;
 	}
 	
 	public static boolean deleteSpecialSchedule (String sn) {
-		Logger.log("DB Delete Special Schedule : "+Config.getConfig(Config.DATABASE_DELETE_SPECIAL_SCHEDULE_SQL_FILE_KEY));
+		Logger.log("DatabaseSpecialSchedule - Delete");
+		Session session = Cache.factory.openSession();
+		Transaction tx = null;
+		boolean flag=false;
 		try {
-			Connection c = getConnection();
-			if (c!=null) {
-				Logger.log("DB Delete Special Schedule - Database connection OK!");
-				String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_DELETE_SPECIAL_SCHEDULE_SQL_FILE_KEY));
-				PreparedStatement ps=c.prepareStatement(sql[0]);
-				Logger.log("DB Delete Special Schedule - Execute "+ps.toString());
-				ps.execute();
-				
-				ps=c.prepareStatement(sql[1]);
-				ps.setString(1, sn);
-				Logger.log("DB Delete Special Schedule - Execute "+ps.toString());
-				ps.execute();
-				
-				ps=c.prepareStatement(sql[2]);
-				Logger.log("DB Delete Special Schedule - Execute "+ps.toString());
-				ps.execute();
-				
-				Logger.log("DB Delete Special Schedule - Execute Callbacks");
-				for (OnDeleteAction a : OnDeleteList) {
-					a.run(sn);
-				}
-			}
-			c.close();
-			return true;
-		} catch (Exception e) {
-			Logger.log("DB Delete Special Schedule - Error - "+e.getMessage());
-			e.printStackTrace();
-		}
-		return false;
+			tx = session.beginTransaction();
+			Specialschedule ss = session.get(Specialschedule.class,sn);
+			if (ss!=null) {
+				session.delete(ss);
+				tx.commit();
+	
+				Logger.log("DatabaseSpecialSchedule - Delete - Execute Callbacks");
+				for (OnDeleteAction a : OnDeleteList) a.run(sn);
+				flag = true;
+			} else Logger.log("DB Delete SpecialSchedule - Schedule doesn't exist");
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			Logger.log("DatabaseSpecialSchedule - Delete - Error" + e.getMessage());
+		} finally {session.close();}
+		return flag;
 	}
 
 }

@@ -58,11 +58,6 @@ public class Cache {
 	    DayScheduleRules=new DayScheduleRuleData();
 	    RegularSchedules=new RegularScheduleData();
 	    SpecialSchedules=new SpecialScheduleData();
-	    
-	    /*
-	    Actuators.updateWithWait(); Sites.updateWithWait(); Controllers.updateWithWait();
-	    SensorClasses.updateWithWait(); Sensors.updateWithWait(); Users.updateWithWait();
-	    DayScheduleRules.updateWithWait(); RegularSchedules.updateWithWait(); SpecialSchedules.updateWithWait();*/
 	}
 	
 	private static abstract class Data<T> {

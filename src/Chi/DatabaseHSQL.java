@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class DatabaseHSQL {
 	
-	protected static String getAddress () {
+	private static String getAddress () {
 		StringBuilder sb=new StringBuilder();
 		sb.append("jdbc:hsqldb:hsql://");
 		sb.append(Config.getConfig(Config.CONFIG_SERVER_DATABASE_HSQL_IP_KEY));
@@ -134,6 +134,4 @@ public class DatabaseHSQL {
 		return statements.toArray(new String[statements.size()]);
 	}
 	
-	public static void initialize() {
-	}
 }

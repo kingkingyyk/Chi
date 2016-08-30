@@ -63,7 +63,7 @@ public class DatabaseActuator {
 		boolean flag=false;
 		try {
 			tx = session.beginTransaction();
-			Actuator act = (Actuator) session.get(Actuator.class,n);
+			Actuator act = session.get(Actuator.class,n);
 			if (act==null) {
 				act = new Actuator(n, (Controller) session.get(Controller.class, "DefaultController"),"Pending Update", null, null);
 				session.save(act);
@@ -89,7 +89,7 @@ public class DatabaseActuator {
 		try {
 			tx = session.beginTransaction();
 			if (!oldN.equals(n)) session.createQuery("Update Actuator set Name='" + n + "' where Name='" + oldN + "'").executeUpdate();
-			Actuator act = (Actuator) session.get(Actuator.class, n);
+			Actuator act = session.get(Actuator.class, n);
 			if (act != null) {
 				act.setController((Controller) session.get(Controller.class, u));
 				session.update(act);
@@ -113,7 +113,7 @@ public class DatabaseActuator {
 		boolean flag=false;
 		try {
 			tx = session.beginTransaction();
-			Actuator act = (Actuator) session.get(Actuator.class, n);
+			Actuator act = session.get(Actuator.class, n);
 			if (act!=null) {
 				act.setStatus(st);
 				session.update(act);
@@ -139,7 +139,7 @@ public class DatabaseActuator {
 		boolean flag=false;
 		try {
 			tx = session.beginTransaction();
-			Actuator act = (Actuator) session.get(Actuator.class, n);
+			Actuator act = session.get(Actuator.class, n);
 			if (act!=null) {
 				session.delete(act);
 				tx.commit();

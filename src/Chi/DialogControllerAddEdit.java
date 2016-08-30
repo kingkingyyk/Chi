@@ -359,7 +359,6 @@ public class DialogControllerAddEdit extends JDialog {
 	
 	private void uiActionsEdit(String n, String s) {
 		setTitle("Edit Controller "+n);
-		textFieldName.setEditable(false);
 		comboBoxSite.setSelectedItem(s);
 		lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
 		lblReportTimeoutInfo.setText("<html><font color=\"green\">OK!</font></html>");
@@ -398,7 +397,7 @@ public class DialogControllerAddEdit extends JDialog {
 					u.setText("Creating controller");
 					Thread t=new Thread() {
 						public void run () {
-							flag=DatabaseController.updateController(textFieldName.getText(),(String)comboBoxSite.getSelectedItem(),positionTargetFactor[0],positionTargetFactor[1],Integer.parseInt(textFieldReportTimeout.getText())*DialogControllerAddEdit.reportTimeoutUnitFactor[comboBoxReportTimeoutUnit.getSelectedIndex()]);
+							flag=DatabaseController.updateController(n,textFieldName.getText(),(String)comboBoxSite.getSelectedItem(),positionTargetFactor[0],positionTargetFactor[1],Integer.parseInt(textFieldReportTimeout.getText())*DialogControllerAddEdit.reportTimeoutUnitFactor[comboBoxReportTimeoutUnit.getSelectedIndex()]);
 							u.dispose();
 						}
 					};

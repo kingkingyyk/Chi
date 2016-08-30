@@ -1,11 +1,12 @@
 package Chi;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 
-public class DatabaseSensorClass extends DatabaseHSQL {
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+public class DatabaseSensorClass {
 	
 	public static interface OnCreateAction {
 		public void run (String name);
@@ -44,133 +45,78 @@ public class DatabaseSensorClass extends DatabaseHSQL {
 		}
 	}
 	
-	public static ResultSet getSensorClass () {
-		return runSQLFromFileAndGetData("DB Get Sensor Class",Config.getConfig(Config.DATABASE_QUERY_SENSOR_CLASS_ALL_SQL_FILE_KEY));
-	}
-	
 	public static boolean createSensorClass (String name) {
-		Logger.log("DB Create Sensor Class : "+Config.getConfig(Config.DATABASE_CREATE_SENSOR_CLASS_SQL_FILE_KEY));
-		if (Cache.SensorClasses.map.containsKey(name)) {
-			Logger.log("DB Create Sensor Class[Cache] - Sensor class already exists!");
-			return false;
-		} else {
-			try {
-				Connection c = getConnection();
-				if (c!=null) {
-					Logger.log("DB Create Sensor Class - Database connection OK!");
-					String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_CREATE_SENSOR_CLASS_SQL_FILE_KEY));
-					PreparedStatement ps=c.prepareStatement(sql[0]);
-					Logger.log("DB Create Sensor Class - Execute "+ps.toString());
-					ps.execute();
-					
-					ps=c.prepareStatement(sql[1]);
-					ps.setString(1, name);
-					Logger.log("DB Create Sensor Class - Execute "+ps.toString());
-					ps.execute();
-					
-					ps=c.prepareStatement(sql[2]);
-					Logger.log("DB Create Sensor Class - Execute "+ps.toString());
-					ps.execute();
-					
-					Logger.log("DB Create Sensor Class - Execute Callbacks");
-					for (OnCreateAction a : OnCreateList) {
-						a.run(name);
-					}
-				}
-				c.close();
-				return true;
-			} catch (Exception e) {
-				Logger.log("DB Create Sensor Class - Error - "+e.getMessage());
-				e.printStackTrace();
-			}
-			return false;
-		}
+		Logger.log("DatabaseSensorClass - Create");
+		Session session = Cache.factory.openSession();
+		Transaction tx = null;
+		boolean flag=false;
+		try {
+			tx = session.beginTransaction();
+			Sensorclass s = session.get(Sensorclass.class,name);
+			if (s==null) {
+				s=new Sensorclass(name);
+				session.save(s);
+				tx.commit();
+	
+				Logger.log("DatabaseSensorClass - Create - Execute Callbacks");
+				for (OnCreateAction a : OnCreateList) a.run(name);
+				flag = true;
+			} else Logger.log("DB Create SensorClass - Class already exists");
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			Logger.log("DatabaseSensorClass - Create - Error" + e.getMessage());
+		} finally {session.close();}
+		return flag;
 	}
 	
 	public static boolean updateSensorClass (String oldN, String newN) {
-		Logger.log("DB Update Sensor Class : "+Config.getConfig(Config.DATABASE_UPDATE_SENSOR_CLASS_SQL_FILE_KEY));
-		if (!Cache.SensorClasses.map.containsKey(oldN)) {
-			Logger.log("DB Update Sensor Class[Cache] - Sensor class doesn't exist!");
-			return false;
-		} else {
-				try {
-					Connection c = getConnection();
-					if (c!=null) {
-						Logger.log("DB Update Sensor Class - Database connection OK!");
-						String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_UPDATE_SENSOR_CLASS_SQL_FILE_KEY));
-						PreparedStatement ps=c.prepareStatement(sql[0]);
-						Logger.log("DB Update Sensor Class - Execute "+ps.toString());
-						ps.execute();
-						
-						ps=c.prepareStatement(sql[1]);
-						Logger.log("DB Update Sensor Class - Execute : "+ps.toString());
-						ps.setString(1, newN);
-						ps.setString(2, oldN);
-						Logger.log("DB Update Sensor Class - Execute");
-						ps.execute();
-						
-						ps=c.prepareStatement(sql[2]);
-						Logger.log("DB Update Sensor Class - Execute "+ps.toString());
-						ps.execute();
-						
-						Logger.log("DB Update Sensor Class - Execute Callbacks");
-						for (OnUpdateAction a : OnUpdateList) {
-							a.run(oldN,newN);
-						}
-					}
-					c.close();
-					
-					return true;
-				} catch (Exception e) {
-					Logger.log("DB Update Sensor Class - Error - "+e.getMessage());
-					e.printStackTrace();
-				}
-				return false;
-			}
+		Logger.log("DatabaseSensorClass - Update");
+		Session session = Cache.factory.openSession();
+		Transaction tx = null;
+		boolean flag=false;
+		try {
+			tx = session.beginTransaction();
+			if (!oldN.equals(newN)) session.createQuery("update Sensorclass set ClassName='"+newN+"' where ClassName='"+oldN+"'").executeUpdate();
+			Sensorclass s = session.get(Sensorclass.class,newN);
+			if (s!=null) {
+				session.update(s);
+				tx.commit();
+	
+				Logger.log("DatabaseSensorClass - Update - Execute Callbacks");
+				for (OnUpdateAction a : OnUpdateList) a.run(oldN,newN);
+				flag = true;
+			} else Logger.log("DB Update SensorClass - Class doesn't exist");
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			Logger.log("DatabaseSensorClass - Update - Error" + e.getMessage());
+		} finally {session.close();}
+		return flag;
 	}
 	
 	public static boolean deleteSensorClass (String name) {
-		Logger.log("DB Delete Sensor Class : "+Config.getConfig(Config.DATABASE_DELETE_SENSOR_CLASS_SQL_FILE_KEY));
-		if (!Cache.SensorClasses.map.containsKey(name)) {
-			Logger.log("DB Create Sensor Class[Cache] - Sensor class already exists!");
-			return false;
-		} else {
-			try {
-				Connection c = getConnection();
-				if (c!=null) {
-					Logger.log("DB Delete Sensor Class - Database connection OK!");
-					String [] sql=getSQLStatementFromFile(Config.getConfig(Config.DATABASE_DELETE_SENSOR_CLASS_SQL_FILE_KEY));
-					PreparedStatement ps=c.prepareStatement(sql[0]);
-					Logger.log("DB Update Sensor Class - Execute "+ps.toString());
-					ps.execute();
-					
-					ps=c.prepareStatement(sql[1]);
-					ps.setString(1, name);
-					Logger.log("DB Delete Sensor Class - Execute - "+ps.toString());
-					ps.execute();
-					
-					ps=c.prepareStatement(sql[2]);
-					ps.setString(1, name);
-					Logger.log("DB Delete Sensor Class - Execute - "+ps.toString());
-					ps.execute();
+		Logger.log("DatabaseSensorClass - Delete");
+		Session session = Cache.factory.openSession();
+		Transaction tx = null;
+		boolean flag=false;
+		try {
+			tx = session.beginTransaction();
+			Sensorclass s = session.get(Sensorclass.class,name);
+			if (s!=null) {
+				session.delete(s);
+				tx.commit();
 	
-					ps=c.prepareStatement(sql[3]);
-					Logger.log("DB Delete Sensor Class - Execute "+ps.toString());
-					ps.execute();
-					
-					Logger.log("DB Delete Sensor Class - Execute Callbacks");
-					for (OnDeleteAction a : OnDeleteList) {
-						a.run(name);
-					}
-				}
-				c.close();
-				return true;
-			} catch (Exception e) {
-				Logger.log("DB Delete Sensor Class - Error - "+e.getMessage());
-				e.printStackTrace();
-			}
-			return false;
-		}
+				Logger.log("DatabaseSensorClass - Delete - Execute Callbacks");
+				for (OnDeleteAction a : OnDeleteList) a.run(name);
+				flag = true;
+			} else Logger.log("DB Delete SensorClass - Class doesn't exist");
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			Logger.log("DatabaseSensorClass - Delete - Error" + e.getMessage());
+		} finally {session.close();}
+		return flag;
 	}
 
 }
