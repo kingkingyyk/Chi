@@ -82,12 +82,16 @@ public class FrameSensorManagement extends JFrame {
 		private ArrayList<SensorTableRow> subRow;
 		public String [] renderText;
 		
-		public SensorTableRow(Object [] o) {
-			if (o!=null) {
-				renderText=new String[o.length];
-				for (int i=0;i<o.length;i++) {
-					renderText[i]=o[i].toString();
-				}
+		public SensorTableRow(Sensor s) {
+			if (s!=null) {
+				renderText=new String[SensorTableModel.COLUMNS.length];
+				renderText[0]=s.getSensorname();
+				renderText[1]=s.getSensorclass().getClassname();
+				renderText[2]=s.getMinvalue().toString();
+				renderText[3]=s.getMaxvalue().toString();
+				renderText[4]=s.getTransformationfactor().toString();
+				renderText[5]=s.getUnit();
+				renderText[6]=s.getController().getControllername();
 			} else {
 				renderText=new String [] {"root"};
 			}
@@ -160,7 +164,7 @@ public class FrameSensorManagement extends JFrame {
 	private JPanel contentPane;
 	private SensorTable table;
 	private SensorTableRow rootRow;
-	private ArrayList<Object []> list=new ArrayList<>();
+	private ArrayList<Sensor> list=new ArrayList<>();
 	public boolean updateSuccess;
 	private JScrollPane scrollPane;
 
@@ -223,13 +227,11 @@ public class FrameSensorManagement extends JFrame {
 	}
 	
 	public void updateSensorTable() {
-		Cache.updateSensor();
+		Cache.Sensors.update();
 		rootRow=new SensorTableRow(null);
-		list.clear();
-		for (Object [] o : Cache.sensorObj) {
-			SensorTableRow utr=new SensorTableRow(o);
-			rootRow.addRow(utr);
-			list.add(o);
+		list.clear(); list.addAll(Cache.Sensors.map.values());
+		for (Sensor s : list) {
+			rootRow.addRow(new SensorTableRow(s));
 		}
 		
 		int lastSelectedRow=-1;
@@ -240,8 +242,8 @@ public class FrameSensorManagement extends JFrame {
 		table.setAutoCreateRowSorter(true);
 		table.setTreeTableModel(new SensorTableModel(rootRow));
 		
-		if (lastSelectedRow>=0 && Cache.sensorList.size()>0) {
-			lastSelectedRow=Math.min(lastSelectedRow,Cache.sensorList.size()-1);
+		if (lastSelectedRow>=0 && list.size()>0) {
+			lastSelectedRow=Math.min(lastSelectedRow,list.size()-1);
 			table.setRowSelectionInterval(lastSelectedRow,lastSelectedRow);
 		}
 		updateSuccess=true;
@@ -269,7 +271,7 @@ public class FrameSensorManagement extends JFrame {
 		return this.table.convertRowIndexToModel(this.table.getSelectedRow());
 	}
 	
-	public Object [] getSelectedObj () {
+	public Sensor getSelectedSensor () {
 		return this.list.get(this.getSelectedRow());
 	}
 }

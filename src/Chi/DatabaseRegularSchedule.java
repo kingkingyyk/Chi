@@ -2,7 +2,6 @@ package Chi;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.LinkedList;
 
 public class DatabaseRegularSchedule extends DatabaseHSQL {
@@ -63,14 +62,6 @@ public class DatabaseRegularSchedule extends DatabaseHSQL {
 			Logger.log("DatabaseRegularSchedule - Unregistered "+a.toString()+" to OnDelete callback");
 			OnDeleteList.remove(a);
 		}
-	}
-	
-	public static ResultSet getRegularScheduleName () {
-		return runSQLFromFileAndGetData("DB Get Regular Schedule Name",Config.getConfig(Config.DATABASE_QUERY_REGULAR_SCHEDULE_ALL_NAME_SQL_FILE_KEY));
-	}
-	
-	public static ResultSet getRegularSchedules () {
-		return runSQLFromFileAndGetData("DB Get Regular Schedules",Config.getConfig(Config.DATABASE_QUERY_REGULAR_SCHEDULE_ALL_SQL_FILE_KEY));
 	}
 	
 	public static boolean createRegularSchedule (String sn, String an, int day, String rn, boolean ao, int pr, boolean en) {

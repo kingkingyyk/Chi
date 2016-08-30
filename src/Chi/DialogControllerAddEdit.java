@@ -124,7 +124,7 @@ public class DialogControllerAddEdit extends JDialog {
 		comboBoxSite.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				String url=(String)Cache.siteMap.get(comboBoxSite.getSelectedItem())[1];
+				String url=Cache.Sites.map.get(comboBoxSite.getSelectedItem()).getSitemapurl();
 				if (currentMapURL==null || !currentMapURL.equals(url)) {
 					currentMapURL=url;
 					drawMap(currentMapURL);
@@ -261,7 +261,7 @@ public class DialogControllerAddEdit extends JDialog {
 	}
 	
 	private void uiActionsNormal() {
-		for (String s : Cache.siteList) {
+		for (String s : Cache.Sites.map.keySet()) {
 			comboBoxSite.addItem(s);
 		}
 		
@@ -302,7 +302,7 @@ public class DialogControllerAddEdit extends JDialog {
 			sb.append("Controller ");
 			sb.append(count++);
 			s=sb.toString();
-		} while (Cache.controllerMap.containsKey(s));
+		} while (Cache.Controllers.map.containsKey(s));
 		textFieldName.setText(s);
 		
 		textFieldName.addKeyListener(new KeyAdapter() {
@@ -310,7 +310,7 @@ public class DialogControllerAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
-				} else if (Cache.controllerMap.containsKey(txt)) {
+				} else if (Cache.Controllers.map.containsKey(txt)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
@@ -332,7 +332,7 @@ public class DialogControllerAddEdit extends JDialog {
 					reportTimeOK=(i>0);
 				} catch (NumberFormatException e) {};
 				
-				if (txt==null || txt.isEmpty() || Cache.controllerList.contains(txt) || !reportTimeOK || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+				if (txt==null || txt.isEmpty() || Cache.Controllers.map.containsKey(txt) || !reportTimeOK || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Site",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -369,7 +369,7 @@ public class DialogControllerAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
-				} else if (Cache.controllerMap.containsKey(txt) && !txt.equals(n)) {
+				} else if (Cache.Controllers.map.containsKey(txt) && !txt.equals(n)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
@@ -391,7 +391,7 @@ public class DialogControllerAddEdit extends JDialog {
 					reportTimeOK=(i>0);
 				} catch (NumberFormatException e) {};
 				
-				if (txt==null || txt.isEmpty() || (Cache.controllerList.contains(txt) && !txt.equals(n)) || !reportTimeOK || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+				if (txt==null || txt.isEmpty() || (Cache.Controllers.map.containsKey(txt) && !txt.equals(n)) || !reportTimeOK || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Site",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

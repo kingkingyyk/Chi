@@ -21,7 +21,7 @@ public class FrameUserManagementContextMenu extends JPopupMenu {
 		newMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.updateUserWithWait()) {
+				if (Cache.Users.updateWithWait()) {
 					DialogUserAddEdit diag=new DialogUserAddEdit();
 					diag.setVisible(true);
 				}
@@ -33,7 +33,7 @@ public class FrameUserManagementContextMenu extends JPopupMenu {
 		editMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.updateUserWithWait()) {
+				if (Cache.Users.updateWithWait()) {
 					User u=m.getSelectedUser();
 					DialogUserAddEdit diag=new DialogUserAddEdit(u.getUsername(),u.getLevel(),u.getStatus());
 					diag.setVisible(true);

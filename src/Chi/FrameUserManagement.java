@@ -228,10 +228,10 @@ public class FrameUserManagement extends JFrame {
 	}
 	
 	public void updateUserTable() {
-		Cache.updateUser();
+		Cache.Users.updateWithWait();
 		rootRow=new UserTableRow(null);
 		this.list.clear();
-		this.list.addAll(Cache.userObj);
+		this.list.addAll(Cache.Users.map.values());
 		
 		for (User u : this.list) {
 			UserTableRow utr=new UserTableRow(u);
@@ -246,8 +246,8 @@ public class FrameUserManagement extends JFrame {
 		table.setAutoCreateRowSorter(true);
 		table.setTreeTableModel(new UserTableModel(rootRow));
 		
-		if (lastSelectedRow>=0 && Cache.RegularScheduleList.size()>0) {
-			lastSelectedRow=Math.min(lastSelectedRow,Cache.RegularScheduleList.size()-1);
+		if (lastSelectedRow>=0 && list.size()>0) {
+			lastSelectedRow=Math.min(lastSelectedRow,list.size()-1);
 			table.setRowSelectionInterval(lastSelectedRow,lastSelectedRow);
 		}
 		updateSuccess=true;

@@ -1,7 +1,5 @@
 package Chi;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
@@ -110,8 +108,8 @@ public class SchedulingThread extends Thread {
 			
 			if (!hasConflict) {
 				Logger.log("RegularSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.actuatorFlag+". [SET]");
-				Cache.updateActuator();
-				TriggerActuator((String)(Cache.actuatorMap.get(dat.actuatorName)[1]),this.dat.actuatorName,this.dat.actuatorFlag);
+				Cache.Actuators.update();
+				TriggerActuator(Cache.Actuators.map.get(dat.actuatorName).getController().getControllername(),this.dat.actuatorName,this.dat.actuatorFlag);
 			} else {
 				Logger.log("RegularSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.actuatorFlag+". [NOT SET DUE TO LOW PRIORITY]");
 			}
@@ -198,8 +196,8 @@ public class SchedulingThread extends Thread {
 			
 			if (!hasConflict) {
 				Logger.log("SpecialSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.actuatorFlag+". [SET]");
-				Cache.updateActuator();
-				TriggerActuator((String)(Cache.actuatorMap.get(dat.actuatorName)[1]),this.dat.actuatorName,this.dat.actuatorFlag);
+				Cache.Actuators.update();
+				TriggerActuator(Cache.Actuators.map.get(dat.actuatorName).getController().getControllername(),this.dat.actuatorName,this.dat.actuatorFlag);
 			} else {
 				Logger.log("SpecialSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.actuatorFlag+". [NOT SET DUE TO LOW PRIORITY]");
 			}
@@ -242,21 +240,17 @@ public class SchedulingThread extends Thread {
 		OnSpecialScheduleStart osss=new OnSpecialScheduleStart();
 		OnSpecialScheduleEnd osse=new OnSpecialScheduleEnd();
 		
-		ResultSet rs=DatabaseSpecialSchedule.getSpecialSchedules();
-		try {
-			while (rs.next()) {
-				SchedulingDataSpecial d=new SchedulingDataSpecial(rs.getString("ScheduleName"),rs.getString("ActuatorName"),rs.getInt("Year"),rs.getInt("Month"),rs.getInt("Day"),rs.getString("Rule"),rs.getBoolean("ActuatorOn"),rs.getInt("Priority"),rs.getBoolean("Enabled"));
-				if (d.getNextEndTime().compareTo(LocalDateTime.now())>0 && d.isEnabled()) {
-					d.registerOnStartFunc(osss);
-					d.registerOnEndFunc(osse);
-					data.put(d.getName(),d);
-				}
+		Cache.SpecialSchedules.update();
+		for (Specialschedule s : Cache.SpecialSchedules.map.values()) {
+			SchedulingDataSpecial d=new SchedulingDataSpecial(	s.getSchedulename(),s.getActuator().getName(),
+																s.getYear(), s.getMonth(), s.getDay(), s.getDayschedulerule().getRulename(),
+																s.getActuatoron(),s.getPriority(),s.getEnabled() );
+			if (d.getNextEndTime().compareTo(LocalDateTime.now())>0 && d.isEnabled()) {
+				d.registerOnStartFunc(osss);
+				d.registerOnEndFunc(osse);
+				data.put(d.getName(),d);
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			stopQueued=true;
 		}
-		
 		OnRegularScheduleCreate orsc=new OnRegularScheduleCreate();
 		OnRegularScheduleUpdate orsu=new OnRegularScheduleUpdate();
 		OnRegularScheduleDelete orsd=new OnRegularScheduleDelete();
@@ -267,25 +261,20 @@ public class SchedulingThread extends Thread {
 		OnRegularScheduleStart orss=new OnRegularScheduleStart();
 		OnRegularScheduleEnd orse=new OnRegularScheduleEnd();
 		
-		rs=DatabaseRegularSchedule.getRegularSchedules();
-		try {
-			while (rs.next()) {
-				SchedulingDataRegular d=new SchedulingDataRegular(rs.getString("ScheduleName"),rs.getString("ActuatorName"),rs.getInt("DayMask"),rs.getString("Rule"),rs.getBoolean("ActuatorOn"),rs.getInt("Priority"),rs.getBoolean("Enabled"));
-				if (d.getNextEndTime().compareTo(LocalDateTime.now())>0 && d.isEnabled() && d.getDay()!=0) {
-					d.registerOnStartFunc(orss);
-					d.registerOnEndFunc(orse);
-					data.put(d.getName(),d);
-				}
+		Cache.RegularSchedules.update();
+		for (Regularschedule r : Cache.RegularSchedules.map.values()) {
+			SchedulingDataRegular d=new SchedulingDataRegular(	r.getSchedulename(), r.getActuator().getName(), r.getDaymask(),
+																r.getDayschedulerule().getRulename(), r.getActuatoron(), r.getPriority(),
+																r.getEnabled());
+			if (d.getNextEndTime().compareTo(LocalDateTime.now())>0 && d.isEnabled() && d.getDay()!=0) {
+				d.registerOnStartFunc(orss);
+				d.registerOnEndFunc(orse);
+				data.put(d.getName(),d);
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			stopQueued=true;
+			
 		}
-		if (stopQueued) {
-			Logger.log("SchedulingThread unable to connect to database.");
-		} else {
-			SchedulingServer.isStarted=true;
-		}
+		
+		SchedulingServer.isStarted=true;
 		while (true) {
 			if (stopQueued) {
 				stopQueued=false;

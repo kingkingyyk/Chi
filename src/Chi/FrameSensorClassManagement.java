@@ -50,7 +50,7 @@ public class FrameSensorClassManagement extends JFrame {
 	
 	private JPanel contentPane;
 	private SensorClassTable table;
-	private ArrayList<Object []> list=new ArrayList<>();
+	private ArrayList<Sensorclass> list=new ArrayList<>();
 	public boolean updateSuccess;
 	private JScrollPane scrollPane;
 
@@ -103,7 +103,10 @@ public class FrameSensorClassManagement extends JFrame {
 		if (table!=null) {
 			table.removeAll();
 		}
-		Object [][] obj=this.list.toArray(new Object [this.list.size()][]);
+		Object [][] obj=new Object [list.size()][1];
+		for (int i=0;i<list.size();i++) {
+			obj[i][0]=list.get(i).getClassname();
+		}
 		table = new SensorClassTable();
 		table.setShowVerticalLines(false);
 		table.setShowHorizontalLines(false);
@@ -115,9 +118,9 @@ public class FrameSensorClassManagement extends JFrame {
 	}
 	
 	public void updateSensorClassTable() {
-		if (Cache.updateSensorClass()) {
+		if (Cache.SensorClasses.updateWithWait()) {
 			list.clear();
-			list.addAll(Cache.sensorClassObj);
+			list.addAll(Cache.SensorClasses.map.values());
 			int lastSelectedRow=-1;
 			if (table!=null) {
 				 lastSelectedRow=table.getSelectedRow();
@@ -138,7 +141,7 @@ public class FrameSensorClassManagement extends JFrame {
 		return this.table.convertRowIndexToModel(this.table.getSelectedRow());
 	}
 	
-	public Object [] getSelectedObj () {
+	public Sensorclass getSelectedClass () {
 		return this.list.get(this.getSelectedRow());
 	}
 }

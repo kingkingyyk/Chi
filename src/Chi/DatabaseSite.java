@@ -2,7 +2,6 @@ package Chi;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class DatabaseSite extends DatabaseHSQL {
@@ -43,18 +42,10 @@ public class DatabaseSite extends DatabaseHSQL {
 			OnDeleteList.add(a);
 		}
 	}
-	
-	public static ResultSet getSiteList () {
-		return runSQLFromFileAndGetData("DB Get Site Name List",Config.getConfig(Config.DATABASE_QUERY_SITE_ALL_NAME_SQL_FILE_KEY));
-	}
-	
-	public static ResultSet getSites () {
-		return runSQLFromFileAndGetData("DB Get Site",Config.getConfig(Config.DATABASE_QUERY_SITE_ALL_SQL_FILE_KEY));
-	}
-	
+
 	public static boolean createSite (String n, String u) {
 		Logger.log("DB Create Site : "+Config.getConfig(Config.DATABASE_CREATE_SITE_SQL_FILE_KEY));
-		if (Cache.siteMap.containsKey(n)) {
+		if (Cache.Sites.map.containsKey(n)) {
 			Logger.log("DB Create Site[Cache] - Site already exists!");
 			return false;
 		} else {
@@ -94,15 +85,10 @@ public class DatabaseSite extends DatabaseHSQL {
 	
 	public static boolean updateSite (String oldN, String n, String u) {
 		Logger.log("DB Update Site : "+Config.getConfig(Config.DATABASE_UPDATE_SITE_SQL_FILE_KEY));
-		if (!Cache.siteMap.containsKey(oldN)) {
+		if (!Cache.Sites.map.containsKey(oldN)) {
 			Logger.log("DB Create Site[Cache] - Site doesn't exist!");
 			return false;
 		} else {
-			Object [] o=Cache.siteMap.get(oldN);
-			if (o[0].equals(n) && o[1].equals(u)) {
-				Logger.log("DB Create Site[Cache] - Information is the same!");
-				return true;
-			} else {
 				try {
 					Connection c = getConnection();
 					if (c!=null) {
@@ -136,12 +122,11 @@ public class DatabaseSite extends DatabaseHSQL {
 				}
 				return false;
 			}
-		}
 	}
 	
 	public static boolean deleteSite (String n) {
 		Logger.log("DB Delete Site : "+Config.getConfig(Config.DATABASE_DELETE_SITE_SQL_FILE_KEY));
-		if (!Cache.siteMap.containsKey(n)) {
+		if (!Cache.Sites.map.containsKey(n)) {
 			Logger.log("DB Delete Site[Cache] - Site doesn't exist!");
 			return false;
 		} else {

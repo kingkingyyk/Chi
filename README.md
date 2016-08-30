@@ -16,6 +16,7 @@ Server Requirement :
 
 Compile :
 + Eclipse MARS.2
++ Hibernate Tool (For database schema update)
 
 Database Schema (Paste the XML) :
 + http://ondras.zarovi.cz/sql/demo/ 

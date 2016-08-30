@@ -20,7 +20,7 @@ public class FrameSensorManagementContextMenu extends JPopupMenu {
 		newMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.updateController() && Cache.updateSensorClass() && Cache.updateSensor()) {
+				if (Cache.Controllers.updateWithWait() && Cache.SensorClasses.updateWithWait() && Cache.Sensors.updateWithWait()) {
 					DialogSensorAddEdit diag=new DialogSensorAddEdit();
 					diag.setVisible(true);
 				}
@@ -31,9 +31,9 @@ public class FrameSensorManagementContextMenu extends JPopupMenu {
 		editMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.updateController() && Cache.updateSensorClass() && Cache.updateSensor()) {
-					Object [] o=m.getSelectedObj();
-					DialogSensorAddEdit diag=new DialogSensorAddEdit((String)o[0],(String)o[1],(Double)o[2],(Double)o[3],(Double)o[4],(String)o[5],(String)o[6]);
+				if (Cache.Controllers.updateWithWait() && Cache.SensorClasses.updateWithWait() && Cache.Sensors.updateWithWait()) {
+					Sensor s=m.getSelectedSensor();
+					DialogSensorAddEdit diag=new DialogSensorAddEdit(s.getSensorname(),s.getSensorclass().getClassname(),s.getMinvalue(),s.getMaxvalue(),s.getTransformationfactor(),s.getUnit(),s.getController().getControllername());
 					diag.setVisible(true);
 				}
 			}
@@ -43,12 +43,12 @@ public class FrameSensorManagementContextMenu extends JPopupMenu {
 		deleteMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete sensor "+m.getSelectedObj()[0].toString()+"?","Delete sensor",JOptionPane.WARNING_MESSAGE)==JOptionPane.YES_OPTION) {
+				if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete sensor "+m.getSelectedSensor()+"?","Delete sensor",JOptionPane.WARNING_MESSAGE)==JOptionPane.YES_OPTION) {
 					WaitUI u=new WaitUI();
 					u.setText("Deleting sensor");
 					Thread t=new Thread() {
 						public void run () {
-							boolean flag=DatabaseSensor.deleteSensor(m.getSelectedObj()[0].toString());
+							boolean flag=DatabaseSensor.deleteSensor(m.getSelectedSensor().getSensorname());
 							if (!flag) {
 								JOptionPane.showMessageDialog(null,"Database error, please check the console for more information.",Config.APP_NAME,JOptionPane.WARNING_MESSAGE);
 							}

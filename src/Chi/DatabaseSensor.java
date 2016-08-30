@@ -2,8 +2,8 @@ package Chi;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
+
 public class DatabaseSensor extends DatabaseHSQL {
 
 	public static interface OnCreateAction {
@@ -43,17 +43,9 @@ public class DatabaseSensor extends DatabaseHSQL {
 		}
 	}
 	
-	public static ResultSet getSensorNameList () {
-		return runSQLFromFileAndGetData("DB Get Sensor Name List",Config.getConfig(Config.DATABASE_QUERY_SENSOR_ALL_NAME_SQL_FILE_KEY));
-	}
-	
-	public static ResultSet getSensors () {
-		return runSQLFromFileAndGetData("DB Get Sensor",Config.getConfig(Config.DATABASE_QUERY_SENSOR_ALL_SQL_FILE_KEY));
-	}
-	
 	public static boolean createSensor (String sn, String cn, double min, double max, double trans, String unit, String con) {
 		Logger.log("DB Create Sensor : "+Config.getConfig(Config.DATABASE_CREATE_SENSOR_SQL_FILE_KEY));
-		if (Cache.sensorMap.containsKey(sn)) {
+		if (Cache.Sensors.map.containsKey(sn)) {
 			Logger.log("DB Create Sensor[Cache] - Sensor already exists!");
 			return false;
 		} else {
@@ -98,15 +90,10 @@ public class DatabaseSensor extends DatabaseHSQL {
 	
 	public static boolean updateSensor (String sn, String cn, double min, double max, double trans, String unit, String con) {
 		Logger.log("DB Update Sensor : "+Config.getConfig(Config.DATABASE_UPDATE_SENSOR_SQL_FILE_KEY));
-		if (!Cache.sensorMap.containsKey(sn)) {
+		if (!Cache.Sensors.map.containsKey(sn)) {
 			Logger.log("DB Upate Sensor[Cache] - Sensor doesn't exist!");
 			return false;
 		} else {
-			Object [] o=Cache.sensorMap.get(sn);
-			if (o[0].equals(sn) && o[1].equals(cn) && o[2].equals(min) && o[3].equals(max) && o[4].equals(trans) && o[5].equals(unit) && o[6].equals(con)) {
-				Logger.log("DB Update Sensor[Cache] - Information is the same!");
-				return true;
-			} else {
 				try {
 					Connection c = getConnection();
 					if (c!=null) {
@@ -144,12 +131,11 @@ public class DatabaseSensor extends DatabaseHSQL {
 				}
 				return false;
 			}
-		}
 	}
 	
 	public static boolean deleteSensor (String sn) {
 		Logger.log("DB Delete Sensor : "+Config.getConfig(Config.DATABASE_DELETE_SENSOR_SQL_FILE_KEY));
-		if (!Cache.sensorMap.containsKey(sn)) {
+		if (!Cache.Sensors.map.containsKey(sn)) {
 			Logger.log("DB Delete Sensor[Cache] - Sensor doesn't exist!");
 			return false;
 		} else {

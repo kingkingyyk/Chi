@@ -20,7 +20,7 @@ public class FrameDayScheduleRuleManagementContextMenu extends JPopupMenu {
 		newMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.updateDayScheduleRule()) {
+				if (Cache.DayScheduleRules.updateWithWait()) {
 					DialogDayScheduleRuleAddEdit diag=new DialogDayScheduleRuleAddEdit();
 					diag.setVisible(true);
 				}
@@ -31,9 +31,9 @@ public class FrameDayScheduleRuleManagementContextMenu extends JPopupMenu {
 		editMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.updateDayScheduleRule()) {
-					Object [] o=m.getSelectedObj();
-					DialogDayScheduleRuleAddEdit diag=new DialogDayScheduleRuleAddEdit((String)o[0],(Integer)o[1],(Integer)o[2],(Integer)o[3],(Integer)o[4]);
+				if (Cache.DayScheduleRules.updateWithWait()) {
+					Dayschedulerule r=m.getSelectedRule();
+					DialogDayScheduleRuleAddEdit diag=new DialogDayScheduleRuleAddEdit(r.getRulename(),r.getStarthour(),r.getStartminute(),r.getEndhour(),r.getEndminute());
 					diag.setVisible(true);
 				}
 			}
@@ -43,12 +43,12 @@ public class FrameDayScheduleRuleManagementContextMenu extends JPopupMenu {
 		deleteMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete rule "+m.getSelectedObj()[0].toString()+"?","Delete rule",JOptionPane.WARNING_MESSAGE)==JOptionPane.YES_OPTION) {
+				if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete rule "+m.getSelectedRule().getRulename()+"?","Delete rule",JOptionPane.WARNING_MESSAGE)==JOptionPane.YES_OPTION) {
 					WaitUI u=new WaitUI();
 					u.setText("Deleting rule");
 					Thread t=new Thread() {
 						public void run () {
-							boolean flag=DatabaseDayScheduleRule.deleteDayScheduleRule(m.getSelectedObj()[0].toString());
+							boolean flag=DatabaseDayScheduleRule.deleteDayScheduleRule(m.getSelectedRule().getRulename());
 							if (!flag) {
 								JOptionPane.showMessageDialog(null,"Database error, please check the console for more information.",Config.APP_NAME,JOptionPane.WARNING_MESSAGE);
 							}

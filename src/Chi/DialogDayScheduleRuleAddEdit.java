@@ -41,7 +41,7 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 			sb.append("Time Rule ");
 			sb.append(count++);
 			s=sb.toString();
-		} while (Cache.DayScheduleRuleMap.containsKey(s));
+		} while (Cache.DayScheduleRules.map.containsKey(s));
 		textFieldName.setText(s);
 		
 		prefill(s,0,0,0,1);
@@ -245,7 +245,7 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
-				} else if (Cache.DayScheduleRuleList.contains(txt)) {
+				} else if (Cache.DayScheduleRules.map.containsKey(txt)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
@@ -261,7 +261,7 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || !lblTimeInfo.getText().contains("OK") || Cache.DayScheduleRuleList.contains(txt) || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+				if (txt==null || txt.isEmpty() || !lblTimeInfo.getText().contains("OK") || Cache.DayScheduleRules.map.containsKey(txt) || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Day Schedule Rule",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -294,7 +294,7 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
-				} else if (Cache.DayScheduleRuleList.contains(txt) && !txt.equals(n)) {
+				} else if (Cache.DayScheduleRules.map.containsKey(txt) && !txt.equals(n)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
@@ -310,7 +310,7 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || !lblTimeInfo.getText().contains("OK") || (Cache.DayScheduleRuleList.contains(txt) && !txt.equals(n)) || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+				if (txt==null || txt.isEmpty() || !lblTimeInfo.getText().contains("OK") || (Cache.DayScheduleRules.map.containsKey(txt) && !txt.equals(n)) || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Edit Day Schedule Rule",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

@@ -99,7 +99,7 @@ public class DialogSensorClassAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
-				} else if (Cache.sensorClassMap.containsKey(txt)) {
+				} else if (Cache.SensorClasses.map.containsKey(txt)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
@@ -114,7 +114,7 @@ public class DialogSensorClassAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || Cache.sensorClassMap.containsKey(txt) || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+				if (txt==null || txt.isEmpty() || Cache.SensorClasses.map.containsKey(txt) || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid name!",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -147,7 +147,7 @@ public class DialogSensorClassAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
-				} else if (Cache.sensorClassMap.containsKey(txt) && !txt.equals(fillN)) {
+				} else if (Cache.SensorClasses.map.containsKey(txt) && !txt.equals(fillN)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
@@ -162,7 +162,7 @@ public class DialogSensorClassAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || (Cache.sensorClassMap.containsKey(txt) && !txt.equals(fillN)) || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+				if (txt==null || txt.isEmpty() || (Cache.SensorClasses.map.containsKey(txt) && !txt.equals(fillN)) || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid name!",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

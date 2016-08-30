@@ -82,16 +82,17 @@ public class FrameRegularScheduleManagement extends JFrame {
 		private ArrayList<RegularScheduleTableRow> subRow;
 		public String [] renderText;
 		
-		public RegularScheduleTableRow(Object [] o) {
-			if (o!=null) {
-				renderText=new String[o.length];
-				for (int i=0;i<o.length;i++) {
-					renderText[i]=o[i].toString();
-					if (RegularScheduleTableModel.COLUMNS[i].equals("Days")) renderText[i]=Utility.dayMaskToStr((Integer)o[i]);
-					else if (RegularScheduleTableModel.COLUMNS[i].equals("Switch"))
-						if (o[i].equals(Boolean.TRUE)) renderText[i]="ON";
-						else renderText[i]="OFF";
-				}
+		public RegularScheduleTableRow(Regularschedule r) {
+			if (r!=null) {
+				renderText=new String[7];
+				renderText[0]=r.getSchedulename();
+				renderText[1]=r.getActuator().getName();
+				renderText[2]=Utility.dayMaskToStr(r.getDaymask());
+				renderText[3]=r.getDayschedulerule().getRulename();
+				if (r.getEnabled()) renderText[4]="ON";
+				else renderText[4]="OFF";
+				renderText[5]=r.getPriority().toString();
+				renderText[6]=r.getEnabled().toString();
 			} else {
 				renderText=new String [] {"root"};
 			}
@@ -171,7 +172,7 @@ public class FrameRegularScheduleManagement extends JFrame {
 	private JPanel contentPane;
 	private RegularScheduleTable table;
 	private RegularScheduleTableRow rootRow;
-	private ArrayList<Object []> list=new ArrayList<>();
+	private ArrayList<Regularschedule> list=new ArrayList<>();
 	public boolean updateSuccess;
 	private JScrollPane scrollPane;
 
@@ -234,13 +235,11 @@ public class FrameRegularScheduleManagement extends JFrame {
 	}
 	
 	public void updateRegularScheduleTable() {
-		Cache.updateRegularSchedule();
+		Cache.RegularSchedules.update();
 		rootRow=new RegularScheduleTableRow(null);
-		list.clear();
-		for (Object [] o : Cache.RegularScheduleObj) {
-			RegularScheduleTableRow utr=new RegularScheduleTableRow(o);
-			rootRow.addRow(utr);
-			list.add(o);
+		list.clear(); list.addAll(Cache.RegularSchedules.map.values());
+		for (Regularschedule r : list) {
+			rootRow.addRow(new RegularScheduleTableRow(r));
 		}
 		
 		int lastSelectedRow=-1;
@@ -251,8 +250,8 @@ public class FrameRegularScheduleManagement extends JFrame {
 		table.setAutoCreateRowSorter(true);
 		table.setTreeTableModel(new RegularScheduleTableModel(rootRow));
 		
-		if (lastSelectedRow>=0 && Cache.RegularScheduleList.size()>0) {
-			lastSelectedRow=Math.min(lastSelectedRow,Cache.RegularScheduleList.size()-1);
+		if (lastSelectedRow>=0 && list.size()>0) {
+			lastSelectedRow=Math.min(lastSelectedRow,list.size()-1);
 			table.setRowSelectionInterval(lastSelectedRow,lastSelectedRow);
 		}
 		updateSuccess=true;
@@ -280,7 +279,7 @@ public class FrameRegularScheduleManagement extends JFrame {
 		return this.table.convertRowIndexToModel(this.table.getSelectedRow());
 	}
 	
-	public Object [] getSelectedObj () {
+	public Regularschedule getSelectedSchedule () {
 		return this.list.get(this.getSelectedRow());
 	}
 }

@@ -50,7 +50,7 @@ public class DatabaseSensorClass extends DatabaseHSQL {
 	
 	public static boolean createSensorClass (String name) {
 		Logger.log("DB Create Sensor Class : "+Config.getConfig(Config.DATABASE_CREATE_SENSOR_CLASS_SQL_FILE_KEY));
-		if (Cache.sensorClassMap.containsKey(name)) {
+		if (Cache.SensorClasses.map.containsKey(name)) {
 			Logger.log("DB Create Sensor Class[Cache] - Sensor class already exists!");
 			return false;
 		} else {
@@ -89,15 +89,10 @@ public class DatabaseSensorClass extends DatabaseHSQL {
 	
 	public static boolean updateSensorClass (String oldN, String newN) {
 		Logger.log("DB Update Sensor Class : "+Config.getConfig(Config.DATABASE_UPDATE_SENSOR_CLASS_SQL_FILE_KEY));
-		if (!Cache.sensorClassMap.containsKey(oldN)) {
+		if (!Cache.SensorClasses.map.containsKey(oldN)) {
 			Logger.log("DB Update Sensor Class[Cache] - Sensor class doesn't exist!");
 			return false;
 		} else {
-			Object [] o=Cache.sensorClassMap.get(oldN);
-			if (o[0].equals(newN)) {
-				Logger.log("DB Update Sensor Class[Cache] - Information is same!");
-				return true;
-			} else {
 				try {
 					Connection c = getConnection();
 					if (c!=null) {
@@ -132,12 +127,11 @@ public class DatabaseSensorClass extends DatabaseHSQL {
 				}
 				return false;
 			}
-		}
 	}
 	
 	public static boolean deleteSensorClass (String name) {
 		Logger.log("DB Delete Sensor Class : "+Config.getConfig(Config.DATABASE_DELETE_SENSOR_CLASS_SQL_FILE_KEY));
-		if (!Cache.sensorClassMap.containsKey(name)) {
+		if (!Cache.SensorClasses.map.containsKey(name)) {
 			Logger.log("DB Create Sensor Class[Cache] - Sensor class already exists!");
 			return false;
 		} else {

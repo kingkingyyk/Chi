@@ -44,7 +44,7 @@ public class DialogSensorAddEdit extends JDialog {
 			sb.append("Sensor ");
 			sb.append(count++);
 			s=sb.toString();
-		} while (Cache.sensorMap.containsKey(s));
+		} while (Cache.Sensors.map.containsKey(s));
 		
 		prefill(s,"DefaultClass",0,1,1,"","");
 		uiActionsNormal();
@@ -115,7 +115,7 @@ public class DialogSensorAddEdit extends JDialog {
 		comboBoxClass = new JComboBox<>();
 		comboBoxClass.setMaximumRowCount(6);
 		comboBoxClass.setBounds(89, 38, 246, 20);
-		for (String s : Cache.sensorClassList) {
+		for (String s : Cache.SensorClasses.map.keySet()) {
 			comboBoxClass.addItem(s);
 		}
 		contentPanel.add(comboBoxClass);
@@ -180,7 +180,7 @@ public class DialogSensorAddEdit extends JDialog {
 		
 		comboBoxController = new JComboBox<>();
 		comboBoxController.setBounds(89, 192, 246, 20);
-		for (String s : Cache.controllerList) {
+		for (String s : Cache.Controllers.map.keySet()) {
 			comboBoxController.addItem(s);
 		}
 		contentPanel.add(comboBoxController);
@@ -221,7 +221,7 @@ public class DialogSensorAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
-				} else if (Cache.sensorMap.containsKey(txt)) {
+				} else if (Cache.Sensors.map.containsKey(txt)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
@@ -296,7 +296,7 @@ public class DialogSensorAddEdit extends JDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (!validateInput() || Cache.sensorMap.containsKey(textFieldName.getText()) || textFieldName.getText().contains(Config.PACKET_FIELD_DELIMITER)) {
+				if (!validateInput() || Cache.Sensors.map.containsKey(textFieldName.getText()) || textFieldName.getText().contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Sensor",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -332,7 +332,7 @@ public class DialogSensorAddEdit extends JDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (!validateInput() || (Cache.sensorMap.containsKey(textFieldName.getText()) && !textFieldName.getText().equals(n)) || textFieldName.getText().contains(Config.PACKET_FIELD_DELIMITER)) {
+				if (!validateInput() || (Cache.Sensors.map.containsKey(textFieldName.getText()) && !textFieldName.getText().equals(n)) || textFieldName.getText().contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Sensor",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

@@ -415,5 +415,6 @@ public class ConfigUI extends JDialog {
 		Config.setConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PASSWORD_KEY, new String(passwordFieldDatabasePassword.getPassword()));
 		
 		Config.writeConfigFile();
+		Cache.initialize();
 	}
 }

@@ -170,7 +170,7 @@ public class DialogUserAddEdit extends JDialog {
 				String txt=textFieldUsername.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblUsernameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
-				} else if (Cache.userMap.containsKey(txt)) {
+				} else if (Cache.Users.map.containsKey(txt)) {
 					lblUsernameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					lblUsernameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
@@ -186,7 +186,7 @@ public class DialogUserAddEdit extends JDialog {
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldUsername.getText();
 				char [] pw=textFieldPassword.getPassword();
-				if (txt==null || txt.isEmpty() || Cache.userMap.containsKey(txt) || pw==null || pw.length==0 || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+				if (txt==null || txt.isEmpty() || Cache.Users.map.containsKey(txt) || pw==null || pw.length==0 || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid credential!",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -218,7 +218,7 @@ public class DialogUserAddEdit extends JDialog {
 				String txt=textFieldUsername.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblUsernameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
-				} else if (Cache.userMap.containsKey(txt) && !txt.equals(fillN)) {
+				} else if (Cache.Users.map.containsKey(txt) && !txt.equals(fillN)) {
 					lblUsernameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					lblUsernameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");

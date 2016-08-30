@@ -75,7 +75,7 @@ public class DatabaseDayScheduleRule extends DatabaseHSQL {
 	
 	public static boolean createDayScheduleRule (String n, int sh, int sm, int eh, int em) {
 		Logger.log("DB Create DayScheduleRule : "+Config.getConfig(Config.DATABASE_CREATE_DAY_SCHEDULE_RULE_SQL_FILE_KEY));
-		if (Cache.DayScheduleRuleMap.containsKey(n)) {
+		if (Cache.DayScheduleRules.map.containsKey(n)) {
 			Logger.log("DB CreateDayScheduleRule[Cache] : Rule already exists!");
 			return false;
 		} else {
@@ -117,15 +117,10 @@ public class DatabaseDayScheduleRule extends DatabaseHSQL {
 	
 	public static boolean updateDayScheduleRule  (String oldN, String n, int sh, int sm, int eh, int em) {
 		Logger.log("DB Update DayScheduleRule : "+Config.getConfig(Config.DATABASE_UPDATE_DAY_SCHEDULE_RULE_SQL_FILE_KEY));
-		if (!Cache.DayScheduleRuleMap.containsKey(oldN)) {
+		if (!Cache.DayScheduleRules.map.containsKey(oldN)) {
 			Logger.log("DB CreateDayScheduleRule[Cache] : Rule doesn't exist!");
 			return false;
 		} else {
-			Object [] o=Cache.DayScheduleRuleMap.get(oldN);
-			if (o[0].equals(n) && o[1].equals(sh) && o[2].equals(sm) && o[3].equals(eh) && o[4].equals(em)) {
-				Logger.log("DB CreateDayScheduleRule[Cache] : Information is the same!");
-				return true;
-			} else {
 				try {
 					Connection c = getConnection();
 					if (c!=null) {
@@ -161,7 +156,6 @@ public class DatabaseDayScheduleRule extends DatabaseHSQL {
 				}
 				return false;	
 			}
-		}
 	}
 	
 	public static Object [] getDayScheduleRule (String n) {
@@ -189,7 +183,7 @@ public class DatabaseDayScheduleRule extends DatabaseHSQL {
 	
 	public static boolean deleteDayScheduleRule (String n) {
 		Logger.log("DB Delete DayScheduleRule : "+Config.getConfig(Config.DATABASE_DELETE_DAY_SCHEDULE_RULE_SQL_FILE_KEY));
-		if (!Cache.DayScheduleRuleMap.containsKey(n)) {
+		if (!Cache.DayScheduleRules.map.containsKey(n)) {
 			Logger.log("DB CreateDayScheduleRule[Cache] : Rule doesn't exist!");
 			return false;
 		} else {

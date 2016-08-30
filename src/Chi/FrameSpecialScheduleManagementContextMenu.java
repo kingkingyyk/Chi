@@ -20,7 +20,7 @@ public class FrameSpecialScheduleManagementContextMenu extends JPopupMenu {
 		newMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.updateActuator() && Cache.updateDayScheduleRule() && Cache.updateSpecialSchedule() && Cache.updateRegularSchedule() ) {
+				if (Cache.Actuators.updateWithWait() && Cache.DayScheduleRules.updateWithWait() && Cache.SpecialSchedules.updateWithWait() && Cache.RegularSchedules.updateWithWait() ) {
 					DialogSpecialScheduleAddEdit diag=new DialogSpecialScheduleAddEdit();
 					diag.setVisible(true);
 				}
@@ -31,9 +31,9 @@ public class FrameSpecialScheduleManagementContextMenu extends JPopupMenu {
 		editMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.updateActuator() && Cache.updateDayScheduleRule() && Cache.updateSpecialSchedule() && Cache.updateRegularSchedule()) {
-					Object [] o=m.getSelectedObj();
-					DialogSpecialScheduleAddEdit diag=new DialogSpecialScheduleAddEdit((String)o[0],(String)o[1],(Integer)o[2],(Integer)o[3],(Integer)o[4],(String)o[5],(Boolean)o[6],(Integer)o[7],(Boolean)o[8]);
+				if (Cache.Actuators.updateWithWait() && Cache.DayScheduleRules.updateWithWait() && Cache.SpecialSchedules.updateWithWait() && Cache.RegularSchedules.updateWithWait()) {
+					Specialschedule s=m.getSelectedSchedule();
+					DialogSpecialScheduleAddEdit diag=new DialogSpecialScheduleAddEdit(s.getSchedulename(),s.getActuator().getName(),s.getYear(),s.getMonth(),s.getDay(),s.getDayschedulerule().getRulename(),s.getActuatoron(),s.getPriority(),s.getEnabled());
 					diag.setVisible(true);
 				}
 			}
@@ -43,12 +43,12 @@ public class FrameSpecialScheduleManagementContextMenu extends JPopupMenu {
 		deleteMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete schedule "+m.getSelectedObj()[0].toString()+"?","Delete schedule",JOptionPane.WARNING_MESSAGE)==JOptionPane.YES_OPTION) {
+				if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete schedule "+m.getSelectedSchedule().getSchedulename()+"?","Delete schedule",JOptionPane.WARNING_MESSAGE)==JOptionPane.YES_OPTION) {
 					WaitUI u=new WaitUI();
 					u.setText("Deleting schedule");
 					Thread t=new Thread() {
 						public void run () {
-							boolean flag=DatabaseSpecialSchedule.deleteSpecialSchedule(m.getSelectedObj()[0].toString());
+							boolean flag=DatabaseSpecialSchedule.deleteSpecialSchedule(m.getSelectedSchedule().getSchedulename());
 							if (!flag) {
 								JOptionPane.showMessageDialog(null,"Database error, please check the console for more information.",Config.APP_NAME,JOptionPane.WARNING_MESSAGE);
 							}

@@ -21,7 +21,7 @@ public class FrameSensorClassManagementContextMenu extends JPopupMenu {
 		newMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.updateSensorClass()) {
+				if (Cache.SensorClasses.updateWithWait()) {
 					DialogSensorClassAddEdit diag=new DialogSensorClassAddEdit();
 					diag.setVisible(true);
 				}
@@ -32,9 +32,8 @@ public class FrameSensorClassManagementContextMenu extends JPopupMenu {
 		editMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.updateSensorClass()) {
-					Object [] o=m.getSelectedObj();
-					DialogSensorClassAddEdit diag=new DialogSensorClassAddEdit(o[0].toString());
+				if (Cache.SensorClasses.updateWithWait()) {
+					DialogSensorClassAddEdit diag=new DialogSensorClassAddEdit(m.getSelectedClass().getClassname());
 					diag.setVisible(true);
 				}
 			}
@@ -44,12 +43,12 @@ public class FrameSensorClassManagementContextMenu extends JPopupMenu {
 		deleteMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete sensor class "+m.getSelectedObj()[0].toString()+"?\nSensors in this class will be removed to DefaultClass after deletion.","Delete sensor class",JOptionPane.WARNING_MESSAGE)==JOptionPane.YES_OPTION) {
+				if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete sensor class "+m.getSelectedClass().getClassname()+"?\nSensors in this class will be removed to DefaultClass after deletion.","Delete sensor class",JOptionPane.WARNING_MESSAGE)==JOptionPane.YES_OPTION) {
 					WaitUI u=new WaitUI();
 					u.setText("Deleting sensor class");
 					Thread t=new Thread() {
 						public void run () {
-							boolean flag=DatabaseSensorClass.deleteSensorClass(m.getSelectedObj()[0].toString());
+							boolean flag=DatabaseSensorClass.deleteSensorClass(m.getSelectedClass().getClassname());
 							if (!flag) {
 								JOptionPane.showMessageDialog(null,"Database error, please check the console for more information.",Config.APP_NAME,JOptionPane.WARNING_MESSAGE);
 							}
@@ -74,8 +73,8 @@ public class FrameSensorClassManagementContextMenu extends JPopupMenu {
 
 			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
-				editMenu.setEnabled(m.getSelectedRow()!=-1  && !m.getSelectedObj()[0].equals("DefaultClass"));
-				deleteMenu.setEnabled(m.getSelectedRow()!=-1  && !m.getSelectedObj()[0].equals("DefaultClass"));
+				editMenu.setEnabled(m.getSelectedRow()!=-1  && !m.getSelectedClass().getClassname().equals("DefaultClass"));
+				deleteMenu.setEnabled(m.getSelectedRow()!=-1  && !m.getSelectedClass().getClassname().equals("DefaultClass"));
 			};
 		
 		});

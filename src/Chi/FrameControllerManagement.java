@@ -5,7 +5,6 @@ import java.awt.Component;
 import java.awt.SystemColor;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.swing.JFrame;
@@ -84,16 +83,15 @@ public class FrameControllerManagement extends JFrame {
 		private ArrayList<ControllerTableRow> subRow;
 		public String [] renderText;
 		
-		public ControllerTableRow(Object [] o) {
-			if (o!=null) {
-				renderText=new String[o.length];
-				for (int i=0;i<o.length;i++) {
-					renderText[i]=o[i].toString();
-				}
-				renderText[2]=String.format("%.2f",(Double)o[2]); //position X
-				renderText[3]=String.format("%.2f",(Double)o[3]); //position Y
+		public ControllerTableRow(Controller ctrl) {
+			if (ctrl!=null) {
+				renderText=new String[6];
+				renderText[0]=ctrl.getControllername();
+				renderText[1]=ctrl.getSite().getSitename();
+				renderText[2]=String.format("%.2f",ctrl.getPositionx()); //position X
+				renderText[3]=String.format("%.2f",ctrl.getPositiony()); //position Y
 				
-				int period=(Integer)o[4];
+				int period=ctrl.getReporttimeout();
 				StringBuilder sb=new StringBuilder();
 				if (period>3600) {
 					sb.append(period/3600);
@@ -110,7 +108,7 @@ public class FrameControllerManagement extends JFrame {
 					sb.append("s");
 				}
 				renderText[4]=sb.toString(); // report period.
-				renderText[5]=dateFormatter.format((Date)o[5]); //last report time
+				renderText[5]=dateFormatter.format(ctrl.getLastreporttime()); //last report time
 			} else {
 				renderText=new String [] {"root"};
 			}
@@ -167,15 +165,16 @@ public class FrameControllerManagement extends JFrame {
 			FrameControllerManagement.currInstance=new FrameControllerManagement();
 			FrameControllerManagement.currInstance.setLocationRelativeTo(null);
 		} else {
-			FrameControllerManagement.currInstance.toFront();
 			FrameControllerManagement.currInstance.repaint();
 		}
+		FrameControllerManagement.currInstance.toFront();
 		return FrameControllerManagement.currInstance;
 	}
 	
 	public static void refresh() {
 		if (FrameControllerManagement.currInstance!=null) {
 			FrameControllerManagement.currInstance.updateControllerTable();
+			FrameControllerManagement.currInstance.toFront();
 			FrameControllerManagement.currInstance.repaint();
 		}
 	}
@@ -185,7 +184,7 @@ public class FrameControllerManagement extends JFrame {
 	private ControllerTableRow rootRow;
 	public boolean updateSuccess;
 	private JScrollPane scrollPane;
-	private ArrayList<Object []> controllerList=new ArrayList<>();
+	private ArrayList<Controller> controllerList=new ArrayList<>();
 
 	public FrameControllerManagement() {
 		setTitle("Controller Management");
@@ -246,14 +245,14 @@ public class FrameControllerManagement extends JFrame {
 	}
 	
 	public void updateControllerTable() {
-		updateSuccess=Cache.updateController();
+		updateSuccess=Cache.Controllers.updateWithWait();
 		if (updateSuccess) {
 			controllerList.clear();
-			controllerList.addAll(Cache.controllerObj);
+			controllerList.addAll(Cache.Controllers.map.values());
 			rootRow=new ControllerTableRow(null);
 			
-			for (Object [] o : Cache.controllerObj) {
-				rootRow.addRow(new ControllerTableRow(o));
+			for (Controller ctlr : controllerList) {
+				rootRow.addRow(new ControllerTableRow(ctlr));
 			}
 			
 			int lastSelectedRow=-1;
@@ -265,7 +264,7 @@ public class FrameControllerManagement extends JFrame {
 			table.setTreeTableModel(new ControllerTableModel(rootRow));
 			
 			if (lastSelectedRow>=0 && controllerList.size()>0) {
-				lastSelectedRow=Math.min(lastSelectedRow,Cache.controllerList.size()-1);
+				lastSelectedRow=Math.min(lastSelectedRow,Cache.Controllers.map.values().size()-1);
 				table.setRowSelectionInterval(lastSelectedRow,lastSelectedRow);
 			}
 			updateSuccess=true;
@@ -291,7 +290,7 @@ public class FrameControllerManagement extends JFrame {
 		return this.table.convertRowIndexToModel(this.table.getSelectedRow());
 	}
 	
-	public Object [] getSelectedObj () {
+	public Controller getSelectedController () {
 		return this.controllerList.get(this.getSelectedRow());
 	}
 }

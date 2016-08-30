@@ -20,13 +20,14 @@ public class FrameSiteManagementContextMenu extends JPopupMenu {
 		newMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.updateSite()) {
+				if (Cache.Sites.updateWithWait()) {
 					DialogSiteAddEdit diag=new DialogSiteAddEdit();
 					diag.setVisible(true);
+					/*
 					if (diag.updated) {
 						m.updateSiteTable();
 						FrameControllerManagement.refresh();
-					}
+					}*/
 				}
 			}
 		});
@@ -35,14 +36,15 @@ public class FrameSiteManagementContextMenu extends JPopupMenu {
 		editMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.updateSite()) {
-					Object [] o=m.getSelectedObj();
-					DialogSiteAddEdit diag=new DialogSiteAddEdit((String)o[0],(String)o[1]);
+				if (Cache.Sites.updateWithWait()) {
+					Site s=m.getSelectedSite();
+					DialogSiteAddEdit diag=new DialogSiteAddEdit(s.getSitename(),s.getSitemapurl());
 					diag.setVisible(true);
+					/*
 					if (diag.updated) {
 						m.updateSiteTable();
 						FrameControllerManagement.refresh();
-					}
+					}*/
 				}
 			}
 		});
@@ -51,12 +53,12 @@ public class FrameSiteManagementContextMenu extends JPopupMenu {
 		deleteMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete site "+m.getSelectedObj()[0].toString()+"?","Delete site",JOptionPane.WARNING_MESSAGE)==JOptionPane.YES_OPTION) {
+				if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete site "+m.getSelectedSite().getSitename()+"?","Delete site",JOptionPane.WARNING_MESSAGE)==JOptionPane.YES_OPTION) {
 					WaitUI u=new WaitUI();
 					u.setText("Deleting site");
 					Thread t=new Thread() {
 						public void run () {
-							boolean flag=DatabaseSite.deleteSite(m.getSelectedObj()[0].toString());
+							boolean flag=DatabaseSite.deleteSite(m.getSelectedSite().getSitename());
 							if (!flag) {
 								JOptionPane.showMessageDialog(null,"Database error, please check the console for more information.",Config.APP_NAME,JOptionPane.WARNING_MESSAGE);
 							}
@@ -83,8 +85,8 @@ public class FrameSiteManagementContextMenu extends JPopupMenu {
 
 			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
-				editMenu.setEnabled(m.getSelectedRow()!=-1 && !m.getSelectedObj()[0].equals("DefaultSite"));
-				deleteMenu.setEnabled(m.getSelectedRow()!=-1 && !m.getSelectedObj()[0].equals("DefaultSite") );
+				editMenu.setEnabled(m.getSelectedRow()!=-1 && !m.getSelectedSite().getSitename().equals("DefaultSite"));
+				deleteMenu.setEnabled(m.getSelectedRow()!=-1 && !m.getSelectedSite().getSitename().equals("DefaultSite") );
 			};
 		
 		});

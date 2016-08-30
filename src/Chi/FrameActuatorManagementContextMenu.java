@@ -21,7 +21,7 @@ public class FrameActuatorManagementContextMenu extends JPopupMenu {
 		newMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.updateController() & Cache.updateActuator()) {
+				if (Cache.Controllers.updateWithWait() & Cache.Actuators.updateWithWait()) {
 					DialogActuatorAddEdit diag=new DialogActuatorAddEdit();
 					diag.setVisible(true);
 				}
@@ -32,16 +32,14 @@ public class FrameActuatorManagementContextMenu extends JPopupMenu {
 		toggleMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.updateController() & Cache.updateActuator()) {
-					Object [] o=m.getSelectedObj();
-					String aname=(String)o[0];
-					String cname=(String)o[1];
-					String status=(String)o[2];
+				if (Cache.Controllers.updateWithWait() & Cache.Actuators.updateWithWait()) {
+					Actuator act =m.getSelectedActuator();
+					String status=act.getStatus();
 					if (!status.equals("Pending Update")) {
 						if (status.equals("Pending Update")) status="OFF";
 						else status="ON";
 						
-						ControllerPacketActuatorTrigger p=new ControllerPacketActuatorTrigger(cname,aname,status);
+						ControllerPacketActuatorTrigger p=new ControllerPacketActuatorTrigger(act.getController().getControllername(),act.getName(),status);
 						p.trigger();
 						JOptionPane.showMessageDialog(null,"Request sent successfully.\nThe status will be updated once the controller has replied.","Toggle Status",JOptionPane.INFORMATION_MESSAGE);
 					} else {
@@ -55,9 +53,9 @@ public class FrameActuatorManagementContextMenu extends JPopupMenu {
 		editMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.updateController() & Cache.updateActuator()) {
-					Object [] o=m.getSelectedObj();
-					DialogActuatorAddEdit diag=new DialogActuatorAddEdit((String)o[0],(String)o[1]);
+				if (Cache.Controllers.updateWithWait() & Cache.Actuators.updateWithWait()) {
+					Actuator act =m.getSelectedActuator();
+					DialogActuatorAddEdit diag=new DialogActuatorAddEdit(act.getName(),act.getController().getControllername());
 					diag.setVisible(true);
 				}
 			}
@@ -67,12 +65,12 @@ public class FrameActuatorManagementContextMenu extends JPopupMenu {
 		deleteMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete actuator "+m.getSelectedObj()[0].toString()+"?","Delete site",JOptionPane.WARNING_MESSAGE)==JOptionPane.YES_OPTION) {
+				if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete actuator "+m.getSelectedActuator().getName()+"?","Delete site",JOptionPane.WARNING_MESSAGE)==JOptionPane.YES_OPTION) {
 					WaitUI u=new WaitUI();
 					u.setText("Deleting actuator");
 					Thread t=new Thread() {
 						public void run () {
-							boolean flag=DatabaseActuator.deleteActuator(m.getSelectedObj()[0].toString());
+							boolean flag=DatabaseActuator.deleteActuator(m.getSelectedActuator().getName());
 							if (!flag) {
 								JOptionPane.showMessageDialog(null,"Database error, please check the console for more information.",Config.APP_NAME,JOptionPane.WARNING_MESSAGE);
 							}

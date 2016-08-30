@@ -219,11 +219,11 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 			}
 		});
 		
-		for (String c : Cache.actuatorList) {
+		for (String c : Cache.Actuators.map.keySet()) {
 			comboBoxActuator.addItem(c);
 		}
 		
-		for (String c : Cache.DayScheduleRuleList) {
+		for (String c : Cache.DayScheduleRules.map.keySet()) {
 			comboBoxTimeRule.addItem(c);
 		}
 		
@@ -287,7 +287,7 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 			sb.append("Regular Schedule ");
 			sb.append(count++);
 			s=sb.toString();
-		} while (Cache.RegularScheduleMap.containsKey(s) || Cache.SpecialScheduleMap.containsKey(s));
+		} while (Cache.RegularSchedules.map.containsKey(s) || Cache.SpecialSchedules.map.containsKey(s));
 		textFieldName.setText(s);
 		
 		textFieldPriority.setText("1");
@@ -298,7 +298,7 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
-				} else if (Cache.RegularScheduleMap.containsKey(txt) || Cache.SpecialScheduleMap.containsKey(txt)) {
+				} else if (Cache.RegularSchedules.map.containsKey(txt) || Cache.SpecialSchedules.map.containsKey(txt)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
@@ -320,7 +320,7 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 					priorityOK=(i>0);
 				} catch (NumberFormatException e) {};
 				
-				if (txt==null || txt.isEmpty() || Cache.RegularScheduleMap.containsKey(txt) || Cache.SpecialScheduleMap.containsKey(txt) || !priorityOK || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+				if (txt==null || txt.isEmpty() || Cache.RegularSchedules.map.containsKey(txt) || Cache.SpecialSchedules.map.containsKey(txt) || !priorityOK || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Regular Schedule",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -362,7 +362,7 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
-				} else if ((Cache.RegularScheduleMap.containsKey(txt) || Cache.SpecialScheduleMap.containsKey(txt)) && !txt.equals(n)) {
+				} else if ((Cache.RegularSchedules.map.containsKey(txt) || Cache.SpecialSchedules.map.containsKey(txt)) && !txt.equals(n)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
@@ -383,7 +383,7 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 					int i=Integer.parseInt(textFieldPriority.getText());
 					priorityOK=(i>0);
 				} catch (NumberFormatException e) {};
-				if (txt==null || txt.isEmpty() || ((Cache.RegularScheduleMap.containsKey(txt) || Cache.SpecialScheduleMap.containsKey(txt)) && !txt.equals(n)) || !priorityOK || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+				if (txt==null || txt.isEmpty() || ((Cache.RegularSchedules.map.containsKey(txt) || Cache.SpecialSchedules.map.containsKey(txt)) && !txt.equals(n)) || !priorityOK || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Edit Regular Schedule",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

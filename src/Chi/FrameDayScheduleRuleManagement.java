@@ -5,10 +5,7 @@ import java.awt.Component;
 import java.awt.SystemColor;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -83,14 +80,14 @@ public class FrameDayScheduleRuleManagement extends JFrame {
 		private ArrayList<DayScheduleRuleTableRow> subRow;
 		public String [] renderText;
 		
-		public DayScheduleRuleTableRow(Object [] o) {
-			if (o!=null) {
+		public DayScheduleRuleTableRow(Dayschedulerule r) {
+			if (r!=null) {
 				renderText=new String [3];
-				renderText[0]=(String)o[0];
+				renderText[0]=r.getRulename();
 				
-				String [] t=Utility.formatTime((int)o[1],(int)o[2]);
+				String [] t=Utility.formatTime(r.getStarthour(),r.getStartminute());
 				renderText[1]=t[0]+":"+t[1]+" "+t[2];
-				t=Utility.formatTime((int)o[3],(int)o[4]);
+				t=Utility.formatTime(r.getEndhour(),r.getEndminute());
 				renderText[2]=t[0]+":"+t[1]+" "+t[2];
 			} else {
 				renderText=new String [] {"root"};
@@ -164,9 +161,7 @@ public class FrameDayScheduleRuleManagement extends JFrame {
 	private JPanel contentPane;
 	private DayScheduleRuleTable table;
 	private DayScheduleRuleTableRow rootRow;
-	private ArrayList<Object []> list=new ArrayList<>();
-	public HashSet<String> DayScheduleRulenameDB=new HashSet<>();
-	public boolean updateSuccess;
+	private ArrayList<Dayschedulerule> list=new ArrayList<>();
 	private JScrollPane scrollPane;
 
 	public FrameDayScheduleRuleManagement() {
@@ -230,46 +225,27 @@ public class FrameDayScheduleRuleManagement extends JFrame {
 	}
 	
 	public void updateDayScheduleRuleTable() {
-		WaitUI u=new WaitUI();
-		u.setText("Populating DayScheduleRule list");
-		updateSuccess=false;
-		DayScheduleRulenameDB=new HashSet<>();
-		Thread t=new Thread() {
-			public void run () {
-				ResultSet rs=DatabaseDayScheduleRule.getDayScheduleRules();
-				if (rs!=null) {
-					rootRow=new DayScheduleRuleTableRow(null);
-					list.clear();
-					try {
-						while (rs.next()) {
-							DayScheduleRulenameDB.add(rs.getString(1));
-							Object [] o={rs.getString(1),rs.getInt(2),rs.getInt(3),rs.getInt(4),rs.getInt(5)};
-							DayScheduleRuleTableRow utr=new DayScheduleRuleTableRow(o);
-							rootRow.addRow(utr);
-							list.add(o);
-						}
-					} catch (SQLException e) {e.printStackTrace();}
-					int lastSelectedRow=-1;
-					if (table!=null) {
-						lastSelectedRow=table.getSelectedRow();
-					}
-					
-					createTable();
-					table.setTreeTableModel(new DayScheduleRuleTableModel(rootRow));
-					
-					if (lastSelectedRow>=0 && DayScheduleRulenameDB.size()>0) {
-						lastSelectedRow=Math.min(lastSelectedRow,DayScheduleRulenameDB.size()-1);
-						table.setRowSelectionInterval(lastSelectedRow,lastSelectedRow);
-					}
-					updateSuccess=true;
-				}
-				u.dispose();
+		if (Cache.DayScheduleRules.updateWithWait()) {
+			this.list.clear(); this.list.addAll(Cache.DayScheduleRules.map.values());
+			
+			rootRow=new DayScheduleRuleTableRow(null);
+			for (Dayschedulerule r : this.list) {
+				rootRow.addRow(new DayScheduleRuleTableRow(r));
 			}
-		};
-		t.start();
-		u.setVisible(true);
-		
-		if (updateSuccess) {
+			
+			int lastSelectedRow=-1;
+			if (table!=null) {
+				lastSelectedRow=table.getSelectedRow();
+			}
+			
+			createTable();
+			table.setTreeTableModel(new DayScheduleRuleTableModel(rootRow));
+			
+			if (lastSelectedRow>=0 && this.list.size()>0) {
+				lastSelectedRow=Math.min(lastSelectedRow,this.list.size()-1);
+				table.setRowSelectionInterval(lastSelectedRow,lastSelectedRow);
+			}
+			
 			table.getColumn(0).setCellRenderer(new DayScheduleRuleTableCellRenderer());
 			table.getColumn(1).setCellRenderer(new DayScheduleRuleTableCellRenderer());
 			table.getColumn(2).setCellRenderer(new DayScheduleRuleTableCellRenderer());
@@ -284,7 +260,7 @@ public class FrameDayScheduleRuleManagement extends JFrame {
 		return this.table.getSelectedRow();
 	}
 	
-	public Object [] getSelectedObj () {
+	public Dayschedulerule getSelectedRule () {
 		return this.list.get(this.table.getSelectedRow());
 	}
 }

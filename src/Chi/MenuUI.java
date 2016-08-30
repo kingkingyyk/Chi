@@ -166,9 +166,8 @@ public class MenuUI extends JFrame {
 		btnUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				FrameUserManagement f=FrameUserManagement.getInstance();
-				if (f.updateSuccess) {
-					f.setVisible(true);
-				}
+				f.setVisible(true);
+				f.toFront();
 			}
 		});
 		
@@ -176,9 +175,7 @@ public class MenuUI extends JFrame {
 		btnSensor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				FrameSensorManagement f=FrameSensorManagement.getInstance();
-				if (f.updateSuccess) {
-					f.setVisible(true);
-				}
+				f.setVisible(true);
 			}
 		});
 		btnSensor.setBounds(129, 35, 130, 23);
@@ -188,9 +185,8 @@ public class MenuUI extends JFrame {
 		btnController.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				FrameControllerManagement f=FrameControllerManagement.getInstance();
-				if (f.updateSuccess) {
-					f.setVisible(true);
-				}
+				f.setVisible(true);
+				f.toFront();
 			}
 		});
 		btnController.setBounds(129, 103, 130, 23);
@@ -200,9 +196,8 @@ public class MenuUI extends JFrame {
 		btnSite.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				FrameSiteManagement f=FrameSiteManagement.getInstance();
-				if (f.updateSuccess) {
-					f.setVisible(true);
-				}
+				f.setVisible(true);
+				f.toFront();
 			}
 		});
 		btnSite.setBounds(130, 69, 130, 23);
@@ -212,9 +207,8 @@ public class MenuUI extends JFrame {
 		btnSensorClass.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				FrameSensorClassManagement f=FrameSensorClassManagement.getInstance();
-				if (f.updateSuccess) {
-					f.setVisible(true);
-				}
+				f.setVisible(true);
+				f.toFront();
 			}
 		});
 		btnSensorClass.setBounds(269, 5, 135, 23);
@@ -224,9 +218,8 @@ public class MenuUI extends JFrame {
 		btnActuator.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				FrameActuatorManagement f=FrameActuatorManagement.getInstance();
-				if (f.updateSuccess) {
-					f.setVisible(true);
-				}
+				f.setVisible(true);
+				f.toFront();
 			}
 		});
 		btnActuator.setBounds(269, 35, 135, 23);
@@ -240,9 +233,8 @@ public class MenuUI extends JFrame {
 		btnDayScheduleRules.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				FrameDayScheduleRuleManagement f=FrameDayScheduleRuleManagement.getInstance();
-				if (f.updateSuccess) {
-					f.setVisible(true);
-				}
+				f.setVisible(true);
+				f.toFront();
 			}
 		});
 		btnDayScheduleRules.setBounds(10, 11, 127, 23);
@@ -253,9 +245,8 @@ public class MenuUI extends JFrame {
 		btnRegularSchedules.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				FrameRegularScheduleManagement f=FrameRegularScheduleManagement.getInstance();
-				if (f.updateSuccess) {
-					f.setVisible(true);
-				}
+				f.setVisible(true);
+				f.toFront();
 			}
 		});
 		panelScheduling.add(btnRegularSchedules);
@@ -264,9 +255,8 @@ public class MenuUI extends JFrame {
 		btnSpecialSchedules.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				FrameSpecialScheduleManagement f=FrameSpecialScheduleManagement.getInstance();
-				if (f.updateSuccess) {
-					f.setVisible(true);
-				}
+				f.setVisible(true);
+				f.toFront();
 			}
 		});
 		btnSpecialSchedules.setBounds(277, 11, 127, 23);
@@ -278,9 +268,8 @@ public class MenuUI extends JFrame {
 		btnOngoingSchedules.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				FrameOngoingSchedules f=FrameOngoingSchedules.getInstance();
-				if (f.updateSuccess) {
-					f.setVisible(true);
-				}
+				f.setVisible(true);
+				f.toFront();
 			}
 		});
 		panelScheduling.add(btnOngoingSchedules);

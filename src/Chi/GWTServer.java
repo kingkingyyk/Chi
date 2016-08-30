@@ -44,8 +44,8 @@ public class GWTServer {
 					    String data2=st.nextToken();
 					    switch (data1) {
 						    case "1" : {
-						    	Cache.updateUser();
-						    	oos.writeBoolean(Cache.userMap.containsKey(data2));
+						    	Cache.Users.update();
+						    	oos.writeBoolean(Cache.Users.map.containsKey(data2));
 						    	break;
 						    }
 						    case "2" : {
@@ -54,11 +54,11 @@ public class GWTServer {
 						    	break;
 						    }
 						    case "3" : {
-						    	Cache.updateUser();
-						    	if (!Cache.userMap.containsKey(data2)) {
+						    	Cache.Users.update();
+						    	if (!Cache.Users.map.containsKey(data2)) {
 						    		oos.writeObject("FAILCHECK");
 						    	} else {
-						    		oos.writeObject(Cache.userMap.get(data2).getStatus());
+						    		oos.writeObject(Cache.Users.map.get(data2).getStatus());
 						    	}
 						    }
 					    }

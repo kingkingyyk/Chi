@@ -21,7 +21,7 @@ public class FrameControllerManagementContextMenu extends JPopupMenu {
 		newMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.updateController() && Cache.updateSite()) {
+				if (Cache.Controllers.updateWithWait() && Cache.Sites.updateWithWait()) {
 					DialogControllerAddEdit diag=new DialogControllerAddEdit();
 					diag.setVisible(true);
 				}
@@ -32,9 +32,8 @@ public class FrameControllerManagementContextMenu extends JPopupMenu {
 		helloMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.updateController()) {
-					final String cname=(String)m.getSelectedObj()[0];
-					ControllerPacketRequestAlive p=new ControllerPacketRequestAlive(cname);
+				if (Cache.Controllers.updateWithWait()) {
+					ControllerPacketRequestAlive p=new ControllerPacketRequestAlive(m.getSelectedController().getControllername());
 					if (p.send()) {
 						JOptionPane.showMessageDialog(null,"Request sent successfully.\nThe last report time will be updated once the controller has replied","Force report alive",JOptionPane.INFORMATION_MESSAGE);
 					}
@@ -46,9 +45,9 @@ public class FrameControllerManagementContextMenu extends JPopupMenu {
 		editMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.updateController() && Cache.updateSite()) {
-					Object [] o=m.getSelectedObj();
-					DialogControllerAddEdit diag=new DialogControllerAddEdit((String)o[0],(String)o[1],(Double)o[2],(Double)o[3],(Integer)o[4]);
+				if (Cache.Controllers.updateWithWait() && Cache.Sites.updateWithWait()) {
+					Controller c=m.getSelectedController();
+					DialogControllerAddEdit diag=new DialogControllerAddEdit(c.getControllername(),c.getSite().getSitename(),c.getPositionx(),c.getPositiony(),c.getReporttimeout());
 					diag.setVisible(true);
 				}
 			}
@@ -58,12 +57,12 @@ public class FrameControllerManagementContextMenu extends JPopupMenu {
 		deleteMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete controller "+m.getSelectedObj()[0].toString()+"?","Delete controller",JOptionPane.WARNING_MESSAGE)==JOptionPane.YES_OPTION) {
+				if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete controller "+m.getSelectedController().getControllername()+"?","Delete controller",JOptionPane.WARNING_MESSAGE)==JOptionPane.YES_OPTION) {
 					WaitUI u=new WaitUI();
 					u.setText("Deleting controller");
 					Thread t=new Thread() {
 						public void run () {
-							boolean flag=DatabaseController.deleteController(m.getSelectedObj()[0].toString());
+							boolean flag=DatabaseController.deleteController(m.getSelectedController().getControllername());
 							if (!flag) {
 								JOptionPane.showMessageDialog(null,"Database error, please check the console for more information.",Config.APP_NAME,JOptionPane.WARNING_MESSAGE);
 							}
@@ -89,9 +88,9 @@ public class FrameControllerManagementContextMenu extends JPopupMenu {
 
 			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
-				editMenu.setEnabled(m.getSelectedRow()!=-1 && !m.getSelectedObj()[0].equals("DefaultController"));
-				helloMenu.setEnabled(m.getSelectedRow()!=-1 && !m.getSelectedObj()[0].equals("DefaultController"));
-				deleteMenu.setEnabled(m.getSelectedRow()!=-1 && !m.getSelectedObj()[0].equals("DefaultController"));
+				editMenu.setEnabled(m.getSelectedRow()!=-1 && !m.getSelectedController().getControllername().equals("DefaultController"));
+				helloMenu.setEnabled(m.getSelectedRow()!=-1 && !m.getSelectedController().getControllername().equals("DefaultController"));
+				deleteMenu.setEnabled(m.getSelectedRow()!=-1 && !m.getSelectedController().getControllername().equals("DefaultController"));
 			};
 		
 		});

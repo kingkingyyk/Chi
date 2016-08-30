@@ -81,15 +81,19 @@ public class FrameSpecialScheduleManagement extends JFrame {
 		private ArrayList<SpecialScheduleTableRow> subRow;
 		public String [] renderText;
 		
-		public SpecialScheduleTableRow(Object [] o) {
-			if (o!=null) {
-				renderText=new String[o.length];
-				for (int i=0;i<o.length;i++) {
-					renderText[i]=o[i].toString();
-					 if (SpecialScheduleTableModel.COLUMNS[i].equals("Switch"))
-						if (o[i].equals(Boolean.TRUE)) renderText[i]="ON";
-						else renderText[i]="OFF";
-				}
+		public SpecialScheduleTableRow(Specialschedule s) {
+			if (s!=null) {
+				renderText=new String[SpecialScheduleTableModel.COLUMNS.length];
+				renderText[0]=s.getSchedulename();
+				renderText[1]=s.getActuator().getName();
+				renderText[2]=s.getYear().toString();
+				renderText[3]=s.getMonth().toString();
+				renderText[4]=s.getDay().toString();
+				renderText[5]=s.getDayschedulerule().getRulename();
+				if (s.getActuatoron()) renderText[6]="ON";
+				else renderText[6]="OFF";
+				renderText[7]=s.getPriority().toString();
+				renderText[8]=s.getEnabled().toString();
 			} else {
 				renderText=new String [] {"root"};
 			}
@@ -169,7 +173,7 @@ public class FrameSpecialScheduleManagement extends JFrame {
 	private JPanel contentPane;
 	private SpecialScheduleTable table;
 	private SpecialScheduleTableRow rootRow;
-	private ArrayList<Object []> list=new ArrayList<>();
+	private ArrayList<Specialschedule> list=new ArrayList<>();
 	public boolean updateSuccess;
 	private JScrollPane scrollPane;
 
@@ -232,13 +236,11 @@ public class FrameSpecialScheduleManagement extends JFrame {
 	}
 	
 	public void updateSpecialScheduleTable() {
-		Cache.updateSpecialSchedule();
+		Cache.SpecialSchedules.updateWithWait();
 		rootRow=new SpecialScheduleTableRow(null);
-		list.clear();
-		for (Object [] o : Cache.SpecialScheduleObj) {
-			SpecialScheduleTableRow utr=new SpecialScheduleTableRow(o);
-			rootRow.addRow(utr);
-			list.add(o);
+		list.clear(); list.addAll(Cache.SpecialSchedules.map.values());
+		for (Specialschedule s : list) {
+			rootRow.addRow(new SpecialScheduleTableRow(s));
 		}
 		
 		int lastSelectedRow=-1;
@@ -249,8 +251,8 @@ public class FrameSpecialScheduleManagement extends JFrame {
 		table.setAutoCreateRowSorter(true);
 		table.setTreeTableModel(new SpecialScheduleTableModel(rootRow));
 		
-		if (lastSelectedRow>=0 && Cache.SpecialScheduleList.size()>0) {
-			lastSelectedRow=Math.min(lastSelectedRow,Cache.SpecialScheduleList.size()-1);
+		if (lastSelectedRow>=0 && list.size()>0) {
+			lastSelectedRow=Math.min(lastSelectedRow,list.size()-1);
 			table.setRowSelectionInterval(lastSelectedRow,lastSelectedRow);
 		}
 		updateSuccess=true;
@@ -282,7 +284,7 @@ public class FrameSpecialScheduleManagement extends JFrame {
 		return this.table.convertRowIndexToModel(this.table.getSelectedRow());
 	}
 	
-	public Object [] getSelectedObj () {
+	public Specialschedule getSelectedSchedule () {
 		return this.list.get(this.getSelectedRow());
 	}
 }

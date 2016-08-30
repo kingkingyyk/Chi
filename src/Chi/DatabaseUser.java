@@ -48,7 +48,7 @@ public class DatabaseUser {
 
 	public static boolean createUserCredential (String user, String pw, int lvl, String status) {
 		Logger.log("DB Create User");
-		if (Cache.userMap.containsKey(user)) {
+		if (Cache.Users.map.containsKey(user)) {
 			Logger.log("DB Create User[Cache] - User already exists!");
 			return false;
 		} else {
@@ -77,7 +77,7 @@ public class DatabaseUser {
 	
 	public static boolean updateUserCredentialPassword (String oldN, String user, String pw, int lvl, String status) {
 		Logger.log("DB Update User");
-		if (!Cache.userMap.containsKey(oldN)) {
+		if (!Cache.Users.map.containsKey(oldN)) {
 			Logger.log("DB Update User[Cache] - User doesn't exist!");
 			return false;
 		} else {
@@ -107,7 +107,7 @@ public class DatabaseUser {
 	
 	public static boolean updateUserCredentialNoPassword (String oldN, String user, int lvl, String status) {
 		Logger.log("DB Update User/2");
-		if (!Cache.userMap.containsKey(oldN)) {
+		if (!Cache.Users.map.containsKey(oldN)) {
 			Logger.log("DB Update User/2[Cache] - User doesn't exists!");
 			return false;
 		} else {
@@ -137,7 +137,7 @@ public class DatabaseUser {
 	
 	public static boolean deleteUser (String user) {
 		Logger.log("DB Delete User");
-		if (!Cache.userMap.containsKey(user)) {
+		if (!Cache.Users.map.containsKey(user)) {
 			Logger.log("DB Delete User[Cache] - User doesn't exists!");
 			return false;
 		} else {

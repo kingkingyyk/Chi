@@ -82,12 +82,9 @@ public class FrameActuatorManagement extends JFrame {
 		private ArrayList<ActuatorTableRow> subRow;
 		public String [] renderText;
 		
-		public ActuatorTableRow(Object [] o) {
-			if (o!=null) {
-				renderText=new String[o.length];
-				for (int i=0;i<o.length;i++) {
-					renderText[i]=o[i].toString();
-				}
+		public ActuatorTableRow(Actuator act) {
+			if (act!=null) {
+				renderText=new String [] {act.getName(), act.getController().getControllername(), act.getStatus()};
 			} else {
 				renderText=new String [] {"root"};
 			}
@@ -162,7 +159,7 @@ public class FrameActuatorManagement extends JFrame {
 	private ActuatorTableRow rootRow;
 	public boolean updateSuccess;
 	private JScrollPane scrollPane;
-	private ArrayList<Object []> actuatorList=new ArrayList<>();
+	private ArrayList<Actuator> actuatorList=new ArrayList<>();
 
 	public FrameActuatorManagement() {
 		setTitle("Actuator Management");
@@ -223,14 +220,14 @@ public class FrameActuatorManagement extends JFrame {
 	}
 	
 	public void updateActuatorTable() {
-		updateSuccess=Cache.updateActuator();
+		updateSuccess=Cache.Actuators.updateWithWait();
 		if (updateSuccess) {
 			actuatorList.clear();
-			actuatorList.addAll(Cache.actuatorObj);
+			actuatorList.addAll(Cache.Actuators.map.values());
 			rootRow=new ActuatorTableRow(null);
 			
-			for (Object [] o : Cache.actuatorObj) {
-				rootRow.addRow(new ActuatorTableRow(o));
+			for (Actuator act : actuatorList) {
+				rootRow.addRow(new ActuatorTableRow(act));
 			}
 			
 			int lastSelectedRow=-1;
@@ -261,7 +258,7 @@ public class FrameActuatorManagement extends JFrame {
 		return this.table.convertRowIndexToModel(this.table.getSelectedRow());
 	}
 	
-	public Object [] getSelectedObj () {
+	public Actuator getSelectedActuator () {
 		return this.actuatorList.get(this.getSelectedRow());
 	}
 }

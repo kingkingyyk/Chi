@@ -3,7 +3,6 @@ package Chi;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -58,17 +57,9 @@ public class DatabaseController extends DatabaseHSQL {
 		}
 	}
 	
-	public static ResultSet getControllerNameList () {
-		return runSQLFromFileAndGetData("DB Get Controller Name List",Config.getConfig(Config.DATABASE_QUERY_CONTROLLER_ALL_NAME_SQL_FILE_KEY));
-	}
-	
-	public static ResultSet getControllers () {
-		return runSQLFromFileAndGetData("DB Get Controller",Config.getConfig(Config.DATABASE_QUERY_CONTROLLER_ALL_SQL_FILE_KEY));
-	}
-	
 	public static boolean createController (String n, String s, double x, double y, int t) {
 		Logger.log("DB Create Controller : "+Config.getConfig(Config.DATABASE_CREATE_CONTROLLER_SQL_FILE_KEY));
-		if (Cache.controllerMap.containsKey(n)) {
+		if (Cache.Controllers.map.containsKey(n)) {
 			Logger.log("DB Create Controller[Cache] - Controller already exists!");
 			return false;
 		} else {
@@ -111,15 +102,10 @@ public class DatabaseController extends DatabaseHSQL {
 	
 	public static boolean updateController (String n, String s, double x, double y, int t) {
 		Logger.log("DB Update Controller : "+Config.getConfig(Config.DATABASE_UPDATE_CONTROLLER_SQL_FILE_KEY));
-		if (!Cache.controllerMap.containsKey(n)) {
+		if (!Cache.Controllers.map.containsKey(n)) {
 			Logger.log("DB Update Controller[Cache] - Controller doesn't exist!");
 			return false;
 		} else {
-			Object [] o=Cache.controllerMap.get(n);
-			if (o[0].equals(n) && o[1].equals(s) && o[2].equals(x) && o[3].equals(y) && o[4].equals(t)) {
-				Logger.log("DB Update Controller[Cache] - Information is the same!");
-				return true;
-			} else {
 				try {
 					Connection c = getConnection();
 					if (c!=null) {
@@ -154,12 +140,11 @@ public class DatabaseController extends DatabaseHSQL {
 				}
 				return false;
 			}
-		}
 	}
 	
 	public static boolean updateControllerReportTime (String n, LocalDateTime dt) {
 		Logger.log("DB Update Controller Report Time : "+Config.getConfig(Config.DATABASE_UPDATE_CONTROLLER_REPORT_TIME_SQL_FILE_KEY));
-		if (!Cache.controllerMap.containsKey(n)) {
+		if (!Cache.Controllers.map.containsKey(n)) {
 			Logger.log("DB Update Controller Report Time [Cache] - Controller doesn't exist!");
 			return false;
 		} else {
@@ -198,7 +183,7 @@ public class DatabaseController extends DatabaseHSQL {
 	
 	public static boolean deleteController (String sn) {
 		Logger.log("DB Delete Controller : "+Config.getConfig(Config.DATABASE_DELETE_CONTROLLER_SQL_FILE_KEY));
-		if (!Cache.controllerMap.containsKey(sn)) {
+		if (!Cache.Controllers.map.containsKey(sn)) {
 			Logger.log("DB Create Controller[Cache] - Controller doesn't exist!");
 			return false;
 		} else {

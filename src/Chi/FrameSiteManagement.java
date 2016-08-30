@@ -82,12 +82,11 @@ public class FrameSiteManagement extends JFrame {
 		private ArrayList<SiteTableRow> subRow;
 		public String [] renderText;
 		
-		public SiteTableRow(Object [] o) {
-			if (o!=null) {
-				renderText=new String[o.length];
-				for (int i=0;i<o.length;i++) {
-					renderText[i]=o[i].toString();
-				}
+		public SiteTableRow(Site s) {
+			if (s!=null) {
+				renderText=new String[SiteTableModel.COLUMNS.length];
+				renderText[0]=s.getSitename();
+				renderText[1]=s.getSitemapurl();
 			} else {
 				renderText=new String [] {"root"};
 			}
@@ -162,7 +161,7 @@ public class FrameSiteManagement extends JFrame {
 	private SiteTableRow rootRow;
 	public boolean updateSuccess;
 	private JScrollPane scrollPane;
-	private ArrayList<Object []> siteList=new ArrayList<>();
+	private ArrayList<Site> siteList=new ArrayList<>();
 
 	public FrameSiteManagement() {
 		setTitle("Site Management");
@@ -223,14 +222,13 @@ public class FrameSiteManagement extends JFrame {
 	}
 	
 	public void updateSiteTable() {
-		updateSuccess=Cache.updateSite();
+		updateSuccess=Cache.Sites.updateWithWait();
 		if (updateSuccess) {
-			siteList.clear();
-			siteList.addAll(Cache.siteObj);
+			siteList.clear(); siteList.addAll(Cache.Sites.map.values());
 			rootRow=new SiteTableRow(null);
 			
-			for (Object [] o : Cache.siteObj) {
-				rootRow.addRow(new SiteTableRow(o));
+			for (Site s : siteList) {
+				rootRow.addRow(new SiteTableRow(s));
 			}
 			
 			int lastSelectedRow=-1;
@@ -260,7 +258,7 @@ public class FrameSiteManagement extends JFrame {
 		return this.table.convertRowIndexToModel(this.table.getSelectedRow());
 	}
 	
-	public Object [] getSelectedObj () {
+	public Site getSelectedSite () {
 		return this.siteList.get(this.getSelectedRow());
 	}
 }

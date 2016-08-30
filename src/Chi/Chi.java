@@ -44,6 +44,7 @@ public class Chi {
 		ss.setLocationRelativeTo(null);
 		Logger.log("MainUI done.");
 		ss.setVisible(true);
+		ss.setAlwaysOnTop(false);
 	}
 	
 }
