@@ -48,4 +48,7 @@ public class Site implements java.io.Serializable {
 		this.controllers = controllers;
 	}
 
+	public Object [] toObj () {
+		return new Object [] {this.getSitename(),this.getSitemapurl()};
+	}
 }

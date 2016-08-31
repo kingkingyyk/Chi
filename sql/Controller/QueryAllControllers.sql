@@ -1,1 +1,0 @@
-SELECT ControllerName,Site,PositionX,PositionY,ReportTimeout,LastReportTime FROM Controller

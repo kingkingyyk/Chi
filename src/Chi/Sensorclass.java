@@ -35,4 +35,7 @@ public class Sensorclass implements java.io.Serializable {
 		this.sensors = sensors;
 	}
 
+	public Object [] toObj () {
+		return new Object [] {this.getClassname()};
+	}
 }

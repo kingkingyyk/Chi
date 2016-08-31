@@ -1,6 +1,0 @@
-LOCK TABLE User WRITE
-@
-DELETE FROM User WHERE Username=?
-
-@
-COMMIT

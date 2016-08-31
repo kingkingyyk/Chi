@@ -1,6 +1,0 @@
-LOCK TABLE Site WRITE
-@
-DELETE FROM Site WHERE SiteName=?
-
-@
-COMMIT

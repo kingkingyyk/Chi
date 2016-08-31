@@ -1,1 +1,0 @@
-SELECT * FROM RegularSchedule WHERE ScheduleName=?

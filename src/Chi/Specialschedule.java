@@ -105,4 +105,10 @@ public class Specialschedule implements java.io.Serializable {
 		this.enabled = enabled;
 	}
 
+	public Object [] toObj () {
+		return new Object [] {this.getSchedulename(), this.getActuator().getName(),
+							  this.getYear(),this.getMonth(),this.getDay(),
+							  this.getDayschedulerule().getRulename(),this.getActuatoron(),
+							  this.getPriority(),this.getEnabled()};
+	}
 }

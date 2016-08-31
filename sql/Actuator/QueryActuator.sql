@@ -1,1 +1,0 @@
-SELECT Name,Controller,Status FROM Actuator WHERE Name=?

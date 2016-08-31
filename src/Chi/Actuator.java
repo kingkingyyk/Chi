@@ -69,4 +69,7 @@ public class Actuator implements java.io.Serializable {
 		this.specialschedules = specialschedules;
 	}
 
+	public Object [] toObj () {
+		return new Object [] {this.getName(), this.getController(), this.getStatus()};
+	}
 }

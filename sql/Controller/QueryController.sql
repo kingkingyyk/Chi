@@ -1,1 +1,0 @@
-SELECT * FROM Controller WHERE ControllerName=?

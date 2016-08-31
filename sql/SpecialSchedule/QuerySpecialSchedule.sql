@@ -1,1 +1,0 @@
-SELECT * FROM SpecialSchedule WHERE ScheduleName=?

@@ -86,4 +86,9 @@ public class Sensor implements java.io.Serializable {
 		this.unit = unit;
 	}
 
+	public Object [] toObj () {
+		return new Object [] {this.getSensorname(), this.getSensorclass().toString(),
+							  this.getMinvalue(), this.getMaxvalue(), this.getTransformationfactor(),
+							  this.getUnit(), this.getController().getControllername()};
+	}
 }

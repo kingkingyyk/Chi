@@ -1,1 +1,0 @@
-SELECT Username FROM User ORDER BY Username

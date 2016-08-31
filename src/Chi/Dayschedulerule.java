@@ -87,4 +87,8 @@ public class Dayschedulerule implements java.io.Serializable {
 		this.specialschedules = specialschedules;
 	}
 
+	public Object [] toObj () {
+		return new Object [] {this.getRulename(),this.getStarthour(),this.getStartminute(),
+							  this.getEndhour(),this.getEndminute()};
+	}
 }

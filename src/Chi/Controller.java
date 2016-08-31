@@ -101,4 +101,9 @@ public class Controller implements java.io.Serializable {
 		this.actuators = actuators;
 	}
 
+	public Object [] toObj () {
+		return new Object [] {this.getControllername(), this.getSite().getSitename(),
+							  this.getPositionx(), this.getPositiony(),
+							  this.getReporttimeout(), this.getLastreporttime()};
+	}
 }

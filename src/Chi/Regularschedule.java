@@ -85,4 +85,9 @@ public class Regularschedule implements java.io.Serializable {
 		this.enabled = enabled;
 	}
 
+	public Object [] toObj () {
+		return new Object [] {this.getSchedulename(), this.getActuator().getName(),
+							  this.getDaymask(), this.getDayschedulerule().getRulename(),
+							  this.getActuatoron(), this.getPriority(), this.getEnabled()};
+	}
 }

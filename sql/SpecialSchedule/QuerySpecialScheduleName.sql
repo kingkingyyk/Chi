@@ -1,1 +1,0 @@
-SELECT ScheduleName From SpecialSchedule
