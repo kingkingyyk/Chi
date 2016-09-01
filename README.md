@@ -38,9 +38,6 @@ Current Working Stuffs :
 + Actuator Status Reporting
 + Actuator control (Manual / Scheduled)
 
-v1 To-Do-List :
-+ GWT Server communication implementation [Refer to PacketFormats.xlsx]
-
 v1.1 To-Do-List :
 + Rewrite dataset store & caching mehanism to improve UI latency
 + Implement automated value propagation

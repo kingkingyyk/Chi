@@ -48,8 +48,9 @@ public class Config {
 	public static final String DATABASE_CREATE_TABLES_SQL_HSQL_FILE_KEY="server.database.sql.hsql.createtables.file";
 	public static final String DATABASE_RESET_SQL_HSQL_FILE_KEY="server.database.cassandra.hsql.reset.file";
 	
-	public static final String DATABASE_RECORD_READING_SQL_FILE_KEY="server.database.sql.recordreading";
-	public static final String DATABASE_RECORD_GETTING_SQL_FILE_KEY="server.database.sql.recordgetting";
+	public static final String DATABASE_RECORD_SAVE_TO_DB_SQL_FILE_KEY="server.database.sql.record.save";
+	public static final String DATABASE_RECORD_QUERY_BETWEEN_TIME_FILE_KEY="server.database.sql.record.query.betweentime";
+	public static final String DATABASE_RECORD_QUERY_MONTH_FILE_KEY="server.database.sql.record.query.month";
 	//Default values.
 	public static final String CONFIG_DEFAULT_KEY=".default";
 	private static final String CONFIG_SERVER_INCOMING_PORT_DEFAULT="40000";
@@ -79,8 +80,12 @@ public class Config {
 	public static final String DATABASE_CREATE_TABLES_SQL_HSQL_FILE_DEFAULT="InitializationHSQL/CreateTables.sql";
 	public static final String DATABASE_RESET_SQL_HSQL_FILE_DEFAULT="InitializationHSQL/ResetDB.sql";
 	//Database - Reading
-	public static final String DATABASE_RECORD_READING_SQL_FILE_DEFAULT="Reading/RecordReading.sql";
-	public static final String DATABASE_RECORD_GETTING_SQL_FILE_DEFAULT="Reading/QueryReading.sql";
+	public static final String DATABASE_RECORD_READING_SQL_FILE_DEFAULT="";
+	public static final String DATABASE_RECORD_GETTING_SQL_FILE_DEFAULT="";
+	
+	public static final String DATABASE_RECORD_SAVE_TO_DB_SQL_FILE_DEFAULT="Reading/RecordReading.sql";
+	public static final String DATABASE_RECORD_QUERY_BETWEEN_TIME_FILE_DEFAULT="Reading/QueryReadingBetweenTime.sql";
+	public static final String DATABASE_RECORD_QUERY_MONTH_FILE_DEFAULT="Reading/QueryReadingMonth.sql";
 
 	
 	public static void setConfig (String key, String value) {
@@ -137,8 +142,9 @@ public class Config {
 		Config.setConfig(DATABASE_CREATE_TABLES_SQL_HSQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_CREATE_TABLES_SQL_HSQL_FILE_DEFAULT);
 		Config.setConfig(DATABASE_RESET_SQL_HSQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_RESET_SQL_HSQL_FILE_DEFAULT);
 		
-		Config.setConfig(DATABASE_RECORD_READING_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_RECORD_READING_SQL_FILE_DEFAULT);
-		Config.setConfig(DATABASE_RECORD_GETTING_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_RECORD_GETTING_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_RECORD_SAVE_TO_DB_SQL_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_RECORD_SAVE_TO_DB_SQL_FILE_DEFAULT);
+		Config.setConfig(DATABASE_RECORD_QUERY_BETWEEN_TIME_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_RECORD_QUERY_BETWEEN_TIME_FILE_DEFAULT);
+		Config.setConfig(DATABASE_RECORD_QUERY_MONTH_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_RECORD_QUERY_MONTH_FILE_DEFAULT);
 		
 		//Real config
 		String [] keys=prop.keySet().toArray(new String[prop.keySet().size()]);

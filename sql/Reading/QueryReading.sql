@@ -1,1 +1,0 @@
-SELECT * FROM Chi.SensorReading WHERE ControllerName='C1' AND SensorName='S1';

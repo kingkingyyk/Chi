@@ -1,0 +1,1 @@
+SELECT TimeStp,Value FROM Chi.SensorReading WHERE SensorName=? AND TimeStp>=? AND TimeStp<=? LIMIT ?;

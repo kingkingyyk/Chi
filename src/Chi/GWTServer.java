@@ -6,6 +6,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.SocketTimeoutException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javax.net.ssl.SSLServerSocket;
@@ -14,6 +16,7 @@ import javax.net.ssl.SSLSocket;
 
 public class GWTServer {
 	private static GWTServerThread t;
+	private static DateTimeFormatter dtFormat=DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	
 	public static Object processRequest (ArrayList<String> list) {
 	    switch (list.get(0)) {
@@ -320,10 +323,22 @@ public class GWTServer {
 		    			result.add(new Object [] {d.getName(),d.getActuatorName(),d.getActuatorFlag(),d.getPriority(),d.getNextStartTime(),d.getNextEndTime()});
 		    	return result;
 		    }
-		    case "36" : {
+		    case "36" : { //SensorGetByName
 		    	Cache.Sensors.update();
 		    	ArrayList<Object []> result=new ArrayList<>();
 		    	if (Cache.Sensors.map.containsKey(list.get(1))) result.add(Cache.Sensors.map.get(list.get(1)).toObj());
+		    	return result;
+		    }
+		    case "37" : { //SensorGetReadingBetweenTime
+		    	ArrayList<SensorReading> lsr=DatabaseReading.getReadingBetweenTime(list.get(2),LocalDateTime.parse(list.get(3),dtFormat),LocalDateTime.parse(list.get(4),dtFormat),5000);
+		    	ArrayList<Object []> result=new ArrayList<>();
+		    	for (SensorReading sr : lsr) result.add(new Object [] {sr.getTimestamp(),sr.getActualValue()});
+		    	return result;
+		    }
+		    case "38" : { //SensorGetReadingBetweenTime
+		    	ArrayList<SensorReading> lsr=DatabaseReading.getReadingMonthly(list.get(2),Integer.parseInt(list.get(3)),Integer.parseInt(list.get(4)));
+		    	ArrayList<Object []> result=new ArrayList<>();
+		    	for (SensorReading sr : lsr) result.add(new Object [] {sr.getTimestamp(),sr.getActualValue()});
 		    	return result;
 		    }
 	    }

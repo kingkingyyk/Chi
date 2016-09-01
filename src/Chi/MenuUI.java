@@ -3,14 +3,11 @@ package Chi;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Row;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -283,12 +280,13 @@ public class MenuUI extends JFrame {
 		panelSQL.add(btnViewReadings);
 		btnViewReadings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				/*
 				ResultSet rs=DatabaseReading.getSensorReading();
 				ArrayList<Row> rows=new ArrayList<>();
 				for (Row row : rs) {
 					rows.add(row);
 				}
-				//ReadingExport.export(rows);
+				ReadingExport.export(rows); */
 			}
 		});
 		

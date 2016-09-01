@@ -3,8 +3,10 @@ package Chi;
 import java.awt.Image;
 import java.security.MessageDigest;
 import java.sql.Date;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 
 import javax.swing.ImageIcon;
 
@@ -26,6 +28,10 @@ public class Utility {
 
     public static Date localDateTimeToDate (LocalDateTime dt) {
         return new Date(dt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+    }
+    
+    public static LocalDateTime dateToLocalDateTime (Date d) {
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(d.getTime()), ZoneOffset.UTC);
     }
     
 	public static String [] Days={"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"};
