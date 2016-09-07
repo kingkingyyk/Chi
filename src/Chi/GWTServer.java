@@ -5,27 +5,28 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 
 public class GWTServer {
-	private static GWTServerThread t;
-	private static DateTimeFormatter dtFormat=DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	private static GWTServerT t;
 	
-	public static Object processRequest (ArrayList<String> list) {
-	    switch (list.get(0)) {
+	public static Object processRequest (ArrayList<Object> list) {
+	    switch ((String)list.get(0)) {
 		    case "0" : { //UserCheckNameExists
 		    	Cache.Users.update();
 		    	return Cache.Users.map.containsKey(list.get(1));
 		    }
 		    case "1" : { //UserRegister
-		    	return DatabaseUser.createUserCredential(list.get(1),list.get(2),1,"PENDING APPROVAL");
+		    	return DatabaseUser.createUserCredential((String)list.get(1),(String)list.get(2),1,"PENDING APPROVAL");
 		    }
 		    case "2" : { //UserCheckCredentialOK
 		    	Cache.Users.update();
@@ -78,10 +79,10 @@ public class GWTServer {
 		    	Dayschedulerule r=Cache.DayScheduleRules.map.get(list.get(1));
 		    	if (r==null) return "RULE_NOT_EXIST";
 		    	else {
-		    		int sh=Integer.parseInt(list.get(3)); int sm=Integer.parseInt(list.get(4));
-		    		int eh=Integer.parseInt(list.get(5)); int em=Integer.parseInt(list.get(6));
+		    		int sh=(int)list.get(3); int sm=(int)list.get(4);
+		    		int eh=(int)list.get(5); int em=(int)list.get(6);
 		    		if (sh>eh || (sh==eh && sm>em)) return "INVALID_TIME";
-		    		boolean flag=DatabaseDayScheduleRule.updateDayScheduleRule(list.get(1),list.get(2), sh, sm, eh, em);
+		    		boolean flag=DatabaseDayScheduleRule.updateDayScheduleRule((String)list.get(1),(String)list.get(2), sh, sm, eh, em);
 		    		if (flag) return "OK";
 		    		else return "ERROR";
 		    	}
@@ -91,10 +92,10 @@ public class GWTServer {
 		    	Dayschedulerule r=Cache.DayScheduleRules.map.get(list.get(1));
 		    	if (r==null) return "RULE_ALREADY_EXISTS";
 		    	else {
-		    		int sh=Integer.parseInt(list.get(2)); int sm=Integer.parseInt(list.get(3));
-		    		int eh=Integer.parseInt(list.get(4)); int em=Integer.parseInt(list.get(5));
+		    		int sh=(int)list.get(2); int sm=(int)list.get(3);
+		    		int eh=(int)list.get(4); int em=(int)list.get(5);
 		    		if (sh>eh || (sh==eh && sm>em)) return "INVALID_TIME";
-		    		boolean flag=DatabaseDayScheduleRule.createDayScheduleRule(list.get(1), sh, sm, eh, em);
+		    		boolean flag=DatabaseDayScheduleRule.createDayScheduleRule((String)list.get(1), sh, sm, eh, em);
 		    		if (flag) return "OK";
 		    		else return "ERROR";
 		    	}
@@ -136,7 +137,7 @@ public class GWTServer {
 		    	Regularschedule r=Cache.RegularSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
-		    		boolean flag=DatabaseRegularSchedule.updateRegularSchedule(r.getSchedulename(),list.get(2),r.getActuator().getName(),r.getDaymask(),r.getDayschedulerule().getRulename(),r.getActuatoron(),r.getPriority(),r.getEnabled());
+		    		boolean flag=DatabaseRegularSchedule.updateRegularSchedule(r.getSchedulename(),(String)list.get(2),r.getActuator().getName(),r.getDaymask(),r.getDayschedulerule().getRulename(),r.getActuatoron(),r.getPriority(),r.getEnabled());
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
@@ -154,9 +155,9 @@ public class GWTServer {
 		    	Cache.RegularSchedules.update();
 		    	Regularschedule r=Cache.RegularSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
-		    	else if (Integer.parseInt(list.get(2))>=128) return "INVALID_DAY";
+		    	else if ((int)list.get(2)>=128) return "INVALID_DAY";
 		    	else {
-		    		boolean flag=DatabaseRegularSchedule.updateRegularSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),Integer.parseInt(list.get(2)),r.getDayschedulerule().getRulename(),r.getActuatoron(),r.getPriority(),r.getEnabled());
+		    		boolean flag=DatabaseRegularSchedule.updateRegularSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),(int)list.get(2),r.getDayschedulerule().getRulename(),r.getActuatoron(),r.getPriority(),r.getEnabled());
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
@@ -175,7 +176,7 @@ public class GWTServer {
 		    	Regularschedule r=Cache.RegularSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
-		    		boolean flag=DatabaseRegularSchedule.updateRegularSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getDaymask(),r.getDayschedulerule().getRulename(),Boolean.parseBoolean(list.get(2)),r.getPriority(),r.getEnabled());
+		    		boolean flag=DatabaseRegularSchedule.updateRegularSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getDaymask(),r.getDayschedulerule().getRulename(),(boolean)list.get(2),r.getPriority(),r.getEnabled());
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
@@ -184,7 +185,7 @@ public class GWTServer {
 		    	Regularschedule r=Cache.RegularSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
-		    		boolean flag=DatabaseRegularSchedule.updateRegularSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getDaymask(),r.getDayschedulerule().getRulename(),r.getActuatoron(),Integer.parseInt(list.get(2)),r.getEnabled());
+		    		boolean flag=DatabaseRegularSchedule.updateRegularSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getDaymask(),r.getDayschedulerule().getRulename(),r.getActuatoron(),(int)list.get(2),r.getEnabled());
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
@@ -193,7 +194,7 @@ public class GWTServer {
 		    	Regularschedule r=Cache.RegularSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
-		    		boolean flag=DatabaseRegularSchedule.updateRegularSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getDaymask(),r.getDayschedulerule().getRulename(),Boolean.parseBoolean(list.get(2)),r.getPriority(),Boolean.parseBoolean(list.get(2)));
+		    		boolean flag=DatabaseRegularSchedule.updateRegularSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getDaymask(),r.getDayschedulerule().getRulename(),r.getActuatoron(),r.getPriority(),(boolean)(list.get(2)));
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
@@ -202,12 +203,12 @@ public class GWTServer {
 		    	Regularschedule r=Cache.RegularSchedules.map.get(list.get(1));
 		    	if (r!=null) return "SCHEDULE_ALREADY_EXISTS";
 		    	else if (!Cache.Actuators.map.containsKey(list.get(2))) return "ACTUATOR_NOT_EXIST";
-		    	else if (Integer.parseInt(list.get(3))>=128) return "INVALID_DAY";
+		    	else if ((int)(list.get(3))>=128) return "INVALID_DAY";
 		    	else if (!Cache.DayScheduleRules.map.containsKey(list.get(4))) return "RULE_NOT_EXIST";
 		    	else {
-		    		boolean flag=DatabaseRegularSchedule.createRegularSchedule( list.get(1),Cache.Actuators.map.get(list.get(2)).getName(),
-		    																	Integer.parseInt(list.get(3)), Cache.DayScheduleRules.map.get(list.get(4)).getRulename(),
-		    																	Boolean.parseBoolean(list.get(5)), Integer.parseInt(list.get(6)), Boolean.parseBoolean(list.get(7)));
+		    		boolean flag=DatabaseRegularSchedule.createRegularSchedule( (String)list.get(1),Cache.Actuators.map.get(list.get(2)).getName(),
+		    																	(int)list.get(3), Cache.DayScheduleRules.map.get(list.get(4)).getRulename(),
+		    																	(boolean)list.get(5), (int)list.get(6), (boolean)list.get(7));
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
@@ -232,7 +233,7 @@ public class GWTServer {
 		    	Specialschedule r=Cache.SpecialSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
-		    		boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule(r.getSchedulename(),list.get(2),r.getActuator().getName(),r.getYear(),r.getMonth(),r.getDay(),r.getDayschedulerule().getRulename(),r.getActuatoron(),r.getPriority(),r.getEnabled());
+		    		boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule(r.getSchedulename(),(String)list.get(2),r.getActuator().getName(),r.getYear(),r.getMonth(),r.getDay(),r.getDayschedulerule().getRulename(),r.getActuatoron(),r.getPriority(),r.getEnabled());
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
@@ -251,7 +252,7 @@ public class GWTServer {
 		    	Specialschedule r=Cache.SpecialSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
-		    		boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),Integer.parseInt(list.get(2)),Integer.parseInt(list.get(3)),Integer.parseInt(list.get(4)),r.getDayschedulerule().getRulename(),r.getActuatoron(),r.getPriority(),r.getEnabled());
+		    		boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),(int)(list.get(2)),(int)(list.get(3)),(int)(list.get(4)),r.getDayschedulerule().getRulename(),r.getActuatoron(),r.getPriority(),r.getEnabled());
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
@@ -270,7 +271,7 @@ public class GWTServer {
 		    	Specialschedule r=Cache.SpecialSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
-		    		boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getYear(),r.getMonth(),r.getDay(),r.getDayschedulerule().getRulename(),Boolean.parseBoolean(list.get(2)),r.getPriority(),r.getEnabled());
+		    		boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getYear(),r.getMonth(),r.getDay(),r.getDayschedulerule().getRulename(),(boolean)(list.get(2)),r.getPriority(),r.getEnabled());
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
@@ -279,7 +280,7 @@ public class GWTServer {
 		    	Specialschedule r=Cache.SpecialSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
-		    		boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getYear(),r.getMonth(),r.getDay(),r.getDayschedulerule().getRulename(),r.getActuatoron(),Integer.parseInt(list.get(2)),r.getEnabled());
+		    		boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getYear(),r.getMonth(),r.getDay(),r.getDayschedulerule().getRulename(),r.getActuatoron(),(int)(list.get(2)),r.getEnabled());
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
@@ -288,7 +289,7 @@ public class GWTServer {
 		    	Specialschedule r=Cache.SpecialSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
-		    		boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getYear(),r.getMonth(),r.getDay(),r.getDayschedulerule().getRulename(),Boolean.parseBoolean(list.get(2)),r.getPriority(),Boolean.parseBoolean(list.get(2)));
+		    		boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getYear(),r.getMonth(),r.getDay(),r.getDayschedulerule().getRulename(),(boolean)(list.get(2)),r.getPriority(),(boolean)(list.get(2)));
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
@@ -299,10 +300,10 @@ public class GWTServer {
 		    	else if (!Cache.Actuators.map.containsKey(list.get(2))) return "ACTUATOR_NOT_EXIST";
 		    	else if (!Cache.DayScheduleRules.map.containsKey(list.get(4))) return "RULE_NOT_EXIST";
 		    	else {
-		    		boolean flag=DatabaseSpecialSchedule.createSpecialSchedule( list.get(1),Cache.Actuators.map.get(list.get(2)).getName(),
-		    																	Integer.parseInt(list.get(3)), Integer.parseInt(list.get(4)), Integer.parseInt(list.get(5)), 
+		    		boolean flag=DatabaseSpecialSchedule.createSpecialSchedule( (String)list.get(1),Cache.Actuators.map.get(list.get(2)).getName(),
+		    																	(int)list.get(3), (int)list.get(4), (int)list.get(5), 
 		    																	Cache.DayScheduleRules.map.get(list.get(6)).getRulename(),
-		    																	Boolean.parseBoolean(list.get(7)), Integer.parseInt(list.get(8)), Boolean.parseBoolean(list.get(9)));
+		    																	(boolean)list.get(7), (int)list.get(8), (boolean)(list.get(9)));
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
@@ -330,13 +331,13 @@ public class GWTServer {
 		    	return result;
 		    }
 		    case "37" : { //SensorGetReadingBetweenTime
-		    	ArrayList<SensorReading> lsr=DatabaseReading.getReadingBetweenTime(list.get(2),LocalDateTime.parse(list.get(3),dtFormat),LocalDateTime.parse(list.get(4),dtFormat),5000);
+		    	ArrayList<SensorReading> lsr=DatabaseReading.getReadingBetweenTime((String)list.get(2),(LocalDateTime)list.get(3),(LocalDateTime)list.get(4),5000);
 		    	ArrayList<Object []> result=new ArrayList<>();
 		    	for (SensorReading sr : lsr) result.add(new Object [] {sr.getTimestamp(),sr.getActualValue()});
 		    	return result;
 		    }
 		    case "38" : { //SensorGetReadingBetweenTime
-		    	ArrayList<SensorReading> lsr=DatabaseReading.getReadingMonthly(list.get(2),Integer.parseInt(list.get(3)),Integer.parseInt(list.get(4)));
+		    	ArrayList<SensorReading> lsr=DatabaseReading.getReadingMonthly((String)list.get(2),(int)list.get(3),(int)list.get(4));
 		    	ArrayList<Object []> result=new ArrayList<>();
 		    	for (SensorReading sr : lsr) result.add(new Object [] {sr.getTimestamp(),sr.getActualValue()});
 		    	return result;
@@ -345,20 +346,23 @@ public class GWTServer {
 	    return null;
 	}
 	
-	private static class GWTServerThread extends Thread {
-		public SSLServerSocket serverSocket;
+	private static class GWTServerT extends Thread {
 		boolean stopFlag=false;
+	}
+	
+	private static class GWTSecureServerThread extends GWTServerT {
+		public SSLServerSocket serverSocket;
 		
 		@SuppressWarnings("unchecked")
 		public void run () {
 			System.setProperty("javax.net.ssl.keyStore",Config.getConfig(Config.CONFIG_SERVER_GWT_KEY_FILE_KEY));
 			System.setProperty("javax.net.ssl.keyStorePassword",Config.getConfig(Config.CONFIG_SERVER_GWT_PASSWORD_KEY));
-			while (!stopFlag) {
+			while (!stopFlag && !Thread.currentThread().isInterrupted()) {
 				try {
 					try {
 					    SSLServerSocketFactory socketFactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
 					    serverSocket = (SSLServerSocket) socketFactory.createServerSocket(Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_GWT_PORT_KEY)));
-					    serverSocket.setSoTimeout(5000);
+					    serverSocket.setSoTimeout(0);
 					    SSLSocket sslsocket=(SSLSocket) serverSocket.accept();
 					    InputStream is=sslsocket.getInputStream();
 					    ObjectInputStream ois=new ObjectInputStream(is);
@@ -369,7 +373,7 @@ public class GWTServer {
 					    try {
 						    Object o=ois.readObject();
 						    if (o instanceof ArrayList) {
-						    	oos.writeObject(GWTServer.processRequest((ArrayList<String>)o));
+						    	oos.writeObject(GWTServer.processRequest((ArrayList<Object>)o));
 						    }
 					    } catch (ClassNotFoundException cn) {}
 				    	oos.close(); os.close();
@@ -378,7 +382,8 @@ public class GWTServer {
 						serverSocket.close();
 					} 
 				} catch (IOException e) {
-					Logger.log("GWTServerThread Error - "+e.getMessage());
+					Logger.log("GWTSecureServerThread Error - "+e.getMessage());
+					break;
 				}
 			}
 			try {
@@ -389,12 +394,58 @@ public class GWTServer {
 		}
 	}
 	
+	private static class GWTServerThread extends GWTServerT {
+		public ServerSocket serverSocket;
+		
+		@SuppressWarnings("unchecked")
+		public void run () {
+			while (!stopFlag && !Thread.currentThread().isInterrupted()) {
+				try {
+					try {
+						serverSocket=new ServerSocket(Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_GWT_PORT_KEY)));
+					    serverSocket.setSoTimeout(0);
+					    Socket socket=(Socket) serverSocket.accept();
+					    InputStream is=socket.getInputStream();
+					    ObjectInputStream ois=new ObjectInputStream(is);
+					    
+					    OutputStream os=socket.getOutputStream();
+					    ObjectOutputStream oos=new ObjectOutputStream(os);
+					    
+					    try {
+						    Object o=ois.readObject();
+						    if (o instanceof ArrayList) {
+						    	oos.writeObject(GWTServer.processRequest((ArrayList<Object>)o));
+						    }
+					    } catch (ClassNotFoundException cn) {}
+				    	oos.close(); os.close();
+				    	socket.close(); serverSocket.close();
+					} catch (SocketTimeoutException te) {
+						serverSocket.close();
+					} 
+				} catch (IOException e) {
+					Logger.log("GWTServerThread Error - "+e.getMessage());
+					break;
+				}
+			}
+			try {
+				serverSocket.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			};
+		}
+	}
 	
 	public static boolean start() {
 		if (t==null) {
-			Logger.log("GWTServer - Starting");
-			t=new GWTServerThread();
-			t.start();
+			if (Boolean.parseBoolean(Config.getConfig(Config.CONFIG_SERVER_GWT_SSL_KEY))) {
+				Logger.log("GWTSecureServer - Starting");
+				t=new GWTSecureServerThread();
+				t.start();
+			} else {
+				Logger.log("GWTServer - Starting");
+				t=new GWTServerThread();
+				t.start();
+			}
 			return true;
 		}
 		return false;
@@ -402,9 +453,27 @@ public class GWTServer {
 	
 	public static boolean stop() {
 		if (t!=null) {
-			Logger.log("GWTServer - Requested to stop");
+			Logger.log("GWTSecure/Server - Requested to stop");
 			t.stopFlag=true;
-			t.interrupt();
+			if (t instanceof GWTSecureServerThread) {
+				try {
+					System.setProperty("javax.net.ssl.keyStore",Config.getConfig(Config.CONFIG_SERVER_GWT_KEY_FILE_KEY));
+					System.setProperty("javax.net.ssl.keyStorePassword",Config.getConfig(Config.CONFIG_SERVER_GWT_PASSWORD_KEY));
+				    SSLSocketFactory socketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+				    SSLSocket sc = (SSLSocket) socketFactory.createSocket("127.0.0.1",Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_GWT_PORT_KEY)));
+				    sc.startHandshake();
+				    sc.getOutputStream().write(new byte [] {1});
+				    sc.getOutputStream().close();
+				    sc.close();
+				} catch (Exception e) {e.printStackTrace();}
+			} else {
+				try {
+					Socket sc = new Socket("127.0.0.1",Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_GWT_PORT_KEY)));
+			    	sc.getOutputStream().write(new byte [] {1});
+			    	sc.getOutputStream().close();
+			    	sc.close();
+				} catch (Exception e) {e.printStackTrace();}
+			}
 			t=null;
 			return true;
 		}

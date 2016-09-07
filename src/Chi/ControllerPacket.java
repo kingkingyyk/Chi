@@ -5,7 +5,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 public class ControllerPacket {
-	public static enum Type {Hello,SetActuator,ChangeName,ChangeTimeout};
+	public static enum Type {Hello,SetActuator,GetReading,ChangeName,ChangeTimeout};
 	private Type type;
 	private String [] data;
 	

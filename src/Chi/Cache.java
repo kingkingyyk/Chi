@@ -32,32 +32,36 @@ public class Cache {
 	}
 	
 	public static void initialize() {
-	    try{
-	        Configuration c= new Configuration().configure("/conf/hibernate.cfg.xml");
-	        c.setProperty("hibernate.connection.username",Config.getConfig(Config.CONFIG_SERVER_DATABASE_HSQL_USERNAME_KEY));
-	        c.setProperty("hibernate.connection.password",Config.getConfig(Config.CONFIG_SERVER_DATABASE_HSQL_PASSWORD_KEY));
-	        c.setProperty("hibernate.connection.url",getHSQLAddress());
-	        File [] files=new File("conf").listFiles();
-	        for (File f : files) {
-	        	if (f.getPath().endsWith(".hbm.xml")) {
-	        		c=c.addResource("/conf/"+f.getName());
-	        	}
-	        }
-	        factory=c.buildSessionFactory();
-	     }catch (Throwable ex) { 
-	        Logger.log("Cache failed to create factory object - "+ex.getMessage());
-	        ex.printStackTrace();
-	        throw new ExceptionInInitializerError(ex); 
-	     }
-	    Actuators=new ActuatorData();
-	    Sites=new SiteData();
-	    Controllers=new ControllerData();
-	    SensorClasses=new SensorClassData();
-	    Sensors=new SensorData();
-	    Users=new UserData();
-	    DayScheduleRules=new DayScheduleRuleData();
-	    RegularSchedules=new RegularScheduleData();
-	    SpecialSchedules=new SpecialScheduleData();
+		Thread t=new Thread() {
+			public void run () {
+			    try{
+			        Configuration c= new Configuration().configure("/conf/hibernate.cfg.xml");
+			        c.setProperty("hibernate.connection.username",Config.getConfig(Config.CONFIG_SERVER_DATABASE_HSQL_USERNAME_KEY));
+			        c.setProperty("hibernate.connection.password",Config.getConfig(Config.CONFIG_SERVER_DATABASE_HSQL_PASSWORD_KEY));
+			        c.setProperty("hibernate.connection.url",getHSQLAddress());
+			        File [] files=new File("conf").listFiles();
+			        for (File f : files) {
+			        	if (f.getPath().endsWith(".hbm.xml")) {
+			        		c=c.addResource("/conf/"+f.getName());
+			        	}
+			        }
+			        factory=c.buildSessionFactory();
+			     }catch (Throwable ex) { 
+			        Logger.log("Cache failed to create factory object - "+ex.getMessage());
+			        ex.printStackTrace();
+			     }
+			    Actuators=new ActuatorData();
+			    Sites=new SiteData();
+			    Controllers=new ControllerData();
+			    SensorClasses=new SensorClassData();
+			    Sensors=new SensorData();
+			    Users=new UserData();
+			    DayScheduleRules=new DayScheduleRuleData();
+			    RegularSchedules=new RegularScheduleData();
+			    SpecialSchedules=new SpecialScheduleData();
+			}
+		};
+		t.start();
 	}
 	
 	private static abstract class Data<T> {

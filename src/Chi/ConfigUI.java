@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JPasswordField;
+import javax.swing.JCheckBox;
 
 public class ConfigUI extends JDialog {
 	private static final long serialVersionUID = -4765449778876379813L;
@@ -33,6 +34,7 @@ public class ConfigUI extends JDialog {
 	private JTextField textFieldControllerPort;
 	private JTextField textFieldGWTPort;
 	private JPasswordField passwordFieldGWTPassword;
+	private JCheckBox chckbxGWTSSL;
 
 	public ConfigUI() {
 		setModal(true);
@@ -345,6 +347,11 @@ public class ConfigUI extends JDialog {
 		passwordFieldGWTPassword.setToolTipText("The password for GWT server to connect.");
 		passwordFieldGWTPassword.setBounds(82, 42, 86, 20);
 		panelGWTSettings.add(passwordFieldGWTPassword);
+		
+		chckbxGWTSSL = new JCheckBox("SSL Connection");
+		chckbxGWTSSL.setSelected(Boolean.parseBoolean(Config.getConfig(Config.CONFIG_SERVER_GWT_SSL_KEY)));
+		chckbxGWTSSL.setBounds(10, 179, 106, 23);
+		panelGWTSettings.add(chckbxGWTSSL);
 		btnGWTPort.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				textFieldGWTPort.setText(Config.getConfig(Config.CONFIG_SERVER_GWT_PORT_KEY+Config.CONFIG_DEFAULT_KEY));
@@ -400,6 +407,7 @@ public class ConfigUI extends JDialog {
 		Config.setConfig(Config.CONFIG_SERVER_INCOMING_PORT_KEY, textFieldListeningPort.getText());
 		Config.setConfig(Config.CONFIG_SERVER_GWT_PORT_KEY, textFieldGWTPort.getText());
 		Config.setConfig(Config.CONFIG_SERVER_GWT_PASSWORD_KEY, new String(passwordFieldGWTPassword.getPassword()));
+		Config.setConfig(Config.CONFIG_SERVER_GWT_SSL_KEY, String.valueOf(chckbxGWTSSL.isSelected()));
 		
 		Config.setConfig(Config.CONFIG_SERVER_CONTROLLER_IP_KEY, textFieldControllerIP.getText());
 		Config.setConfig(Config.CONFIG_SERVER_CONTROLLER_PORT_KEY, textFieldControllerPort.getText());

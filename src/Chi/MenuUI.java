@@ -320,6 +320,7 @@ public class MenuUI extends JFrame {
 				Logger.log("Config UI started.");
 				ConfigUI ui=new ConfigUI();
 				Logger.log("Config UI done.");
+				ui.setLocationRelativeTo(null);
 				ui.setVisible(true);
 				Logger.log("Config UI closed.");
 			}
