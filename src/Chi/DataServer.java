@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.LinkedList;
 
 public class DataServer {
 	private static FileOutputStream fileLocker;
@@ -13,6 +14,41 @@ public class DataServer {
 	private static File lockedFile;
 	private static boolean isStarted=false;
 	private static boolean attempted=false;
+	
+	public static interface OnReportReceived {
+		public void run (String controllerName);
+	}
+	
+	public static interface OnReadingReceived {
+		public void run (String sensorName, double value);
+	}
+	
+	private static LinkedList<OnReportReceived> OnReportReceivedCallbacks=new LinkedList<>();
+	private static LinkedList<OnReadingReceived> OnReadingReceivedCallbacks=new LinkedList<>();
+	
+	public static void registerOnReportReceived (OnReportReceived r) {
+		if (!OnReportReceivedCallbacks.contains(r)) {
+			OnReportReceivedCallbacks.add(r);
+		}
+	}
+	
+	public static void unregisterOnReportReceived (OnReportReceived r) {
+		if (OnReportReceivedCallbacks.contains(r)) {
+			OnReportReceivedCallbacks.remove(r);
+		}
+	}
+	
+	public static void registerOnReadingReceived (OnReadingReceived r) {
+		if (!OnReadingReceivedCallbacks.contains(r)) {
+			OnReadingReceivedCallbacks.add(r);
+		}
+	}
+	
+	public static void unregisterOnReadingReceived (OnReadingReceived r) {
+		if (OnReadingReceivedCallbacks.contains(r)) {
+			OnReadingReceivedCallbacks.remove(r);
+		}
+	}
 	
 	public static void start() {
 		Logger.log("Attempting to start listening server.");

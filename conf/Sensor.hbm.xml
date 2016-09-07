@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Aug 30, 2016 1:51:22 PM by Hibernate Tools 5.1.0.Alpha1 -->
+<!-- Generated Sep 7, 2016 8:37:48 PM by Hibernate Tools 5.1.0.Alpha1 -->
 <hibernate-mapping>
     <class name="Chi.Sensor" table="SENSOR" schema="PUBLIC" catalog="PUBLIC" optimistic-lock="version">
         <id name="sensorname" type="string">
@@ -32,5 +32,11 @@
         <property name="maxthreshold" type="java.lang.Double">
             <column name="MAXTHRESHOLD" precision="64" scale="0" />
         </property>
+        <set name="sensorevents" table="SENSOREVENT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="SENSORNAME" length="100" not-null="true" />
+            </key>
+            <one-to-many class="Chi.Sensorevent" />
+        </set>
     </class>
 </hibernate-mapping>
