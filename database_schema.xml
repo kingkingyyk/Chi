@@ -72,7 +72,7 @@
 <part>ControllerName</part>
 </key>
 </table>
-<table x="1333" y="579" name="SensorClass">
+<table x="1081" y="700" name="SensorClass">
 <row name="ClassName" null="0" autoincrement="0">
 <datatype>VARCHAR(100)</datatype>
 </row>
@@ -80,7 +80,7 @@
 <part>ClassName</part>
 </key>
 </table>
-<table x="1047" y="563" name="Sensor">
+<table x="1038" y="449" name="Sensor">
 <row name="SensorName" null="0" autoincrement="0">
 <datatype>VARCHAR</datatype>
 </row>
@@ -225,9 +225,10 @@
 <part>ScheduleName</part>
 </key>
 </table>
-<table x="1232" y="208" name="SensorReading">
+<table x="1214" y="161" name="SensorReading">
 <row name="SensorName" null="0" autoincrement="0">
 <datatype>VARCHAR(100)</datatype>
+<relation table="Sensor" row="SensorName" />
 <relation table="Sensor" row="SensorName" />
 </row>
 <row name="TimeStp" null="0" autoincrement="0">
@@ -259,6 +260,25 @@
 </row>
 <key type="PRIMARY" name="">
 <part>SensorName</part>
+</key>
+</table>
+<table x="1311" y="502" name="SensorEvent">
+<row name="SensorName" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+<relation table="Sensor" row="SensorName" />
+</row>
+<row name="TimeStp" null="0" autoincrement="0">
+<datatype>TIMESTAMP</datatype>
+</row>
+<row name="EventType" null="1" autoincrement="0">
+<datatype>VARCHAR(200)</datatype>
+<default>NULL</default></row>
+<row name="EventValue" null="0" autoincrement="0">
+<datatype>DOUBLE</datatype>
+</row>
+<key type="PRIMARY" name="">
+<part>SensorName</part>
+<part>TimeStp</part>
 </key>
 </table>
 </sql>

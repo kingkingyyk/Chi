@@ -11,6 +11,8 @@ public class Theme {
 		map.put("Reset-16x16", Utility.resizeImageIcon(new ImageIcon(Theme.class.getResource("/images/reset.png")),16,16));
 		map.put("TopTitleBar", new ImageIcon(Theme.class.getResource("/images/TopTitleBar.jpg")));
 		map.put("CassandraLogo", new ImageIcon(Theme.class.getResource("/images/cassandra-logo.png")));
+		map.put("HSQLLogo", new ImageIcon(Theme.class.getResource("/images/hypersql-logo.png")));
+		map.put("GWTLogo", new ImageIcon(Theme.class.getResource("/images/gwt-logo.png")));
 		map.put("ChiLogo", new ImageIcon(Theme.class.getResource("/images/chi-logo.png")));
 	}
 	

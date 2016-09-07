@@ -8,11 +8,11 @@ import org.hibernate.Transaction;
 public class DatabaseSensor {
 
 	public static interface OnCreateAction {
-		public void run (String sn, String cn, double min, double max, double trans, String unit, String con);
+		public void run (String sn, String cn, double min, double max, double trans, String unit, String con, double minT, double maxT);
 	}
 	
 	public static interface OnUpdateAction {
-		public void run (String oldSN, String sn, String cn, double min, double max, double trans, String unit, String con);
+		public void run (String oldSN, String sn, String cn, double min, double max, double trans, String unit, String con, double minT, double maxT);
 	}
 	
 	public static interface OnDeleteAction {
@@ -44,7 +44,7 @@ public class DatabaseSensor {
 		}
 	}
 	
-	public static boolean createSensor (String sn, String cn, double min, double max, double trans, String unit, String con) {
+	public static boolean createSensor (String sn, String cn, double min, double max, double trans, String unit, String con, double minT, double maxT) {
 		Logger.log("DatabaseSensor - Create");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
@@ -53,12 +53,12 @@ public class DatabaseSensor {
 			tx = session.beginTransaction();
 			Sensor s = session.get(Sensor.class,sn);
 			if (s==null) {
-				s=new Sensor(sn,session.get(Controller.class,con),session.get(Sensorclass.class,cn),min,max,trans,unit);
+				s=new Sensor(sn,session.get(Controller.class,con),session.get(Sensorclass.class,cn),min,max,trans,unit,minT,maxT,null);
 				session.save(s);
 				tx.commit();
 	
 				Logger.log("DatabaseSensor - Create - Execute Callbacks");
-				for (OnCreateAction a : OnCreateList) a.run(sn,cn,min,max,trans,unit,con);
+				for (OnCreateAction a : OnCreateList) a.run(sn,cn,min,max,trans,unit,con,minT,maxT);
 				flag = true;
 			} else Logger.log("DB Create Sensor - Sensor already exists");
 		} catch (HibernateException e) {
@@ -69,7 +69,7 @@ public class DatabaseSensor {
 		return flag;
 	}
 	
-	public static boolean updateSensor (String oldSN, String sn, String cn, double min, double max, double trans, String unit, String con) {
+	public static boolean updateSensor (String oldSN, String sn, String cn, double min, double max, double trans, String unit, String con, double minT, double maxT) {
 		Logger.log("DatabaseSensor - Update");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
@@ -85,11 +85,13 @@ public class DatabaseSensor {
 				s.setTransformationfactor(trans);
 				s.setUnit(unit);
 				s.setController(session.get(Controller.class,con));
+				s.setMinthreshold(minT);
+				s.setMaxthreshold(maxT);
 				session.save(s);
 				tx.commit();
 	
 				Logger.log("DatabaseSensor - Update - Execute Callbacks");
-				for (OnUpdateAction a : OnUpdateList) a.run(oldSN, sn,cn,min,max,trans,unit,con);
+				for (OnUpdateAction a : OnUpdateList) a.run(oldSN, sn,cn,min,max,trans,unit,con,minT,maxT);
 				flag = true;
 			} else Logger.log("DB Update Sensor - Sensor doesn't exist");
 		} catch (HibernateException e) {

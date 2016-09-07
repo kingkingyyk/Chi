@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Sep 7, 2016 8:09:21 PM by Hibernate Tools 5.1.0.Alpha1 -->
+<hibernate-mapping>
+    <class name="Chi.Sensorevent" table="SENSOREVENT" schema="PUBLIC" catalog="PUBLIC" optimistic-lock="version">
+        <composite-id name="id" class="Chi.SensoreventId">
+            <key-property name="sensorname" type="string">
+                <column name="SENSORNAME" length="100" />
+            </key-property>
+            <key-property name="timestp" type="timestamp">
+                <column name="TIMESTP" length="26" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="sensor" class="Chi.Sensor" update="false" insert="false" fetch="select">
+            <column name="SENSORNAME" length="100" not-null="true" />
+        </many-to-one>
+        <property name="eventtype" type="string">
+            <column name="EVENTTYPE" length="100" />
+        </property>
+        <property name="eventvalue" type="string">
+            <column name="EVENTVALUE" length="100" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -26,5 +26,11 @@
         <property name="unit" type="string">
             <column name="UNIT" length="10" />
         </property>
+        <property name="minthreshold" type="java.lang.Double">
+            <column name="MINTHRESHOLD" precision="64" scale="0" />
+        </property>
+        <property name="maxthreshold" type="java.lang.Double">
+            <column name="MAXTHRESHOLD" precision="64" scale="0" />
+        </property>
     </class>
 </hibernate-mapping>

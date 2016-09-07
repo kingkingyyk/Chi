@@ -77,9 +77,8 @@ public class DatabaseReading extends DatabaseCassandra {
 			ResultSet rs=executeSQL("DB Get Reading", session, sql[0]);
 			
 			Cache.Sensors.update();
-			Iterator<Row> it=rs.iterator();
-			while (it.hasNext()) {
-				Row r=it.next();
+			for (Row r : rs) {
+			    if (rs.getAvailableWithoutFetching() == 100 && !rs.isFullyFetched()) rs.fetchMoreResults();
 				SensorReading sr=new SensorReading(sn,Utility.dateToLocalDateTime(new Date(r.getTimestamp("TimeStp").getTime())),r.getDouble("Value"),Cache.Sensors.map.get(sn).denormalizeValue(r.getDouble("Value")));
 				list.add(sr);
 			}

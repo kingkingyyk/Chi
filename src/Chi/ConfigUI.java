@@ -173,6 +173,11 @@ public class ConfigUI extends JDialog {
 		passwordFieldDBHSQLPassword.setBounds(106, 103, 86, 20);
 		panelHSQLSettings.add(passwordFieldDBHSQLPassword);
 		
+		JLabel lblHSQLLogo = new JLabel();
+		lblHSQLLogo.setBounds(312, 151, 223, 47);
+		lblHSQLLogo.setIcon(Utility.resizeImageIcon(Theme.getIcon("HSQLLogo"),lblHSQLLogo.getWidth(),lblHSQLLogo.getHeight()));
+		panelHSQLSettings.add(lblHSQLLogo);
+		
 		JPanel panelCassandraSettings = new JPanel();
 		tabbedPane.addTab("Cassandra", null, panelCassandraSettings, null);
 		panelCassandraSettings.setLayout(null);
@@ -352,6 +357,11 @@ public class ConfigUI extends JDialog {
 		chckbxGWTSSL.setSelected(Boolean.parseBoolean(Config.getConfig(Config.CONFIG_SERVER_GWT_SSL_KEY)));
 		chckbxGWTSSL.setBounds(10, 179, 106, 23);
 		panelGWTSettings.add(chckbxGWTSSL);
+		
+		JLabel lblGWTLogo = new JLabel();
+		lblGWTLogo.setBounds(434, 102, 100, 100);
+		lblGWTLogo.setIcon(Utility.resizeImageIcon(Theme.getIcon("GWTLogo"),lblGWTLogo.getWidth(),lblGWTLogo.getHeight()));
+		panelGWTSettings.add(lblGWTLogo);
 		btnGWTPort.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				textFieldGWTPort.setText(Config.getConfig(Config.CONFIG_SERVER_GWT_PORT_KEY+Config.CONFIG_DEFAULT_KEY));

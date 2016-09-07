@@ -25,6 +25,8 @@ CREATE TABLE Sensor(
 	TransformationFactor double,
 	Unit varchar(10),
 	Controller varchar(100),
+	MinThreshold double,
+	MaxThreshold double,
 	FOREIGN KEY (Class) REFERENCES SensorClass(ClassName) ON UPDATE CASCADE,
 	FOREIGN KEY (Controller) REFERENCES Controller(ControllerName) ON UPDATE CASCADE
 )
@@ -76,6 +78,15 @@ CREATE TABLE SpecialSchedule (
 	Enabled boolean,
 	FOREIGN KEY (ActuatorName) REFERENCES Actuator(Name) ON UPDATE CASCADE,
 	FOREIGN KEY (Rule) REFERENCES DayScheduleRule(RuleName) ON UPDATE CASCADE
+)
+@
+CREATE TABLE SensorEvent (
+	SensorName varchar (100),
+	TimeStp timestamp,
+	EventType varchar (100),
+	EventValue varchar(100),
+	PRIMARY KEY (SensorName, TimeStp),
+	FOREIGN KEY (SensorName) REFERENCES Sensor(SensorName) ON UPDATE CASCADE
 )
 @
 INSERT INTO Site VALUES ('DefaultSite','http://i.imgur.com/Ep8mS4K.jpg')

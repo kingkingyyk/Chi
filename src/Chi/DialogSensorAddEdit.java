@@ -33,6 +33,10 @@ public class DialogSensorAddEdit extends JDialog {
 	private JButton cancelButton;
 	private JButton okButton;
 	private JComboBox<String> comboBoxController;
+	private JTextField textFieldMinThreshold;
+	private JTextField textFieldMaxThreshold;
+	private JLabel lblMinThresholdInfo;
+	private JLabel lblMaxThresholdInfo;
 
 	public DialogSensorAddEdit() {
 		create();
@@ -59,7 +63,7 @@ public class DialogSensorAddEdit extends JDialog {
 	}
 	
 	private boolean validateInput () {
-		JTextField [] numberFields=new JTextField [] {textFieldMinValue,textFieldMaxValue,textFieldTransFactor};
+		JTextField [] numberFields=new JTextField [] {textFieldMinValue,textFieldMaxValue,textFieldTransFactor,textFieldMinThreshold,textFieldMaxThreshold};
 		JTextField [] fillFields=new JTextField[] {textFieldName,textFieldUnit};
 		for (int i=0;i<numberFields.length;i++) {
 			try {
@@ -81,7 +85,7 @@ public class DialogSensorAddEdit extends JDialog {
 		setModal(true);
 		setResizable(false);
 		setIconImage(Theme.getIcon("ChiLogo").getImage());
-		setBounds(100, 100, 485, 300);
+		setBounds(100, 100, 485, 360);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(null);
 		contentPanel.setBounds(0, 11, 479, 216);
@@ -191,7 +195,7 @@ public class DialogSensorAddEdit extends JDialog {
 		contentPanel.add(lblController);
 		{
 			JPanel buttonPane = new JPanel();
-			buttonPane.setBounds(0, 238, 479, 33);
+			buttonPane.setBounds(0, 298, 479, 33);
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane);
 			{
@@ -204,6 +208,36 @@ public class DialogSensorAddEdit extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
+		
+		JLabel lblMinThreshold = new JLabel("Min Threshold :");
+		lblMinThreshold.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblMinThreshold.setBounds(10, 239, 74, 14);
+		getContentPane().add(lblMinThreshold);
+		
+		textFieldMinThreshold = new JTextField();
+		textFieldMinThreshold.setText("0.0");
+		textFieldMinThreshold.setColumns(30);
+		textFieldMinThreshold.setBounds(89, 236, 246, 20);
+		getContentPane().add(textFieldMinThreshold);
+		
+		JLabel lblMaxThreshold = new JLabel("Max Threshold :");
+		lblMaxThreshold.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblMaxThreshold.setBounds(0, 270, 84, 14);
+		getContentPane().add(lblMaxThreshold);
+		
+		textFieldMaxThreshold = new JTextField();
+		textFieldMaxThreshold.setText("1.0");
+		textFieldMaxThreshold.setColumns(30);
+		textFieldMaxThreshold.setBounds(89, 267, 246, 20);
+		getContentPane().add(textFieldMaxThreshold);
+		
+		lblMinThresholdInfo = new JLabel("");
+		lblMinThresholdInfo.setBounds(345, 237, 124, 16);
+		getContentPane().add(lblMinThresholdInfo);
+		
+		lblMaxThresholdInfo = new JLabel("");
+		lblMaxThresholdInfo.setBounds(345, 268, 124, 16);
+		getContentPane().add(lblMaxThresholdInfo);
 	}
 	
 	public void prefill(String n, String c, double min, double max, double t, String u, String con) {
@@ -249,6 +283,28 @@ public class DialogSensorAddEdit extends JDialog {
 					lblMaxValueInfo.setText("<html><font color=\"green\">OK!</font></html>");
 				} catch (NumberFormatException ex) {
 					lblMaxValueInfo.setText("<html><font color=\"red\">Value must be a number!</font></html>");
+				}
+			}
+		});
+		
+		textFieldMinThreshold.addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e) {
+				try {
+					Double.parseDouble(textFieldMinThreshold.getText());
+					lblMinThresholdInfo.setText("<html><font color=\"green\">OK!</font></html>");
+				} catch (NumberFormatException ex) {
+					lblMinThresholdInfo.setText("<html><font color=\"red\">Value must be a number!</font></html>");
+				}
+			}
+		});
+		
+		textFieldMaxThreshold.addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e) {
+				try {
+					Double.parseDouble(textFieldMaxThreshold.getText());
+					lblMaxThresholdInfo.setText("<html><font color=\"green\">OK!</font></html>");
+				} catch (NumberFormatException ex) {
+					lblMaxThresholdInfo.setText("<html><font color=\"red\">Value must be a number!</font></html>");
 				}
 			}
 		});
@@ -303,7 +359,11 @@ public class DialogSensorAddEdit extends JDialog {
 					u.setText("Creating sensor");
 					Thread t=new Thread() {
 						public void run () {
-							flag=DatabaseSensor.createSensor(textFieldName.getText(),(String)comboBoxClass.getSelectedItem(),Double.parseDouble(textFieldMinValue.getText()),Double.parseDouble(textFieldMaxValue.getText()),Double.parseDouble(textFieldTransFactor.getText()),textFieldUnit.getText(),(String)comboBoxController.getSelectedItem());
+							flag=DatabaseSensor.createSensor(textFieldName.getText(),(String)comboBoxClass.getSelectedItem(),
+									Double.parseDouble(textFieldMinValue.getText()),Double.parseDouble(textFieldMaxValue.getText()),
+									Double.parseDouble(textFieldTransFactor.getText()),textFieldUnit.getText(),
+									(String)comboBoxController.getSelectedItem(),Double.parseDouble(textFieldMinThreshold.getText()),
+									Double.parseDouble(textFieldMaxThreshold.getText()));
 							u.dispose();
 						}
 					};
@@ -338,7 +398,11 @@ public class DialogSensorAddEdit extends JDialog {
 					u.setText("Updating sensor");
 					Thread t=new Thread() {
 						public void run () {
-							flag=DatabaseSensor.updateSensor(n,textFieldName.getText(),(String)comboBoxClass.getSelectedItem(),Double.parseDouble(textFieldMinValue.getText()),Double.parseDouble(textFieldMaxValue.getText()),Double.parseDouble(textFieldTransFactor.getText()), textFieldUnit.getText(),(String)comboBoxController.getSelectedItem());
+							flag=DatabaseSensor.updateSensor(n,textFieldName.getText(),(String)comboBoxClass.getSelectedItem(),
+									Double.parseDouble(textFieldMinValue.getText()),Double.parseDouble(textFieldMaxValue.getText()),
+									Double.parseDouble(textFieldTransFactor.getText()), textFieldUnit.getText(),
+									(String)comboBoxController.getSelectedItem(),Double.parseDouble(textFieldMinThreshold.getText()),
+									Double.parseDouble(textFieldMaxThreshold.getText()));
 							u.dispose();
 						}
 					};
