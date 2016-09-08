@@ -1,12 +1,12 @@
 package Chi;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class DataServerReadingToDatabase {
 	private static final String TIMESTAMP_FORMAT="yyyy-MM-dd HH:mm:ss"; //format the time
-	private static SimpleDateFormat formatter=new SimpleDateFormat(DataServerReadingToDatabase.TIMESTAMP_FORMAT);
+	private static DateTimeFormatter formatter=DateTimeFormatter.ofPattern(TIMESTAMP_FORMAT);
 	
 	private static class Data {
 		String sname;
@@ -14,7 +14,7 @@ public class DataServerReadingToDatabase {
 		double reading;
 		
 		public String toString() {
-			return this.sname+"|"+formatter.format(this.timestamp)+"|"+this.reading;
+			return this.sname+"|"+this.timestamp.format(formatter)+"|"+this.reading;
 		}
 	}
 	//Thread safe queue.

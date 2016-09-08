@@ -9,5 +9,5 @@ CREATE TABLE SensorReading(
 	IsMorning Boolean,
 	TimeStp timestamp,
 	Value double,
-	PRIMARY KEY ((SensorName,Year,Month,Day,WeekDay,IsMorning),TimeStp)
+	PRIMARY KEY (SensorName,TimeStp)
 ) WITH CLUSTERING ORDER BY (TimeStp DESC);

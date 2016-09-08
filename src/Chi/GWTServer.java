@@ -8,8 +8,10 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.sql.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
@@ -17,6 +19,8 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
 public class GWTServer {
+	private static final String TIMESTAMP_FORMAT="yyyy-MM-dd HH:mm:ss"; //format the time
+	private static DateTimeFormatter formatter=DateTimeFormatter.ofPattern(TIMESTAMP_FORMAT);
 	private static GWTServerT t;
 	
 	public static Object processRequest (ArrayList<Object> list) {
@@ -331,13 +335,15 @@ public class GWTServer {
 		    	return result;
 		    }
 		    case "37" : { //SensorGetReadingBetweenTime
-		    	ArrayList<SensorReading> lsr=DatabaseReading.getReadingBetweenTime((String)list.get(2),(LocalDateTime)list.get(3),(LocalDateTime)list.get(4),5000);
+		    	ArrayList<SensorReading> lsr=DatabaseReading.getReadingBetweenTime((String)list.get(1),(LocalDateTime)list.get(2),(LocalDateTime)list.get(3),5000);
 		    	ArrayList<Object []> result=new ArrayList<>();
-		    	for (SensorReading sr : lsr) result.add(new Object [] {sr.getTimestamp(),sr.getActualValue()});
+		    	for (SensorReading sr : lsr) {
+		    		result.add(new Object [] {sr.getTimestamp(),sr.getActualValue()});
+		    	}
 		    	return result;
 		    }
 		    case "38" : { //SensorGetReadingBetweenTime
-		    	ArrayList<SensorReading> lsr=DatabaseReading.getReadingMonthly((String)list.get(2),(int)list.get(3),(int)list.get(4));
+		    	ArrayList<SensorReading> lsr=DatabaseReading.getReadingMonthly((String)list.get(1),(int)list.get(2),(int)list.get(3));
 		    	ArrayList<Object []> result=new ArrayList<>();
 		    	for (SensorReading sr : lsr) result.add(new Object [] {sr.getTimestamp(),sr.getActualValue()});
 		    	return result;
@@ -403,7 +409,7 @@ public class GWTServer {
 				try {
 					try {
 						serverSocket=new ServerSocket(Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_GWT_PORT_KEY)));
-					    serverSocket.setSoTimeout(0);
+					    //serverSocket.setSoTimeout(0);
 					    Socket socket=(Socket) serverSocket.accept();
 					    InputStream is=socket.getInputStream();
 					    ObjectInputStream ois=new ObjectInputStream(is);
