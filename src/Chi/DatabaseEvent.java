@@ -4,13 +4,51 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 public class DatabaseEvent {
 
+	public static interface OnSensorEventLoggedAction {
+		public void run(String name, String eventType, String eventValue);
+	}
+
+	public static interface OnControllerEventLoggedAction {
+		public void run(String name, String eventType, String eventValue);
+	}
+
+	private static ArrayList<OnSensorEventLoggedAction> OnSensorEventLoggedList = new ArrayList<>();
+	private static ArrayList<OnControllerEventLoggedAction> OnControllerEventLoggedList = new ArrayList<>();
+
+	public static void registerOnSensorEventLoggedAction(OnSensorEventLoggedAction a) {
+		if (!OnSensorEventLoggedList.contains(a)) {
+			Logger.log("DatabaseEvent - Registered " + a.toString() + " to OnSensorEventLogged callback");
+			OnSensorEventLoggedList.add(a);
+		}
+	}
+	
+	public static void unregisterOnSensorEventLoggedAction(OnSensorEventLoggedAction a) {
+		if (OnSensorEventLoggedList.contains(a)) {
+			Logger.log("DatabaseEvent - Unregistered " + a.toString() + " from OnSensorEventLogged callback");
+			OnSensorEventLoggedList.remove(a);
+		}
+	}
+	
+	public static void registerOnControllerEventLoggedAction(OnControllerEventLoggedAction a) {
+		if (!OnControllerEventLoggedList.contains(a)) {
+			Logger.log("DatabaseEvent - Registered " + a.toString() + " to OnControllerEventLogged callback");
+			OnControllerEventLoggedList.add(a);
+		}
+	}
+	
+	public static void unregisterOnControllerEventLoggedAction(OnControllerEventLoggedAction a) {
+		if (OnControllerEventLoggedList.contains(a)) {
+			Logger.log("DatabaseEvent - Unregistered " + a.toString() + " from OnControllerEventLogged callback");
+			OnControllerEventLoggedList.remove(a);
+		}
+	}
+	
 	public static boolean logSensorEvent (String name, String eventType, String eventValue) {
 		StringBuilder sbLog=new StringBuilder("DatabaseEvent - Log Sensor Event ");
 		sbLog.append(name); sbLog.append("|"); sbLog.append(eventType); sbLog.append("|"); sbLog.append(eventValue);

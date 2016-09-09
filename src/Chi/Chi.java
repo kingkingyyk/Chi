@@ -37,6 +37,7 @@ public class Chi {
 		FrameRegularScheduleManagementBind.initialize();
 		FrameSpecialScheduleManagementBind.initialize();
 		FrameOngoingSchedulesBind.initialize();
+		FrameNotificationBind.initialize();
 		Logger.log("GUI & data binding done.");
 		
 		Logger.log("MainUI started.");
