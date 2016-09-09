@@ -46,10 +46,8 @@ public class SchedulingDataRegular extends SchedulingData {
 	
 	protected void updateScheduler(boolean updateScheduler) {
 		Logger.log("Scheduling Data Regular - Calculating start & end time for "+this.name);
-		Cache.DayScheduleRules.update();
 		if (day!=0) {
 			LocalDateTime now=LocalDateTime.now();
-			Cache.DayScheduleRules.update();
 			Dayschedulerule r=Cache.DayScheduleRules.map.get(this.rule);
 			LocalDateTime temp=LocalDateTime.of(now.getYear(),now.getMonthValue(),now.getDayOfMonth(),r.getEndhour(),r.getEndminute());
 			if (now.compareTo(temp)>=0) {

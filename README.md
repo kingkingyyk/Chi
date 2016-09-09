@@ -37,9 +37,9 @@ Current Working Stuffs :
 + Controller Status Reporting
 + Actuator Status Reporting
 + Actuator control (Manual / Scheduled)
++ Efficient local data caching
 
 v1.1 To-Do-List :
-+ Rewrite dataset store & caching mehanism to improve UI latency
 + Implement automated value propagation
 + Notification server
 + Secure communication between controller & server

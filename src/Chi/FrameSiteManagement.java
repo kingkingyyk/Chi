@@ -222,7 +222,7 @@ public class FrameSiteManagement extends JFrame {
 	}
 	
 	public void updateSiteTable() {
-		updateSuccess=Cache.Sites.updateWithWait();
+		updateSuccess=true;
 		if (updateSuccess) {
 			siteList.clear(); siteList.addAll(Cache.Sites.map.values());
 			rootRow=new SiteTableRow(null);

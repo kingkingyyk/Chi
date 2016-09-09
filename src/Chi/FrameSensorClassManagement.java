@@ -118,7 +118,7 @@ public class FrameSensorClassManagement extends JFrame {
 	}
 	
 	public void updateSensorClassTable() {
-		if (Cache.SensorClasses.updateWithWait()) {
+		if (true) {
 			list.clear();
 			list.addAll(Cache.SensorClasses.map.values());
 			int lastSelectedRow=-1;

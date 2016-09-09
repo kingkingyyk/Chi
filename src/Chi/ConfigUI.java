@@ -390,6 +390,7 @@ public class ConfigUI extends JDialog {
 		btnOK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				saveConfigurations();
+				Cache.initialize();
 				dispose();
 			}
 		});
@@ -433,6 +434,5 @@ public class ConfigUI extends JDialog {
 		Config.setConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PASSWORD_KEY, new String(passwordFieldDatabasePassword.getPassword()));
 		
 		Config.writeConfigFile();
-		Cache.initialize();
 	}
 }

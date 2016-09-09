@@ -228,7 +228,6 @@ public class FrameUserManagement extends JFrame {
 	}
 	
 	public void updateUserTable() {
-		Cache.Users.updateWithWait();
 		rootRow=new UserTableRow(null);
 		this.list.clear();
 		this.list.addAll(Cache.Users.map.values());

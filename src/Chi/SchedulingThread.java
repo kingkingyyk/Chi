@@ -108,7 +108,6 @@ public class SchedulingThread extends Thread {
 			
 			if (!hasConflict) {
 				Logger.log("RegularSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.actuatorFlag+". [SET]");
-				Cache.Actuators.update();
 				TriggerActuator(Cache.Actuators.map.get(dat.actuatorName).getController().getControllername(),this.dat.actuatorName,this.dat.actuatorFlag);
 			} else {
 				Logger.log("RegularSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.actuatorFlag+". [NOT SET DUE TO LOW PRIORITY]");
@@ -196,7 +195,6 @@ public class SchedulingThread extends Thread {
 			
 			if (!hasConflict) {
 				Logger.log("SpecialSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.actuatorFlag+". [SET]");
-				Cache.Actuators.update();
 				TriggerActuator(Cache.Actuators.map.get(dat.actuatorName).getController().getControllername(),this.dat.actuatorName,this.dat.actuatorFlag);
 			} else {
 				Logger.log("SpecialSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.actuatorFlag+". [NOT SET DUE TO LOW PRIORITY]");
@@ -240,7 +238,6 @@ public class SchedulingThread extends Thread {
 		OnSpecialScheduleStart osss=new OnSpecialScheduleStart();
 		OnSpecialScheduleEnd osse=new OnSpecialScheduleEnd();
 		
-		Cache.SpecialSchedules.update();
 		for (Specialschedule s : Cache.SpecialSchedules.map.values()) {
 			SchedulingDataSpecial d=new SchedulingDataSpecial(	s.getSchedulename(),s.getActuator().getName(),
 																s.getYear(), s.getMonth(), s.getDay(), s.getDayschedulerule().getRulename(),
@@ -261,7 +258,6 @@ public class SchedulingThread extends Thread {
 		OnRegularScheduleStart orss=new OnRegularScheduleStart();
 		OnRegularScheduleEnd orse=new OnRegularScheduleEnd();
 		
-		Cache.RegularSchedules.update();
 		for (Regularschedule r : Cache.RegularSchedules.map.values()) {
 			SchedulingDataRegular d=new SchedulingDataRegular(	r.getSchedulename(), r.getActuator().getName(), r.getDaymask(),
 																r.getDayschedulerule().getRulename(), r.getActuatoron(), r.getPriority(),

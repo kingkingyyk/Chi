@@ -76,6 +76,7 @@ public class DatabaseController {
 				ctrl.setLastreporttime(new Date(0));
 				session.save(ctrl);
 				tx.commit();
+				Cache.Controllers.map.put(n,ctrl);
 	
 				Logger.log("DatabaseController - Create - Execute Callbacks");
 				for (OnCreateAction a : OnCreateList) a.run(n,s,x,y,t);
@@ -96,7 +97,10 @@ public class DatabaseController {
 		boolean flag=false;
 		try {
 			tx = session.beginTransaction();
-			if (!oldN.equals(n)) session.createQuery("Update Controller set ControllerName='" + n + "' where ControllerName='" + oldN + "'").executeUpdate();
+			if (!oldN.equals(n)) {
+				session.createQuery("Update Controller set ControllerName='" + n + "' where ControllerName='" + oldN + "'").executeUpdate();
+				Cache.Controllers.map.remove(oldN);
+			}
 			Controller ctrl = (Controller) session.get(Controller.class,n);
 			if (ctrl!=null) {
 				ctrl.setSite((Site)session.get(Site.class,s));
@@ -106,6 +110,7 @@ public class DatabaseController {
 				ctrl.setLastreporttime(new Date(0));
 				session.update(ctrl);
 				tx.commit();
+				Cache.Controllers.map.put(n,ctrl);
 	
 				Logger.log("DatabaseController - Update - Execute Callbacks");
 				for (OnUpdateAction a : OnUpdateList) a.run(n,n,s,x,y,t);
@@ -155,6 +160,7 @@ public class DatabaseController {
 			if (ctrl!=null) {
 				session.delete(ctrl);
 				tx.commit();
+				Cache.Controllers.map.remove(n);
 	
 				Logger.log("DatabaseController - Delete - Execute Callbacks");
 				for (OnDeleteAction a : OnDeleteList) a.run(n);

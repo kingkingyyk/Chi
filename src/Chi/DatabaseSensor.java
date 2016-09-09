@@ -56,6 +56,7 @@ public class DatabaseSensor {
 				s=new Sensor(sn,session.get(Controller.class,con),session.get(Sensorclass.class,cn),min,max,trans,unit,minT,maxT,null);
 				session.save(s);
 				tx.commit();
+				Cache.Sensors.map.put(sn,s);
 	
 				Logger.log("DatabaseSensor - Create - Execute Callbacks");
 				for (OnCreateAction a : OnCreateList) a.run(sn,cn,min,max,trans,unit,con,minT,maxT);
@@ -76,7 +77,10 @@ public class DatabaseSensor {
 		boolean flag=false;
 		try {
 			tx = session.beginTransaction();
-			if (!oldSN.equals(sn)) session.createQuery("update Sensor set SensorName='"+sn+"' where SensorName='"+oldSN+"'").executeUpdate();
+			if (!oldSN.equals(sn)) {
+				session.createQuery("update Sensor set SensorName='"+sn+"' where SensorName='"+oldSN+"'").executeUpdate();
+				Cache.Sensors.map.remove(oldSN);
+			}
 			Sensor s = session.get(Sensor.class,sn);
 			if (s!=null) {
 				s.setSensorclass(session.get(Sensorclass.class,cn));
@@ -89,6 +93,7 @@ public class DatabaseSensor {
 				s.setMaxthreshold(maxT);
 				session.save(s);
 				tx.commit();
+				Cache.Sensors.map.put(sn,s);
 	
 				Logger.log("DatabaseSensor - Update - Execute Callbacks");
 				for (OnUpdateAction a : OnUpdateList) a.run(oldSN, sn,cn,min,max,trans,unit,con,minT,maxT);
@@ -113,6 +118,7 @@ public class DatabaseSensor {
 			if (s!=null) {
 				session.delete(s);
 				tx.commit();
+				Cache.Sensors.map.remove(sn);
 	
 				Logger.log("DatabaseSensor - Delete - Execute Callbacks");
 				for (OnDeleteAction a : OnDeleteList) a.run(sn);

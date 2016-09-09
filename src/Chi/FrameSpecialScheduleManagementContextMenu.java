@@ -20,10 +20,8 @@ public class FrameSpecialScheduleManagementContextMenu extends JPopupMenu {
 		newMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.Actuators.updateWithWait() && Cache.DayScheduleRules.updateWithWait() && Cache.SpecialSchedules.updateWithWait() && Cache.RegularSchedules.updateWithWait() ) {
-					DialogSpecialScheduleAddEdit diag=new DialogSpecialScheduleAddEdit();
-					diag.setVisible(true);
-				}
+				DialogSpecialScheduleAddEdit diag=new DialogSpecialScheduleAddEdit();
+				diag.setVisible(true);
 			}
 		});
 		
@@ -31,11 +29,9 @@ public class FrameSpecialScheduleManagementContextMenu extends JPopupMenu {
 		editMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.Actuators.updateWithWait() && Cache.DayScheduleRules.updateWithWait() && Cache.SpecialSchedules.updateWithWait() && Cache.RegularSchedules.updateWithWait()) {
-					Specialschedule s=m.getSelectedSchedule();
-					DialogSpecialScheduleAddEdit diag=new DialogSpecialScheduleAddEdit(s.getSchedulename(),s.getActuator().getName(),s.getYear(),s.getMonth(),s.getDay(),s.getDayschedulerule().getRulename(),s.getActuatoron(),s.getPriority(),s.getEnabled());
-					diag.setVisible(true);
-				}
+				Specialschedule s=m.getSelectedSchedule();
+				DialogSpecialScheduleAddEdit diag=new DialogSpecialScheduleAddEdit(s.getSchedulename(),s.getActuator().getName(),s.getYear(),s.getMonth(),s.getDay(),s.getDayschedulerule().getRulename(),s.getActuatoron(),s.getPriority(),s.getEnabled());
+				diag.setVisible(true);
 			}
 		});
 		

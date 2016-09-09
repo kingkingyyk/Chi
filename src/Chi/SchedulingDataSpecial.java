@@ -52,7 +52,6 @@ public class SchedulingDataSpecial extends SchedulingData {
 	
 	protected void updateScheduler(boolean updateScheduler) {
 		Logger.log("Scheduling Data Special - Calculating start & end time for "+this.name);
-		Cache.DayScheduleRules.update();
 		Dayschedulerule r=Cache.DayScheduleRules.map.get(this.rule);
 		if (r!=null) {
 			this.nextStartTime=LocalDateTime.of(year,month,day,r.getStarthour(),r.getStartminute());

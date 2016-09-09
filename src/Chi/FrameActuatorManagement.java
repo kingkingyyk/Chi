@@ -220,7 +220,7 @@ public class FrameActuatorManagement extends JFrame {
 	}
 	
 	public void updateActuatorTable() {
-		updateSuccess=Cache.Actuators.updateWithWait();
+		updateSuccess=true;
 		if (updateSuccess) {
 			actuatorList.clear();
 			actuatorList.addAll(Cache.Actuators.map.values());

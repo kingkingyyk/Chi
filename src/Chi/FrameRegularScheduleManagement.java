@@ -235,7 +235,6 @@ public class FrameRegularScheduleManagement extends JFrame {
 	}
 	
 	public void updateRegularScheduleTable() {
-		Cache.RegularSchedules.update();
 		rootRow=new RegularScheduleTableRow(null);
 		list.clear(); list.addAll(Cache.RegularSchedules.map.values());
 		for (Regularschedule r : list) {

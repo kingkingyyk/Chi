@@ -19,21 +19,17 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
 public class GWTServer {
-	private static final String TIMESTAMP_FORMAT="yyyy-MM-dd HH:mm:ss"; //format the time
-	private static DateTimeFormatter formatter=DateTimeFormatter.ofPattern(TIMESTAMP_FORMAT);
 	private static GWTServerT t;
 	
 	public static Object processRequest (ArrayList<Object> list) {
 	    switch ((String)list.get(0)) {
 		    case "0" : { //UserCheckNameExists
-		    	Cache.Users.update();
 		    	return Cache.Users.map.containsKey(list.get(1));
 		    }
 		    case "1" : { //UserRegister
 		    	return DatabaseUser.createUserCredential((String)list.get(1),(String)list.get(2),1,"PENDING APPROVAL");
 		    }
 		    case "2" : { //UserCheckCredentialOK
-		    	Cache.Users.update();
 		    	User u=Cache.Users.map.get(list.get(1));
 		    	if (u==null || !u.getPassword().equals(list.get(2))) {
 		    		return "INVALID";
@@ -42,44 +38,36 @@ public class GWTServer {
 		    	}
 		    }
 		    case "3" : { //SiteGetList
-		    	Cache.Sites.update();
 		    	ArrayList<Object []> result=new ArrayList<>();
 		    	for (Site s : Cache.Sites.map.values()) result.add(s.toObj());
 		    	return result;
 		    }
 		    case "4" : { //SiteGetControllers
-		    	Cache.Sites.update();
-		    	Cache.Controllers.update();
 		    	ArrayList<Object []> result=new ArrayList<>();
 		    	for (Controller c : Cache.Sites.map.get(list.get(1)).getControllers()) result.add(c.toObj());
 		    	return result;
 		    }
 		    case "5" : { //ControllerGetSensors
-		    	Cache.Controllers.update();
 		    	ArrayList<Object []> result=new ArrayList<>();
 			    for (Sensor s : Cache.Controllers.map.get(list.get(1)).getSensors()) result.add(s.toObj());
 		    	return result;
 		    }
 		    case "6" : { //ControllerGetActuators
-		    	Cache.Controllers.update();
 		    	ArrayList<Object []> result=new ArrayList<>();
 			    for (Actuator act : Cache.Controllers.map.get(list.get(1)).getActuators()) result.add(act.toObj());
 		    	return result;
 		    }
 		    case "7" : { //DayScheduleRuleGetAll
-		    	Cache.DayScheduleRules.update();
 		    	ArrayList<Object []> result=new ArrayList<>();
 			    for (Dayschedulerule r : Cache.DayScheduleRules.map.values()) result.add(r.toObj());
 		    	return result;
 		    }
 		    case "8" : { //DayScheduleRuleGetByName
-		    	Cache.DayScheduleRules.update();
 		    	ArrayList<Object> result=new ArrayList<>();
 		    	for (Object o : Cache.DayScheduleRules.map.get(list.get(1)).toObj()) result.add(o);
 		    	return result;
 		    }
 		    case "9" : { //DayScheduleRuleSet
-		    	Cache.DayScheduleRules.update();
 		    	Dayschedulerule r=Cache.DayScheduleRules.map.get(list.get(1));
 		    	if (r==null) return "RULE_NOT_EXIST";
 		    	else {
@@ -92,7 +80,6 @@ public class GWTServer {
 		    	}
 		    }
 		    case "10" : { //DayScheduleRuleCreate
-		    	Cache.DayScheduleRules.update();
 		    	Dayschedulerule r=Cache.DayScheduleRules.map.get(list.get(1));
 		    	if (r==null) return "RULE_ALREADY_EXISTS";
 		    	else {
@@ -105,7 +92,6 @@ public class GWTServer {
 		    	}
 		    }
 		    case "11" : { //ActuatorGetRegularSchedules
-		    	Cache.Actuators.update();
 		    	ArrayList<Object []> result=new ArrayList<>();
 		    	for (Regularschedule r : Cache.Actuators.map.get(list.get(1)).getRegularschedules()) {
 		    		result.add(r.toObj());
@@ -113,7 +99,6 @@ public class GWTServer {
 		    	return result;
 		    }
 		    case "12" : { //ActuatorGetSpecialSchedules
-		    	Cache.Actuators.update();
 		    	ArrayList<Object []> result=new ArrayList<>();
 		    	for (Specialschedule ss : Cache.Actuators.map.get(list.get(1)).getSpecialschedules()) {
 		    		result.add(ss.toObj());
@@ -121,7 +106,6 @@ public class GWTServer {
 		    	return result;
 		    }
 		    case "13" : { //RegularScheduleGetAll
-		    	Cache.RegularSchedules.update();
 		    	ArrayList<Object []> result=new ArrayList<>();
 		    	for (Regularschedule r : Cache.RegularSchedules.map.values()) {
 		    		result.add(r.toObj());
@@ -129,7 +113,6 @@ public class GWTServer {
 		    	return result;
 		    }
 		    case "14" : { //RegularScheduleByName
-		    	Cache.RegularSchedules.update();
 		    	ArrayList<Object> result=new ArrayList<>();
 		    	for (Object o : Cache.RegularSchedules.map.get(list.get(1)).toObj()) {
 		    		result.add(o);
@@ -137,7 +120,6 @@ public class GWTServer {
 		    	return result;
 		    }
 		    case "15" : { //RegularScheduleUpdateName
-		    	Cache.RegularSchedules.update();
 		    	Regularschedule r=Cache.RegularSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
@@ -146,7 +128,6 @@ public class GWTServer {
 		    	}
 		    }
 		    case "16" : { //RegularScheduleUpdateActuator
-		    	Cache.RegularSchedules.update(); Cache.Actuators.update();
 		    	Regularschedule r=Cache.RegularSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else if (!Cache.Actuators.map.containsKey(list.get(2))) return "ACTUATOR_NOT_EXIST";
@@ -156,7 +137,6 @@ public class GWTServer {
 		    	}
 		    }
 		    case "17" : { //RegularScheduleUpdateDay
-		    	Cache.RegularSchedules.update();
 		    	Regularschedule r=Cache.RegularSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else if ((int)list.get(2)>=128) return "INVALID_DAY";
@@ -166,7 +146,6 @@ public class GWTServer {
 		    	}
 		    }
 		    case "18" : { //RegularScheduleUpdateDayScheduleRule
-		    	Cache.RegularSchedules.update();
 		    	Regularschedule r=Cache.RegularSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else if (!Cache.DayScheduleRules.map.containsKey(list.get(2))) return "RULE_NOT_EXIST";
@@ -176,7 +155,6 @@ public class GWTServer {
 		    	}
 		    }
 		    case "19" : { //RegularScheduleActuatorOn
-		    	Cache.RegularSchedules.update();
 		    	Regularschedule r=Cache.RegularSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
@@ -185,7 +163,6 @@ public class GWTServer {
 		    	}
 		    }
 		    case "20" : { //RegularSchedulePriority
-		    	Cache.RegularSchedules.update();
 		    	Regularschedule r=Cache.RegularSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
@@ -194,7 +171,6 @@ public class GWTServer {
 		    	}
 		    }
 		    case "21" : { //RegularScheduleEnabled
-		    	Cache.RegularSchedules.update();
 		    	Regularschedule r=Cache.RegularSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
@@ -203,7 +179,6 @@ public class GWTServer {
 		    	}
 		    }
 		    case "22" : { //RegularScheduleCreate
-		    	Cache.RegularSchedules.update(); Cache.Actuators.update(); Cache.DayScheduleRules.update();
 		    	Regularschedule r=Cache.RegularSchedules.map.get(list.get(1));
 		    	if (r!=null) return "SCHEDULE_ALREADY_EXISTS";
 		    	else if (!Cache.Actuators.map.containsKey(list.get(2))) return "ACTUATOR_NOT_EXIST";
@@ -217,7 +192,6 @@ public class GWTServer {
 		    	}
 		    }
 		    case "23" : { //SpecialScheduleGetAll
-		    	Cache.SpecialSchedules.update();
 		    	ArrayList<Object []> result=new ArrayList<>();
 		    	for (Specialschedule r : Cache.SpecialSchedules.map.values()) {
 		    		result.add(r.toObj());
@@ -225,7 +199,6 @@ public class GWTServer {
 		    	return result;
 		    }
 		    case "24" : { //SpecialScheduleByName
-		    	Cache.SpecialSchedules.update();
 		    	ArrayList<Object> result=new ArrayList<>();
 		    	for (Object o : Cache.SpecialSchedules.map.get(list.get(1)).toObj()) {
 		    		result.add(o);
@@ -233,7 +206,6 @@ public class GWTServer {
 		    	return result;
 		    }
 		    case "25" : { //SpecialScheduleUpdateName
-		    	Cache.SpecialSchedules.update();
 		    	Specialschedule r=Cache.SpecialSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
@@ -242,7 +214,6 @@ public class GWTServer {
 		    	}
 		    }
 		    case "26" : { //SpecialScheduleUpdateActuator
-		    	Cache.SpecialSchedules.update(); Cache.Actuators.update();
 		    	Specialschedule r=Cache.SpecialSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else if (!Cache.Actuators.map.containsKey(list.get(2))) return "ACTUATOR_NOT_EXIST";
@@ -252,7 +223,6 @@ public class GWTServer {
 		    	}
 		    }
 		    case "27" : { //SpecialScheduleUpdateDay
-		    	Cache.SpecialSchedules.update();
 		    	Specialschedule r=Cache.SpecialSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
@@ -261,7 +231,6 @@ public class GWTServer {
 		    	}
 		    }
 		    case "28" : { //SpecialScheduleUpdateDayScheduleRule
-		    	Cache.SpecialSchedules.update();
 		    	Specialschedule r=Cache.SpecialSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else if (!Cache.DayScheduleRules.map.containsKey(list.get(2))) return "RULE_NOT_EXIST";
@@ -271,7 +240,6 @@ public class GWTServer {
 		    	}
 		    }
 		    case "29" : { //SpecialScheduleActuatorOn
-		    	Cache.SpecialSchedules.update();
 		    	Specialschedule r=Cache.SpecialSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
@@ -280,7 +248,6 @@ public class GWTServer {
 		    	}
 		    }
 		    case "30" : { //SpecialSchedulePriority
-		    	Cache.SpecialSchedules.update();
 		    	Specialschedule r=Cache.SpecialSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
@@ -289,7 +256,6 @@ public class GWTServer {
 		    	}
 		    }
 		    case "31" : { //SpecialScheduleEnabled
-		    	Cache.SpecialSchedules.update();
 		    	Specialschedule r=Cache.SpecialSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
@@ -298,7 +264,6 @@ public class GWTServer {
 		    	}
 		    }
 		    case "32" : { //SpecialScheduleCreate
-		    	Cache.SpecialSchedules.update(); Cache.Actuators.update(); Cache.DayScheduleRules.update();
 		    	Specialschedule r=Cache.SpecialSchedules.map.get(list.get(1));
 		    	if (r!=null) return "SCHEDULE_ALREADY_EXISTS";
 		    	else if (!Cache.Actuators.map.containsKey(list.get(2))) return "ACTUATOR_NOT_EXIST";
@@ -329,7 +294,6 @@ public class GWTServer {
 		    	return result;
 		    }
 		    case "36" : { //SensorGetByName
-		    	Cache.Sensors.update();
 		    	ArrayList<Object []> result=new ArrayList<>();
 		    	if (Cache.Sensors.map.containsKey(list.get(1))) result.add(Cache.Sensors.map.get(list.get(1)).toObj());
 		    	return result;

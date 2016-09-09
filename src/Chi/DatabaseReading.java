@@ -75,9 +75,7 @@ public class DatabaseReading extends DatabaseCassandra {
 			sql[0].setTimestamp(2,Utility.localDateTimeToDate(max));
 			sql[0].setInt(3,limit);
 			ResultSet rs=executeSQL("DB Get Reading", session, sql[0]);
-			System.out.println(rs.toString());
 			
-			Cache.Sensors.update();
 			for (Row r : rs) {
 			    if (rs.getAvailableWithoutFetching() == 100 && !rs.isFullyFetched()) rs.fetchMoreResults();
 				SensorReading sr=new SensorReading(sn,Utility.dateToLocalDateTime(new Date(r.getTimestamp("TimeStp").getTime())),r.getDouble("Value"),Cache.Sensors.map.get(sn).denormalizeValue(r.getDouble("Value")));
@@ -115,7 +113,6 @@ public class DatabaseReading extends DatabaseCassandra {
 			BoundStatement [] sql=getBoundSQLStatementFromFile(session,Config.getConfig(Config.DATABASE_RECORD_QUERY_MONTH_FILE_KEY));
 			
 			LocalDateTime dt=LocalDateTime.of(year,month,1,0,0);
-			Cache.Sensors.update();
 			
 			while (dt.getMonthValue()==month) {
 				sql[0].setString(0, sn);

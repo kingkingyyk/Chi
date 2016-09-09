@@ -77,6 +77,7 @@ public class DatabaseDayScheduleRule {
 				r=new Dayschedulerule(n); r.setStarthour(sh); r.setStartminute(sm); r.setEndhour(eh); r.setEndminute(em);
 				session.save(r);
 				tx.commit();
+				Cache.DayScheduleRules.map.put(n,r);
 	
 				Logger.log("DatabaseDayScheduleRule - Create - Execute Callbacks");
 				for (OnCreateAction a : OnCreateList) a.run(n,sh,sm,eh,em);
@@ -97,12 +98,16 @@ public class DatabaseDayScheduleRule {
 		boolean flag=false;
 		try {
 			tx=session.beginTransaction();
-			if (!oldN.equals(n)) session.createQuery("Update Dayschedulerule set RuleName='"+n+"' where RuleName='"+oldN+"'").executeUpdate();
+			if (!oldN.equals(n)) {
+				session.createQuery("Update Dayschedulerule set RuleName='"+n+"' where RuleName='"+oldN+"'").executeUpdate();
+				Cache.DayScheduleRules.map.remove(oldN);
+			}
 			Dayschedulerule r=session.get(Dayschedulerule.class,n);
 			if (r!=null) {
 				r.setStarthour(sh); r.setStartminute(sm); r.setEndhour(eh); r.setEndminute(em);
 				session.update(r);
 				tx.commit();
+				Cache.DayScheduleRules.map.put(n,r);
 				
 				Logger.log("DB Update DayScheduleRule - Execute Callbacks");
 				for (OnUpdateAction a : OnUpdateList) a.run(oldN,n,sh,sm,eh,em);
@@ -127,6 +132,7 @@ public class DatabaseDayScheduleRule {
 			if (r!=null) {
 				session.delete(r);
 				tx.commit();
+				Cache.DayScheduleRules.map.remove(n);
 				
 				Logger.log("DB Delete DayScheduleRule - Execute Callbacks");
 				for (OnDeleteAction a : OnDeleteList) a.run(n);

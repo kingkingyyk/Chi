@@ -60,6 +60,7 @@ public class DatabaseUser {
 				User u=new User(user,pw,lvl,status,Timestamp.valueOf(LocalDateTime.now()));
 				session.save(u);
 				tx.commit();
+				Cache.Users.map.put(user,u);
 				
 				Logger.log("DB Create User - Execute Callbacks");
 				for (OnCreateAction a : OnCreateList) {
@@ -86,11 +87,15 @@ public class DatabaseUser {
 			boolean flag;
 			try {
 				tx=session.beginTransaction();
-				if (!oldN.equals(user)) session.createQuery("update User set Username='"+user+"' where Username='"+oldN+"'").executeUpdate();
+				if (!oldN.equals(user)) {
+					session.createQuery("update User set Username='"+user+"' where Username='"+oldN+"'").executeUpdate();
+					Cache.Users.map.remove(oldN);
+				}
 				User u=(User)session.get(User.class, user);
 				u.setPassword(pw); u.setLevel(lvl); u.setStatus(status);
 				session.update(u);
 				tx.commit();
+				Cache.Users.map.put(user,u);
 				Logger.log("DB Update User - Execute Callbacks");
 				for (OnUpdateAction a : OnUpdateList) {
 					a.run(user, lvl, status);
@@ -116,11 +121,15 @@ public class DatabaseUser {
 			boolean flag;
 			try {
 				tx=session.beginTransaction();
-				if (!oldN.equals(user))session.createQuery("update User set Username='"+user+"' where Username='"+oldN+"'").executeUpdate();
+				if (!oldN.equals(user)) {
+					session.createQuery("update User set Username='"+user+"' where Username='"+oldN+"'").executeUpdate();
+					Cache.Users.map.remove(oldN);
+				}
 				User u=(User)session.get(User.class,user);
 				u.setLevel(lvl); u.setStatus(status);
 				session.update(u);
 				tx.commit();
+				Cache.Users.map.put(user,u);
 				Logger.log("DB Update User/2 - Execute Callbacks");
 				for (OnUpdateAction a : OnUpdateList) {
 					a.run(user, lvl, status);
@@ -149,6 +158,7 @@ public class DatabaseUser {
 				User u=(User)session.get(User.class, user);
 				session.delete(u);
 				tx.commit();
+				Cache.Users.map.remove(user);
 				Logger.log("DB Delete User - Execute Callbacks");
 				for (OnDeleteAction a : OnDeleteList) {
 					a.run(user);

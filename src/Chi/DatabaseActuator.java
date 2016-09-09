@@ -68,6 +68,7 @@ public class DatabaseActuator {
 				act = new Actuator(n, (Controller) session.get(Controller.class, "DefaultController"),"Pending Update", null, null);
 				session.save(act);
 				tx.commit();
+				Cache.Actuators.map.put(n,act);
 	
 				Logger.log("DatabaseActuator - Create - Execute Callbacks");
 				for (OnCreateAction a : OnCreateList) a.run(n, u);
@@ -88,12 +89,16 @@ public class DatabaseActuator {
 		boolean flag = false;
 		try {
 			tx = session.beginTransaction();
-			if (!oldN.equals(n)) session.createQuery("Update Actuator set Name='" + n + "' where Name='" + oldN + "'").executeUpdate();
+			if (!oldN.equals(n)) {
+				session.createQuery("Update Actuator set Name='" + n + "' where Name='" + oldN + "'").executeUpdate();
+				Cache.Actuators.map.remove(oldN);
+			}
 			Actuator act = session.get(Actuator.class, n);
 			if (act != null) {
 				act.setController((Controller) session.get(Controller.class, u));
 				session.update(act);
 				tx.commit();
+				Cache.Actuators.map.put(n,act);
 				
 				Logger.log("DB Update Actuator - Execute Callbacks");
 				for (OnUpdateAction a : OnUpdateList) a.run(oldN, n, u);
@@ -143,6 +148,7 @@ public class DatabaseActuator {
 			if (act!=null) {
 				session.delete(act);
 				tx.commit();
+				Cache.Actuators.map.remove(n);
 				
 				Logger.log("DB Delete Actuator - Execute Callbacks");
 				for (OnDeleteAction a : OnDeleteList) a.run(n);

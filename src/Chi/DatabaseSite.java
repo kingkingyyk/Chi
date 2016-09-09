@@ -56,6 +56,7 @@ public class DatabaseSite {
 				s=new Site(n,u,null);
 				session.save(s);
 				tx.commit();
+				Cache.Sites.map.put(n,s);
 	
 				Logger.log("DatabaseSite - Create - Execute Callbacks");
 				for (OnCreateAction a : OnCreateList) a.run(n,u);
@@ -76,12 +77,16 @@ public class DatabaseSite {
 		boolean flag=false;
 		try {
 			tx = session.beginTransaction();
-			if (!oldN.equals(n)) session.createQuery("update Site set SiteName='"+n+"' where SiteName='"+oldN+"'").executeUpdate();
+			if (!oldN.equals(n)) {
+				session.createQuery("update Site set SiteName='"+n+"' where SiteName='"+oldN+"'").executeUpdate();
+				Cache.Sites.map.remove(oldN);
+			}
 			Site s = session.get(Site.class,n);
 			if (s!=null) {
 				s.setSitemapurl(u);
 				session.update(s);
 				tx.commit();
+				Cache.Sites.map.put(n,s);
 	
 				Logger.log("DatabaseSite - Update - Execute Callbacks");
 				for (OnUpdateAction a : OnUpdateList) a.run(oldN,n,u);
@@ -106,6 +111,7 @@ public class DatabaseSite {
 			if (s!=null) {
 				session.delete(s);
 				tx.commit();
+				Cache.Sites.map.remove(n);
 	
 				Logger.log("DatabaseSite - Delete - Execute Callbacks");
 				for (OnDeleteAction a : OnDeleteList) a.run(n);

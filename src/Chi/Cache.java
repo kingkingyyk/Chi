@@ -1,8 +1,9 @@
 package Chi;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import javax.swing.JOptionPane;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -32,9 +33,11 @@ public class Cache {
 	}
 	
 	public static void initialize() {
+		WaitUI u=new WaitUI();
+		u.setText("Pooling data from database... (20)");
 		Thread t=new Thread() {
 			public void run () {
-			    try{
+				try {
 			        Configuration c= new Configuration().configure("/conf/hibernate.cfg.xml");
 			        c.setProperty("hibernate.connection.username",Config.getConfig(Config.CONFIG_SERVER_DATABASE_HSQL_USERNAME_KEY));
 			        c.setProperty("hibernate.connection.password",Config.getConfig(Config.CONFIG_SERVER_DATABASE_HSQL_PASSWORD_KEY));
@@ -59,46 +62,60 @@ public class Cache {
 			    DayScheduleRules=new DayScheduleRuleData();
 			    RegularSchedules=new RegularScheduleData();
 			    SpecialSchedules=new SpecialScheduleData();
+			    
+			    boolean flag=(factory!=null);
+			    if (flag) {
+				    flag &=Actuators.update();
+				    flag &=Sites.update();
+				    flag &=Controllers.update();
+				    flag &=SensorClasses.update();
+				    flag &=Sensors.update();
+				    flag &=Users.update();
+				    flag &=DayScheduleRules.update();
+				    flag &=RegularSchedules.update();
+				    flag &=SpecialSchedules.update();
+			    }
+			    
+			    if (!flag) JOptionPane.showMessageDialog(null,"Fail to update data from database!",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
+			    
+			    u.setVisible(false);
 			}
 		};
 		t.start();
+		Thread t2=new Thread() {
+			public void run () {
+				try { Thread.sleep(1000); }catch (InterruptedException e) {}
+				for (int cd=20;cd>=0 && u.isVisible();cd--) {
+					u.setText("Pooling data from database... ("+cd+")");
+					try { Thread.sleep(1000); }catch (InterruptedException e) {}
+				}
+			}
+		};
+		t2.start();
+		u.setVisible(true);
 	}
 	
 	private static abstract class Data<T> {
-		protected static boolean updateSuccess=false;
-		public HashMap<String,T> map=new HashMap<>();
+		public ConcurrentHashMap<String,T> map=new ConcurrentHashMap<>();
 		public String getType() {return "data";}
 		public String getClassName() {return "data";}
 		public void onAcquired(@SuppressWarnings("rawtypes") List l) {}
-		public void update() {
+		
+		public boolean update() {
 			Session session=factory.openSession();
 			Transaction tx=null;
+			boolean flag=false;
 			try {
 				tx=session.beginTransaction();
 				onAcquired(session.createQuery("FROM "+getClassName()).getResultList());
-				updateSuccess=true;
+				flag=true;
 			} catch (HibernateException e) {
-				updateSuccess=false;
 		        Logger.log("Cache.update"+getType()+" Error - "+e.getMessage());
 		        if (tx!=null) tx.rollback();
 		    } finally {
 		         session.close(); 
 		    }
-		}
-		public boolean updateWithWait() {
-			updateSuccess=false;
-			WaitUI u=new WaitUI();
-			u.setText("Querying "+getType());
-			Thread t=new Thread() {
-				public void run () {
-					try { Thread.sleep(10); } catch (InterruptedException e) {}
-					update();
-					u.dispose();
-				}
-			};
-			t.start();
-			u.setVisible(true);
-			return updateSuccess;
+			return flag;
 		}
 	}
 	

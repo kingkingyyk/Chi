@@ -77,6 +77,7 @@ public class DatabaseRegularSchedule {
 				r=new Regularschedule(sn,session.get(Actuator.class,an),session.get(Dayschedulerule.class,rn),day,ao,pr,en);
 				session.save(r);
 				tx.commit();
+				Cache.RegularSchedules.map.put(sn,r);
 	
 				Logger.log("DatabaseRegularSchedule - Create - Execute Callbacks");
 				for (OnCreateAction a : OnCreateList) a.run(sn,an,day,rn,ao,pr,en);
@@ -97,7 +98,10 @@ public class DatabaseRegularSchedule {
 		boolean flag=false;
 		try {
 			tx = session.beginTransaction();
-			if (!oldSN.equals(sn)) session.createQuery("update Regularschedule set ScheduleName='"+sn+"' where ScheduleName='"+oldSN+"'").executeUpdate();
+			if (!oldSN.equals(sn)) {
+				session.createQuery("update Regularschedule set ScheduleName='"+sn+"' where ScheduleName='"+oldSN+"'").executeUpdate();
+				Cache.RegularSchedules.map.remove(oldSN);
+			}
 			Regularschedule r = session.get(Regularschedule.class,sn);
 			if (r!=null) {
 				r.setActuator(session.get(Actuator.class,an));
@@ -108,6 +112,7 @@ public class DatabaseRegularSchedule {
 				r.setEnabled(en);
 				session.update(r);
 				tx.commit();
+				Cache.RegularSchedules.map.put(sn,r);
 	
 				Logger.log("DatabaseRegularSchedule - Update - Execute Callbacks");
 				for (OnUpdateAction a : OnUpdateList) a.run(oldSN,sn,an,day,rn,ao,pr,en);
@@ -132,6 +137,7 @@ public class DatabaseRegularSchedule {
 			if (r!=null) {
 				session.delete(r);
 				tx.commit();
+				Cache.RegularSchedules.map.remove(sn);
 	
 				Logger.log("DatabaseRegularSchedule - Delete - Execute Callbacks");
 				for (OnDeleteAction a : OnDeleteList) a.run(sn);

@@ -20,10 +20,8 @@ public class FrameSensorManagementContextMenu extends JPopupMenu {
 		newMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.Controllers.updateWithWait() && Cache.SensorClasses.updateWithWait() && Cache.Sensors.updateWithWait()) {
-					DialogSensorAddEdit diag=new DialogSensorAddEdit();
-					diag.setVisible(true);
-				}
+				DialogSensorAddEdit diag=new DialogSensorAddEdit();
+				diag.setVisible(true);
 			}
 		});
 		
@@ -31,11 +29,9 @@ public class FrameSensorManagementContextMenu extends JPopupMenu {
 		editMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.Controllers.updateWithWait() && Cache.SensorClasses.updateWithWait() && Cache.Sensors.updateWithWait()) {
-					Sensor s=m.getSelectedSensor();
-					DialogSensorAddEdit diag=new DialogSensorAddEdit(s.getSensorname(),s.getSensorclass().getClassname(),s.getMinvalue(),s.getMaxvalue(),s.getTransformationfactor(),s.getUnit(),s.getController().getControllername());
-					diag.setVisible(true);
-				}
+				Sensor s=m.getSelectedSensor();
+				DialogSensorAddEdit diag=new DialogSensorAddEdit(s.getSensorname(),s.getSensorclass().getClassname(),s.getMinvalue(),s.getMaxvalue(),s.getTransformationfactor(),s.getUnit(),s.getController().getControllername());
+				diag.setVisible(true);
 			}
 		});
 		

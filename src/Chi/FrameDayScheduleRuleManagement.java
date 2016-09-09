@@ -225,7 +225,7 @@ public class FrameDayScheduleRuleManagement extends JFrame {
 	}
 	
 	public void updateDayScheduleRuleTable() {
-		if (Cache.DayScheduleRules.updateWithWait()) {
+		if (true) {
 			this.list.clear(); this.list.addAll(Cache.DayScheduleRules.map.values());
 			
 			rootRow=new DayScheduleRuleTableRow(null);

@@ -229,7 +229,6 @@ public class FrameSensorManagement extends JFrame {
 	}
 	
 	public void updateSensorTable() {
-		Cache.Sensors.update();
 		rootRow=new SensorTableRow(null);
 		list.clear(); list.addAll(Cache.Sensors.map.values());
 		for (Sensor s : list) {

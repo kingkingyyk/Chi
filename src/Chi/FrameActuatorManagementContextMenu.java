@@ -21,10 +21,8 @@ public class FrameActuatorManagementContextMenu extends JPopupMenu {
 		newMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.Controllers.updateWithWait() & Cache.Actuators.updateWithWait()) {
-					DialogActuatorAddEdit diag=new DialogActuatorAddEdit();
-					diag.setVisible(true);
-				}
+				DialogActuatorAddEdit diag=new DialogActuatorAddEdit();
+				diag.setVisible(true);
 			}
 		});
 		
@@ -32,19 +30,17 @@ public class FrameActuatorManagementContextMenu extends JPopupMenu {
 		toggleMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.Controllers.updateWithWait() & Cache.Actuators.updateWithWait()) {
-					Actuator act =m.getSelectedActuator();
-					String status=act.getStatus();
-					if (!status.equals("Pending Update")) {
-						if (status.equals("Pending Update")) status="OFF";
-						else status="ON";
-						
-						ControllerPacketActuatorTrigger p=new ControllerPacketActuatorTrigger(act.getController().getControllername(),act.getName(),status);
-						p.trigger();
-						JOptionPane.showMessageDialog(null,"Request sent successfully.\nThe status will be updated once the controller has replied.","Toggle Status",JOptionPane.INFORMATION_MESSAGE);
-					} else {
-						JOptionPane.showMessageDialog(null,"Looks like the actuator has not registered itself to the server.","Toggle Status",JOptionPane.ERROR_MESSAGE);
-					}
+				Actuator act =m.getSelectedActuator();
+				String status=act.getStatus();
+				if (!status.equals("Pending Update")) {
+					if (status.equals("Pending Update")) status="OFF";
+					else status="ON";
+					
+					ControllerPacketActuatorTrigger p=new ControllerPacketActuatorTrigger(act.getController().getControllername(),act.getName(),status);
+					p.trigger();
+					JOptionPane.showMessageDialog(null,"Request sent successfully.\nThe status will be updated once the controller has replied.","Toggle Status",JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					JOptionPane.showMessageDialog(null,"Looks like the actuator has not registered itself to the server.","Toggle Status",JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -53,11 +49,9 @@ public class FrameActuatorManagementContextMenu extends JPopupMenu {
 		editMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.Controllers.updateWithWait() & Cache.Actuators.updateWithWait()) {
-					Actuator act =m.getSelectedActuator();
-					DialogActuatorAddEdit diag=new DialogActuatorAddEdit(act.getName(),act.getController().getControllername());
-					diag.setVisible(true);
-				}
+				Actuator act =m.getSelectedActuator();
+				DialogActuatorAddEdit diag=new DialogActuatorAddEdit(act.getName(),act.getController().getControllername());
+				diag.setVisible(true);
 			}
 		});
 		

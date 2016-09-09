@@ -20,15 +20,8 @@ public class FrameSiteManagementContextMenu extends JPopupMenu {
 		newMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.Sites.updateWithWait()) {
-					DialogSiteAddEdit diag=new DialogSiteAddEdit();
-					diag.setVisible(true);
-					/*
-					if (diag.updated) {
-						m.updateSiteTable();
-						FrameControllerManagement.refresh();
-					}*/
-				}
+				DialogSiteAddEdit diag=new DialogSiteAddEdit();
+				diag.setVisible(true);
 			}
 		});
 		
@@ -36,16 +29,9 @@ public class FrameSiteManagementContextMenu extends JPopupMenu {
 		editMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.Sites.updateWithWait()) {
-					Site s=m.getSelectedSite();
-					DialogSiteAddEdit diag=new DialogSiteAddEdit(s.getSitename(),s.getSitemapurl());
-					diag.setVisible(true);
-					/*
-					if (diag.updated) {
-						m.updateSiteTable();
-						FrameControllerManagement.refresh();
-					}*/
-				}
+				Site s=m.getSelectedSite();
+				DialogSiteAddEdit diag=new DialogSiteAddEdit(s.getSitename(),s.getSitemapurl());
+				diag.setVisible(true);
 			}
 		});
 		

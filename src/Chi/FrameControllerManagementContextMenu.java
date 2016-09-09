@@ -21,10 +21,8 @@ public class FrameControllerManagementContextMenu extends JPopupMenu {
 		newMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.Controllers.updateWithWait() && Cache.Sites.updateWithWait()) {
-					DialogControllerAddEdit diag=new DialogControllerAddEdit();
-					diag.setVisible(true);
-				}
+				DialogControllerAddEdit diag=new DialogControllerAddEdit();
+				diag.setVisible(true);
 			}
 		});
 		
@@ -32,11 +30,9 @@ public class FrameControllerManagementContextMenu extends JPopupMenu {
 		helloMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.Controllers.updateWithWait()) {
-					ControllerPacketRequestAlive p=new ControllerPacketRequestAlive(m.getSelectedController().getControllername());
-					if (p.send()) {
-						JOptionPane.showMessageDialog(null,"Request sent successfully.\nThe last report time will be updated once the controller has replied","Force report alive",JOptionPane.INFORMATION_MESSAGE);
-					}
+				ControllerPacketRequestAlive p=new ControllerPacketRequestAlive(m.getSelectedController().getControllername());
+				if (p.send()) {
+					JOptionPane.showMessageDialog(null,"Request sent successfully.\nThe last report time will be updated once the controller has replied","Force report alive",JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 		});
@@ -45,11 +41,9 @@ public class FrameControllerManagementContextMenu extends JPopupMenu {
 		editMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (Cache.Controllers.updateWithWait() && Cache.Sites.updateWithWait()) {
-					Controller c=m.getSelectedController();
-					DialogControllerAddEdit diag=new DialogControllerAddEdit(c.getControllername(),c.getSite().getSitename(),c.getPositionx(),c.getPositiony(),c.getReporttimeout());
-					diag.setVisible(true);
-				}
+				Controller c=m.getSelectedController();
+				DialogControllerAddEdit diag=new DialogControllerAddEdit(c.getControllername(),c.getSite().getSitename(),c.getPositionx(),c.getPositiony(),c.getReporttimeout());
+				diag.setVisible(true);
 			}
 		});
 		

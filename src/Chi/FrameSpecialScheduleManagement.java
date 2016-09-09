@@ -236,7 +236,6 @@ public class FrameSpecialScheduleManagement extends JFrame {
 	}
 	
 	public void updateSpecialScheduleTable() {
-		Cache.SpecialSchedules.updateWithWait();
 		rootRow=new SpecialScheduleTableRow(null);
 		list.clear(); list.addAll(Cache.SpecialSchedules.map.values());
 		for (Specialschedule s : list) {

@@ -78,6 +78,7 @@ public class DatabaseSpecialSchedule {
 				ss=new Specialschedule(sn,session.get(Actuator.class,an),session.get(Dayschedulerule.class,rn),year,month,day,ao,pr,en);
 				session.save(ss);
 				tx.commit();
+				Cache.SpecialSchedules.map.put(sn, ss);
 	
 				Logger.log("DatabaseSpecialSchedule - Create - Execute Callbacks");
 				for (OnCreateAction a : OnCreateList) a.run(sn,an,year,month,day,rn,ao,pr,en);
@@ -98,7 +99,10 @@ public class DatabaseSpecialSchedule {
 		boolean flag=false;
 		try {
 			tx = session.beginTransaction();
-			if (!oldSN.equals(sn)) session.createQuery("update Specialschedule set ScheduleName='"+sn+"' where ScheduleName='"+oldSN+"'").executeUpdate();
+			if (!oldSN.equals(sn)) {
+				session.createQuery("update Specialschedule set ScheduleName='"+sn+"' where ScheduleName='"+oldSN+"'").executeUpdate();
+				Cache.SpecialSchedules.map.remove(oldSN);
+			}
 			Specialschedule ss = session.get(Specialschedule.class,sn);
 			if (ss!=null) {
 				ss.setActuator(session.get(Actuator.class,an));
@@ -111,6 +115,7 @@ public class DatabaseSpecialSchedule {
 				ss.setEnabled(en);
 				session.update(ss);
 				tx.commit();
+				Cache.SpecialSchedules.map.put(sn, ss);
 	
 				Logger.log("DatabaseSpecialSchedule - Update - Execute Callbacks");
 				for (OnUpdateAction a : OnUpdateList) a.run(oldSN,sn,an,year,month,day,rn,ao,pr,en);
@@ -135,6 +140,7 @@ public class DatabaseSpecialSchedule {
 			if (ss!=null) {
 				session.delete(ss);
 				tx.commit();
+				Cache.SpecialSchedules.map.remove(sn);
 	
 				Logger.log("DatabaseSpecialSchedule - Delete - Execute Callbacks");
 				for (OnDeleteAction a : OnDeleteList) a.run(sn);

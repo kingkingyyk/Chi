@@ -245,7 +245,7 @@ public class FrameControllerManagement extends JFrame {
 	}
 	
 	public void updateControllerTable() {
-		updateSuccess=Cache.Controllers.updateWithWait();
+		updateSuccess=true;
 		if (updateSuccess) {
 			controllerList.clear();
 			controllerList.addAll(Cache.Controllers.map.values());
