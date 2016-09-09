@@ -71,8 +71,8 @@ public class DatabaseReading extends DatabaseCassandra {
 			
 			BoundStatement [] sql=getBoundSQLStatementFromFile(session,Config.getConfig(Config. DATABASE_RECORD_QUERY_BETWEEN_TIME_FILE_KEY));
 			sql[0].setString(0, sn);
-			sql[0].setTimestamp(1,Utility.localDateTimeToDate(min));
-			sql[0].setTimestamp(2,Utility.localDateTimeToDate(max));
+			sql[0].setTimestamp(1,Utility.localDateTimeToSQLDate(min));
+			sql[0].setTimestamp(2,Utility.localDateTimeToSQLDate(max));
 			sql[0].setInt(3,limit);
 			ResultSet rs=executeSQL("DB Get Reading", session, sql[0]);
 			

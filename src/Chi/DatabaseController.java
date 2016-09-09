@@ -38,10 +38,24 @@ public class DatabaseController {
 		}
 	}
 	
+	public static void unregisterOnCreateAction (OnCreateAction a) {
+		if (OnCreateList.contains(a)) {
+			Logger.log("DatabaseController - Unregistered "+a.toString()+" from OnCreate callback");
+			OnCreateList.remove(a);
+		}
+	}
+	
 	public static void registerOnUpdateAction (OnUpdateAction a) {
 		if (!OnUpdateList.contains(a)) {
 			Logger.log("DatabaseController - Registered "+a.toString()+" to OnUpdate callback");
 			OnUpdateList.add(a);
+		}
+	}
+	
+	public static void unregisterOnUpdateAction (OnUpdateAction a) {
+		if (OnUpdateList.contains(a)) {
+			Logger.log("DatabaseController - Unregistered "+a.toString()+" from OnUpdate callback");
+			OnUpdateList.remove(a);
 		}
 	}
 	
@@ -52,10 +66,24 @@ public class DatabaseController {
 		}
 	}
 	
+	public static void unregisterOnReportAction (OnReportAction a) {
+		if (OnReportList.contains(a)) {
+			Logger.log("DatabaseController - Unregistered "+a.toString()+" from OnReport callback");
+			OnReportList.remove(a);
+		}
+	}
+	
 	public static void registerOnDeleteAction (OnDeleteAction a) {
 		if (!OnDeleteList.contains(a)) {
 			Logger.log("DatabaseController - Registered "+a.toString()+" to OnDelete callback");
 			OnDeleteList.add(a);
+		}
+	}
+	
+	public static void unregisterOnDeleteAction (OnDeleteAction a) {
+		if (OnDeleteList.contains(a)) {
+			Logger.log("DatabaseController - Unregistered "+a.toString()+" from OnDelete callback");
+			OnDeleteList.remove(a);
 		}
 	}
 	
@@ -111,6 +139,12 @@ public class DatabaseController {
 				session.update(ctrl);
 				tx.commit();
 				Cache.Controllers.map.put(n,ctrl);
+				for (Sensor se : Cache.Sensors.map.values())
+					if (se.getController().getControllername().equals(oldN))
+						se.setController(ctrl);
+				for (Actuator act : Cache.Actuators.map.values())
+					if (act.getController().getControllername().equals(oldN))
+						act.setController(ctrl);
 	
 				Logger.log("DatabaseController - Update - Execute Callbacks");
 				for (OnUpdateAction a : OnUpdateList) a.run(n,n,s,x,y,t);
@@ -133,7 +167,7 @@ public class DatabaseController {
 			tx = session.beginTransaction();
 			Controller ctrl = (Controller) session.get(Controller.class,n);
 			if (ctrl!=null) {
-				ctrl.setLastreporttime(Utility.localDateTimeToDate(dt));
+				ctrl.setLastreporttime(Utility.localDateTimeToSQLDate(dt));
 				session.update(ctrl);
 				tx.commit();
 	

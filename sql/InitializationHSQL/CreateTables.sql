@@ -81,12 +81,21 @@ CREATE TABLE SpecialSchedule (
 )
 @
 CREATE TABLE SensorEvent (
+	Id bigint IDENTITY PRIMARY KEY,
 	SensorName varchar (100),
 	TimeStp timestamp,
 	EventType varchar (100),
 	EventValue varchar(100),
-	PRIMARY KEY (SensorName, TimeStp),
 	FOREIGN KEY (SensorName) REFERENCES Sensor(SensorName) ON UPDATE CASCADE
+)
+@
+CREATE TABLE ControllerEvent (
+	Id bigint IDENTITY PRIMARY KEY,
+	ControllerName varchar (100),
+	TimeStp timestamp,
+	EventType varchar (100),
+	EventValue varchar(100),
+	FOREIGN KEY (ControllerName) REFERENCES Controller(ControllerName) ON UPDATE CASCADE
 )
 @
 INSERT INTO Site VALUES ('DefaultSite','http://i.imgur.com/Ep8mS4K.jpg')
@@ -96,3 +105,5 @@ INSERT INTO SensorClass VALUES ('DefaultClass')
 INSERT INTO Controller VALUES ('DefaultController','DefaultSite','0.5','0.5',10,TIMESTAMP(0))
 @
 INSERT INTO Site VALUES ('FSKTM Student Center','http://i.imgur.com/p5ZPRNm.jpg')
+@
+INSERT INTO User VALUES ('admin','admin',1,'ACTIVATED',TIMESTAMP(0))

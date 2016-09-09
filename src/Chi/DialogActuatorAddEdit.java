@@ -32,8 +32,8 @@ public class DialogActuatorAddEdit extends JDialog {
 	
 	public DialogActuatorAddEdit(String n, String u) {
 		create();
-		prefill(n,u);
 		uiActionsNormal();
+		prefill(n,u);
 		uiActionsEdit(n);
 	}
 	

@@ -9,9 +9,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
-import java.sql.Date;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
@@ -310,6 +308,30 @@ public class GWTServer {
 		    	ArrayList<SensorReading> lsr=DatabaseReading.getReadingMonthly((String)list.get(1),(int)list.get(2),(int)list.get(3));
 		    	ArrayList<Object []> result=new ArrayList<>();
 		    	for (SensorReading sr : lsr) result.add(new Object [] {sr.getTimestamp(),sr.getActualValue()});
+		    	return result;
+		    }
+		    case "39" : { //SensorEventGetByName
+		    	ArrayList<Sensorevent> seL=DatabaseEvent.getSensorEventByName((String)list.get(1));
+		    	ArrayList<Object []> result=new ArrayList<>();
+		    	for (Sensorevent se : seL) result.add(new Object [] {se.getSensor().getSensorname(),Utility.dateToLocalDateTime(se.getTimestp()),se.getEventtype(),se.getEventvalue()});
+		    	return result;
+		    }
+		    case "40" : { //SensorEventGetBetweenTime
+		    	ArrayList<Sensorevent> seL=DatabaseEvent.getSensorEventBetweenTime((LocalDateTime)list.get(1),(LocalDateTime)list.get(2));
+		    	ArrayList<Object []> result=new ArrayList<>();
+		    	for (Sensorevent se : seL) result.add(new Object [] {se.getSensor().getSensorname(),Utility.dateToLocalDateTime(se.getTimestp()),se.getEventtype(),se.getEventvalue()});
+		    	return result;
+		    }
+		    case "41" : { //ControllerEventGetByName
+		    	ArrayList<Controllerevent> ceL=DatabaseEvent.getControllerEventByName((String)list.get(1));
+		    	ArrayList<Object []> result=new ArrayList<>();
+		    	for (Controllerevent ce : ceL) result.add(new Object [] {ce.getController().getControllername(),Utility.dateToLocalDateTime(ce.getTimestp()),ce.getEventtype(),ce.getEventvalue()});
+		    	return result;
+		    }
+		    case "42" : { //ControllerEventGetBetweenTime
+		    	ArrayList<Controllerevent> ceL=DatabaseEvent.getControllerEventBetweenTime((LocalDateTime)list.get(1),(LocalDateTime)list.get(2));
+		    	ArrayList<Object []> result=new ArrayList<>();
+		    	for (Controllerevent ce : ceL) result.add(new Object [] {ce.getController().getControllername(),Utility.dateToLocalDateTime(ce.getTimestp()),ce.getEventtype(),ce.getEventvalue()});
 		    	return result;
 		    }
 	    }

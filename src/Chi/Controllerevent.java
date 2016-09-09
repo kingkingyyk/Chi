@@ -2,19 +2,19 @@ package Chi;
 
 import java.util.Date;
 
-public class Sensorevent implements java.io.Serializable {
-	private static final long serialVersionUID = 3473876954626305649L;
+public class Controllerevent implements java.io.Serializable {
+	private static final long serialVersionUID = -5562597974086520955L;
 	private Long id;
-	private Sensor sensor;
+	private Controller controller;
 	private Date timestp;
 	private String eventtype;
 	private String eventvalue;
 
-	public Sensorevent() {
+	public Controllerevent() {
 	}
 
-	public Sensorevent(Sensor sensor, Date timestp, String eventtype, String eventvalue) {
-		this.sensor = sensor;
+	public Controllerevent(Controller controller, Date timestp, String eventtype, String eventvalue) {
+		this.controller = controller;
 		this.timestp = timestp;
 		this.eventtype = eventtype;
 		this.eventvalue = eventvalue;
@@ -28,12 +28,12 @@ public class Sensorevent implements java.io.Serializable {
 		this.id = id;
 	}
 
-	public Sensor getSensor() {
-		return this.sensor;
+	public Controller getController() {
+		return this.controller;
 	}
 
-	public void setSensor(Sensor sensor) {
-		this.sensor = sensor;
+	public void setController(Controller controller) {
+		this.controller = controller;
 	}
 
 	public Date getTimestp() {

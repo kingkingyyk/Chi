@@ -28,25 +28,45 @@ public class DataServer {
 	
 	public static void registerOnReportReceived (OnReportReceived r) {
 		if (!OnReportReceivedCallbacks.contains(r)) {
+			Logger.log("DataServer - Registered "+r.toString()+" to OnReportReceived callback");
 			OnReportReceivedCallbacks.add(r);
 		}
 	}
 	
 	public static void unregisterOnReportReceived (OnReportReceived r) {
 		if (OnReportReceivedCallbacks.contains(r)) {
+			Logger.log("DataServer - Unregistered "+r.toString()+" from OnReportReceived callback");
 			OnReportReceivedCallbacks.remove(r);
+		}
+	}
+	
+	public static void fireOnReportReceived (String s) {
+		for (OnReportReceived r : OnReportReceivedCallbacks) {
+			r.run(s);
 		}
 	}
 	
 	public static void registerOnReadingReceived (OnReadingReceived r) {
 		if (!OnReadingReceivedCallbacks.contains(r)) {
+			Logger.log("DataServer - Registered "+r.toString()+" to OnReadingReceived callback");
 			OnReadingReceivedCallbacks.add(r);
 		}
 	}
 	
 	public static void unregisterOnReadingReceived (OnReadingReceived r) {
 		if (OnReadingReceivedCallbacks.contains(r)) {
+			Logger.log("DataServer - Unregistered "+r.toString()+" from OnReportReceived callback");
 			OnReadingReceivedCallbacks.remove(r);
+		}
+	}
+	
+	public static void fireOnReadingReceived (String name, double value) {
+		Sensor s=Cache.Sensors.map.getOrDefault(name,null);
+		if (s!=null) {
+			double denormalized=s.denormalizeValue(value);
+			for (OnReadingReceived r : OnReadingReceivedCallbacks) {
+				r.run(name,denormalized);
+			}
 		}
 	}
 	

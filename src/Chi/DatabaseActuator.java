@@ -99,6 +99,12 @@ public class DatabaseActuator {
 				session.update(act);
 				tx.commit();
 				Cache.Actuators.map.put(n,act);
+				for (Regularschedule r : Cache.RegularSchedules.map.values())
+					if (r.getActuator().getName().equals(oldN))
+						r.setActuator(act);
+				for (Specialschedule s : Cache.SpecialSchedules.map.values())
+					if (s.getActuator().getName().equals(oldN))
+						s.setActuator(act);
 				
 				Logger.log("DB Update Actuator - Execute Callbacks");
 				for (OnUpdateAction a : OnUpdateList) a.run(oldN, n, u);

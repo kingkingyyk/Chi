@@ -2,7 +2,6 @@ package Chi;
 
 import java.awt.Image;
 import java.security.MessageDigest;
-import java.sql.Date;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -26,11 +25,23 @@ public class Utility {
     	return "";
     }
 
-    public static Date localDateTimeToDate (LocalDateTime dt) {
-        return new Date(dt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+    public static long localDateTimeToLong (LocalDateTime dt) {
+    	return dt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }
     
-    public static LocalDateTime dateToLocalDateTime (Date d) {
+    public static java.sql.Date localDateTimeToSQLDate (LocalDateTime dt) {
+        return new java.sql.Date(localDateTimeToLong(dt));
+    }
+    
+    public static java.util.Date localDateTimeToUtilDate (LocalDateTime dt) {
+        return new java.util.Date(localDateTimeToLong(dt));
+    }
+    
+    public static LocalDateTime dateToLocalDateTime (java.sql.Date d) {
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(d.getTime()), ZoneOffset.UTC);
+    }
+    
+    public static LocalDateTime dateToLocalDateTime (java.util.Date d) {
         return LocalDateTime.ofInstant(Instant.ofEpochMilli(d.getTime()), ZoneOffset.UTC);
     }
     

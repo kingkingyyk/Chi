@@ -87,7 +87,10 @@ public class DatabaseSite {
 				session.update(s);
 				tx.commit();
 				Cache.Sites.map.put(n,s);
-	
+				for (Controller c : Cache.Controllers.map.values())
+					if (c.getSite().getSitename().equals(oldN))
+						c.setSite(s);
+
 				Logger.log("DatabaseSite - Update - Execute Callbacks");
 				for (OnUpdateAction a : OnUpdateList) a.run(oldN,n,u);
 				flag = true;

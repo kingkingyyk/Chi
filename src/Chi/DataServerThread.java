@@ -3,6 +3,7 @@ package Chi;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.time.LocalDateTime;
 import java.util.StringTokenizer;
 
 import javax.swing.JOptionPane;
@@ -48,20 +49,25 @@ public class DataServerThread extends Thread {
 									st.nextToken(); //controller name
 									DataServerReadingToDatabase.queueData(st.nextToken(),Double.parseDouble(st.nextToken()));
 								} catch (NumberFormatException e) {}
+								break;
 							}
 							case "1" : {
-								DataServerControllerAliveToDatabase.queueData(st.nextToken());
+								String cn=st.nextToken();
+								DatabaseController.updateControllerReportTime(cn,LocalDateTime.now());
+								DataServer.fireOnReportReceived(cn);
+								break;
 							}
 							case "2" : {
 								try {
 									DataServerActuatorStatusToDatabase.queueData(st.nextToken(),st.nextToken());
 								} catch (NumberFormatException e) {}
+								break;
 							}
 							case "3" : {
-								
+								break;
 							}
 							case "4" : {
-								
+								break;
 							}
 						}
 					}

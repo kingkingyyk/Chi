@@ -14,6 +14,9 @@ public class Theme {
 		map.put("HSQLLogo", new ImageIcon(Theme.class.getResource("/images/hypersql-logo.png")));
 		map.put("GWTLogo", new ImageIcon(Theme.class.getResource("/images/gwt-logo.png")));
 		map.put("ChiLogo", new ImageIcon(Theme.class.getResource("/images/chi-logo.png")));
+		map.put("NotificationIcon", new ImageIcon(Theme.class.getResource("/images/NOTIFICATION.png")));
+		map.put("ControllerIcon", new ImageIcon(Theme.class.getResource("/images/CONTROLLER.png")));
+		map.put("SensorIcon", new ImageIcon(Theme.class.getResource("/images/SENSOR.png")));
 	}
 	
 	public static ImageIcon getIcon (String key) {

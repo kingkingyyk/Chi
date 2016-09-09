@@ -87,7 +87,10 @@ public class DatabaseSensorClass {
 				session.update(s);
 				tx.commit();
 				Cache.SensorClasses.map.put(newN,s);
-	
+				for (Sensor se : Cache.Sensors.map.values())
+					if (se.getSensorclass().getClassname().equals(oldN))
+						se.setSensorclass(s);
+				
 				Logger.log("DatabaseSensorClass - Update - Execute Callbacks");
 				for (OnUpdateAction a : OnUpdateList) a.run(oldN,newN);
 				flag = true;

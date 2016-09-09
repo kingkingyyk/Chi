@@ -30,7 +30,7 @@ public class FrameSensorManagementContextMenu extends JPopupMenu {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Sensor s=m.getSelectedSensor();
-				DialogSensorAddEdit diag=new DialogSensorAddEdit(s.getSensorname(),s.getSensorclass().getClassname(),s.getMinvalue(),s.getMaxvalue(),s.getTransformationfactor(),s.getUnit(),s.getController().getControllername());
+				DialogSensorAddEdit diag=new DialogSensorAddEdit(s.getSensorname(),s.getSensorclass().getClassname(),s.getMinvalue(),s.getMaxvalue(),s.getTransformationfactor(),s.getUnit(),s.getController().getControllername(),s.getMinthreshold(),s.getMaxthreshold());
 				diag.setVisible(true);
 			}
 		});

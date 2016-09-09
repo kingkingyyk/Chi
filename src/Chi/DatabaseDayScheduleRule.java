@@ -108,6 +108,12 @@ public class DatabaseDayScheduleRule {
 				session.update(r);
 				tx.commit();
 				Cache.DayScheduleRules.map.put(n,r);
+				for (Regularschedule rs : Cache.RegularSchedules.map.values())
+					if (rs.getDayschedulerule().getRulename().equals(oldN))
+						rs.setDayschedulerule(r);
+				for (Specialschedule ss : Cache.SpecialSchedules.map.values())
+					if (ss.getDayschedulerule().getRulename().equals(oldN))
+						ss.setDayschedulerule(r);
 				
 				Logger.log("DB Update DayScheduleRule - Execute Callbacks");
 				for (OnUpdateAction a : OnUpdateList) a.run(oldN,n,sh,sm,eh,em);

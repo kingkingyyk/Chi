@@ -27,6 +27,8 @@ public class MenuUI extends JFrame {
 	private JButton btnStartSchedulingServer;
 	private JButton btnStartGWTServer;
 	private JButton btnOngoingSchedules;
+	private JButton btnStartNotificationServer;
+	private JButton btnStopNotificationServer;
 
 	public MenuUI() {
 		setTitle(Config.APP_NAME);
@@ -147,11 +149,25 @@ public class MenuUI extends JFrame {
 		});
 		panelServer.add(btnStopSchedulingServer);
 		
-		JButton btnStartNotificationServer = new JButton("Start Notification Server");
+		btnStartNotificationServer = new JButton("Start Notification Server");
+		btnStartNotificationServer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				NotificationServer.start();
+				btnStartNotificationServer.setEnabled(false);
+				btnStopNotificationServer.setEnabled(true);
+			}
+		});
 		btnStartNotificationServer.setBounds(34, 114, 153, 23);
 		panelServer.add(btnStartNotificationServer);
 		
-		JButton btnStopNotificationServer = new JButton("Stop Notification Server");
+		btnStopNotificationServer = new JButton("Stop Notification Server");
+		btnStopNotificationServer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				NotificationServer.stop();
+				btnStartNotificationServer.setEnabled(true);
+				btnStopNotificationServer.setEnabled(false);
+			}
+		});
 		btnStopNotificationServer.setEnabled(false);
 		btnStopNotificationServer.setBounds(229, 114, 153, 23);
 		panelServer.add(btnStopNotificationServer);
@@ -281,6 +297,21 @@ public class MenuUI extends JFrame {
 			}
 		});
 		panelScheduling.add(btnOngoingSchedules);
+		
+		JPanel panelNotification = new JPanel();
+		tabbedPane.addTab("Notification", null, panelNotification, null);
+		panelNotification.setLayout(null);
+		
+		JButton btnNotification = new JButton("Notification Center");
+		btnNotification.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FrameNotification f=FrameNotification.getInstance();
+				f.setVisible(true);
+				f.toFront();
+			}
+		});
+		btnNotification.setBounds(10, 11, 131, 23);
+		panelNotification.add(btnNotification);
 		
 		JPanel panelSQL = new JPanel();
 		tabbedPane.addTab("SQL", null, panelSQL, null);

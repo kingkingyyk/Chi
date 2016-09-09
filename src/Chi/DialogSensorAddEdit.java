@@ -50,15 +50,15 @@ public class DialogSensorAddEdit extends JDialog {
 			s=sb.toString();
 		} while (Cache.Sensors.map.containsKey(s));
 		
-		prefill(s,"DefaultClass",0,1,1,"","");
 		uiActionsNormal();
+		prefill(s,"DefaultClass",0,1,1,"","",0,1);
 		uiActionsAdd();
 	}
 	
-	public DialogSensorAddEdit(String n, String c, double min, double max, double t, String u, String con) {
+	public DialogSensorAddEdit(String n, String c, double min, double max, double t, String u, String con, double minT, double maxT) {
 		create();
-		prefill(n,c,min,max,t,u,con);
 		uiActionsNormal();
+		prefill(n,c,min,max,t,u,con,minT,maxT);
 		uiActionsEdit(n);
 	}
 	
@@ -240,31 +240,19 @@ public class DialogSensorAddEdit extends JDialog {
 		getContentPane().add(lblMaxThresholdInfo);
 	}
 	
-	public void prefill(String n, String c, double min, double max, double t, String u, String con) {
+	public void prefill(String n, String c, double min, double max, double t, String u, String con, double minT, double maxT) {
 		textFieldName.setText(n);
 		comboBoxClass.setSelectedItem(c);
 		textFieldMinValue.setText(String.valueOf(min));
 		textFieldMaxValue.setText(String.valueOf(max));
 		textFieldTransFactor.setText(String.valueOf(t));
 		textFieldUnit.setText(u);
+		comboBoxController.setSelectedItem(con);
+		textFieldMinThreshold.setText(String.valueOf(minT));
+		textFieldMaxThreshold.setText(String.valueOf(maxT));
 	}
 	
 	public void uiActionsNormal () {
-		textFieldName.addKeyListener(new KeyAdapter() {
-			public void keyReleased(KeyEvent e) {
-				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty()) { 
-					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
-				} else if (Cache.Sensors.map.containsKey(txt)) {
-					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
-				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
-					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
-				} else {
-					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
-				}
-			}
-		});
-		
 		textFieldMinValue.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
 				try {
@@ -347,6 +335,21 @@ public class DialogSensorAddEdit extends JDialog {
 		setTitle("Add Sensor");
 		lblUnitInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
 		
+		textFieldName.addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e) {
+				String txt=textFieldName.getText();
+				if (txt==null || txt.isEmpty()) { 
+					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
+				} else if (Cache.Sensors.map.containsKey(txt)) {
+					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
+				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
+				} else {
+					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
+				}
+			}
+		});
+		
 		okButton.addActionListener(new ActionListener() {
 			public boolean flag;
 			
@@ -385,6 +388,21 @@ public class DialogSensorAddEdit extends JDialog {
 	public void uiActionsEdit(String n) {
 		setTitle("Edit Sensor "+n);
 		lblUnitInfo.setText("<html><font color=\"green\">OK!</font></html>");
+		
+		textFieldName.addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e) {
+				String txt=textFieldName.getText();
+				if (txt==null || txt.isEmpty()) { 
+					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
+				} else if (Cache.Sensors.map.containsKey(txt) && !txt.equals(n)) {
+					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
+				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
+				} else {
+					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
+				}
+			}
+		});
 		
 		okButton.addActionListener(new ActionListener() {
 			public boolean flag;
