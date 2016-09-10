@@ -1,6 +1,7 @@
 #
-#Fri Sep 09 22:38:03 SGT 2016
+#Sat Sep 10 09:57:38 SGT 2016
 server.hsql.ip=192.168.0.10
+server.gwt.com.encryption=false
 server.incoming.port=40000
 server.hsql.ip.default=127.0.0.1
 server.database.sql.cassandra.init.file.default=sql/InitializationCassandra/InitDB.sql
@@ -38,8 +39,8 @@ server.database.sql.record.save.default=sql/Reading/RecordReading.sql
 server.controller.ip=224.0.0.180
 server.database.sql.cassandra.createtables.file=sql/InitializationCassandra/CreateTables.sql
 server.database.cassandra.hsql.reset.file=sql/InitializationHSQL/ResetDB.sql
-server.database.hsql.username.default=chi-admin
 server.gwt.com.ssl.default=false
+server.database.hsql.username.default=chi-admin
 server.database.sql.record.save=sql/Reading/RecordReading.sql
 server.gwt.password=chi-admin
 server.lock.file.name=CHI_LOCK
@@ -50,5 +51,6 @@ server.database.hsql.port.default=9001
 server.incoming.port.default=40000
 server.lock.file.name.default=CHI_LOCK
 server.database.cassandra.sql.reset.file=sql/InitializationCassandra/ResetDB.sql
+server.gwt.com.encryption.default=false
 server.database.cassandra.password.default=chi-admin
 server.database.sql.cassandra.createtables.file.default=sql/InitializationCassandra/CreateTables.sql

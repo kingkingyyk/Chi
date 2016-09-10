@@ -38,9 +38,8 @@ Current Working Stuffs :
 + Actuator Status Reporting
 + Actuator control (Manual / Scheduled)
 + Efficient local data caching
++ Notification server
 
 v1.1 To-Do-List :
-+ Implement automated value propagation
-+ Notification server
-+ Secure communication between controller & server
 + Controller communication implementation [Refer to PacketFormats.xlsx]
++ Controller communication encryption

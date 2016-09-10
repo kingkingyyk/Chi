@@ -226,7 +226,7 @@ public class FrameRegularScheduleManagement extends JFrame {
 		}
 		table = new RegularScheduleTable();
 		table.setEditable(false);
-		Icon img=Utility.resizeImageIcon(new ImageIcon(getClass().getResource(Config.ICON_TEXTURE_PATH+"/REGULAR_SCHEDULE.png")), 16, 16);
+		Icon img=Utility.resizeImageIcon(Theme.getIcon("RegularScheduleIcon"), 16, 16);
 		table.setLeafIcon(img);
 		table.setOpenIcon(img);
 		table.setClosedIcon(img);

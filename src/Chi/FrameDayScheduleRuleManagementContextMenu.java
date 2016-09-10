@@ -16,7 +16,7 @@ public class FrameDayScheduleRuleManagementContextMenu extends JPopupMenu {
 	private JMenuItem deleteMenu;
 	
 	public FrameDayScheduleRuleManagementContextMenu (FrameDayScheduleRuleManagement m) {
-		this.newMenu=new JMenuItem("New...",Utility.resizeImageIcon(new ImageIcon(getClass().getResource(Config.ICON_TEXTURE_PATH+"/ADD.png")),14,14));
+		this.newMenu=new JMenuItem("New...",Utility.resizeImageIcon(Theme.getIcon("AddIcon"),14,14));
 		newMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {

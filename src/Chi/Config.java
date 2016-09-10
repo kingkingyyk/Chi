@@ -37,7 +37,7 @@ public class Config {
 	public static final String CONFIG_SERVER_CONTROLLER_IP_KEY="server.controller.ip";
 	public static final String CONFIG_SERVER_CONTROLLER_PORT_KEY="server.controller.port";
 	public static final String CONFIG_SERVER_GWT_PORT_KEY="server.gwt.com.port";
-	public static final String CONFIG_SERVER_GWT_SSL_KEY="server.gwt.com.ssl";
+	public static final String CONFIG_SERVER_GWT_ENCRYPTION_KEY="server.gwt.com.encryption";
 	public static final String CONFIG_SERVER_GWT_KEY_FILE_KEY="server.gwt.keyfile";
 	public static final String CONFIG_SERVER_GWT_PASSWORD_KEY="server.gwt.password";
 	//Listening server config
@@ -70,7 +70,7 @@ public class Config {
 	private static final String CONFIG_SERVER_GWT_PORT_DEFAULT="40001";
 	private static final String CONFIG_SERVER_GWT_KEY_FILE_DEFAULT="chikey";
 	private static final String CONFIG_SERVER_GWT_PASSWORD_DEFAULT="chi-admin";
-	private static final boolean CONFIG_SERVER_GWT_SSL_DEFAULT=false;
+	private static final boolean CONFIG_SERVER_GWT_ENCRYPTION_DEFAULT=false;
 	
 	//Listening server
 	public static final String CONFIG_SERVER_LOCK_FILE_DEFAULT="CHI_LOCK";
@@ -135,7 +135,7 @@ public class Config {
 		Config.setConfig(CONFIG_SERVER_DATABASE_TEST_FAIL_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_TEST_FAIL_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_LOCK_FILE_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_LOCK_FILE_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_GWT_PORT_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_GWT_PORT_DEFAULT);
-		Config.setConfig(CONFIG_SERVER_GWT_SSL_KEY+CONFIG_DEFAULT_KEY, String.valueOf(CONFIG_SERVER_GWT_SSL_DEFAULT));
+		Config.setConfig(CONFIG_SERVER_GWT_ENCRYPTION_KEY+CONFIG_DEFAULT_KEY, String.valueOf(CONFIG_SERVER_GWT_ENCRYPTION_DEFAULT));
 		Config.setConfig(CONFIG_SERVER_GWT_KEY_FILE_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_GWT_KEY_FILE_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_GWT_PASSWORD_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_GWT_PASSWORD_DEFAULT);
 		

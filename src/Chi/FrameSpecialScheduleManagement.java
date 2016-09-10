@@ -227,7 +227,7 @@ public class FrameSpecialScheduleManagement extends JFrame {
 		}
 		table = new SpecialScheduleTable();
 		table.setEditable(false);
-		Icon img=Utility.resizeImageIcon(new ImageIcon(getClass().getResource(Config.ICON_TEXTURE_PATH+"/SPECIAL_SCHEDULE.png")), 16, 16);
+		Icon img=Utility.resizeImageIcon(Theme.getIcon("SpecialScheduleIcon"), 16, 16);
 		table.setLeafIcon(img);
 		table.setOpenIcon(img);
 		table.setClosedIcon(img);

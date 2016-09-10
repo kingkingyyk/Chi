@@ -23,7 +23,6 @@ import javax.swing.JTable;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 
 public class FrameOngoingSchedules extends JFrame {
 	private static FrameOngoingSchedules currInstance;
@@ -132,8 +131,8 @@ public class FrameOngoingSchedules extends JFrame {
 	}
 	
 	private static class OnGoingSchedulesTableCellRenderer extends DefaultTableCellRenderer {
-		private static Icon regularSchIcon=Utility.resizeImageIcon(new ImageIcon(Utility.class.getResource(Config.ICON_TEXTURE_PATH+"/REGULAR_SCHEDULE.png")), 16, 16);
-		private static Icon specialSchIcon=Utility.resizeImageIcon(new ImageIcon(Utility.class.getResource(Config.ICON_TEXTURE_PATH+"/SPECIAL_SCHEDULE.png")), 16, 16);
+		private static Icon regularSchIcon=Utility.resizeImageIcon(Theme.getIcon("RegularScheduleIcon"), 16, 16);
+		private static Icon specialSchIcon=Utility.resizeImageIcon(Theme.getIcon("SpecialScheduleIcon"), 16, 16);
 		private static final long serialVersionUID = 1L;
 		
 		@Override

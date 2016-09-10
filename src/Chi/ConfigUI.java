@@ -34,7 +34,7 @@ public class ConfigUI extends JDialog {
 	private JTextField textFieldControllerPort;
 	private JTextField textFieldGWTPort;
 	private JPasswordField passwordFieldGWTPassword;
-	private JCheckBox chckbxGWTSSL;
+	private JCheckBox chckbxGWTEncrypt;
 
 	public ConfigUI() {
 		setModal(true);
@@ -353,10 +353,10 @@ public class ConfigUI extends JDialog {
 		passwordFieldGWTPassword.setBounds(82, 42, 86, 20);
 		panelGWTSettings.add(passwordFieldGWTPassword);
 		
-		chckbxGWTSSL = new JCheckBox("SSL Connection");
-		chckbxGWTSSL.setSelected(Boolean.parseBoolean(Config.getConfig(Config.CONFIG_SERVER_GWT_SSL_KEY)));
-		chckbxGWTSSL.setBounds(10, 179, 106, 23);
-		panelGWTSettings.add(chckbxGWTSSL);
+		chckbxGWTEncrypt = new JCheckBox("Encrypted Connection");
+		chckbxGWTEncrypt.setSelected(Boolean.parseBoolean(Config.getConfig(Config.CONFIG_SERVER_GWT_ENCRYPTION_KEY)));
+		chckbxGWTEncrypt.setBounds(10, 179, 136, 23);
+		panelGWTSettings.add(chckbxGWTEncrypt);
 		
 		JLabel lblGWTLogo = new JLabel();
 		lblGWTLogo.setBounds(434, 102, 100, 100);
@@ -418,7 +418,7 @@ public class ConfigUI extends JDialog {
 		Config.setConfig(Config.CONFIG_SERVER_INCOMING_PORT_KEY, textFieldListeningPort.getText());
 		Config.setConfig(Config.CONFIG_SERVER_GWT_PORT_KEY, textFieldGWTPort.getText());
 		Config.setConfig(Config.CONFIG_SERVER_GWT_PASSWORD_KEY, new String(passwordFieldGWTPassword.getPassword()));
-		Config.setConfig(Config.CONFIG_SERVER_GWT_SSL_KEY, String.valueOf(chckbxGWTSSL.isSelected()));
+		Config.setConfig(Config.CONFIG_SERVER_GWT_ENCRYPTION_KEY, String.valueOf(chckbxGWTEncrypt.isSelected()));
 		
 		Config.setConfig(Config.CONFIG_SERVER_CONTROLLER_IP_KEY, textFieldControllerIP.getText());
 		Config.setConfig(Config.CONFIG_SERVER_CONTROLLER_PORT_KEY, textFieldControllerPort.getText());

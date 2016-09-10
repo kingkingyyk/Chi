@@ -17,7 +17,6 @@ import javax.swing.JTable;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 
 public class FrameDayScheduleRuleManagement extends JFrame {
 	private static FrameDayScheduleRuleManagement currInstance;
@@ -215,7 +214,7 @@ public class FrameDayScheduleRuleManagement extends JFrame {
 		table = new DayScheduleRuleTable();
 		table.setRootVisible(false);
 		table.setEditable(false);
-		Icon img=Utility.resizeImageIcon(new ImageIcon(getClass().getResource(Config.ICON_TEXTURE_PATH+"/DAY_SCHEDULE_RULE.png")), 16, 16);
+		Icon img=Utility.resizeImageIcon(Theme.getIcon("DayScheduleRuleIcon"), 16, 16);
 		table.setLeafIcon(img);
 		table.setOpenIcon(img);
 		table.setClosedIcon(img);

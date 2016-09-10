@@ -19,7 +19,6 @@ import javax.swing.JTable;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 
 public class FrameSiteManagement extends JFrame {
 	private static FrameSiteManagement currInstance;
@@ -213,7 +212,7 @@ public class FrameSiteManagement extends JFrame {
 		}
 		table = new SiteTable();
 		table.setEditable(false);
-		Icon img=Utility.resizeImageIcon(new ImageIcon(getClass().getResource(Config.ICON_TEXTURE_PATH+"/SITE.png")), 16, 16);
+		Icon img=Utility.resizeImageIcon(Theme.getIcon("SiteIcon"), 16, 16);
 		table.setLeafIcon(img);
 		table.setOpenIcon(img);
 		table.setClosedIcon(img);

@@ -19,7 +19,6 @@ import javax.swing.JTable;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 
 public class FrameSensorManagement extends JFrame {
 	private static FrameSensorManagement currInstance;
@@ -220,7 +219,7 @@ public class FrameSensorManagement extends JFrame {
 		}
 		table = new SensorTable();
 		table.setEditable(false);
-		Icon img=Utility.resizeImageIcon(new ImageIcon(getClass().getResource(Config.ICON_TEXTURE_PATH+"/SENSOR.png")), 16, 16);
+		Icon img=Utility.resizeImageIcon(Theme.getIcon("SensorIcon"), 16, 16);
 		table.setLeafIcon(img);
 		table.setOpenIcon(img);
 		table.setClosedIcon(img);

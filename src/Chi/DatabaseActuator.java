@@ -65,7 +65,7 @@ public class DatabaseActuator {
 			tx = session.beginTransaction();
 			Actuator act = session.get(Actuator.class,n);
 			if (act==null) {
-				act = new Actuator(n, (Controller) session.get(Controller.class, "DefaultController"),"Pending Update", null, null);
+				act = new Actuator(n, (Controller) session.get(Controller.class, u),"Pending Update", null, null);
 				session.save(act);
 				tx.commit();
 				Cache.Actuators.map.put(n,act);

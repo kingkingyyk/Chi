@@ -105,5 +105,3 @@ INSERT INTO SensorClass VALUES ('DefaultClass')
 INSERT INTO Controller VALUES ('DefaultController','DefaultSite','0.5','0.5',10,TIMESTAMP(0))
 @
 INSERT INTO Site VALUES ('FSKTM Student Center','http://i.imgur.com/p5ZPRNm.jpg')
-@
-INSERT INTO User VALUES ('admin','admin',1,'ACTIVATED',TIMESTAMP(0))

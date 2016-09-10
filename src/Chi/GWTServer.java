@@ -5,21 +5,26 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.security.spec.KeySpec;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
-
-import javax.net.ssl.SSLServerSocket;
-import javax.net.ssl.SSLServerSocketFactory;
+import javax.crypto.Cipher;
+import javax.crypto.SealedObject;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
 public class GWTServer {
 	private static GWTServerT t;
 	
-	public static Object processRequest (ArrayList<Object> list) {
+	public static Serializable processRequest (ArrayList<Object> list) {
 	    switch ((String)list.get(0)) {
 		    case "0" : { //UserCheckNameExists
 		    	return Cache.Users.map.containsKey(list.get(1));
@@ -343,46 +348,56 @@ public class GWTServer {
 	}
 	
 	private static class GWTSecureServerThread extends GWTServerT {
-		public SSLServerSocket serverSocket;
+		public ServerSocket serverSocket;
 		
 		@SuppressWarnings("unchecked")
 		public void run () {
-			System.setProperty("javax.net.ssl.keyStore",Config.getConfig(Config.CONFIG_SERVER_GWT_KEY_FILE_KEY));
-			System.setProperty("javax.net.ssl.keyStorePassword",Config.getConfig(Config.CONFIG_SERVER_GWT_PASSWORD_KEY));
-			while (!stopFlag && !Thread.currentThread().isInterrupted()) {
-				try {
-					try {
-					    SSLServerSocketFactory socketFactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
-					    serverSocket = (SSLServerSocket) socketFactory.createServerSocket(Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_GWT_PORT_KEY)));
-					    serverSocket.setSoTimeout(0);
-					    SSLSocket sslsocket=(SSLSocket) serverSocket.accept();
-					    InputStream is=sslsocket.getInputStream();
-					    ObjectInputStream ois=new ObjectInputStream(is);
-					    
-					    OutputStream os=sslsocket.getOutputStream();
-					    ObjectOutputStream oos=new ObjectOutputStream(os);
-					    
-					    try {
-						    Object o=ois.readObject();
-						    if (o instanceof ArrayList) {
-						    	oos.writeObject(GWTServer.processRequest((ArrayList<Object>)o));
-						    }
-					    } catch (ClassNotFoundException cn) {}
-				    	oos.close(); os.close();
-				    	sslsocket.close(); serverSocket.close();
-					} catch (SocketTimeoutException te) {
-						serverSocket.close();
-					} 
-				} catch (IOException e) {
-					Logger.log("GWTSecureServerThread Error - "+e.getMessage());
-					break;
-				}
-			}
 			try {
-				serverSocket.close();
+		        final byte[] salt = "chichilol".getBytes();
+		        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+		        KeySpec spec = new PBEKeySpec(Config.getConfig(Config.CONFIG_SERVER_GWT_PASSWORD_KEY).toCharArray(), salt, 1024, 128);
+		        SecretKey secret=new SecretKeySpec(factory.generateSecret(spec).getEncoded(),"AES");
+		        Cipher encrypter=Cipher.getInstance("AES");
+		        encrypter.init(Cipher.ENCRYPT_MODE,secret);
+		        Cipher decrypter=Cipher.getInstance("AES");
+		        decrypter.init(Cipher.DECRYPT_MODE,secret);
+		        
+				while (!stopFlag && !Thread.currentThread().isInterrupted()) {
+					try {
+						try {
+							serverSocket=new ServerSocket(Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_GWT_PORT_KEY)));
+						    //serverSocket.setSoTimeout(0);
+						    Socket socket=(Socket) serverSocket.accept();
+						    InputStream is=socket.getInputStream();
+						    ObjectInputStream ois=new ObjectInputStream(is);
+						    
+						    OutputStream os=socket.getOutputStream();
+						    ObjectOutputStream oos=new ObjectOutputStream(os);
+						    
+						    try {
+							    Object o=ois.readObject();
+							    if (o instanceof SealedObject) {
+								    Object decrypted=(((SealedObject) o).getObject(decrypter));
+								    if (decrypted instanceof ArrayList) {
+								    	oos.writeObject(new SealedObject(GWTServer.processRequest((ArrayList<Object>)decrypted),encrypter));
+								    }
+							    }
+						    } catch (Exception cn) { cn.printStackTrace();}
+					    	oos.close(); os.close();
+					    	socket.close(); serverSocket.close();
+						} catch (SocketTimeoutException te) {
+							serverSocket.close();
+							serverSocket=null;
+						} 
+					} catch (IOException e) {
+						Logger.log("GWTServerThread Error - "+e.getMessage());
+						break;
+					}
+				}
 			} catch (Exception e) {
+				if (serverSocket!=null) try {serverSocket.close();} catch (IOException ioe) {}
 				e.printStackTrace();
-			};
+			}
 		}
 	}
 	
@@ -429,7 +444,7 @@ public class GWTServer {
 	
 	public static boolean start() {
 		if (t==null) {
-			if (Boolean.parseBoolean(Config.getConfig(Config.CONFIG_SERVER_GWT_SSL_KEY))) {
+			if (Boolean.parseBoolean(Config.getConfig(Config.CONFIG_SERVER_GWT_ENCRYPTION_KEY))) {
 				Logger.log("GWTSecureServer - Starting");
 				t=new GWTSecureServerThread();
 				t.start();

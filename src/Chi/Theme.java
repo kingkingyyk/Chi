@@ -17,6 +17,20 @@ public class Theme {
 		map.put("NotificationIcon", new ImageIcon(Theme.class.getResource("/images/NOTIFICATION.png")));
 		map.put("ControllerIcon", new ImageIcon(Theme.class.getResource("/images/CONTROLLER.png")));
 		map.put("SensorIcon", new ImageIcon(Theme.class.getResource("/images/SENSOR.png")));
+		map.put("ActuatorIcon", new ImageIcon(Theme.class.getResource("/images/ACTUATOR.png")));
+		map.put("AddIcon", new ImageIcon(Theme.class.getResource("/images/ADD.png")));
+		map.put("ControllerIcon", new ImageIcon(Theme.class.getResource("/images/CONTROLLER.png")));
+		map.put("DayScheduleRuleIcon", new ImageIcon(Theme.class.getResource("/images/DAY_SCHEDULE_RULE.png")));
+		map.put("DeleteIcon", new ImageIcon(Theme.class.getResource("/images/DELETE.png")));
+		map.put("EditIcon", new ImageIcon(Theme.class.getResource("/images/EDIT.png")));
+		map.put("HelloIcon", new ImageIcon(Theme.class.getResource("/images/HELLO.png")));
+		map.put("PointIcon", new ImageIcon(Theme.class.getResource("/images/POINT.png")));
+		map.put("RegularScheduleIcon", new ImageIcon(Theme.class.getResource("/images/REGULAR_SCHEDULE.png")));
+		map.put("ResetIcon", new ImageIcon(Theme.class.getResource("/images/reset.png")));
+		map.put("SiteIcon", new ImageIcon(Theme.class.getResource("/images/SITE.png")));
+		map.put("SpecialScheduleIcon", new ImageIcon(Theme.class.getResource("/images/SPECIAL_SCHEDULE.png")));
+		map.put("TickIcon", new ImageIcon(Theme.class.getResource("/images/TICK.png")));
+		map.put("UserIcon", new ImageIcon(Theme.class.getResource("/images/USER.png")));
 	}
 	
 	public static ImageIcon getIcon (String key) {
