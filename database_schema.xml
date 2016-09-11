@@ -37,7 +37,7 @@
 		<type label="SET" length="1" sql="SET" quote=""/>
 		<type label="Bit" length="0" sql="bit" quote=""/>
 	</group>
-</datatypes><table x="601" y="675" name="Site">
+</datatypes><table x="105" y="322" name="Site">
 <row name="SiteName" null="0" autoincrement="0">
 <datatype>VARCHAR(100)</datatype>
 <default>'NULL'</default></row>
@@ -48,7 +48,7 @@
 <part>SiteName</part>
 </key>
 </table>
-<table x="842" y="453" name="Controller">
+<table x="296" y="403" name="Controller">
 <row name="ControllerName" null="0" autoincrement="0">
 <datatype>VARCHAR(100)</datatype>
 </row>
@@ -72,7 +72,7 @@
 <part>ControllerName</part>
 </key>
 </table>
-<table x="1081" y="700" name="SensorClass">
+<table x="551" y="370" name="SensorClass">
 <row name="ClassName" null="0" autoincrement="0">
 <datatype>VARCHAR(100)</datatype>
 </row>
@@ -80,7 +80,7 @@
 <part>ClassName</part>
 </key>
 </table>
-<table x="1038" y="449" name="Sensor">
+<table x="831" y="486" name="Sensor">
 <row name="SensorName" null="0" autoincrement="0">
 <datatype>VARCHAR</datatype>
 </row>
@@ -108,7 +108,7 @@
 <part>SensorName</part>
 </key>
 </table>
-<table x="395" y="456" name="User">
+<table x="109" y="79" name="User">
 <row name="Username" null="0" autoincrement="0">
 <datatype>VARCHAR(100)</datatype>
 </row>
@@ -128,7 +128,7 @@
 <part>Username</part>
 </key>
 </table>
-<table x="940" y="203" name="Actuator">
+<table x="556" y="194" name="Actuator">
 <row name="Name" null="0" autoincrement="0">
 <datatype>VARCHAR(100)</datatype>
 </row>
@@ -143,7 +143,7 @@
 <part>Name</part>
 </key>
 </table>
-<table x="358" y="149" name="DayScheduleRule">
+<table x="537" y="27" name="DayScheduleRule">
 <row name="Name" null="0" autoincrement="0">
 <datatype>VARCHAR</datatype>
 </row>
@@ -163,7 +163,7 @@
 <part>Name</part>
 </key>
 </table>
-<table x="617" y="40" name="RegularSchedule">
+<table x="824" y="18" name="RegularSchedule">
 <row name="ScheduleName" null="0" autoincrement="0">
 <datatype>VARCHAR(100)</datatype>
 </row>
@@ -191,7 +191,7 @@
 <part>ScheduleName</part>
 </key>
 </table>
-<table x="621" y="278" name="SpecialSchedule">
+<table x="822" y="225" name="SpecialSchedule">
 <row name="ScheduleName" null="0" autoincrement="0">
 <datatype>VARCHAR(100)</datatype>
 </row>
@@ -225,7 +225,7 @@
 <part>ScheduleName</part>
 </key>
 </table>
-<table x="1214" y="161" name="SensorReading">
+<table x="1157" y="231" name="SensorReading">
 <row name="SensorName" null="0" autoincrement="0">
 <datatype>VARCHAR(100)</datatype>
 <relation table="Sensor" row="SensorName" />
@@ -262,7 +262,10 @@
 <part>SensorName</part>
 </key>
 </table>
-<table x="1311" y="502" name="SensorEvent">
+<table x="1164" y="531" name="SensorEvent">
+<row name="ID" null="0" autoincrement="1">
+<datatype>INTEGER</datatype>
+</row>
 <row name="SensorName" null="0" autoincrement="0">
 <datatype>VARCHAR(100)</datatype>
 <relation table="Sensor" row="SensorName" />
@@ -277,8 +280,28 @@
 <datatype>DOUBLE</datatype>
 </row>
 <key type="PRIMARY" name="">
-<part>SensorName</part>
-<part>TimeStp</part>
+<part>ID</part>
+</key>
+</table>
+<table x="558" y="648" name="ControllerEvent">
+<row name="ID" null="0" autoincrement="1">
+<datatype>INTEGER</datatype>
+</row>
+<row name="ControllerName" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+<relation table="Controller" row="ControllerName" />
+</row>
+<row name="TimeStp" null="0" autoincrement="0">
+<datatype>TIMESTAMP</datatype>
+</row>
+<row name="EventType" null="1" autoincrement="0">
+<datatype>VARCHAR(200)</datatype>
+<default>NULL</default></row>
+<row name="EventValue" null="0" autoincrement="0">
+<datatype>DOUBLE</datatype>
+</row>
+<key type="PRIMARY" name="">
+<part>ID</part>
 </key>
 </table>
 </sql>
