@@ -8,7 +8,6 @@ import javax.swing.JFileChooser;
 
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
@@ -322,10 +321,11 @@ public class MenuUI extends JFrame {
 		panelSQL.add(btnViewReadings);
 		btnViewReadings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ArrayList<SensorReading> list=DatabaseReading.getReadingBetweenTime("testTemp",LocalDateTime.of(1990,1,1,0,0),LocalDateTime.now(),5000);
+				ArrayList<SensorReading> list=DatabaseReading.getReadingMonthly("testTemp",2016,9);
 				for (SensorReading r : list) {
 					System.out.println(r.getSensorName()+" "+r.getTimestamp()+" "+r.getActualValue());
 				}
+				System.out.println(list.size());
 			}
 		});
 		

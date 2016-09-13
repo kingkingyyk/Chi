@@ -4,7 +4,6 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
@@ -15,7 +14,7 @@ import com.datastax.driver.core.exceptions.NoHostAvailableException;
 
 public class DatabaseReading extends DatabaseCassandra {
 	
-	public static boolean storeReading (String sn, LocalDateTime time, double v) {
+	public static boolean storeReading () {
 		String ip=Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY);
 		int port=Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
 		Logger.log("DB Store Reading : "+Config.getConfig(Config.DATABASE_RECORD_SAVE_TO_DB_SQL_FILE_KEY));
@@ -29,16 +28,19 @@ public class DatabaseReading extends DatabaseCassandra {
 			Logger.log("DB Store Reading - Database connection OK!");
 			
 			BoundStatement [] sql=getBoundSQLStatementFromFile(session,Config.getConfig(Config.DATABASE_RECORD_SAVE_TO_DB_SQL_FILE_KEY));
-			sql[0].setString(0, sn);
-			sql[0].setInt(1,time.getYear());
-			sql[0].setInt(2,time.getMonthValue());
-			sql[0].setInt(3,time.getDayOfMonth());
-			sql[0].setInt(4,time.getDayOfWeek().getValue());
-			if (time.getHour()>=12) sql[0].setBool(5,true);
-			else sql[0].setBool(5, false);
-			sql[0].setTimestamp(6,Timestamp.valueOf(time));
-			sql[0].setDouble(7, v);
-			executeSQL("DB Store Reading", session, sql[0]);
+			while (DataServerReadingToDatabase.queue.size()>0) {
+				DataServerReadingToDatabase.Data d=DataServerReadingToDatabase.queue.poll();
+				sql[0].setString(0, d.sname);
+				sql[0].setInt(1,d.timestamp.getYear());
+				sql[0].setInt(2,d.timestamp.getMonthValue());
+				sql[0].setInt(3,d.timestamp.getDayOfMonth());
+				sql[0].setInt(4,d.timestamp.getDayOfWeek().getValue());
+				if (d.timestamp.getHour()>=12) sql[0].setBool(5,true);
+				else sql[0].setBool(5, false);
+				sql[0].setTimestamp(6,Timestamp.valueOf(d.timestamp));
+				sql[0].setDouble(7,d.reading);
+				executeSQL("DB Store Reading", session, sql[0]);
+			}
 			
 			session.close();
 			cluster.close();
@@ -55,7 +57,7 @@ public class DatabaseReading extends DatabaseCassandra {
 		return false;
 	}
 	
-	public static ArrayList<SensorReading> getReadingBetweenTime (String sn, LocalDateTime min, LocalDateTime max, int limit) {
+	public static ArrayList<SensorReading> getReadingBetweenTime (String sn, LocalDateTime min, LocalDateTime max) {
 		String ip=Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY);
 		int port=Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
 		Logger.log("DB Get Reading : "+Config.getConfig(Config. DATABASE_RECORD_QUERY_BETWEEN_TIME_FILE_KEY));
@@ -73,7 +75,6 @@ public class DatabaseReading extends DatabaseCassandra {
 			sql[0].setString(0, sn);
 			sql[0].setTimestamp(1,Utility.localDateTimeToSQLDate(min));
 			sql[0].setTimestamp(2,Utility.localDateTimeToSQLDate(max));
-			sql[0].setInt(3,limit);
 			ResultSet rs=executeSQL("DB Get Reading", session, sql[0]);
 			
 			for (Row r : rs) {
@@ -112,30 +113,13 @@ public class DatabaseReading extends DatabaseCassandra {
 			
 			BoundStatement [] sql=getBoundSQLStatementFromFile(session,Config.getConfig(Config.DATABASE_RECORD_QUERY_MONTH_FILE_KEY));
 			
-			LocalDateTime dt=LocalDateTime.of(year,month,1,0,0);
-			
-			while (dt.getMonthValue()==month) {
-				sql[0].setString(0, sn);
-				sql[0].setInt(1,year);
-				sql[0].setInt(2,month);
-				sql[0].setInt(3,dt.getDayOfMonth());
-				sql[0].setBool(4,true);
-				sql[0].setInt(5,1);
-				ResultSet rs=executeSQL("DB Get Reading", session, sql[0]);
-				Iterator<Row> it=rs.iterator();
-				if (it.hasNext()) {
-					Row r=it.next();
-					list.add(new SensorReading(sn,Utility.dateToLocalDateTime(new Date(r.getTimestamp("TimeStp").getTime())),r.getDouble("Value"),Cache.Sensors.map.get(sn).denormalizeValue(r.getDouble("Value"))));
-				}
-				
-				sql[0].setBool(4,false);
-				rs=executeSQL("DB Get Reading", session, sql[0]);
-				it=rs.iterator();
-				if (it.hasNext()) {
-					Row r=it.next();
-					list.add(new SensorReading(sn,Utility.dateToLocalDateTime(new Date(r.getTimestamp("TimeStp").getTime())),r.getDouble("Value"),Cache.Sensors.map.get(sn).denormalizeValue(r.getDouble("Value"))));
-				}
-				dt=dt.plusDays(1);
+			sql[0].setString(0, sn);
+			sql[0].setInt(1,year);
+			sql[0].setInt(2,month);
+			ResultSet rs=executeSQL("DB Get Reading", session, sql[0]);
+			for (Row r : rs) {
+				if (rs.getAvailableWithoutFetching() == 100 && !rs.isFullyFetched()) rs.fetchMoreResults();
+				list.add(new SensorReading(sn,Utility.dateToLocalDateTime(new Date(r.getTimestamp("TimeStp").getTime())),r.getDouble("Value"),Cache.Sensors.map.get(sn).denormalizeValue(r.getDouble("Value"))));
 			}
 			
 			session.close();

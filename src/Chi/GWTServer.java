@@ -302,7 +302,7 @@ public class GWTServer {
 		    	return result;
 		    }
 		    case "37" : { //SensorGetReadingBetweenTime
-		    	ArrayList<SensorReading> lsr=DatabaseReading.getReadingBetweenTime((String)list.get(1),(LocalDateTime)list.get(2),(LocalDateTime)list.get(3),5000);
+		    	ArrayList<SensorReading> lsr=DatabaseReading.getReadingBetweenTime((String)list.get(1),(LocalDateTime)list.get(2),(LocalDateTime)list.get(3));
 		    	ArrayList<Object []> result=new ArrayList<>();
 		    	for (SensorReading sr : lsr) {
 		    		result.add(new Object [] {sr.getTimestamp(),sr.getActualValue()});

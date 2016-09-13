@@ -1,1 +1,1 @@
-SELECT TimeStp,Value FROM Chi.SensorReading WHERE SensorName=? AND Year=? AND Month=? AND Day=? AND IsMorning=? LIMIT ?;
+SELECT TimeStp,Value FROM Chi.SensorReading WHERE SensorName=? AND Year=? AND Month=? ALLOW FILTERING;

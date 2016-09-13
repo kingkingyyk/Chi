@@ -8,7 +8,7 @@ public class DataServerReadingToDatabase {
 	private static final String TIMESTAMP_FORMAT="yyyy-MM-dd HH:mm:ss"; //format the time
 	private static DateTimeFormatter formatter=DateTimeFormatter.ofPattern(TIMESTAMP_FORMAT);
 	
-	private static class Data {
+	public static class Data {
 		String sname;
 		LocalDateTime timestamp;
 		double reading;
@@ -18,7 +18,7 @@ public class DataServerReadingToDatabase {
 		}
 	}
 	//Thread safe queue.
-	private static ConcurrentLinkedQueue<Data> queue=new ConcurrentLinkedQueue<>();
+	public static ConcurrentLinkedQueue<Data> queue=new ConcurrentLinkedQueue<>();
 
 	public static void queueData(String sn, double r) {
 		Data d=new Data();
@@ -40,13 +40,8 @@ public class DataServerReadingToDatabase {
 	
 	private static void writeToDatabase() {
 		while (queue.size()>0) {
-			Data d=queue.poll();
-			boolean success=DatabaseReading.storeReading(d.sname, d.timestamp, d.reading);
-			if (!success) {
-				try {
-					Thread.sleep(5000);
-				} catch (InterruptedException e) {}
-			}
+			DatabaseReading.storeReading();
+			try { Thread.sleep(500);} catch (InterruptedException e) {}
 		}
 	}
 }
