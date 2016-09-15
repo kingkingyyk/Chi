@@ -40,6 +40,10 @@ public class Chi {
 		FrameNotificationBind.initialize();
 		Logger.log("GUI & data binding done.");
 		
+		Logger.log("Data server to database started.");
+		DataServerReadingToDatabase.initialize();
+		Logger.log("Data server to database done.");
+		
 		Logger.log("MainUI started.");
 		MenuUI ss=new MenuUI();
 		ss.setLocationRelativeTo(null);

@@ -321,11 +321,10 @@ public class MenuUI extends JFrame {
 		panelSQL.add(btnViewReadings);
 		btnViewReadings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				FrameReading fr=new FrameReading();
+				fr.setVisible(true);/*
 				ArrayList<SensorReading> list=DatabaseReading.getReadingMonthly("testTemp",2016,9);
-				for (SensorReading r : list) {
-					System.out.println(r.getSensorName()+" "+r.getTimestamp()+" "+r.getActualValue());
-				}
-				System.out.println(list.size());
+				ReadingExport.export(list); */
 			}
 		});
 		
