@@ -38,11 +38,11 @@ public class Utility {
     }
     
     public static LocalDateTime dateToLocalDateTime (java.sql.Date d) {
-        return LocalDateTime.ofInstant(Instant.ofEpochMilli(d.getTime()), ZoneOffset.UTC);
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(d.getTime()), ZoneOffset.systemDefault());
     }
     
     public static LocalDateTime dateToLocalDateTime (java.util.Date d) {
-        return LocalDateTime.ofInstant(Instant.ofEpochMilli(d.getTime()), ZoneOffset.UTC);
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(d.getTime()), ZoneOffset.systemDefault());
     }
     
 	public static String [] Days={"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"};
