@@ -151,7 +151,7 @@ public class FrameSiteManagement extends JFrame {
 	public static void refresh() {
 		if (FrameSiteManagement.currInstance!=null) {
 			FrameSiteManagement.currInstance.updateSiteTable();
-			FrameSiteManagement.currInstance.repaint();
+			FrameSiteManagement.currInstance.table.repaint();
 		}
 	}
 	

@@ -167,6 +167,7 @@ public class DatabaseController {
 			tx = session.beginTransaction();
 			Controller ctrl = (Controller) session.get(Controller.class,n);
 			if (ctrl!=null) {
+				Cache.Controllers.map.get(n).setLastreporttime(Utility.localDateTimeToSQLDate(dt));
 				ctrl.setLastreporttime(Utility.localDateTimeToSQLDate(dt));
 				session.update(ctrl);
 				tx.commit();

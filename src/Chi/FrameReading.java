@@ -72,7 +72,7 @@ public class FrameReading extends JFrame {
     	
         dAxis = (DateAxis) chart.getXYPlot().getDomainAxis();
         dAxis.setDateFormatOverride(new SimpleDateFormat("HH:mm:ss aa"));
-        dAxis.setTickUnit(new DateTickUnit(DateTickUnitType.SECOND,15));
+        //dAxis.setTickUnit(new DateTickUnit(DateTickUnitType.SECOND,15));
 		ChartPanel panel = new ChartPanel(chart);
 		contentPane.add(panel, BorderLayout.CENTER);
 		

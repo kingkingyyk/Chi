@@ -44,7 +44,7 @@ public class FrameSensorClassManagement extends JFrame {
 	public static void refresh() {
 		if (FrameSensorClassManagement.currInstance!=null) {
 			FrameSensorClassManagement.currInstance.updateSensorClassTable();
-			FrameSensorClassManagement.currInstance.repaint();
+			FrameSensorClassManagement.currInstance.table.repaint();
 		}
 	}
 	

@@ -153,7 +153,7 @@ public class FrameDayScheduleRuleManagement extends JFrame {
 	public static void refresh() {
 		if (FrameDayScheduleRuleManagement.currInstance!=null) {
 			FrameDayScheduleRuleManagement.currInstance.updateDayScheduleRuleTable();
-			FrameDayScheduleRuleManagement.currInstance.repaint();
+			FrameDayScheduleRuleManagement.currInstance.table.repaint();
 		}
 	}
 	

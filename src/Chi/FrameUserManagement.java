@@ -156,7 +156,7 @@ public class FrameUserManagement extends JFrame {
 	public static void refresh() {
 		if (FrameUserManagement.currInstance!=null) {
 			FrameUserManagement.currInstance.updateUserTable();
-			FrameUserManagement.currInstance.repaint();
+			FrameUserManagement.currInstance.table.repaint();
 		}
 	}
 	private JPanel contentPane;

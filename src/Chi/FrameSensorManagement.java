@@ -158,7 +158,7 @@ public class FrameSensorManagement extends JFrame {
 	public static void refresh() {
 		if (FrameSensorManagement.currInstance!=null) {
 			FrameSensorManagement.currInstance.updateSensorTable();
-			FrameSensorManagement.currInstance.repaint();
+			FrameSensorManagement.currInstance.table.repaint();
 		}
 	}
 	

@@ -175,7 +175,7 @@ public class FrameOngoingSchedules extends JFrame {
 	public static void refresh() {
 		if (FrameOngoingSchedules.currInstance!=null) {
 			FrameOngoingSchedules.currInstance.updateOnGoingSchedulesTable();
-			FrameOngoingSchedules.currInstance.repaint();
+			FrameOngoingSchedules.currInstance.table.repaint();
 		}
 	}
 	

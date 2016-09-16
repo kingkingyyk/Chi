@@ -173,8 +173,7 @@ public class FrameControllerManagement extends JFrame {
 	public static void refresh() {
 		if (FrameControllerManagement.currInstance!=null) {
 			FrameControllerManagement.currInstance.updateControllerTable();
-			FrameControllerManagement.currInstance.toFront();
-			FrameControllerManagement.currInstance.repaint();
+			FrameControllerManagement.currInstance.table.repaint();
 		}
 	}
 	

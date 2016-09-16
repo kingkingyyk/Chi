@@ -166,7 +166,7 @@ public class FrameSpecialScheduleManagement extends JFrame {
 	public static void refresh() {
 		if (FrameSpecialScheduleManagement.currInstance!=null) {
 			FrameSpecialScheduleManagement.currInstance.updateSpecialScheduleTable();
-			FrameSpecialScheduleManagement.currInstance.repaint();
+			FrameSpecialScheduleManagement.currInstance.table.repaint();
 		}
 	}
 	

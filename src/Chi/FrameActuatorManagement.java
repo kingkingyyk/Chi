@@ -149,7 +149,7 @@ public class FrameActuatorManagement extends JFrame {
 	public static void refresh() {
 		if (FrameActuatorManagement.currInstance!=null) {
 			FrameActuatorManagement.currInstance.updateActuatorTable();
-			FrameActuatorManagement.currInstance.repaint();
+			FrameActuatorManagement.currInstance.table.repaint();
 		}
 	}
 	

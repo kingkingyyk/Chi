@@ -46,7 +46,8 @@ public class DataServerThread extends Thread {
 						switch (id) {
 							case "0" : {
 								try {
-									st.nextToken(); //controller name
+									String cn=st.nextToken(); //controller name
+									DatabaseController.updateControllerReportTime(cn,LocalDateTime.now());
 									DataServerReadingToDatabase.queueData(st.nextToken(),Double.parseDouble(st.nextToken()));
 								} catch (NumberFormatException e) {}
 								break;
