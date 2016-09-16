@@ -52,7 +52,7 @@ public class FrameReading extends JFrame {
 	}
 	
 	public FrameReading() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 750, 400);
         
 		contentPane = new JPanel();
@@ -78,7 +78,7 @@ public class FrameReading extends JFrame {
 		
 		chart.getXYPlot().getRangeAxis().setRangeWithMargins(20,50);
 		
-        lastUpdateTime=LocalDateTime.now().minusMinutes(1);
+        lastUpdateTime=LocalDateTime.of(1970,1,1,0,0);
 		t=new Timer();
 		UpdateTask ut=new UpdateTask(); ut.r=this;
 		t.schedule(ut,10,2000);

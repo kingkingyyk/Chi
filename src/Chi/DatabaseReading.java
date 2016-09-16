@@ -28,8 +28,8 @@ public class DatabaseReading extends DatabaseCassandra {
 			Logger.log("DB Store Reading - Database connection OK!");
 			
 			BoundStatement [] sql=getBoundSQLStatementFromFile(session,Config.getConfig(Config.DATABASE_RECORD_SAVE_TO_DB_SQL_FILE_KEY));
-			while (DataServerReadingToDatabase.queue.size()>0) {
-				DataServerReadingToDatabase.Data d=DataServerReadingToDatabase.queue.poll();
+			DataServerReadingToDatabase.Data d;
+			while ((d=DataServerReadingToDatabase.queue.poll())!=null) {
 				sql[0].setString(0, d.sname);
 				sql[0].setInt(1,d.timestamp.getYear());
 				sql[0].setInt(2,d.timestamp.getMonthValue());
