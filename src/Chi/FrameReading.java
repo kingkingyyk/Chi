@@ -6,7 +6,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -39,14 +39,18 @@ public class FrameReading extends JFrame {
 		
 		@Override
 		public void run() {
-			LocalDateTime now=LocalDateTime.now();
-			ArrayList<SensorReading> list=DatabaseReading.getReadingBetweenTime("testTemp",r.lastUpdateTime,now);
-			r.lastUpdateTime=now;
-			for (SensorReading r : list) {
-				this.r.tSeries.addOrUpdate(new Second(Utility.localDateTimeToUtilDate(r.getTimestamp())),r.getActualValue());
+			if (r.chart.isNotify()) {
+				r.chart.setNotify(false);
+				LocalDateTime now=LocalDateTime.now();
+				LinkedList<SensorReading> list=DatabaseReading.getReadingBetweenTime("testTemp",r.lastUpdateTime,now);
+				r.lastUpdateTime=now;
+				for (SensorReading r : list) this.r.tSeries.addOrUpdate(new Second(Utility.localDateTimeToUtilDate(r.getTimestamp())),r.getActualValue());
+				r.chart.setNotify(true);
+				if (!this.r.tSeries.isEmpty()) {
+			        this.r.dAxis.setMinimumDate(this.r.tSeries.getDataItem(0).getPeriod().getStart());
+			        this.r.dAxis.setMaximumDate(Utility.localDateTimeToUtilDate(now.plusSeconds(5)));
+				}
 			}
-	        this.r.dAxis.setMinimumDate(this.r.tSeries.getDataItem(0).getPeriod().getStart());
-	        this.r.dAxis.setMaximumDate(Utility.localDateTimeToUtilDate(now.plusSeconds(5)));
 		}
 		
 	}
@@ -62,7 +66,7 @@ public class FrameReading extends JFrame {
 		
 		dataset=new TimeSeriesCollection();
 		tSeries=new TimeSeries("Temperature");
-		tSeries.setMaximumItemCount(60);
+		//tSeries.setMaximumItemCount(60);
 		dataset.addSeries(tSeries);
 		
     	chart = ChartFactory.createTimeSeriesChart("Temperature", "Time", "C", dataset, true, true, false);
@@ -72,7 +76,6 @@ public class FrameReading extends JFrame {
     	
         dAxis = (DateAxis) chart.getXYPlot().getDomainAxis();
         dAxis.setDateFormatOverride(new SimpleDateFormat("HH:mm:ss aa"));
-        //dAxis.setTickUnit(new DateTickUnit(DateTickUnitType.SECOND,15));
 		ChartPanel panel = new ChartPanel(chart);
 		contentPane.add(panel, BorderLayout.CENTER);
 		

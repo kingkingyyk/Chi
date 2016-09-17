@@ -247,6 +247,15 @@ public class MenuUI extends JFrame {
 		btnActuator.setBounds(269, 35, 135, 23);
 		panelDatabase.add(btnActuator);
 		
+		JButton btnClearReadings = new JButton("Clear Readings");
+		btnClearReadings.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				DatabaseReading.clearReading("testTemp");
+			}
+		});
+		btnClearReadings.setBounds(10, 69, 109, 23);
+		panelDatabase.add(btnClearReadings);
+		
 		JPanel panelScheduling = new JPanel();
 		tabbedPane.addTab("Scheduling", null, panelScheduling, null);
 		panelScheduling.setLayout(null);

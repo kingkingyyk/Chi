@@ -126,6 +126,7 @@ public class DatabaseActuator {
 			tx = session.beginTransaction();
 			Actuator act = session.get(Actuator.class, n);
 			if (act!=null) {
+				Cache.Actuators.map.get(n).setStatus(st);
 				act.setStatus(st);
 				session.update(act);
 				tx.commit();

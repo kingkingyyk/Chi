@@ -60,6 +60,7 @@ public class DataServerThread extends Thread {
 							}
 							case "2" : {
 								try {
+									st.nextToken();
 									DataServerActuatorStatusToDatabase.queueData(st.nextToken(),st.nextToken());
 								} catch (NumberFormatException e) {}
 								break;

@@ -11,6 +11,7 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.security.spec.KeySpec;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.time.LocalDateTime;
 import javax.crypto.Cipher;
 import javax.crypto.SealedObject;
@@ -302,16 +303,16 @@ public class GWTServer {
 		    	return result;
 		    }
 		    case "37" : { //SensorGetReadingBetweenTime
-		    	ArrayList<SensorReading> lsr=DatabaseReading.getReadingBetweenTime((String)list.get(1),(LocalDateTime)list.get(2),(LocalDateTime)list.get(3));
-		    	ArrayList<Object []> result=new ArrayList<>();
+		    	LinkedList<SensorReading> lsr=DatabaseReading.getReadingBetweenTime((String)list.get(1),(LocalDateTime)list.get(2),(LocalDateTime)list.get(3));
+		    	ArrayList<Object []> result=new ArrayList<>(lsr.size());
 		    	for (SensorReading sr : lsr) {
 		    		result.add(new Object [] {sr.getTimestamp(),sr.getActualValue()});
 		    	}
 		    	return result;
 		    }
 		    case "38" : { //SensorGetReadingBetweenTime
-		    	ArrayList<SensorReading> lsr=DatabaseReading.getReadingMonthly((String)list.get(1),(int)list.get(2),(int)list.get(3));
-		    	ArrayList<Object []> result=new ArrayList<>();
+		    	LinkedList<SensorReading> lsr=DatabaseReading.getReadingMonthly((String)list.get(1),(int)list.get(2),(int)list.get(3));
+		    	ArrayList<Object []> result=new ArrayList<>(lsr.size());
 		    	for (SensorReading sr : lsr) result.add(new Object [] {sr.getTimestamp(),sr.getActualValue()});
 		    	return result;
 		    }

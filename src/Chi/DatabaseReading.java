@@ -3,7 +3,7 @@ package Chi;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
@@ -21,9 +21,7 @@ public class DatabaseReading extends DatabaseCassandra {
 		Cluster cluster=null;
 		try {
 			Logger.log("DB Store Reading - Connecting to database : "+ip+":"+port);
-			cluster=Cluster.builder().withCredentials(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_USERNAME_KEY),Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PASSWORD_KEY))/*
-			*/.withPort(port)/*
-			*/.addContactPoint(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)).build();
+			cluster=getCluster();
 			Session session=cluster.connect();
 			Logger.log("DB Store Reading - Database connection OK!");
 			
@@ -57,17 +55,15 @@ public class DatabaseReading extends DatabaseCassandra {
 		return false;
 	}
 	
-	public static ArrayList<SensorReading> getReadingBetweenTime (String sn, LocalDateTime min, LocalDateTime max) {
+	public static LinkedList<SensorReading> getReadingBetweenTime (String sn, LocalDateTime min, LocalDateTime max) {
 		String ip=Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY);
 		int port=Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
 		Logger.log("DB Get Reading : "+Config.getConfig(Config. DATABASE_RECORD_QUERY_BETWEEN_TIME_FILE_KEY));
 		Cluster cluster=null;
-		ArrayList<SensorReading> list=new ArrayList<>();
+		LinkedList<SensorReading> list=new LinkedList<>();
 		try {
 			Logger.log("DB Get Reading - Connecting to database : "+ip+":"+port);
-			cluster=Cluster.builder().withCredentials(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_USERNAME_KEY),Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PASSWORD_KEY))/*
-			*/.withPort(port)/*
-			*/.addContactPoint(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)).build();
+			cluster=getCluster();
 			Session session=cluster.connect();
 			Logger.log("DB Get Reading - Database connection OK!");
 			
@@ -80,7 +76,7 @@ public class DatabaseReading extends DatabaseCassandra {
 			for (Row r : rs) {
 			    if (rs.getAvailableWithoutFetching() == 100 && !rs.isFullyFetched()) rs.fetchMoreResults();
 				SensorReading sr=new SensorReading(sn,Utility.dateToLocalDateTime(new Date(r.getTimestamp("TimeStp").getTime())),r.getDouble("Value"),Cache.Sensors.map.get(sn).denormalizeValue(r.getDouble("Value")));
-				list.add(sr);
+				list.addLast(sr);
 			}
 			
 			session.close();
@@ -97,17 +93,15 @@ public class DatabaseReading extends DatabaseCassandra {
 		return list;
 	}
 	
-	public static ArrayList<SensorReading> getReadingMonthly (String sn, int year, int month) {
+	public static LinkedList<SensorReading> getReadingMonthly (String sn, int year, int month) {
 		String ip=Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY);
 		int port=Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
 		Logger.log("DB Get Reading : "+Config.getConfig(Config.DATABASE_RECORD_QUERY_MONTH_FILE_KEY));
 		Cluster cluster=null;
-		ArrayList<SensorReading> list=new ArrayList<>();
+		LinkedList<SensorReading> list=new LinkedList<>();
 		try {
 			Logger.log("DB Get Reading - Connecting to database : "+ip+":"+port);
-			cluster=Cluster.builder().withCredentials(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_USERNAME_KEY),Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PASSWORD_KEY))/*
-			*/.withPort(port)/*
-			*/.addContactPoint(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)).build();
+			cluster=getCluster();
 			Session session=cluster.connect();
 			Logger.log("DB Get Reading - Database connection OK!");
 			
@@ -119,7 +113,7 @@ public class DatabaseReading extends DatabaseCassandra {
 			ResultSet rs=executeSQL("DB Get Reading", session, sql[0]);
 			for (Row r : rs) {
 				if (rs.getAvailableWithoutFetching() == 100 && !rs.isFullyFetched()) rs.fetchMoreResults();
-				list.add(new SensorReading(sn,Utility.dateToLocalDateTime(new Date(r.getTimestamp("TimeStp").getTime())),r.getDouble("Value"),Cache.Sensors.map.get(sn).denormalizeValue(r.getDouble("Value"))));
+				list.addLast(new SensorReading(sn,Utility.dateToLocalDateTime(new Date(r.getTimestamp("TimeStp").getTime())),r.getDouble("Value"),Cache.Sensors.map.get(sn).denormalizeValue(r.getDouble("Value"))));
 			}
 			
 			session.close();
@@ -134,5 +128,31 @@ public class DatabaseReading extends DatabaseCassandra {
 			cluster.close();
 		}
 		return list;
+	}
+	
+	public static void clearReading (String sn) {
+		String ip=Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY);
+		int port=Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
+		Logger.log("DB Clear Reading : "+Config.getConfig(Config.DATABASE_RECORD_QUERY_MONTH_FILE_KEY));
+		Cluster cluster=null;
+		try {
+			Logger.log("DB Clear Reading - Connecting to database : "+ip+":"+port);
+			cluster=getCluster();
+			Session session=cluster.connect();
+			Logger.log("DB Clear Reading - Database connection OK!");
+			
+			session.execute("DELETE FROM Chi.SensorReading WHERE SensorName='"+sn+"';");
+			
+			session.close();
+			cluster.close();
+		} catch (NoHostAvailableException e) {
+			Logger.log("DB Clear Reading - Database connection fail!");
+		} catch (Exception e) {
+			Logger.log("DB Clear Reading - Error - "+e.getMessage());
+			e.printStackTrace();
+		}
+		if (cluster!=null) {
+			cluster.close();
+		}
 	}
 }
