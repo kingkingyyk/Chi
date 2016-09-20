@@ -26,6 +26,7 @@ public class GWTServer {
 	private static GWTServerT t;
 	
 	public static Serializable processRequest (ArrayList<Object> list) {
+		for (Object o : list) if (o==null) return null;
 	    switch ((String)list.get(0)) {
 		    case "0" : { //UserCheckNameExists
 		    	return Cache.Users.map.containsKey(list.get(1));
@@ -48,7 +49,7 @@ public class GWTServer {
 		    }
 		    case "4" : { //SiteGetControllers
 		    	ArrayList<Object []> result=new ArrayList<>();
-		    	for (Controller c : Cache.Sites.map.get(list.get(1)).getControllers()) result.add(c.toObj());
+		    	for (Controller c : Cache.Controllers.map.values()) if (c.getSite().getSitename().equals(list.get(1))) result.add(c.toObj());
 		    	return result;
 		    }
 		    case "5" : { //ControllerGetSensors
@@ -310,7 +311,7 @@ public class GWTServer {
 		    	}
 		    	return result;
 		    }
-		    case "38" : { //SensorGetReadingBetweenTime
+		    case "38" : { //SensorGetReadingMonthly
 		    	LinkedList<SensorReading> lsr=DatabaseReading.getReadingMonthly((String)list.get(1),(int)list.get(2),(int)list.get(3));
 		    	ArrayList<Object []> result=new ArrayList<>(lsr.size());
 		    	for (SensorReading sr : lsr) result.add(new Object [] {sr.getTimestamp(),sr.getActualValue()});
