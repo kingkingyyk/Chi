@@ -39,6 +39,7 @@ public class Cache {
 			public void run () {
 				try {
 			        Configuration c= new Configuration().configure("/conf/hibernate.cfg.xml");
+			        c.setProperty("hibernate.enable_lazy_load_no_trans","true");
 			        c.setProperty("hibernate.connection.username",Config.getConfig(Config.CONFIG_SERVER_DATABASE_HSQL_USERNAME_KEY));
 			        c.setProperty("hibernate.connection.password",Config.getConfig(Config.CONFIG_SERVER_DATABASE_HSQL_PASSWORD_KEY));
 			        c.setProperty("hibernate.connection.url",getHSQLAddress());
@@ -65,12 +66,13 @@ public class Cache {
 			    
 			    boolean flag=(factory!=null);
 			    if (flag) {
-				    flag &=Actuators.update();
+			    	//Topological order
+				    flag &=Users.update();
+				    flag &=SensorClasses.update();
 				    flag &=Sites.update();
 				    flag &=Controllers.update();
-				    flag &=SensorClasses.update();
 				    flag &=Sensors.update();
-				    flag &=Users.update();
+				    flag &=Actuators.update();
 				    flag &=DayScheduleRules.update();
 				    flag &=RegularSchedules.update();
 				    flag &=SpecialSchedules.update();

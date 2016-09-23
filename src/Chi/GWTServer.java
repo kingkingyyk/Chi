@@ -24,6 +24,8 @@ import javax.net.ssl.SSLSocketFactory;
 
 public class GWTServer {
 	private static GWTServerT t;
+	private static LinkedList<Integer> PortPool=new LinkedList<>();
+	private static LinkedList<ServerSocket> Sock=new LinkedList<>();
 	
 	public static Serializable processRequest (ArrayList<Object> list) {
 		for (Object o : list) if (o==null) return null;
@@ -348,11 +350,49 @@ public class GWTServer {
 	private static class GWTServerT extends Thread {
 		boolean stopFlag=false;
 	}
-	
+
 	private static class GWTSecureServerThread extends GWTServerT {
-		public ServerSocket serverSocket;
+		private static class GWTSecureServerPoolThread extends Thread {
+			public boolean ran=false;
+			public int portId;
+			public Cipher encrypter, decrypter;
+			
+			@SuppressWarnings("unchecked")
+			public void run () {
+				ServerSocket serverSocket=null;
+				try {
+					serverSocket=new ServerSocket(portId);
+					Sock.add(serverSocket);
+				    serverSocket.setSoTimeout(10000);
+					ran=true;
+				    Socket socket=(Socket) serverSocket.accept();
+				    
+				    InputStream is=socket.getInputStream();
+				    ObjectInputStream ois=new ObjectInputStream(is);
+				    
+				    OutputStream os=socket.getOutputStream();
+				    ObjectOutputStream oos=new ObjectOutputStream(os);
+				    
+				    try {
+					    Object o=ois.readObject();
+					    if (o instanceof SealedObject) {
+						    Object decrypted=(((SealedObject) o).getObject(decrypter));
+						    if (decrypted instanceof ArrayList) {
+						    	oos.writeObject(new SealedObject(GWTServer.processRequest((ArrayList<Object>)decrypted),encrypter));
+						    }
+					    }
+				    } catch (Exception cn) { cn.printStackTrace();}
+			    	oos.close(); os.close();
+			    	socket.close(); serverSocket.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				} finally {
+					PortPool.addFirst(portId);
+					if (serverSocket!=null) Sock.remove(serverSocket);
+				}
+			}
+		}
 		
-		@SuppressWarnings("unchecked")
 		public void run () {
 			try {
 		        final byte[] salt = "chichilol".getBytes();
@@ -365,39 +405,33 @@ public class GWTServer {
 		        decrypter.init(Cipher.DECRYPT_MODE,secret);
 		        
 				while (!stopFlag && !Thread.currentThread().isInterrupted()) {
-					try {
-						try {
-							serverSocket=new ServerSocket(Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_GWT_PORT_KEY)));
-						    //serverSocket.setSoTimeout(0);
-						    Socket socket=(Socket) serverSocket.accept();
-						    InputStream is=socket.getInputStream();
-						    ObjectInputStream ois=new ObjectInputStream(is);
-						    
-						    OutputStream os=socket.getOutputStream();
-						    ObjectOutputStream oos=new ObjectOutputStream(os);
-						    
-						    try {
-							    Object o=ois.readObject();
-							    if (o instanceof SealedObject) {
-								    Object decrypted=(((SealedObject) o).getObject(decrypter));
-								    if (decrypted instanceof ArrayList) {
-								    	oos.writeObject(new SealedObject(GWTServer.processRequest((ArrayList<Object>)decrypted),encrypter));
-								    }
-							    }
-						    } catch (Exception cn) { cn.printStackTrace();}
-					    	oos.close(); os.close();
-					    	socket.close(); serverSocket.close();
-						} catch (SocketTimeoutException te) {
-							serverSocket.close();
-							serverSocket=null;
-						} 
-					} catch (IOException e) {
-						Logger.log("GWTServerThread Error - "+e.getMessage());
-						break;
+					ServerSocket serverSocket=new ServerSocket(Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_GWT_PORT_KEY)));
+				    serverSocket.setSoTimeout(0);
+				    Socket socket=(Socket) serverSocket.accept();
+				    
+				    InputStream is=socket.getInputStream();
+				    ObjectInputStream ois=new ObjectInputStream(is);
+				    
+				    OutputStream os=socket.getOutputStream();
+				    ObjectOutputStream oos=new ObjectOutputStream(os);
+				    
+				    int port=PortPool.removeFirst();
+				    Logger.log("GWTSecureServer - Allocating "+port);
+				    GWTSecureServerPoolThread gt=new GWTSecureServerPoolThread();
+					gt.portId=port;
+					gt.encrypter=encrypter;
+					gt.decrypter=decrypter;
+					gt.start();
+					
+					
+					while (!gt.ran) {
+						try { Thread.sleep(100); } catch (InterruptedException e) {};
 					}
+					oos.writeObject(port);
+					ois.close(); is.close(); os.close(); oos.close(); socket.close(); serverSocket.close();
 				}
 			} catch (Exception e) {
-				if (serverSocket!=null) try {serverSocket.close();} catch (IOException ioe) {}
+				//if (serverSocket!=null) try {serverSocket.close();} catch (IOException ioe) {}
 				e.printStackTrace();
 			}
 		}
@@ -446,6 +480,9 @@ public class GWTServer {
 	
 	public static boolean start() {
 		if (t==null) {
+			for (int i=1;i<100;i++) {
+				PortPool.addLast(i+Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_GWT_PORT_KEY)));
+			}
 			if (Boolean.parseBoolean(Config.getConfig(Config.CONFIG_SERVER_GWT_ENCRYPTION_KEY))) {
 				Logger.log("GWTSecureServer - Starting");
 				t=new GWTSecureServerThread();
