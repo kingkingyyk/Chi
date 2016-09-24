@@ -1,1 +1,1 @@
-SELECT TimeStp,Value FROM Chi.SensorReading WHERE SensorName=? AND TimeStp>=? AND TimeStp<=?;
+SELECT TimeStp,Value FROM SensorReading WHERE SensorName=? AND TimeStp>=? AND TimeStp<=?;

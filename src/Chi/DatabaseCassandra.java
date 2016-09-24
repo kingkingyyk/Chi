@@ -14,15 +14,21 @@ import com.datastax.driver.core.exceptions.NoHostAvailableException;
 public class DatabaseCassandra {
 	
 	private static Cluster cluster=null;
+	private static Session session=null;
 	
 	public static void initialize() {
 		cluster=Cluster.builder().withCredentials(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_USERNAME_KEY),Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PASSWORD_KEY))/*
 				*/.withPort(Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY)))/*
 				*/.addContactPoint(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)).build();
+		session=cluster.connect("Chi");
 	}
 	
 	protected static Cluster getCluster() {
 		return cluster;
+	}
+	
+	protected static Session getSession() {
+		return session;
 	}
 	
 	public static boolean testConnection() {
@@ -42,14 +48,10 @@ public class DatabaseCassandra {
 	}
 
 	public static boolean testKeyspace () {
-		Cluster cluster=null;
 		try {
 			Logger.log("DB Test Keyspace - Connecting to database : "+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)+":"+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
-			cluster=getCluster();
-			Session session=cluster.connect();
 			Logger.log("DB Test Keyspace - Database connection OK!");
-			KeyspaceMetadata ks=cluster.getMetadata().getKeyspace(Config.APP_NAME);
-			session.close();
+			KeyspaceMetadata ks=getCluster().getMetadata().getKeyspace(Config.APP_NAME);
 			return ks!=null;
 		} catch (NoHostAvailableException e) {
 			Logger.log("DB Test Keyspace - Database connection fail!");
@@ -60,14 +62,10 @@ public class DatabaseCassandra {
 	}
 	
 	public static boolean runSQL(String cmdName, String sql) {
-		Cluster cluster=null;
 		try {
 			Logger.log(cmdName+" - Connecting to database : "+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)+":"+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
-			cluster=getCluster();
-			Session session=cluster.connect();
 			Logger.log(cmdName+" - Database connection OK!");
-			System.out.println("Result : "+executeSQL(cmdName,session,sql).toString());
-			session.close();
+			System.out.println("Result : "+executeSQL(cmdName,getSession(),sql).toString());
 			return true;
 		} catch (NoHostAvailableException e) {
 			Logger.log(cmdName+" - Database connection fail!");
@@ -79,21 +77,17 @@ public class DatabaseCassandra {
 	
 	public static boolean runSQLFromFile(String cmdName, String filename) {
 		Logger.log("Database - Run SQL From File : "+filename);
-		Cluster cluster=null;
 		try {
 			Logger.log(cmdName+" - Connecting to database : "+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)+":"+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
-			cluster=getCluster();
-			Session session=cluster.connect();
 			Logger.log(cmdName+" - Database connection OK!");
 			if (filename!=null) {
 				String [] sql=getSQLStatementFromFile(filename);
 				for (int i=0;i<sql.length;i++) {
 					if (!sql[i].equals("")) {
-						executeSQL(cmdName,session,sql[i]);
+						executeSQL(cmdName,getSession(),sql[i]);
 					}
 				}
 			}
-			session.close();
 			return true;
 		} catch (NoHostAvailableException e) {
 			Logger.log(cmdName+" - Database connection fail!");
@@ -105,21 +99,16 @@ public class DatabaseCassandra {
 
 	protected static ResultSet runSQLFromFileAndGetData(String cmdName, String filename) {
 		Logger.log("Database - Run SQL From File : "+filename);
-		Cluster cluster=null;
 		try {
 			Logger.log(cmdName+" - Connecting to database : "+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)+":"+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
-			cluster=getCluster();
-			Session session=cluster.connect();
-			session=cluster.connect("Chi");
 			Logger.log(cmdName+" - Database connection OK!");
 			ResultSet rs=null;
 			if (filename!=null) {
 				String [] sql=getSQLStatementFromFile(filename);
 				for (int i=0;i<sql.length;i++) {
-					rs=executeSQL(cmdName,session,sql[i]);
+					rs=executeSQL(cmdName,getSession(),sql[i]);
 				}
 			}
-			session.close();
 			return rs;
 		} catch (NoHostAvailableException e) {
 			Logger.log(cmdName+" - Database connection fail!");

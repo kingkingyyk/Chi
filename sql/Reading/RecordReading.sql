@@ -1,1 +1,1 @@
-INSERT INTO Chi.SensorReading(SensorName,Year,Month,Day,Weekday,IsMorning,TimeStp,Value) VALUES(?,?,?,?,?,?,?,?);
+INSERT INTO SensorReading(SensorName,Year,Month,Day,Weekday,IsMorning,TimeStp,Value) VALUES(?,?,?,?,?,?,?,?);
