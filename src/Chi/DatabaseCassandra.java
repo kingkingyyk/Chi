@@ -12,11 +12,17 @@ import com.datastax.driver.core.Session;
 import com.datastax.driver.core.exceptions.NoHostAvailableException;
 
 public class DatabaseCassandra {
-
-	protected static Cluster getCluster() {
-		return 	Cluster.builder().withCredentials(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_USERNAME_KEY),Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PASSWORD_KEY))/*
+	
+	private static Cluster cluster=null;
+	
+	public static void initialize() {
+		cluster=Cluster.builder().withCredentials(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_USERNAME_KEY),Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PASSWORD_KEY))/*
 				*/.withPort(Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY)))/*
 				*/.addContactPoint(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)).build();
+	}
+	
+	protected static Cluster getCluster() {
+		return cluster;
 	}
 	
 	public static boolean testConnection() {
@@ -44,15 +50,11 @@ public class DatabaseCassandra {
 			Logger.log("DB Test Keyspace - Database connection OK!");
 			KeyspaceMetadata ks=cluster.getMetadata().getKeyspace(Config.APP_NAME);
 			session.close();
-			cluster.close();
 			return ks!=null;
 		} catch (NoHostAvailableException e) {
 			Logger.log("DB Test Keyspace - Database connection fail!");
 		} catch (Exception e) {
 			Logger.log("DB Test Keyspace - Error - "+e.getMessage());
-		}
-		if (cluster!=null) {
-			cluster.close();
 		}
 		return false;
 	}
@@ -66,15 +68,11 @@ public class DatabaseCassandra {
 			Logger.log(cmdName+" - Database connection OK!");
 			System.out.println("Result : "+executeSQL(cmdName,session,sql).toString());
 			session.close();
-			cluster.close();
 			return true;
 		} catch (NoHostAvailableException e) {
 			Logger.log(cmdName+" - Database connection fail!");
 		} catch (Exception e) {
 			Logger.log(cmdName+" - Error - "+e.getMessage());
-		}
-		if (cluster!=null) {
-			cluster.close();
 		}
 		return false;
 	}
@@ -96,15 +94,11 @@ public class DatabaseCassandra {
 				}
 			}
 			session.close();
-			cluster.close();
 			return true;
 		} catch (NoHostAvailableException e) {
 			Logger.log(cmdName+" - Database connection fail!");
 		} catch (Exception e) {
 			Logger.log(cmdName+" - Error - "+e.getMessage());
-		}
-		if (cluster!=null) {
-			cluster.close();
 		}
 		return false;
 	}
@@ -126,15 +120,11 @@ public class DatabaseCassandra {
 				}
 			}
 			session.close();
-			cluster.close();
 			return rs;
 		} catch (NoHostAvailableException e) {
 			Logger.log(cmdName+" - Database connection fail!");
 		} catch (Exception e) {
 			Logger.log(cmdName+" - Error - "+e.getMessage());
-		}
-		if (cluster!=null) {
-			cluster.close();
 		}
 		return null;
 	}

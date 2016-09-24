@@ -34,7 +34,6 @@ public class Config {
 	public static final String CONFIG_SERVER_DATABASE_HSQL_PASSWORD_KEY="server.database.hsql.password";
 	public static final String CONFIG_SERVER_DATABASE_TEST_OK_KEY="server.database.test.success.text";
 	public static final String CONFIG_SERVER_DATABASE_TEST_FAIL_KEY="server.database.test.fail.text";
-	public static final String CONFIG_SERVER_CONTROLLER_IP_KEY="server.controller.ip";
 	public static final String CONFIG_SERVER_CONTROLLER_PORT_KEY="server.controller.port";
 	public static final String CONFIG_SERVER_GWT_PORT_KEY="server.gwt.com.port";
 	public static final String CONFIG_SERVER_GWT_ENCRYPTION_KEY="server.gwt.com.encryption";
@@ -55,7 +54,6 @@ public class Config {
 	//Default values.
 	public static final String CONFIG_DEFAULT_KEY=".default";
 	private static final String CONFIG_SERVER_INCOMING_PORT_DEFAULT="40000";
-	private static final String CONFIG_SERVER_CONTROLLER_IP_DEFAULT="224.0.0.180";
 	private static final String CONFIG_SERVER_CONTROLLER_PORT_DEFAULT="40002";
 	private static final String CONFIG_SERVER_DATABASE_CASSANDRA_IP_DEFAULT="127.0.0.1";
 	private static final String CONFIG_SERVER_DATABASE_CASSANDRA_PORT_DEFAULT="9042";
@@ -121,7 +119,6 @@ public class Config {
 		
 		//Default values
 		Config.setConfig(CONFIG_SERVER_INCOMING_PORT_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_INCOMING_PORT_DEFAULT);
-		Config.setConfig(CONFIG_SERVER_CONTROLLER_IP_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_CONTROLLER_IP_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_CONTROLLER_PORT_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_CONTROLLER_PORT_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_CASSANDRA_IP_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_DATABASE_CASSANDRA_PORT_DEFAULT);

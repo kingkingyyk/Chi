@@ -24,6 +24,7 @@ public class Chi {
 		
 		Logger.log("Initializing Cache");
 		Cache.initialize();
+		DatabaseCassandra.initialize();
 		
 		Logger.log("GUI & data binding started.");
 		//In topological order

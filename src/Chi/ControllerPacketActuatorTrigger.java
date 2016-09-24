@@ -18,7 +18,7 @@ public class ControllerPacketActuatorTrigger extends Thread {
 	
 	public void run() {
 		String [] data={controllerName,actuatorName,status};
-		ControllerPacket p=new ControllerPacket(ControllerPacket.Type.SetActuator,data);
+		ControllerPacket p=new ControllerPacket(Cache.Controllers.map.get(controllerName),ControllerPacket.Type.SetActuator,data);
 		Logger.log("ControllerPacketActuatorTrigger - Send packet");
 		if (p.send()) Logger.log("ControllerPacketActuatorTrigger - Packet sent successfully");
 

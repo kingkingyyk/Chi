@@ -6,12 +6,14 @@ import java.net.InetAddress;
 
 public class ControllerPacket {
 	public static enum Type {Hello,SetActuator,GetReading,ChangeName,ChangeTimeout};
+	private Controller ct;
 	private Type type;
 	private String [] data;
 	
-	public ControllerPacket(Type t, String [] d) {
+	public ControllerPacket(Controller ct, Type t, String [] d) {
 		this.type=t;
 		this.data=d;
+		this.ct=ct;
 	}
 	
 	public boolean send() {
@@ -23,12 +25,11 @@ public class ControllerPacket {
 			sb.append(Config.PACKET_FIELD_DELIMITER);
 		}
 		String toSend=sb.toString();
-		toSend=toSend.substring(0,toSend.length()-1);
 		if (toSend.length()>=Config.PACKET_MAX_BYTE) {
 			Logger.log("Controller Packet Error - Attempt to send larger than max byte size. Content : "+toSend);
 		} else {
 			try {
-				InetAddress address=InetAddress.getByName(Config.getConfig(Config.CONFIG_SERVER_CONTROLLER_IP_KEY));
+				InetAddress address=InetAddress.getByName(ct.getIpaddress());
 				byte [] toSendByte=toSend.getBytes();
 				DatagramPacket packet=new DatagramPacket(toSendByte,toSendByte.length,address,Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_CONTROLLER_PORT_KEY)));
 				DatagramSocket dsocket=new DatagramSocket();

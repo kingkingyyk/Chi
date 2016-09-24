@@ -33,11 +33,11 @@ public class FrameActuatorManagementContextMenu extends JPopupMenu {
 				String status=act.getStatus();
 				if (!status.equals("Pending Update")) {
 					if (status.equals("Pending Update")) status="OFF";
-					else status="ON";
+					else if (status.equals("OFF")) status="ON";
+					else if (status.equals("ON")) status="OFF";
 					
 					ControllerPacketActuatorTrigger p=new ControllerPacketActuatorTrigger(act.getController().getControllername(),act.getName(),status);
 					p.trigger();
-					JOptionPane.showMessageDialog(null,"Request sent successfully.\nThe status will be updated once the controller has replied.","Toggle Status",JOptionPane.INFORMATION_MESSAGE);
 				} else {
 					JOptionPane.showMessageDialog(null,"Looks like the actuator has not registered itself to the server.","Toggle Status",JOptionPane.ERROR_MESSAGE);
 				}

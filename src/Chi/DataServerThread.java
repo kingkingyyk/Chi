@@ -40,21 +40,21 @@ public class DataServerThread extends Thread {
 						for (;buffer[packetLength]!=0 && packetLength<buffer.length;packetLength++) {
 						}
 						String received=new String(buffer,0,packetLength);
-						Logger.log("Data Server - Received packet - "+received);
+						Logger.log("Data Server - Received packet from "+packet.getAddress().getHostAddress()+" - "+received);
 						StringTokenizer st=new StringTokenizer(received,Config.PACKET_FIELD_DELIMITER);
 						String id=st.nextToken();
 						switch (id) {
 							case "0" : {
 								try {
 									String cn=st.nextToken(); //controller name
-									DatabaseController.updateControllerReportTime(cn,LocalDateTime.now());
+									DatabaseController.updateControllerReport(cn,packet.getAddress().getHostAddress().toString(),LocalDateTime.now());
 									DataServerReadingToDatabase.queueData(st.nextToken(),Double.parseDouble(st.nextToken()));
 								} catch (NumberFormatException e) {}
 								break;
 							}
 							case "1" : {
 								String cn=st.nextToken();
-								DatabaseController.updateControllerReportTime(cn,LocalDateTime.now());
+								DatabaseController.updateControllerReport(cn,packet.getAddress().getHostAddress(),LocalDateTime.now());
 								DataServer.fireOnReportReceived(cn);
 								break;
 							}

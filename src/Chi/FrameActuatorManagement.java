@@ -5,7 +5,10 @@ import java.awt.Component;
 import java.awt.SystemColor;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -78,22 +81,35 @@ public class FrameActuatorManagement extends JFrame {
 	}
 	
 	private static class ActuatorTableRow {
-		private ArrayList<ActuatorTableRow> subRow;
+		private LinkedList<ActuatorTableRow> subRow;
+		private HashMap<Actuator,ActuatorTableRow> rowObj;
 		public String [] renderText;
+		private Actuator obj;
 		
 		public ActuatorTableRow(Actuator act) {
 			if (act!=null) {
-				renderText=new String [] {act.getName(), act.getController().getControllername(), act.getStatus()};
+				obj=act;
+				updateInfo();
 			} else {
 				renderText=new String [] {"root"};
+				this.subRow=new LinkedList<>();
+				this.rowObj=new HashMap<>();
 			}
 		}
 		
+		public void updateInfo () {
+			renderText=new String [] {obj.getName(), obj.getController().getControllername(), obj.getStatus()};
+		}
 		public void addRow (ActuatorTableRow r) {
-			if (this.subRow==null) {
-				this.subRow=new ArrayList<>();
-			}
 			this.subRow.add(r);
+			this.rowObj.put(r.obj,r);
+		}
+		
+		public void removeRowByActuator (Actuator r) {
+			if (this.rowObj.containsKey(r)) {
+				this.subRow.remove(this.rowObj.get(r));
+				this.rowObj.remove(r);
+			}
 		}
 		
 		public int getSubRowIndex (ActuatorTableRow r) {
@@ -120,6 +136,7 @@ public class FrameActuatorManagement extends JFrame {
 		@Override
 		public Component getTableCellRendererComponent (JTable aTable, Object value, boolean aIsSelected, boolean aHasFocus, int aRow, int aColumn) {
 			ActuatorTableRow row=(ActuatorTableRow)value;
+			
 			if (row!=null && row.renderText!=null) {
 				setText(row.renderText[ArrayUtils.indexOf(ActuatorTableModel.COLUMNS,aTable.getColumnName(aColumn))].toString());
 			}
@@ -158,7 +175,6 @@ public class FrameActuatorManagement extends JFrame {
 	private ActuatorTableRow rootRow;
 	public boolean updateSuccess;
 	private JScrollPane scrollPane;
-	private ArrayList<Actuator> actuatorList=new ArrayList<>();
 
 	public FrameActuatorManagement() {
 		setTitle("Actuator Management");
@@ -201,7 +217,7 @@ public class FrameActuatorManagement extends JFrame {
 		
 		contentPane.setLayout(gl_contentPane);
 		
-		updateActuatorTable();
+		createTable();
 	}
 	
 	private void createTable() {
@@ -216,40 +232,42 @@ public class FrameActuatorManagement extends JFrame {
 		table.setClosedIcon(img);
 		table.setComponentPopupMenu(new FrameActuatorManagementContextMenu(this));
 		scrollPane.setViewportView(table);
+		
+		rootRow=new ActuatorTableRow(null);
+		updateActuatorTable();
+		table.setAutoCreateRowSorter(true);
+		table.setTreeTableModel(new ActuatorTableModel(rootRow));
+		table.getColumn(0).setCellRenderer(new ActuatorTableCellRenderer());
+		table.getColumn(1).setCellRenderer(new ActuatorTableCellRenderer());
+		table.getColumn(2).setCellRenderer(new ActuatorTableCellRenderer());
+		
+		table.getColumnModel().getColumn(0).setPreferredWidth(133);
+		table.getColumnModel().getColumn(1).setPreferredWidth(266);
+		table.getColumnModel().getColumn(2).setPreferredWidth(54);
 	}
 	
-	public void updateActuatorTable() {
-		updateSuccess=true;
-		if (updateSuccess) {
-			actuatorList.clear();
-			actuatorList.addAll(Cache.Actuators.map.values());
-			rootRow=new ActuatorTableRow(null);
-			
-			for (Actuator act : actuatorList) {
-				rootRow.addRow(new ActuatorTableRow(act));
-			}
-			
-			int lastSelectedRow=-1;
-			if (table!=null) {
-				lastSelectedRow=table.getSelectedRow();
-			}
-			createTable();
-			table.setAutoCreateRowSorter(true);
-			table.setTreeTableModel(new ActuatorTableModel(rootRow));
-			
-			if (lastSelectedRow>=0 && actuatorList.size()>0) {
-				lastSelectedRow=Math.min(lastSelectedRow,actuatorList.size()-1);
-				table.setRowSelectionInterval(lastSelectedRow,lastSelectedRow);
-			}
-			updateSuccess=true;
-			
-			table.getColumn(0).setCellRenderer(new ActuatorTableCellRenderer());
-			table.getColumn(1).setCellRenderer(new ActuatorTableCellRenderer());
-			table.getColumn(2).setCellRenderer(new ActuatorTableCellRenderer());
-			
-			table.getColumnModel().getColumn(0).setPreferredWidth(133);
-			table.getColumnModel().getColumn(1).setPreferredWidth(266);
-			table.getColumnModel().getColumn(2).setPreferredWidth(54);
+	public synchronized void updateActuatorTable() {
+		HashSet<Actuator> existing=new HashSet<>();
+		existing.addAll(rootRow.rowObj.keySet());
+		existing.retainAll(Cache.Actuators.map.values());
+		for (Actuator act : existing) {
+			rootRow.rowObj.get(act).updateInfo();
+		}
+		
+		HashSet<Actuator> addedAct=new HashSet<>();
+		addedAct.addAll(Cache.Actuators.map.values());
+		addedAct.removeAll(rootRow.rowObj.keySet());
+		
+		for (Actuator act : addedAct) {
+			rootRow.addRow(new ActuatorTableRow(act));
+		}
+		
+		HashSet<Actuator> removedAct=new HashSet<>();
+		removedAct.addAll(rootRow.rowObj.keySet());
+		removedAct.removeAll(Cache.Actuators.map.values());
+		
+		for (Actuator act : removedAct) {
+			rootRow.removeRowByActuator(act);
 		}
 	}
 	
@@ -258,6 +276,6 @@ public class FrameActuatorManagement extends JFrame {
 	}
 	
 	public Actuator getSelectedActuator () {
-		return this.actuatorList.get(this.getSelectedRow());
+		return ((ActuatorTableRow)table.getTreeTableModel().getRoot()).subRow.get(this.getSelectedRow()).obj;
 	}
 }

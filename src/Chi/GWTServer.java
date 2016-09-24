@@ -1,5 +1,6 @@
 package Chi;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -17,8 +18,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory;
 
 public class GWTServer {
 	private static GWTServerT t;
@@ -348,6 +347,7 @@ public class GWTServer {
 	}
 
 	private static class GWTSecureServerThread extends GWTServerT {
+		public ServerSocket serverSocket;
 		public void run () {
 			try {
 		        final byte[] salt = "chichilol".getBytes();
@@ -359,7 +359,7 @@ public class GWTServer {
 		        Cipher decrypter=Cipher.getInstance("AES");
 		        decrypter.init(Cipher.DECRYPT_MODE,secret);
 		        
-				ServerSocket serverSocket=new ServerSocket(Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_GWT_PORT_KEY)));
+				serverSocket=new ServerSocket(Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_GWT_PORT_KEY)));
 			    serverSocket.setSoTimeout(0);
 				while (!stopFlag && !Thread.currentThread().isInterrupted()) {
 				    final Socket socket=(Socket) serverSocket.accept();
@@ -390,7 +390,7 @@ public class GWTServer {
 				}
 				serverSocket.close();
 			} catch (Exception e) {
-				//if (serverSocket!=null) try {serverSocket.close();} catch (IOException ioe) {}
+				if (serverSocket!=null) try {serverSocket.close();} catch (IOException ioe) {}
 				e.printStackTrace();
 			}
 		}
@@ -454,14 +454,10 @@ public class GWTServer {
 			t.stopFlag=true;
 			if (t instanceof GWTSecureServerThread) {
 				try {
-					System.setProperty("javax.net.ssl.keyStore",Config.getConfig(Config.CONFIG_SERVER_GWT_KEY_FILE_KEY));
-					System.setProperty("javax.net.ssl.keyStorePassword",Config.getConfig(Config.CONFIG_SERVER_GWT_PASSWORD_KEY));
-				    SSLSocketFactory socketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
-				    SSLSocket sc = (SSLSocket) socketFactory.createSocket("127.0.0.1",Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_GWT_PORT_KEY)));
-				    sc.startHandshake();
-				    sc.getOutputStream().write(new byte [] {1});
-				    sc.getOutputStream().close();
-				    sc.close();
+					Socket sc = new Socket("127.0.0.1",Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_GWT_PORT_KEY)));
+			    	sc.getOutputStream().write(new byte [] {1});
+			    	sc.getOutputStream().close();
+			    	sc.close();
 				} catch (Exception e) {e.printStackTrace();}
 			} else {
 				try {

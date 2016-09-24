@@ -101,6 +101,7 @@ public class DatabaseController {
 				ctrl.setPositionx(x);
 				ctrl.setPositiony(y);
 				ctrl.setReporttimeout(t);
+				ctrl.setIpaddress("255.255.255.255");
 				ctrl.setLastreporttime(new Date(0));
 				session.save(ctrl);
 				tx.commit();
@@ -158,8 +159,8 @@ public class DatabaseController {
 		return flag;
 	}
 	
-	public static boolean updateControllerReportTime (String n, LocalDateTime dt) {
-		Logger.log("DatabaseController - Update Report Time");
+	public static boolean updateControllerReport (String n, String ip, LocalDateTime dt) {
+		Logger.log("DatabaseController - Update Report");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
 		boolean flag=false;
@@ -168,18 +169,19 @@ public class DatabaseController {
 			Controller ctrl = (Controller) session.get(Controller.class,n);
 			if (ctrl!=null) {
 				Cache.Controllers.map.get(n).setLastreporttime(Utility.localDateTimeToSQLDate(dt));
+				ctrl.setIpaddress(ip);
 				ctrl.setLastreporttime(Utility.localDateTimeToSQLDate(dt));
 				session.update(ctrl);
 				tx.commit();
 	
-				Logger.log("DatabaseController - Update Report Time - Execute Callbacks");
+				Logger.log("DatabaseController - Update Report - Execute Callbacks");
 				for (OnReportAction a : OnReportList) a.run(n);
 				flag = true;
-			} else Logger.log("DB Update Controller Report Time - Controller doesn't exist");
+			} else Logger.log("DB Update Controller Report - Controller doesn't exist");
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
-			Logger.log("DatabaseController - Update Report Time - Error" + e.getMessage());
+			Logger.log("DatabaseController - Update Report - Error" + e.getMessage());
 		} finally {session.close();}
 		return flag;
 	}

@@ -30,7 +30,6 @@ public class ConfigUI extends JDialog {
 	private JTextField textFieldDBHSQLUsername;
 	private JPasswordField passwordFieldDBHSQLPassword;
 	private JLabel lblDBHSQLTestResult;
-	private JTextField textFieldControllerIP;
 	private JTextField textFieldControllerPort;
 	private JTextField textFieldGWTPort;
 	private JPasswordField passwordFieldGWTPassword;
@@ -284,39 +283,19 @@ public class ConfigUI extends JDialog {
 		tabbedPane.addTab("Controller", null, panelControllerSettings, null);
 		panelControllerSettings.setLayout(null);
 		
-		JLabel lblControllerIP = new JLabel("Address :");
-		lblControllerIP.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblControllerIP.setBounds(10, 14, 58, 14);
-		panelControllerSettings.add(lblControllerIP);
-		
-		textFieldControllerIP = new JTextField(Config.getConfig(Config.CONFIG_SERVER_CONTROLLER_IP_KEY));
-		textFieldControllerIP.setToolTipText("Controller's IP. Use multicast address if multiple controller exists.");
-		textFieldControllerIP.setColumns(10);
-		textFieldControllerIP.setBounds(78, 11, 86, 20);
-		panelControllerSettings.add(textFieldControllerIP);
-		
-		JButton btnControllerAddress = new JButton(Theme.getIcon("Reset-16x16"));
-		btnControllerAddress.setBounds(174, 11, 24, 20);
-		btnControllerAddress.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				textFieldControllerIP.setText(Config.getConfig(Config.CONFIG_SERVER_CONTROLLER_IP_KEY+Config.CONFIG_DEFAULT_KEY));
-			}
-		});
-		panelControllerSettings.add(btnControllerAddress);
-		
 		JLabel lblControllerPort = new JLabel("Port :");
 		lblControllerPort.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblControllerPort.setBounds(10, 46, 58, 14);
+		lblControllerPort.setBounds(10, 11, 58, 14);
 		panelControllerSettings.add(lblControllerPort);
 		
 		textFieldControllerPort = new JTextField(Config.getConfig(Config.CONFIG_SERVER_CONTROLLER_PORT_KEY));
 		textFieldControllerPort.setToolTipText("Controller's port.");
 		textFieldControllerPort.setColumns(10);
-		textFieldControllerPort.setBounds(78, 43, 86, 20);
+		textFieldControllerPort.setBounds(78, 8, 86, 20);
 		panelControllerSettings.add(textFieldControllerPort);
 		
 		JButton btnControllerPort = new JButton(Theme.getIcon("Reset-16x16"));
-		btnControllerPort.setBounds(174, 43, 24, 20);
+		btnControllerPort.setBounds(174, 8, 24, 20);
 		btnControllerPort.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				textFieldControllerPort.setText(Config.getConfig(Config.CONFIG_SERVER_CONTROLLER_PORT_KEY+Config.CONFIG_DEFAULT_KEY));
@@ -391,6 +370,7 @@ public class ConfigUI extends JDialog {
 			public void actionPerformed(ActionEvent arg0) {
 				saveConfigurations();
 				Cache.initialize();
+				DatabaseCassandra.initialize();
 				dispose();
 			}
 		});
@@ -419,8 +399,7 @@ public class ConfigUI extends JDialog {
 		Config.setConfig(Config.CONFIG_SERVER_GWT_PORT_KEY, textFieldGWTPort.getText());
 		Config.setConfig(Config.CONFIG_SERVER_GWT_PASSWORD_KEY, new String(passwordFieldGWTPassword.getPassword()));
 		Config.setConfig(Config.CONFIG_SERVER_GWT_ENCRYPTION_KEY, String.valueOf(chckbxGWTEncrypt.isSelected()));
-		
-		Config.setConfig(Config.CONFIG_SERVER_CONTROLLER_IP_KEY, textFieldControllerIP.getText());
+
 		Config.setConfig(Config.CONFIG_SERVER_CONTROLLER_PORT_KEY, textFieldControllerPort.getText());
 		
 		Config.setConfig(Config.CONFIG_SERVER_DATABASE_HSQL_IP_KEY, textFieldDBHSQLIP.getText());

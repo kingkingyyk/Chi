@@ -89,12 +89,13 @@ public class DatabaseActuator {
 		boolean flag = false;
 		try {
 			tx = session.beginTransaction();
+			Actuator act=Cache.Actuators.map.get(oldN);
 			if (!oldN.equals(n)) {
 				session.createQuery("Update Actuator set Name='" + n + "' where Name='" + oldN + "'").executeUpdate();
 				Cache.Actuators.map.remove(oldN);
 			}
-			Actuator act = session.get(Actuator.class, n);
 			if (act != null) {
+				act.setName(n);
 				act.setController((Controller) session.get(Controller.class, u));
 				session.update(act);
 				tx.commit();

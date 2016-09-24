@@ -355,7 +355,7 @@ public class DialogSensorAddEdit extends JDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (!validateInput() || Cache.Sensors.map.containsKey(textFieldName.getText()) || textFieldName.getText().contains(Config.PACKET_FIELD_DELIMITER)) {
+				if (!validateInput() || Cache.Sensors.map.containsKey(textFieldName.getText()) || textFieldName.getText().contains(Config.PACKET_FIELD_DELIMITER) && comboBoxController.getSelectedIndex()!=-1) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Sensor",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

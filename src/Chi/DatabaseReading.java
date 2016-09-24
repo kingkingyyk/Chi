@@ -41,16 +41,12 @@ public class DatabaseReading extends DatabaseCassandra {
 			}
 			
 			session.close();
-			cluster.close();
 			return true;
 		} catch (NoHostAvailableException e) {
 			Logger.log("DB Store Reading - Database connection fail!");
 		} catch (Exception e) {
 			Logger.log("DB Store Reading - Error - "+e.getMessage());
 			e.printStackTrace();
-		}
-		if (cluster!=null) {
-			cluster.close();
 		}
 		return false;
 	}
@@ -80,15 +76,11 @@ public class DatabaseReading extends DatabaseCassandra {
 			}
 			
 			session.close();
-			cluster.close();
 		} catch (NoHostAvailableException e) {
 			Logger.log("DB Get Reading - Database connection fail!");
 		} catch (Exception e) {
 			Logger.log("DB Get Reading - Error - "+e.getMessage());
 			e.printStackTrace();
-		}
-		if (cluster!=null) {
-			cluster.close();
 		}
 		return list;
 	}
@@ -117,15 +109,11 @@ public class DatabaseReading extends DatabaseCassandra {
 			}
 			
 			session.close();
-			cluster.close();
 		} catch (NoHostAvailableException e) {
 			Logger.log("DB Get Reading - Database connection fail!");
 		} catch (Exception e) {
 			Logger.log("DB Get Reading - Error - "+e.getMessage());
 			e.printStackTrace();
-		}
-		if (cluster!=null) {
-			cluster.close();
 		}
 		return list;
 	}
@@ -144,15 +132,11 @@ public class DatabaseReading extends DatabaseCassandra {
 			session.execute("DELETE FROM Chi.SensorReading WHERE SensorName='"+sn+"';");
 			
 			session.close();
-			cluster.close();
 		} catch (NoHostAvailableException e) {
 			Logger.log("DB Clear Reading - Database connection fail!");
 		} catch (Exception e) {
 			Logger.log("DB Clear Reading - Error - "+e.getMessage());
 			e.printStackTrace();
-		}
-		if (cluster!=null) {
-			cluster.close();
 		}
 	}
 }

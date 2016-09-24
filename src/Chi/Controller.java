@@ -13,8 +13,10 @@ public class Controller implements java.io.Serializable {
 	private Site site;
 	private Double positionx;
 	private Double positiony;
+	private String ipaddress;
 	private Integer reporttimeout;
 	private Date lastreporttime;
+	private Set<Controllerevent> controllerevents = new HashSet<Controllerevent>(0);
 	private Set<Sensor> sensors = new HashSet<Sensor>(0);
 	private Set<Actuator> actuators = new HashSet<Actuator>(0);
 
@@ -25,14 +27,17 @@ public class Controller implements java.io.Serializable {
 		this.controllername = controllername;
 	}
 
-	public Controller(String controllername, Site site, Double positionx, Double positiony, Integer reporttimeout,
-			Date lastreporttime, Set<Sensor> sensors, Set<Actuator> actuators) {
+	public Controller(String controllername, Site site, Double positionx, Double positiony, String ipaddress,
+			Integer reporttimeout, Date lastreporttime, Set<Controllerevent> controllerevents, Set<Sensor> sensors,
+			Set<Actuator> actuators) {
 		this.controllername = controllername;
 		this.site = site;
 		this.positionx = positionx;
 		this.positiony = positiony;
+		this.ipaddress = ipaddress;
 		this.reporttimeout = reporttimeout;
 		this.lastreporttime = lastreporttime;
+		this.controllerevents = controllerevents;
 		this.sensors = sensors;
 		this.actuators = actuators;
 	}
@@ -69,6 +74,14 @@ public class Controller implements java.io.Serializable {
 		this.positiony = positiony;
 	}
 
+	public String getIpaddress() {
+		return this.ipaddress;
+	}
+
+	public void setIpaddress(String ipaddress) {
+		this.ipaddress = ipaddress;
+	}
+	
 	public Integer getReporttimeout() {
 		return this.reporttimeout;
 	}
@@ -85,6 +98,14 @@ public class Controller implements java.io.Serializable {
 		this.lastreporttime = lastreporttime;
 	}
 
+	public void setControllerevents(Set<Controllerevent> controllerevents) {
+		this.controllerevents = controllerevents;
+	}
+	
+	public Set<Controllerevent> getControllerevents() {
+		return this.controllerevents;
+	}
+	
 	public Set<Sensor> getSensors() {
 		return this.sensors;
 	}
@@ -96,7 +117,7 @@ public class Controller implements java.io.Serializable {
 	public Set<Actuator> getActuators() {
 		return this.actuators;
 	}
-
+	
 	public void setActuators(Set<Actuator> actuators) {
 		this.actuators = actuators;
 	}

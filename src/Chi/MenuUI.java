@@ -450,6 +450,8 @@ public class MenuUI extends JFrame {
 						} else { 
 		            		JOptionPane.showMessageDialog(MenuUI.this,"Failed to create table!\nPlease check if existing table is removed.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
 						}
+		            	
+		            	Cache.initialize();
 		            	u.dispose();
 					}
 				};

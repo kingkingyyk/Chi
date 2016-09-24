@@ -31,7 +31,7 @@ public class FrameControllerManagement extends JFrame {
 		public boolean isCellEditable(int row, int column){ return false;  }
 		
 		@SuppressWarnings("rawtypes")
-		private Class [] colClass={String.class,String.class,Double.class,Double.class,String.class,String.class};
+		private Class [] colClass={String.class,String.class,String.class,String.class,Double.class,String.class};
 	    @Override
 	    public Class<?> getColumnClass(int colNum) {
 	    	return colClass[colNum];
@@ -40,7 +40,7 @@ public class FrameControllerManagement extends JFrame {
 	}
 	
 	private static class ControllerTableModel extends AbstractTreeTableModel {
-		public static final String [] COLUMNS= {"Name","Site","Position X","Position Y","Report Period","Last Report Time"};
+		public static final String [] COLUMNS= {"Name","Site","IP","Position","Report Period","Last Report Time"};
 		
 		public ControllerTableModel (ControllerTableRow r) {
 			super(r);
@@ -87,8 +87,8 @@ public class FrameControllerManagement extends JFrame {
 				renderText=new String[6];
 				renderText[0]=ctrl.getControllername();
 				renderText[1]=ctrl.getSite().getSitename();
-				renderText[2]=String.format("%.2f",ctrl.getPositionx()); //position X
-				renderText[3]=String.format("%.2f",ctrl.getPositiony()); //position Y
+				renderText[2]=ctrl.getIpaddress();
+				renderText[3]=String.format("%.2f",ctrl.getPositionx())+","+String.format("%.2f",ctrl.getPositiony()); //position Y
 				
 				int period=ctrl.getReporttimeout();
 				StringBuilder sb=new StringBuilder();
@@ -275,8 +275,8 @@ public class FrameControllerManagement extends JFrame {
 			table.getColumn(5).setCellRenderer(new ControllerTableCellRenderer());
 			
 			table.getColumnModel().getColumn(0).setPreferredWidth(133);
-			table.getColumnModel().getColumn(1).setPreferredWidth(100);
-			table.getColumnModel().getColumn(2).setPreferredWidth(30);
+			table.getColumnModel().getColumn(1).setPreferredWidth(70);
+			table.getColumnModel().getColumn(2).setPreferredWidth(70);
 			table.getColumnModel().getColumn(3).setPreferredWidth(30);
 			table.getColumnModel().getColumn(4).setPreferredWidth(60);
 			table.getColumnModel().getColumn(5).setPreferredWidth(133);
