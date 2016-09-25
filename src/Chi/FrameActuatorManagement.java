@@ -13,12 +13,14 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumn;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
@@ -69,14 +71,14 @@ public class FrameActuatorManagement extends JFrame {
 		}
 
 		@Override
-		public Object getValueAt(Object arg0, int arg1) {
-			return arg0;
-		}
-		
-		@Override
 	    public String getColumnName(int column) {
 	        return COLUMNS[column];
 	    }
+
+		@Override
+		public Object getValueAt(Object arg0, int arg1) {
+			return arg0;
+		}
 
 	}
 	
@@ -105,10 +107,10 @@ public class FrameActuatorManagement extends JFrame {
 			this.rowObj.put(r.obj,r);
 		}
 		
-		public void removeRowByActuator (Actuator r) {
-			if (this.rowObj.containsKey(r)) {
-				this.subRow.remove(this.rowObj.get(r));
-				this.rowObj.remove(r);
+		public void removeRowByActuator (Actuator act) {
+			if (this.rowObj.containsKey(act)) {
+				this.subRow.remove(this.rowObj.get(act));
+				this.rowObj.remove(act);
 			}
 		}
 		
@@ -166,7 +168,7 @@ public class FrameActuatorManagement extends JFrame {
 	public static void refresh() {
 		if (FrameActuatorManagement.currInstance!=null) {
 			FrameActuatorManagement.currInstance.updateActuatorTable();
-			FrameActuatorManagement.currInstance.table.repaint();
+			//FrameActuatorManagement.currInstance.table.repaint();
 		}
 	}
 	
@@ -236,17 +238,19 @@ public class FrameActuatorManagement extends JFrame {
 		rootRow=new ActuatorTableRow(null);
 		updateActuatorTable();
 		table.setAutoCreateRowSorter(true);
-		table.setTreeTableModel(new ActuatorTableModel(rootRow));
-		table.getColumn(0).setCellRenderer(new ActuatorTableCellRenderer());
-		table.getColumn(1).setCellRenderer(new ActuatorTableCellRenderer());
-		table.getColumn(2).setCellRenderer(new ActuatorTableCellRenderer());
 		
 		table.getColumnModel().getColumn(0).setPreferredWidth(133);
 		table.getColumnModel().getColumn(1).setPreferredWidth(266);
 		table.getColumnModel().getColumn(2).setPreferredWidth(54);
 	}
 	
-	public synchronized void updateActuatorTable() {
+	public void updateActuatorTable() {
+		int selectedRow=this.getSelectedRow();
+		int [] width=new int [table.getColumnModel().getColumnCount()];
+		for (int i=0;i<width.length;i++) {
+			width[i]=table.getColumnModel().getColumn(i).getWidth();
+		}
+		
 		HashSet<Actuator> existing=new HashSet<>();
 		existing.addAll(rootRow.rowObj.keySet());
 		existing.retainAll(Cache.Actuators.map.values());
@@ -254,23 +258,43 @@ public class FrameActuatorManagement extends JFrame {
 			rootRow.rowObj.get(act).updateInfo();
 		}
 		
-		HashSet<Actuator> addedAct=new HashSet<>();
-		addedAct.addAll(Cache.Actuators.map.values());
-		addedAct.removeAll(rootRow.rowObj.keySet());
-		
-		for (Actuator act : addedAct) {
-			rootRow.addRow(new ActuatorTableRow(act));
-		}
-		
+		boolean flag=false;
 		HashSet<Actuator> removedAct=new HashSet<>();
 		removedAct.addAll(rootRow.rowObj.keySet());
 		removedAct.removeAll(Cache.Actuators.map.values());
 		
 		for (Actuator act : removedAct) {
+			flag=true;
 			rootRow.removeRowByActuator(act);
 		}
+		
+		HashSet<Actuator> addedAct=new HashSet<>();
+		addedAct.addAll(Cache.Actuators.map.values());
+		addedAct.removeAll(rootRow.rowObj.keySet());
+		
+		for (Actuator act : addedAct) {
+			flag=true;
+			rootRow.addRow(new ActuatorTableRow(act));
+		}
+		
+		if (flag) {
+			table.setTreeTableModel(new ActuatorTableModel(rootRow));
+			
+			table.getColumn(0).setCellRenderer(new ActuatorTableCellRenderer());
+			table.getColumn(1).setCellRenderer(new ActuatorTableCellRenderer());
+			table.getColumn(2).setCellRenderer(new ActuatorTableCellRenderer());
+		}
+		
+		selectedRow=Math.min(selectedRow,rootRow.rowObj.size()-1);
+		if (selectedRow!=-1) {
+			table.addRowSelectionInterval(table.convertRowIndexToView(selectedRow),table.convertRowIndexToView(selectedRow));
+		}
+		
+		for (int i=0;i<width.length;i++) {
+			table.getColumnModel().getColumn(i).setWidth(width[i]);
+		}
 	}
-	
+
 	public int getSelectedRow () {
 		return this.table.convertRowIndexToModel(this.table.getSelectedRow());
 	}

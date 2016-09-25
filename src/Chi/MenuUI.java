@@ -3,6 +3,9 @@ package Chi;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import org.eclipse.swt.SWT;
+
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
@@ -12,6 +15,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.JTabbedPane;
 
 public class MenuUI extends JFrame {
