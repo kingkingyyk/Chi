@@ -13,14 +13,12 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableColumn;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.SwingUtilities;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
@@ -239,9 +237,9 @@ public class FrameActuatorManagement extends JFrame {
 		updateActuatorTable();
 		table.setAutoCreateRowSorter(true);
 		
-		table.getColumnModel().getColumn(0).setPreferredWidth(133);
-		table.getColumnModel().getColumn(1).setPreferredWidth(266);
-		table.getColumnModel().getColumn(2).setPreferredWidth(54);
+		//table.getColumnModel().getColumn(0).setPreferredWidth(133);
+		//table.getColumnModel().getColumn(1).setPreferredWidth(266);
+		//table.getColumnModel().getColumn(2).setPreferredWidth(54);
 	}
 	
 	public void updateActuatorTable() {

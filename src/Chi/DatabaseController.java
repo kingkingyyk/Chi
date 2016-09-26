@@ -166,11 +166,10 @@ public class DatabaseController {
 		boolean flag=false;
 		try {
 			tx = session.beginTransaction();
-			Controller ctrl = (Controller) session.get(Controller.class,n);
+			Controller ctrl = Cache.Controllers.map.get(n);
 			if (ctrl!=null) {
-				Cache.Controllers.map.get(n).setLastreporttime(Utility.localDateTimeToSQLDate(dt));
-				ctrl.setIpaddress(ip);
 				ctrl.setLastreporttime(Utility.localDateTimeToSQLDate(dt));
+				ctrl.setIpaddress(ip);
 				session.update(ctrl);
 				tx.commit();
 	
