@@ -338,6 +338,31 @@ public class GWTServer {
 		    	for (Controllerevent ce : ceL) result.add(new Object [] {ce.getController().getControllername(),Utility.dateToLocalDateTime(ce.getTimestp()),ce.getEventtype(),ce.getEventvalue()});
 		    	return result;
 		    }
+		    case "43" : { //ActuatorGetAll
+		    	ArrayList<Object []> result=new ArrayList<>();
+		    	for (Actuator act : Cache.Actuators.map.values()) {
+		    		result.add(new Object [] {act.getName(),act.getController().getControllername(),act.getStatus()});
+		    	}
+		    	return result;
+		    }
+		    case "44": { //ActuatorGetByName
+		    	Actuator act=Cache.Actuators.map.get(list.get(1));
+		    	ArrayList<Object> result=new ArrayList<>();
+		    	result.add(act.getName());
+		    	result.add(act.getController().getControllername());
+		    	result.add(act.getStatus());
+		    	return result;
+		    }
+		    case "45" : { //ActuatorSetStatus;
+		    	Actuator act=Cache.Actuators.map.get(list.get(1));
+		    	if (act!=null) {
+		    		ControllerPacketActuatorTrigger p=new ControllerPacketActuatorTrigger(act.getController().getControllername(),act.getName(),(String)list.get(2));
+		    		p.trigger();
+		    		return "OK";
+		    	} else {
+		    		return "ACTUATOR_NOT_EXIST";
+		    	}
+		    }
 	    }
 	    return null;
 	}

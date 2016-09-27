@@ -13,7 +13,7 @@ public class ControllerPacketActuatorTrigger extends Thread {
 	
 	public void trigger() {
 		Logger.log("ControllerPacketActuatorTrigger - Actuator trigger packet queued");
-		this.run();
+		this.start();
 	}
 	
 	public void run() {
