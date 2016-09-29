@@ -1,8 +1,7 @@
 package Chi;
 
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
+import java.io.PrintWriter;
+import java.net.Socket;
 
 public class ControllerPacket {
 	public static enum Type {Hello,SetActuator,GetReading,ChangeName,ChangeTimeout};
@@ -24,22 +23,19 @@ public class ControllerPacket {
 			sb.append(s);
 			sb.append(Config.PACKET_FIELD_DELIMITER);
 		}
-		String toSend=sb.toString();
-		if (toSend.length()>=Config.PACKET_MAX_BYTE) {
-			Logger.log("Controller Packet Error - Attempt to send larger than max byte size. Content : "+toSend);
-		} else {
-			try {
-				InetAddress address=InetAddress.getByName(ct.getIpaddress());
-				byte [] toSendByte=toSend.getBytes();
-				DatagramPacket packet=new DatagramPacket(toSendByte,toSendByte.length,address,Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_CONTROLLER_PORT_KEY)));
-				DatagramSocket dsocket=new DatagramSocket();
-				dsocket.send(packet);
-				dsocket.close();
-				Logger.log("Controller Packet Info - Sent content "+toSend);
-				return true;
-			} catch (Exception e) {
-				Logger.log("Controller Packet Error - Attempting to send packet. "+e.getMessage());
-			}
+		try {
+			Socket sc=new Socket(ct.getIpaddress(),Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_CONTROLLER_PORT_KEY)));
+			Logger.log("Controller Packet Info - Send content : "+sb.toString());
+			while (sb.length()<202) sb.append('\n');
+			sc.setSoTimeout(10000);
+			PrintWriter pw=new PrintWriter(sc.getOutputStream());
+			pw.print(sb.toString());
+			pw.close();
+			sc.close();
+			return true;
+		} catch (Exception e) {
+			Logger.log("Controller Packet Error - Attempting to send packet. "+e.getMessage());
+			e.printStackTrace();
 		}
 		return false;
 	}
