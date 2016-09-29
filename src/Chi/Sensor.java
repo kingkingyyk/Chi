@@ -144,7 +144,7 @@ public class Sensor implements java.io.Serializable {
 	}
 	
 	public Object [] toObj () {
-		return new Object [] {this.getSensorname(), this.getSensorclass().toString(),
+		return new Object [] {this.getSensorname(), this.getSensorclass().getClassname(),
 							  this.getMinvalue(), this.getMaxvalue(), this.getTransformationfactor(),
 							  this.getUnit(), this.getController().getControllername(),this.getMinthreshold(),
 							  this.getMaxthreshold(),this.getPositionx(),this.getPositiony()};
