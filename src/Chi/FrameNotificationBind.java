@@ -5,7 +5,7 @@ public class FrameNotificationBind {
 	public static class OnSensorUpdate implements DatabaseSensor.OnUpdateAction {
 		@Override
 		public void run(String oldSN, String sn, String cn, double min, double max, double trans, String unit,
-				String con, double minT, double maxT) {
+				String con, double minT, double maxT, double px, double py) {
 			FrameNotification.refresh();
 		}
 	}

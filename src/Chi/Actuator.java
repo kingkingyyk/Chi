@@ -10,6 +10,8 @@ public class Actuator implements java.io.Serializable {
 	private String name;
 	private Controller controller;
 	private String status;
+	private Double positionx;
+	private Double positiony;
 	private Set<Regularschedule> regularschedules = new HashSet<Regularschedule>(0);
 	private Set<Specialschedule> specialschedules = new HashSet<Specialschedule>(0);
 
@@ -20,11 +22,13 @@ public class Actuator implements java.io.Serializable {
 		this.name = name;
 	}
 
-	public Actuator(String name, Controller controller, String status, Set<Regularschedule> regularschedules,
-			Set<Specialschedule> specialschedules) {
+	public Actuator(String name, Controller controller, String status, double positionx, double positiony,
+			Set<Regularschedule> regularschedules,Set<Specialschedule> specialschedules) {
 		this.name = name;
 		this.controller = controller;
 		this.status = status;
+		this.positionx = positionx;
+		this.positiony = positiony;
 		this.regularschedules = regularschedules;
 		this.specialschedules = specialschedules;
 	}
@@ -53,6 +57,22 @@ public class Actuator implements java.io.Serializable {
 		this.status = status;
 	}
 
+	public Double getPositionx() {
+		return this.positionx;
+	}
+
+	public void setPositionx(Double positionx) {
+		this.positionx = positionx;
+	}
+
+	public Double getPositiony() {
+		return this.positiony;
+	}
+
+	public void setPositiony(Double positiony) {
+		this.positiony = positiony;
+	}
+	
 	public Set<Regularschedule> getRegularschedules() {
 		return this.regularschedules;
 	}
@@ -70,6 +90,6 @@ public class Actuator implements java.io.Serializable {
 	}
 
 	public Object [] toObj () {
-		return new Object [] {this.getName(), this.getController(), this.getStatus()};
+		return new Object [] {this.getName(), this.getController(), this.getStatus(),this.positionx,this.positiony};
 	}
 }

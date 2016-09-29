@@ -4,7 +4,7 @@ public class FrameRegularScheduleManagementBind {
 
 	public static class OnActuatorUpdate implements DatabaseActuator.OnUpdateAction {
 		@Override
-		public void run(String oldN, String n, String u) {
+		public void run(String oldN, String n, String u, double px, double py) {
 			FrameRegularScheduleManagement.refresh();
 		}
 	}

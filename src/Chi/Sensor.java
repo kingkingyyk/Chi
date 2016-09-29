@@ -15,6 +15,8 @@ public class Sensor implements java.io.Serializable {
 	private String unit;
 	private Double minthreshold;
 	private Double maxthreshold;
+	private Double positionx;
+	private Double positiony;
 	private Set<Sensorevent> sensorevents = new HashSet<Sensorevent>(0);
 
 	public Sensor() {
@@ -26,7 +28,7 @@ public class Sensor implements java.io.Serializable {
 
 	public Sensor(String sensorname, Controller controller, Sensorclass sensorclass, Double minvalue, Double maxvalue,
 			Double transformationfactor, String unit, Double minthreshold, Double maxthreshold,
-			Set<Sensorevent> sensorevents) {
+			Double positionx, Double positiony, Set<Sensorevent> sensorevents) {
 		this.sensorname = sensorname;
 		this.controller = controller;
 		this.sensorclass = sensorclass;
@@ -36,6 +38,8 @@ public class Sensor implements java.io.Serializable {
 		this.unit = unit;
 		this.minthreshold = minthreshold;
 		this.maxthreshold = maxthreshold;
+		this.positionx = positionx;
+		this.positiony = positiony;
 		this.sensorevents = sensorevents;
 	}
 
@@ -111,6 +115,22 @@ public class Sensor implements java.io.Serializable {
 		this.maxthreshold = maxthreshold;
 	}
 
+	public Double getPositionx() {
+		return this.positionx;
+	}
+
+	public void setPositionx(Double positionx) {
+		this.positionx = positionx;
+	}
+
+	public Double getPositiony() {
+		return this.positiony;
+	}
+
+	public void setPositiony(Double positiony) {
+		this.positiony = positiony;
+	}
+	
 	public Set<Sensorevent> getSensorevents() {
 		return this.sensorevents;
 	}
@@ -126,6 +146,7 @@ public class Sensor implements java.io.Serializable {
 	public Object [] toObj () {
 		return new Object [] {this.getSensorname(), this.getSensorclass().toString(),
 							  this.getMinvalue(), this.getMaxvalue(), this.getTransformationfactor(),
-							  this.getUnit(), this.getController().getControllername()};
+							  this.getUnit(), this.getController().getControllername(),this.getMinthreshold(),
+							  this.getMaxthreshold(),this.getPositionx(),this.getPositiony()};
 	}
 }

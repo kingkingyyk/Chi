@@ -3,12 +3,12 @@ package Chi;
 public class FrameSensorManagementBind {
 
 	public static class OnSensorCreate implements DatabaseSensor.OnCreateAction {
-		public void run (String sn, String cn, double min, double max, double trans, String unit, String con, double minT, double maxT) {
+		public void run (String sn, String cn, double min, double max, double trans, String unit, String con, double minT, double maxT, double px, double py) {
 			FrameSensorManagement.refresh();
 		}
 	}
 	public static class OnSensorUpdate implements DatabaseSensor.OnUpdateAction {
-		public void run (String oldSN, String sn, String cn, double min, double max, double trans, String unit, String con, double minT, double maxT) {
+		public void run (String oldSN, String sn, String cn, double min, double max, double trans, String unit, String con, double minT, double maxT, double px, double py) {
 			FrameSensorManagement.refresh();
 		}
 	}

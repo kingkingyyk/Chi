@@ -30,7 +30,7 @@ public class FrameSensorManagement extends JFrame {
 		public boolean isCellEditable(int row, int column){ return false;  }
 		
 		@SuppressWarnings("rawtypes")
-		private Class [] colClass={String.class,String.class,Double.class,Double.class,Double.class,String.class,String.class,Double.class,Double.class};
+		private Class [] colClass={String.class,String.class,Double.class,Double.class,Double.class,String.class,String.class,Double.class,Double.class,String.class};
 	    @Override
 	    public Class<?> getColumnClass(int colNum) {
 	    	return colClass[colNum];
@@ -39,7 +39,7 @@ public class FrameSensorManagement extends JFrame {
 	}
 	
 	private static class SensorTableModel extends AbstractTreeTableModel {
-		public static final String [] COLUMNS= {"Name","Class","Min Value","Max Value","Trans. Fact","Unit","Attached On","Min Threshold","Max Threshold"};
+		public static final String [] COLUMNS= {"Name","Class","Min Value","Max Value","Trans. Fact","Unit","Attached On","Min Threshold","Max Threshold","Position"};
 		
 		public SensorTableModel (SensorTableRow r) {
 			super(r);
@@ -93,6 +93,7 @@ public class FrameSensorManagement extends JFrame {
 				renderText[6]=s.getController().getControllername();
 				renderText[7]=s.getMinthreshold().toString();
 				renderText[8]=s.getMaxthreshold().toString();
+				renderText[9]=String.format("%.2f,%.2f",s.getPositionx(),s.getPositiony());
 			} else {
 				renderText=new String [] {"root"};
 			}
@@ -258,6 +259,7 @@ public class FrameSensorManagement extends JFrame {
 			table.getColumn(6).setCellRenderer(new SensorTableCellRenderer());
 			table.getColumn(7).setCellRenderer(new SensorTableCellRenderer());
 			table.getColumn(8).setCellRenderer(new SensorTableCellRenderer());
+			table.getColumn(9).setCellRenderer(new SensorTableCellRenderer());
 			
 			table.getColumnModel().getColumn(0).setPreferredWidth(133);
 			table.getColumnModel().getColumn(1).setPreferredWidth(133);
@@ -268,6 +270,7 @@ public class FrameSensorManagement extends JFrame {
 			table.getColumnModel().getColumn(6).setPreferredWidth(100);
 			table.getColumnModel().getColumn(7).setPreferredWidth(54);
 			table.getColumnModel().getColumn(8).setPreferredWidth(54);
+			table.getColumnModel().getColumn(9).setPreferredWidth(54);
 		}
 	}
 	

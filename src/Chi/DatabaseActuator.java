@@ -8,11 +8,11 @@ import org.hibernate.Transaction;
 public class DatabaseActuator {
 
 	public static interface OnCreateAction {
-		public void run(String n, String u);
+		public void run(String n, String u, double px, double py);
 	}
 
 	public static interface OnUpdateAction {
-		public void run(String oldN, String n, String u);
+		public void run(String oldN, String n, String u, double px, double py);
 	}
 
 	public static interface OnUpdateStatusAction {
@@ -56,7 +56,7 @@ public class DatabaseActuator {
 		}
 	}
 
-	public static boolean createActuator(String n, String u) {
+	public static boolean createActuator(String n, String u, double px, double py) {
 		Logger.log("DatabaseActuator - Create");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
@@ -65,13 +65,13 @@ public class DatabaseActuator {
 			tx = session.beginTransaction();
 			Actuator act = session.get(Actuator.class,n);
 			if (act==null) {
-				act = new Actuator(n, (Controller) session.get(Controller.class, u),"Pending Update", null, null);
+				act = new Actuator(n, (Controller) session.get(Controller.class, u),"Pending Update", px, py, null, null);
 				session.save(act);
 				tx.commit();
 				Cache.Actuators.map.put(n,act);
 	
 				Logger.log("DatabaseActuator - Create - Execute Callbacks");
-				for (OnCreateAction a : OnCreateList) a.run(n, u);
+				for (OnCreateAction a : OnCreateList) a.run(n, u, px, py);
 				flag = true;
 			} else Logger.log("DB Create Actuator - Actuator already exists");
 		} catch (HibernateException e) {
@@ -82,7 +82,7 @@ public class DatabaseActuator {
 		return flag;
 	}
 
-	public static boolean updateActuator(String oldN, String n, String u) {
+	public static boolean updateActuator(String oldN, String n, String u, double px, double py) {
 		Logger.log("DBActuator Update");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
@@ -97,6 +97,8 @@ public class DatabaseActuator {
 			if (act != null) {
 				act.setName(n);
 				act.setController((Controller) session.get(Controller.class, u));
+				act.setPositionx(px);
+				act.setPositiony(py);
 				session.update(act);
 				tx.commit();
 				Cache.Actuators.map.put(n,act);
@@ -108,7 +110,7 @@ public class DatabaseActuator {
 						s.setActuator(act);
 				
 				Logger.log("DB Update Actuator - Execute Callbacks");
-				for (OnUpdateAction a : OnUpdateList) a.run(oldN, n, u);
+				for (OnUpdateAction a : OnUpdateList) a.run(oldN, n, u, px, py);
 				flag = true;
 			} else Logger.log("DB Update Actuator - Actuator doesn't exist");
 		} catch (HibernateException e) {

@@ -28,6 +28,8 @@ CREATE TABLE Sensor(
 	Controller varchar(100),
 	MinThreshold double,
 	MaxThreshold double,
+	PositionX double,
+	PositionY double,
 	FOREIGN KEY (Class) REFERENCES SensorClass(ClassName) ON UPDATE CASCADE,
 	FOREIGN KEY (Controller) REFERENCES Controller(ControllerName) ON UPDATE CASCADE
 )
@@ -44,6 +46,8 @@ CREATE TABLE Actuator(
 	Name varchar(100) PRIMARY KEY,
 	Controller varchar(100),
 	Status varchar(100),
+	PositionX double,
+	PositionY double,
 	FOREIGN KEY (Controller) REFERENCES Controller(ControllerName)  ON UPDATE CASCADE
 )
 @
