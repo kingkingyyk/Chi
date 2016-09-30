@@ -1,6 +1,6 @@
 package Chi;
 
-import java.io.PrintWriter;
+import java.io.DataOutputStream;
 import java.net.Socket;
 
 public class ControllerPacket {
@@ -17,6 +17,7 @@ public class ControllerPacket {
 	
 	public boolean send() {
 		StringBuilder sb=new StringBuilder();
+		sb.append("!!!!!");
 		sb.append(this.type.ordinal());
 		sb.append(Config.PACKET_FIELD_DELIMITER);
 		for (String s : data) {
@@ -26,10 +27,10 @@ public class ControllerPacket {
 		try {
 			Socket sc=new Socket(ct.getIpaddress(),Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_CONTROLLER_PORT_KEY)));
 			Logger.log("Controller Packet Info - Send content : "+sb.toString());
-			while (sb.length()<202) sb.append('\n');
-			sc.setSoTimeout(10000);
-			PrintWriter pw=new PrintWriter(sc.getOutputStream());
-			pw.print(sb.toString());
+			while (sb.length()<=Config.PACKET_MAX_BYTE) sb.append('!');
+			sc.setSoTimeout(5000);
+			DataOutputStream pw=new DataOutputStream(sc.getOutputStream());
+			pw.write(sb.toString().getBytes());
 			pw.close();
 			sc.close();
 			return true;

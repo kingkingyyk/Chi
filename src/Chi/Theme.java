@@ -31,6 +31,7 @@ public class Theme {
 		map.put("SpecialScheduleIcon", new ImageIcon(Theme.class.getResource("/images/SPECIAL_SCHEDULE.png")));
 		map.put("TickIcon", new ImageIcon(Theme.class.getResource("/images/TICK.png")));
 		map.put("UserIcon", new ImageIcon(Theme.class.getResource("/images/USER.png")));
+		map.put("LoadingIcon", new ImageIcon(Theme.class.getResource("/images/loading.gif")));
 	}
 	
 	public static ImageIcon getIcon (String key) {

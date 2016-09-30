@@ -3,10 +3,10 @@ package Chi;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
+import java.net.Socket;
 import java.util.LinkedList;
+
+import org.hsqldb.lib.DataOutputStream;
 
 public class DataServer {
 	private static FileOutputStream fileLocker;
@@ -121,10 +121,11 @@ public class DataServer {
 			DataServer.listeningThread.setFlag(false);
 			
 			//Send a dummy packet to notify the server to shut down.
-			DatagramPacket packet=new DatagramPacket(new byte [1],1,InetAddress.getByName("localhost"),Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_INCOMING_PORT_KEY)));
-			DatagramSocket dsocket=new DatagramSocket();
-			dsocket.send(packet);
-			dsocket.close();
+			Socket sc=new Socket("localhost",Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_INCOMING_PORT_KEY)));
+			DataOutputStream dos=new DataOutputStream(sc.getOutputStream());
+			dos.write(0);
+			dos.close();
+			sc.close();
 		} catch (IOException e) {
 			Logger.log("Data server - StopP1 - "+e.getMessage());
 		}

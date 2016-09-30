@@ -37,6 +37,17 @@ public class FrameActuatorManagementContextMenu extends JPopupMenu {
 					
 				ControllerPacketActuatorTrigger p=new ControllerPacketActuatorTrigger(act.getController().getControllername(),act.getName(),status);
 				p.trigger();
+				
+				FrameActuatorManagementFeedbackWait fa=new FrameActuatorManagementFeedbackWait();
+				fa.setLocationRelativeTo(null);
+				Thread t=new Thread() {
+					public void run () {
+						try { Thread.sleep(5000); } catch (InterruptedException e) {};
+						fa.setVisible(false);
+					}
+				};
+				t.start();
+				fa.setVisible(true);
 			}
 		});
 		
