@@ -3,23 +3,26 @@ package Chi;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import org.eclipse.swt.SWT;
-
+import javax.swing.text.DefaultCaret;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
+import java.awt.Font;
+import java.awt.Color;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.UIManager;
 
 public class MenuUI extends JFrame {
 	private static final long serialVersionUID = -1439297640667763037L;
+	private static MenuUI currObj=null;
 	private JPanel contentPane;
 	private JButton btnStartDataServer;
 	private JButton btnStopDataServer;
@@ -31,22 +34,19 @@ public class MenuUI extends JFrame {
 	private JButton btnOngoingSchedules;
 	private JButton btnStartNotificationServer;
 	private JButton btnStopNotificationServer;
+	private JTextArea textAreaLog;
+	private JScrollPane scrollPaneLog;
 
 	public MenuUI() {
 		setTitle(Config.APP_NAME);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 445, 310);
+		setBounds(100, 100, 530, 412);
 		setIconImage(Theme.getIcon("ChiLogo").getImage());
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-		JLabel lblAppLogo = new JLabel();
-		lblAppLogo.setBounds(10, 194, 80, 80);
-		lblAppLogo.setIcon(Utility.resizeImageIcon(Theme.getIcon("ChiLogo"), lblAppLogo.getWidth(), lblAppLogo.getHeight()));
-		contentPane.add(lblAppLogo);
 		
 		JButton btnExit = new JButton("Exit");
 		btnExit.addActionListener(new ActionListener() {
@@ -54,19 +54,21 @@ public class MenuUI extends JFrame {
 				System.exit(0);
 			}
 		});
-		btnExit.setBounds(310, 251, 119, 23);
+		btnExit.setFocusPainted(false);
+		btnExit.setBounds(463, 6, 51, 36);
 		contentPane.add(btnExit);
 		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(10, 11, 419, 181);
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
+		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+		tabbedPane.setBounds(10, 59, 504, 181);
 		contentPane.add(tabbedPane);
 		
 		JPanel panelServer = new JPanel();
 		tabbedPane.addTab("Server", null, panelServer, null);
 		panelServer.setLayout(null);
 		
-		btnStartDataServer = new JButton("Start Data Server");
-		btnStartDataServer.setBounds(34, 11, 153, 23);
+		btnStartDataServer = new JButton("Start");
+		btnStartDataServer.setBounds(123, 11, 130, 23);
 		panelServer.add(btnStartDataServer);
 		btnStartDataServer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -78,8 +80,8 @@ public class MenuUI extends JFrame {
 			}
 		});
 		
-		btnStopDataServer = new JButton("Stop Data Server");
-		btnStopDataServer.setBounds(229, 11, 153, 23);
+		btnStopDataServer = new JButton("Stop");
+		btnStopDataServer.setBounds(273, 11, 130, 23);
 		panelServer.add(btnStopDataServer);
 		btnStopDataServer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -92,7 +94,7 @@ public class MenuUI extends JFrame {
 		});
 		btnStopDataServer.setEnabled(false);
 		
-		btnStartGWTServer = new JButton("Start GWT Server");
+		btnStartGWTServer = new JButton("Start");
 		btnStartGWTServer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (GWTServer.start()) {
@@ -103,10 +105,10 @@ public class MenuUI extends JFrame {
 				}
 			}
 		});
-		btnStartGWTServer.setBounds(34, 46, 153, 23);
+		btnStartGWTServer.setBounds(123, 45, 130, 23);
 		panelServer.add(btnStartGWTServer);
 		
-		btnStopGWTServer = new JButton("Stop GWT Server");
+		btnStopGWTServer = new JButton("Stop");
 		btnStopGWTServer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (GWTServer.stop()) {
@@ -118,11 +120,11 @@ public class MenuUI extends JFrame {
 			}
 		});
 		btnStopGWTServer.setEnabled(false);
-		btnStopGWTServer.setBounds(229, 45, 153, 23);
+		btnStopGWTServer.setBounds(273, 45, 130, 23);
 		panelServer.add(btnStopGWTServer);
 		
-		btnStartSchedulingServer = new JButton("Start Scheduling Server");
-		btnStartSchedulingServer.setBounds(34, 80, 153, 23);
+		btnStartSchedulingServer = new JButton("Start");
+		btnStartSchedulingServer.setBounds(123, 79, 130, 23);
 		panelServer.add(btnStartSchedulingServer);
 		btnStartSchedulingServer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -136,9 +138,9 @@ public class MenuUI extends JFrame {
 			}
 		});
 		
-		btnStopSchedulingServer = new JButton("Stop Scheduling Server");
+		btnStopSchedulingServer = new JButton("Stop");
 		btnStopSchedulingServer.setEnabled(false);
-		btnStopSchedulingServer.setBounds(229, 79, 153, 23);
+		btnStopSchedulingServer.setBounds(273, 79, 130, 23);
 		btnStopSchedulingServer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SchedulingServer.stop();
@@ -151,7 +153,7 @@ public class MenuUI extends JFrame {
 		});
 		panelServer.add(btnStopSchedulingServer);
 		
-		btnStartNotificationServer = new JButton("Start Notification Server");
+		btnStartNotificationServer = new JButton("Start");
 		btnStartNotificationServer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				NotificationServer.start();
@@ -159,10 +161,10 @@ public class MenuUI extends JFrame {
 				btnStopNotificationServer.setEnabled(true);
 			}
 		});
-		btnStartNotificationServer.setBounds(34, 114, 153, 23);
+		btnStartNotificationServer.setBounds(123, 114, 130, 23);
 		panelServer.add(btnStartNotificationServer);
 		
-		btnStopNotificationServer = new JButton("Stop Notification Server");
+		btnStopNotificationServer = new JButton("Stop");
 		btnStopNotificationServer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				NotificationServer.stop();
@@ -171,208 +173,67 @@ public class MenuUI extends JFrame {
 			}
 		});
 		btnStopNotificationServer.setEnabled(false);
-		btnStopNotificationServer.setBounds(229, 114, 153, 23);
+		btnStopNotificationServer.setBounds(273, 114, 130, 23);
 		panelServer.add(btnStopNotificationServer);
+		
+		JLabel lblDataServer = new JLabel("Data Server :");
+		lblDataServer.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblDataServer.setBounds(10, 15, 103, 14);
+		panelServer.add(lblDataServer);
+		
+		JLabel lblGWTServer = new JLabel("GWT Server :");
+		lblGWTServer.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblGWTServer.setBounds(10, 49, 103, 14);
+		panelServer.add(lblGWTServer);
+		
+		JLabel lblSchedulingServer = new JLabel("Scheduling Server :");
+		lblSchedulingServer.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblSchedulingServer.setBounds(10, 84, 103, 14);
+		panelServer.add(lblSchedulingServer);
+		
+		JLabel lblNewLabel = new JLabel("Notification Server :");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblNewLabel.setBounds(10, 118, 103, 14);
+		panelServer.add(lblNewLabel);
 		
 		JPanel panelDatabase = new JPanel();
 		tabbedPane.addTab("Database", null, panelDatabase, null);
 		panelDatabase.setLayout(null);
 		
 		JButton btnCreateTables = new JButton("Create Tables");
-		btnCreateTables.setBounds(10, 5, 109, 23);
+		btnCreateTables.setBounds(10, 11, 109, 23);
 		panelDatabase.add(btnCreateTables);
 		
 		JButton btnResetDatabase = new JButton("Reset Database");
-		btnResetDatabase.setBounds(10, 35, 109, 23);
+		btnResetDatabase.setBounds(147, 11, 109, 23);
 		panelDatabase.add(btnResetDatabase);
 		
-		JButton btnUser = new JButton("User");
-		btnUser.setBounds(129, 5, 130, 23);
-		panelDatabase.add(btnUser);
-		btnUser.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				FrameUserManagement f=FrameUserManagement.getInstance();
-				f.setVisible(true);
-				f.toFront();
-			}
-		});
-		
-		JButton btnSensor = new JButton("Sensor");
-		btnSensor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				FrameSensorManagement f=FrameSensorManagement.getInstance();
-				f.setVisible(true);
-			}
-		});
-		btnSensor.setBounds(129, 35, 130, 23);
-		panelDatabase.add(btnSensor);
-		
-		JButton btnController = new JButton("Controller");
-		btnController.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				FrameControllerManagement f=FrameControllerManagement.getInstance();
-				f.setVisible(true);
-				f.toFront();
-			}
-		});
-		btnController.setBounds(129, 103, 130, 23);
-		panelDatabase.add(btnController);
-		
-		JButton btnSite = new JButton("Site");
-		btnSite.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				FrameSiteManagement f=FrameSiteManagement.getInstance();
-				f.setVisible(true);
-				f.toFront();
-			}
-		});
-		btnSite.setBounds(130, 69, 130, 23);
-		panelDatabase.add(btnSite);
-		
-		JButton btnSensorClass = new JButton("Sensor Class");
-		btnSensorClass.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				FrameSensorClassManagement f=FrameSensorClassManagement.getInstance();
-				f.setVisible(true);
-				f.toFront();
-			}
-		});
-		btnSensorClass.setBounds(269, 5, 135, 23);
-		panelDatabase.add(btnSensorClass);
-		
-		JButton btnActuator = new JButton("Actuator");
-		btnActuator.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				FrameActuatorManagement f=FrameActuatorManagement.getInstance();
-				f.setVisible(true);
-				f.toFront();
-			}
-		});
-		btnActuator.setBounds(269, 35, 135, 23);
-		panelDatabase.add(btnActuator);
-		
 		JButton btnClearReadings = new JButton("Clear Readings");
-		btnClearReadings.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				DatabaseReading.clearReading("testTemp");
-			}
-		});
-		btnClearReadings.setBounds(10, 69, 109, 23);
+		btnClearReadings.setBounds(278, 11, 109, 23);
 		panelDatabase.add(btnClearReadings);
 		
-		JPanel panelScheduling = new JPanel();
-		tabbedPane.addTab("Scheduling", null, panelScheduling, null);
-		panelScheduling.setLayout(null);
+		JButton btnRunSQL = new JButton("Run SQL");
+		btnRunSQL.setBounds(10, 45, 109, 23);
+		panelDatabase.add(btnRunSQL);
 		
-		JButton btnDayScheduleRules = new JButton("Day Schedule Rules");
-		btnDayScheduleRules.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				FrameDayScheduleRuleManagement f=FrameDayScheduleRuleManagement.getInstance();
-				f.setVisible(true);
-				f.toFront();
-			}
-		});
-		btnDayScheduleRules.setBounds(10, 11, 127, 23);
-		panelScheduling.add(btnDayScheduleRules);
+		textFieldSQL = new JTextField();
+		textFieldSQL.setBounds(129, 45, 258, 20);
+		panelDatabase.add(textFieldSQL);
+		textFieldSQL.setColumns(10);
 		
-		JButton btnRegularSchedules = new JButton("Regular Schedules");
-		btnRegularSchedules.setBounds(145, 11, 127, 23);
-		btnRegularSchedules.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				FrameRegularScheduleManagement f=FrameRegularScheduleManagement.getInstance();
-				f.setVisible(true);
-				f.toFront();
-			}
-		});
-		panelScheduling.add(btnRegularSchedules);
-		
-		JButton btnSpecialSchedules = new JButton("Special Schedules");
-		btnSpecialSchedules.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				FrameSpecialScheduleManagement f=FrameSpecialScheduleManagement.getInstance();
-				f.setVisible(true);
-				f.toFront();
-			}
-		});
-		btnSpecialSchedules.setBounds(277, 11, 127, 23);
-		panelScheduling.add(btnSpecialSchedules);
-		
-		btnOngoingSchedules = new JButton("Ongoing Schedules");
-		btnOngoingSchedules.setEnabled(false);
-		btnOngoingSchedules.setBounds(10, 119, 127, 23);
-		btnOngoingSchedules.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				FrameOngoingSchedules f=FrameOngoingSchedules.getInstance();
-				f.setVisible(true);
-				f.toFront();
-			}
-		});
-		panelScheduling.add(btnOngoingSchedules);
-		
-		JPanel panelNotification = new JPanel();
-		tabbedPane.addTab("Notification", null, panelNotification, null);
-		panelNotification.setLayout(null);
-		
-		JButton btnNotification = new JButton("Notification Center");
-		btnNotification.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				FrameNotification f=FrameNotification.getInstance();
-				f.setVisible(true);
-				f.toFront();
-			}
-		});
-		btnNotification.setBounds(10, 11, 131, 23);
-		panelNotification.add(btnNotification);
-		
-		JPanel panelSQL = new JPanel();
-		tabbedPane.addTab("SQL", null, panelSQL, null);
-		panelSQL.setLayout(null);
+		JButton btnLoadSQLFromFile = new JButton("Run SQL From File");
+		btnLoadSQLFromFile.setBounds(10, 79, 377, 23);
+		panelDatabase.add(btnLoadSQLFromFile);
 		
 		JButton btnViewReadings = new JButton("View All Readings");
-		btnViewReadings.setBounds(10, 76, 377, 23);
-		panelSQL.add(btnViewReadings);
+		btnViewReadings.setBounds(10, 113, 377, 23);
+		panelDatabase.add(btnViewReadings);
 		btnViewReadings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				FrameReading fr=new FrameReading();
 				fr.setVisible(true);/*
 				ArrayList<SensorReading> list=DatabaseReading.getReadingMonthly("testTemp",2016,9);
 				ReadingExport.export(list); */
-			}
-		});
-		
-		textFieldSQL = new JTextField();
-		textFieldSQL.setBounds(119, 11, 268, 20);
-		panelSQL.add(textFieldSQL);
-		textFieldSQL.setColumns(10);
-		
-		JButton btnRunSQL = new JButton("Run SQL");
-		btnRunSQL.setBounds(10, 10, 101, 23);
-		panelSQL.add(btnRunSQL);
-		btnRunSQL.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				DatabaseCassandra.runSQL("Run SQL", textFieldSQL.getText());
-			}
-		});
-		
-		JButton btnLoadSQLFromFile = new JButton("Run SQL From File");
-		btnLoadSQLFromFile.setBounds(10, 42, 377, 23);
-		panelSQL.add(btnLoadSQLFromFile);
-		
-		JPanel panelConfig = new JPanel();
-		tabbedPane.addTab("Configurations", null, panelConfig, null);
-		panelConfig.setLayout(null);
-		
-		JButton btnConfig = new JButton("Config");
-		btnConfig.setBounds(10, 11, 96, 23);
-		panelConfig.add(btnConfig);
-		btnConfig.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Logger.log("Config UI started.");
-				ConfigUI ui=new ConfigUI();
-				Logger.log("Config UI done.");
-				ui.setLocationRelativeTo(null);
-				ui.setVisible(true);
-				Logger.log("Config UI closed.");
 			}
 		});
 		btnLoadSQLFromFile.addActionListener(new ActionListener() {
@@ -382,6 +243,16 @@ public class MenuUI extends JFrame {
 					File selectedFile=fc.getSelectedFile();
 					DatabaseCassandra.runSQLFromFile("Run SQL From File",selectedFile.getPath());
 				}
+			}
+		});
+		btnRunSQL.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				DatabaseCassandra.runSQL("Run SQL", textFieldSQL.getText());
+			}
+		});
+		btnClearReadings.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				DatabaseReading.clearReading("testTemp");
 			}
 		});
 		btnResetDatabase.addActionListener(new ActionListener() {
@@ -464,5 +335,195 @@ public class MenuUI extends JFrame {
             	u.dispose();
 			}
 		});
+		
+		JPanel panelModelling = new JPanel();
+		tabbedPane.addTab("Modelling", null, panelModelling, null);
+		panelModelling.setLayout(null);
+		
+		JButton btnUser = new JButton("User");
+		btnUser.setBounds(150, 5, 134, 23);
+		panelModelling.add(btnUser);
+		btnUser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				FrameUserManagement f=FrameUserManagement.getInstance();
+				f.setVisible(true);
+				f.toFront();
+			}
+		});
+		
+		JButton btnSensor = new JButton("Sensor");
+		btnSensor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				FrameSensorManagement f=FrameSensorManagement.getInstance();
+				f.setVisible(true);
+			}
+		});
+		btnSensor.setBounds(10, 103, 130, 23);
+		panelModelling.add(btnSensor);
+		
+		JButton btnController = new JButton("Controller");
+		btnController.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				FrameControllerManagement f=FrameControllerManagement.getInstance();
+				f.setVisible(true);
+				f.toFront();
+			}
+		});
+		btnController.setBounds(10, 35, 130, 23);
+		panelModelling.add(btnController);
+		
+		JButton btnSite = new JButton("Site");
+		btnSite.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FrameSiteManagement f=FrameSiteManagement.getInstance();
+				f.setVisible(true);
+				f.toFront();
+			}
+		});
+		btnSite.setBounds(10, 5, 130, 23);
+		panelModelling.add(btnSite);
+		
+		JButton btnSensorClass = new JButton("Sensor Class");
+		btnSensorClass.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				FrameSensorClassManagement f=FrameSensorClassManagement.getInstance();
+				f.setVisible(true);
+				f.toFront();
+			}
+		});
+		btnSensorClass.setBounds(10, 69, 130, 23);
+		panelModelling.add(btnSensorClass);
+		
+		JButton btnActuator = new JButton("Actuator");
+		btnActuator.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				FrameActuatorManagement f=FrameActuatorManagement.getInstance();
+				f.setVisible(true);
+				f.toFront();
+			}
+		});
+		btnActuator.setBounds(10, 137, 130, 23);
+		panelModelling.add(btnActuator);
+		
+		JPanel panelScheduling = new JPanel();
+		tabbedPane.addTab("Scheduling", null, panelScheduling, null);
+		panelScheduling.setLayout(null);
+		
+		JButton btnDayScheduleRules = new JButton("Day Schedule Rules");
+		btnDayScheduleRules.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				FrameDayScheduleRuleManagement f=FrameDayScheduleRuleManagement.getInstance();
+				f.setVisible(true);
+				f.toFront();
+			}
+		});
+		btnDayScheduleRules.setBounds(10, 11, 127, 23);
+		panelScheduling.add(btnDayScheduleRules);
+		
+		JButton btnRegularSchedules = new JButton("Regular Schedules");
+		btnRegularSchedules.setBounds(145, 11, 127, 23);
+		btnRegularSchedules.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				FrameRegularScheduleManagement f=FrameRegularScheduleManagement.getInstance();
+				f.setVisible(true);
+				f.toFront();
+			}
+		});
+		panelScheduling.add(btnRegularSchedules);
+		
+		JButton btnSpecialSchedules = new JButton("Special Schedules");
+		btnSpecialSchedules.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				FrameSpecialScheduleManagement f=FrameSpecialScheduleManagement.getInstance();
+				f.setVisible(true);
+				f.toFront();
+			}
+		});
+		btnSpecialSchedules.setBounds(277, 11, 127, 23);
+		panelScheduling.add(btnSpecialSchedules);
+		
+		btnOngoingSchedules = new JButton("Ongoing Schedules");
+		btnOngoingSchedules.setEnabled(false);
+		btnOngoingSchedules.setBounds(10, 119, 127, 23);
+		btnOngoingSchedules.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				FrameOngoingSchedules f=FrameOngoingSchedules.getInstance();
+				f.setVisible(true);
+				f.toFront();
+			}
+		});
+		panelScheduling.add(btnOngoingSchedules);
+		
+		JPanel panelNotification = new JPanel();
+		tabbedPane.addTab("Notification", null, panelNotification, null);
+		panelNotification.setLayout(null);
+		
+		JButton btnNotification = new JButton("Notification Center");
+		btnNotification.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FrameNotification f=FrameNotification.getInstance();
+				f.setVisible(true);
+				f.toFront();
+			}
+		});
+		btnNotification.setBounds(10, 11, 131, 23);
+		panelNotification.add(btnNotification);
+		
+		JPanel panelConfig = new JPanel();
+		tabbedPane.addTab("Configurations", null, panelConfig, null);
+		panelConfig.setLayout(null);
+		
+		JButton btnConfig = new JButton("Config");
+		btnConfig.setBounds(10, 11, 96, 23);
+		panelConfig.add(btnConfig);
+		
+		JLabel label = new JLabel("Administration Center");
+		label.setForeground(Color.WHITE);
+		label.setFont(label.getFont().deriveFont(label.getFont().getStyle() | Font.BOLD, label.getFont().getSize() + 1f));
+		label.setBounds(10, 12, 140, 23);
+		contentPane.add(label);
+		
+		JLabel labelBackground = new JLabel();
+		labelBackground.setBounds(0, 0, 524, 47);
+		labelBackground.setIcon(Utility.resizeImageIcon(Theme.getIcon("TopTitleBar"),labelBackground.getWidth(),labelBackground.getHeight()));
+		contentPane.add(labelBackground);
+		
+		scrollPaneLog = new JScrollPane();
+		scrollPaneLog.setBounds(10, 251, 504, 125);
+		contentPane.add(scrollPaneLog);
+		
+		textAreaLog = new JTextArea();
+		textAreaLog.setFont(UIManager.getFont("ComboBox.font"));
+		textAreaLog.setEditable(false);
+		scrollPaneLog.setViewportView(textAreaLog);
+		
+		JLabel lblConsole = new JLabel("Console :");
+		lblConsole.setBounds(10, 234, 46, 14);
+		contentPane.add(lblConsole);
+		
+		btnConfig.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Logger.log("Config UI started.");
+				ConfigUI ui=new ConfigUI();
+				Logger.log("Config UI done.");
+				ui.setLocationRelativeTo(null);
+				ui.setVisible(true);
+				Logger.log("Config UI closed.");
+			}
+		});
+		
+		currObj=this;
+		//Autoscroll
+		DefaultCaret caret = (DefaultCaret)textAreaLog.getCaret();
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+	}
+	
+	public void appendLog(String s) {
+		textAreaLog.append(s);
+		textAreaLog.append("\n");
+	}
+	
+	public static MenuUI getCurrInstance() {
+		return MenuUI.currObj;
 	}
 }

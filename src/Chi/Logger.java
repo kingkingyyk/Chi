@@ -19,7 +19,7 @@ public class Logger {
 	private static ConcurrentLinkedQueue<String> eventQueue=new ConcurrentLinkedQueue<>();
 	
 	public static void log (String event) {
-		eventQueue.offer(formatter.format(new Date())+" "+event);
+		eventQueue.offer(formatter.format(new Date())+" | "+event);
 		if (eventQueue.size()==1) {
 			Thread t=new Thread() {
 				public void run () {
@@ -28,6 +28,9 @@ public class Logger {
 						while (eventQueue.size()>0) {
 							String s=eventQueue.poll();
 							System.out.println(s);
+							if (MenuUI.getCurrInstance()!=null) {
+								MenuUI.getCurrInstance().appendLog(s);
+							}
 							if (EnableLogToFile) pw.println(s);
 						}
 						pw.close();
