@@ -369,7 +369,7 @@ public class ConfigUI extends JDialog {
 		btnOK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				saveConfigurations();
-				Cache.initialize();
+				Cache.initialize(null);
 				DatabaseCassandra.initialize();
 				dispose();
 			}

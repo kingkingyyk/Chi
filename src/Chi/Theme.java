@@ -9,7 +9,7 @@ public class Theme {
 	
 	public static void initialize() {
 		map.put("Reset-16x16", Utility.resizeImageIcon(new ImageIcon(Theme.class.getResource("/images/reset.png")),16,16));
-		map.put("TopTitleBar", new ImageIcon(Theme.class.getResource("/images/TopTitleBar.jpg")));
+		map.put("TopTitleBar", new ImageIcon(Chi.class.getResource("/images/TopTitleBar.jpg")));
 		map.put("CassandraLogo", new ImageIcon(Theme.class.getResource("/images/cassandra-logo.png")));
 		map.put("HSQLLogo", new ImageIcon(Theme.class.getResource("/images/hypersql-logo.png")));
 		map.put("GWTLogo", new ImageIcon(Theme.class.getResource("/images/gwt-logo.png")));
@@ -32,6 +32,7 @@ public class Theme {
 		map.put("TickIcon", new ImageIcon(Theme.class.getResource("/images/TICK.png")));
 		map.put("UserIcon", new ImageIcon(Theme.class.getResource("/images/USER.png")));
 		map.put("LoadingIcon", new ImageIcon(Theme.class.getResource("/images/loading.gif")));
+		map.put("StartScreen", new ImageIcon(Chi.class.getResource("/images/START_SCREEN.jpg")));
 	}
 	
 	public static ImageIcon getIcon (String key) {

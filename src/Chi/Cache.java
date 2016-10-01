@@ -32,9 +32,12 @@ public class Cache {
 		return sb.toString();
 	}
 	
-	public static void initialize() {
-		WaitUI u=new WaitUI();
-		u.setText("Pooling data from database... (20)");
+	private static boolean initDone=false;
+	public static void initialize(final StartScreen diag) {
+		final WaitUI u=new WaitUI();
+		if (diag==null) {
+			u.setText("Pooling data from database... (20)");
+		}
 		Thread t=new Thread() {
 			public void run () {
 				try {
@@ -78,23 +81,30 @@ public class Cache {
 				    flag &=SpecialSchedules.update();
 			    }
 			    
-			    if (!flag) JOptionPane.showMessageDialog(null,"Fail to update data from database!",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
-			    
-			    u.setVisible(false);
+			    if (!flag) JOptionPane.showMessageDialog(null,"Fail to update data from database!\nMost functionalities will not be working.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
+			    if (diag==null) u.setVisible(false); else initDone=true;
 			}
 		};
 		t.start();
 		Thread t2=new Thread() {
 			public void run () {
 				try { Thread.sleep(1000); }catch (InterruptedException e) {}
-				for (int cd=20;cd>=0 && u.isVisible();cd--) {
-					u.setText("Pooling data from database... ("+cd+")");
+				for (int cd=20;cd>=0 && ((diag==null && u.isVisible()) || !initDone);cd--) {
+					if (diag==null) u.setText("Pooling data from database... ("+cd+")");
+					else diag.setText("Pooling data from database... ("+cd+")");
 					try { Thread.sleep(1000); }catch (InterruptedException e) {}
 				}
+				initDone=true;
 			}
 		};
 		t2.start();
-		u.setVisible(true);
+		if (diag==null) {
+			u.setVisible(true);
+		} else {
+			while (!initDone) {
+				try { Thread.sleep(1000); }catch (InterruptedException e) {}
+			}
+		}
 	}
 	
 	private static abstract class Data<T> {
