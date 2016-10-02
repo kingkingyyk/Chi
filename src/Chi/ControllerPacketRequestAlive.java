@@ -8,6 +8,6 @@ public class ControllerPacketRequestAlive {
 	}
 	
 	public boolean send() {
-		return this.p.send();
+		return this.p.send()!=null;
 	}
 }

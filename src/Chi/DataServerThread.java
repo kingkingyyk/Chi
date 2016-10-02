@@ -66,15 +66,6 @@ public class DataServerThread extends Thread {
 								try {
 									String cn=st.nextToken();
 									DatabaseController.updateControllerReport(cn,sc.getInetAddress().getHostAddress(),LocalDateTime.now());
-									if (FrameActuatorManagementFeedbackWait.getCurrent()!=null) {
-										Thread t=new Thread() {
-											public void run () {
-												try { Thread.sleep(Config.CONTROLLER_READY_TIME_MS); } catch (InterruptedException e) {};
-												if (FrameActuatorManagementFeedbackWait.getCurrent()!=null) FrameActuatorManagementFeedbackWait.getCurrent().setVisible(false);
-											}
-										};
-										t.start();
-									}
 									DataServerActuatorStatusToDatabase.queueData(st.nextToken(),st.nextToken());
 								} catch (NumberFormatException e) {}
 								break;

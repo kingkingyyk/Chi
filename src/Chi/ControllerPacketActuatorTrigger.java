@@ -20,7 +20,13 @@ public class ControllerPacketActuatorTrigger extends Thread {
 		String [] data={controllerName,actuatorName,status};
 		ControllerPacket p=new ControllerPacket(Cache.Controllers.map.get(controllerName),ControllerPacket.Type.SetActuator,data);
 		Logger.log("ControllerPacketActuatorTrigger - Send packet");
-		if (p.send()) Logger.log("ControllerPacketActuatorTrigger - Packet sent successfully");
-
+		String status;
+		if ((status=p.send())!=null) {
+			Logger.log("ControllerPacketActuatorTrigger - Packet sent successfully");
+			DatabaseActuator.updateActuatorStatus(actuatorName,status);
+		}
+		if (FrameActuatorManagementFeedbackWait.getCurrent()!=null && FrameActuatorManagementFeedbackWait.getCurrent().isVisible()) {
+			FrameActuatorManagementFeedbackWait.getCurrent().setVisible(false);
+		}
 	}
 }

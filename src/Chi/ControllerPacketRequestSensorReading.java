@@ -8,7 +8,7 @@ public class ControllerPacketRequestSensorReading {
 	}
 	
 	public boolean send() {
-		return this.p.send();
+		return this.p.send()!=null;
 	}
 
 }

@@ -19,8 +19,9 @@ public class Config {
 	public static final int PACKET_MAX_BYTE=512;
 	public static final String DATABASE_SQL_PATH="sql";
 	public static final String ICON_TEXTURE_PATH="/images";
-	public static final int CONTROLLER_READY_TIME_MS=5000;
-	public static final int CONTROLLER_REPLY_TIMEOUT_MS=20000;
+	public static final int CONTROLLER_READY_TIME_MS=4000;
+	public static final int CONTROLLER_REPLY_TIMEOUT_MS=15000;
+	public static final int CONTROLLER_MAX_RETRY=3;
 	
 	private static Properties prop;
 	

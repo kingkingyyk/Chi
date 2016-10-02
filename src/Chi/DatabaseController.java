@@ -126,12 +126,14 @@ public class DatabaseController {
 		boolean flag=false;
 		try {
 			tx = session.beginTransaction();
+			Controller ctrl = Cache.Controllers.map.get(oldN);
 			if (!oldN.equals(n)) {
 				session.createQuery("Update Controller set ControllerName='" + n + "' where ControllerName='" + oldN + "'").executeUpdate();
 				Cache.Controllers.map.remove(oldN);
+				Cache.Controllers.map.put(n,ctrl);
 			}
-			Controller ctrl = (Controller) session.get(Controller.class,n);
 			if (ctrl!=null) {
+				ctrl.setControllername(n);
 				ctrl.setSite((Site)session.get(Site.class,s));
 				ctrl.setPositionx(x);
 				ctrl.setPositiony(y);

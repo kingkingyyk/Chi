@@ -397,7 +397,6 @@ public class MenuUI extends JFrame {
 		JButton btnActuator = new JButton("Actuator");
 		btnActuator.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (!DataServer.started()) JOptionPane.showMessageDialog(null, "Toggle status requires data server to be started.", "Actuator Management", JOptionPane.WARNING_MESSAGE);
 				FrameActuatorManagement f=FrameActuatorManagement.getInstance();
 				f.setVisible(true);
 				f.toFront();
