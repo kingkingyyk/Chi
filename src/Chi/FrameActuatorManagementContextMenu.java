@@ -42,8 +42,17 @@ public class FrameActuatorManagementContextMenu extends JPopupMenu {
 				fa.setLocationRelativeTo(null);
 				Thread t=new Thread() {
 					public void run () {
-						try { Thread.sleep(5000); } catch (InterruptedException e) {};
-						fa.setVisible(false);
+						try { Thread.sleep(Config.CONTROLLER_REPLY_TIMEOUT_MS); } catch (InterruptedException e) {};
+						if (fa!=null && fa.isVisible()) {
+							Logger.log("FrameActuatorManagement - Communication Error : "+act.getController().getControllername()+" doesn't reply in 15 seconds!");
+							fa.setVisible(false);
+							JOptionPane.showMessageDialog(null,"Ops, looks like the controller has felt asleep."
+															 + "\nYou might perform the following steps :"
+															 + "\n  - Try toggling again"
+															 + "\n  - Check the network connectivity"
+															 + "\n  - Reset the data server"
+															 + "\n  - Reset the controller","Actuator Management",JOptionPane.WARNING_MESSAGE);
+						}
 					}
 				};
 				t.start();
@@ -96,7 +105,7 @@ public class FrameActuatorManagementContextMenu extends JPopupMenu {
 
 			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
-				toggleMenu.setEnabled(m.getSelectedRow()!=-1);
+				toggleMenu.setEnabled(m.getSelectedRow()!=-1 && DataServer.started());
 				editMenu.setEnabled(m.getSelectedRow()!=-1);
 				deleteMenu.setEnabled(m.getSelectedRow()!=-1);
 			};

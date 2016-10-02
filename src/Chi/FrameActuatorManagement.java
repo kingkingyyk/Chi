@@ -292,6 +292,8 @@ public class FrameActuatorManagement extends JFrame {
 		for (int i=0;i<width.length;i++) {
 			table.getColumnModel().getColumn(i).setWidth(width[i]);
 		}
+		
+		this.table.repaint();
 	}
 
 	public int getSelectedRow () {

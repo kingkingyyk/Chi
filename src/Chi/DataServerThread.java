@@ -26,7 +26,7 @@ public class DataServerThread extends Thread {
 			ssc=new ServerSocket(Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_INCOMING_PORT_KEY)));
 			Logger.log("Data Server - StartP2 - Opening port "+Config.getConfig(Config.CONFIG_SERVER_INCOMING_PORT_KEY));
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Fail to start server : "+e.getMessage(),Config.APP_NAME,JOptionPane.ERROR);
+			JOptionPane.showMessageDialog(null, "Fail to start server : "+e.getMessage(),Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
 			Logger.log("Data Server - StartP2 - Error - "+e.getMessage());
 		}
 		if (ssc==null) {
@@ -66,6 +66,15 @@ public class DataServerThread extends Thread {
 								try {
 									String cn=st.nextToken();
 									DatabaseController.updateControllerReport(cn,sc.getInetAddress().getHostAddress(),LocalDateTime.now());
+									if (FrameActuatorManagementFeedbackWait.getCurrent()!=null) {
+										Thread t=new Thread() {
+											public void run () {
+												try { Thread.sleep(Config.CONTROLLER_READY_TIME_MS); } catch (InterruptedException e) {};
+												if (FrameActuatorManagementFeedbackWait.getCurrent()!=null) FrameActuatorManagementFeedbackWait.getCurrent().setVisible(false);
+											}
+										};
+										t.start();
+									}
 									DataServerActuatorStatusToDatabase.queueData(st.nextToken(),st.nextToken());
 								} catch (NumberFormatException e) {}
 								break;

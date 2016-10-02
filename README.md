@@ -2,6 +2,7 @@
 A system built for Internet of Things
 + Supports remote management (GWT Web-based UI)
 + Supports automated management (Server GUI + GWT Web-based UI)
++ Web UI repo : https://github.com/zktaichou/fyp
 
 Requires :
 + Apache Cassandra
@@ -15,7 +16,7 @@ Server Requirement :
 + Java 8 (Built On Update 92)
 
 Compile :
-+ Eclipse MARS.2
++ Eclipse MARS.2 / NEON
 + Hibernate Tool (For database schema update)
 
 Database Schema (Paste the XML) :
@@ -41,5 +42,4 @@ Current Working Stuffs :
 + Notification server
 
 v1.1 To-Do-List :
-+ Controller communication implementation [Refer to PacketFormats.xlsx]
-+ Controller communication encryption
++ Improves controller communication stability (Requires stress testing)

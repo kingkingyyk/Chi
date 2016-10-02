@@ -5,6 +5,7 @@ import javax.swing.JLabel;
 
 public class FrameActuatorManagementFeedbackWait extends JDialog {
 	private static final long serialVersionUID = 4973286001560655413L;
+	private static FrameActuatorManagementFeedbackWait f=null;
 
 	public FrameActuatorManagementFeedbackWait() {
 		setModal(true);
@@ -16,5 +17,12 @@ public class FrameActuatorManagementFeedbackWait extends JDialog {
 		lblIcon.setIcon(Theme.getIcon("LoadingIcon"));
 		lblIcon.setBounds(0, 0, 100, 100);
 		getContentPane().add(lblIcon);
+		
+		f=this;
+	}
+	
+	public static FrameActuatorManagementFeedbackWait getCurrent() {
+		if (FrameActuatorManagementFeedbackWait.f!=null && FrameActuatorManagementFeedbackWait.f.isVisible()) return FrameActuatorManagementFeedbackWait.f;
+		else return null;
 	}
 }
