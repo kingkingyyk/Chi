@@ -90,6 +90,6 @@ public class Actuator implements java.io.Serializable {
 	}
 
 	public Object [] toObj () {
-		return new Object [] {this.getName(), this.getController(), this.getStatus(),this.positionx,this.positiony};
+		return new Object [] {this.getName(), this.getController().getControllername(), this.getStatus(),this.positionx,this.positiony};
 	}
 }

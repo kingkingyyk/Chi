@@ -37,6 +37,7 @@ public class DataServerThread extends Thread {
 			while (this.running) {
 				try {
 					Socket sc=ssc.accept();
+					sc.setSoTimeout(5000);
 					if (this.running) {
 						BufferedReader br=new BufferedReader(new InputStreamReader(sc.getInputStream()));
 						StringBuilder sb=new StringBuilder();

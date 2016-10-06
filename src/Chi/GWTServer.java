@@ -56,8 +56,8 @@ public class GWTServer {
 		    }
 		    case "6" : { //ControllerGetActuators
 		    	ArrayList<Object []> result=new ArrayList<>();
-			    for (Actuator act : Cache.Controllers.map.get(list.get(1)).getActuators()) result.add(act.toObj());
-		    	return result;
+			    for (Actuator act : Cache.Controllers.map.get(list.get(1)).getActuators()) result.add(Cache.Actuators.map.get(act.getName()).toObj());
+			    return result;
 		    }
 		    case "7" : { //DayScheduleRuleGetAll
 		    	ArrayList<Object []> result=new ArrayList<>();
@@ -341,7 +341,7 @@ public class GWTServer {
 		    case "43" : { //ActuatorGetAll
 		    	ArrayList<Object []> result=new ArrayList<>();
 		    	for (Actuator act : Cache.Actuators.map.values()) {
-		    		result.add(new Object [] {act.getName(),act.getController().getControllername(),act.getStatus()});
+		    		result.add(act.toObj());
 		    	}
 		    	return result;
 		    }
@@ -354,11 +354,12 @@ public class GWTServer {
 		    	return result;
 		    }
 		    case "45" : { //ActuatorSetStatus;
-		    	Actuator act=Cache.Actuators.map.get(list.get(1));
+		    	Actuator act=Cache.Actuators.map.getOrDefault(list.get(1),null);
 		    	if (act!=null) {
 		    		ControllerPacketActuatorTrigger p=new ControllerPacketActuatorTrigger(act.getController().getControllername(),act.getName(),(String)list.get(2));
-		    		p.trigger();
-		    		return "OK";
+		    		p.run();
+		    		if (act.getStatus().equals(list.get(2))) return "OK";
+		    		else return "FAIL";
 		    	} else {
 		    		return "ACTUATOR_NOT_EXIST";
 		    	}
