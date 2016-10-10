@@ -41,5 +41,5 @@ Current Working Stuffs :
 + Efficient local data caching
 + Notification server
 
-v1.1 To-Do-List :
-+ Improves controller communication stability (Requires stress testing)
+v1.2 To-Do-List :
++ Adds Sensor Actuator Response Automation

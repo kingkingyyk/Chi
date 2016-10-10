@@ -29,7 +29,7 @@ public class FrameRegularScheduleManagementContextMenu extends JPopupMenu {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Regularschedule r=m.getSelectedSchedule();
-				DialogRegularScheduleAddEdit diag=new DialogRegularScheduleAddEdit(r.getSchedulename(),r.getActuator().getName(),r.getDaymask(),r.getDayschedulerule().getRulename(),r.getActuatoron(),r.getPriority(),r.getEnabled());
+				DialogRegularScheduleAddEdit diag=new DialogRegularScheduleAddEdit(r.getSchedulename(),r.getActuator().getName(),r.getDaymask(),r.getDayschedulerule().getRulename(),r.getOnstartaction(),r.getOnendaction(),r.getLockmanual(),r.getPriority(),r.getEnabled());
 				diag.setVisible(true);
 			}
 		});

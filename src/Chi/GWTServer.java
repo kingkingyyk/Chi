@@ -125,7 +125,7 @@ public class GWTServer {
 		    	Regularschedule r=Cache.RegularSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
-		    		boolean flag=DatabaseRegularSchedule.updateRegularSchedule(r.getSchedulename(),(String)list.get(2),r.getActuator().getName(),r.getDaymask(),r.getDayschedulerule().getRulename(),r.getActuatoron(),r.getPriority(),r.getEnabled());
+		    		boolean flag=DatabaseRegularSchedule.updateRegularSchedule(r.getSchedulename(),(String)list.get(2),r.getActuator().getName(),r.getDaymask(),r.getDayschedulerule().getRulename(),r.getOnstartaction(),r.getOnendaction(),r.getLockmanual(),r.getPriority(),r.getEnabled());
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
@@ -134,7 +134,7 @@ public class GWTServer {
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else if (!Cache.Actuators.map.containsKey(list.get(2))) return "ACTUATOR_NOT_EXIST";
 		    	else {
-		    		boolean flag=DatabaseRegularSchedule.updateRegularSchedule(r.getSchedulename(),r.getSchedulename(),Cache.Actuators.map.get(list.get(2)).getName(),r.getDaymask(),r.getDayschedulerule().getRulename(),r.getActuatoron(),r.getPriority(),r.getEnabled());
+		    		boolean flag=DatabaseRegularSchedule.updateRegularSchedule(r.getSchedulename(),r.getSchedulename(),Cache.Actuators.map.get(list.get(2)).getName(),r.getDaymask(),r.getDayschedulerule().getRulename(),r.getOnstartaction(),r.getOnendaction(),r.getLockmanual(),r.getPriority(),r.getEnabled());
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
@@ -143,7 +143,7 @@ public class GWTServer {
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else if ((int)list.get(2)>=128) return "INVALID_DAY";
 		    	else {
-		    		boolean flag=DatabaseRegularSchedule.updateRegularSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),(int)list.get(2),r.getDayschedulerule().getRulename(),r.getActuatoron(),r.getPriority(),r.getEnabled());
+		    		boolean flag=DatabaseRegularSchedule.updateRegularSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),(int)list.get(2),r.getDayschedulerule().getRulename(),r.getOnstartaction(),r.getOnendaction(),r.getLockmanual(),r.getPriority(),r.getEnabled());
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
@@ -152,15 +152,31 @@ public class GWTServer {
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else if (!Cache.DayScheduleRules.map.containsKey(list.get(2))) return "RULE_NOT_EXIST";
 		    	else {
-		    		boolean flag=DatabaseRegularSchedule.updateRegularSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getDaymask(),Cache.DayScheduleRules.map.get(list.get(2)).getRulename(),r.getActuatoron(),r.getPriority(),r.getEnabled());
+		    		boolean flag=DatabaseRegularSchedule.updateRegularSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getDaymask(),Cache.DayScheduleRules.map.get(list.get(2)).getRulename(),r.getOnstartaction(),r.getOnendaction(),r.getLockmanual(),r.getPriority(),r.getEnabled());
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
-		    case "19" : { //RegularScheduleActuatorOn
+		    case "19a" : { //RegularScheduleSetOnStartAction
 		    	Regularschedule r=Cache.RegularSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
-		    		boolean flag=DatabaseRegularSchedule.updateRegularSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getDaymask(),r.getDayschedulerule().getRulename(),(boolean)list.get(2),r.getPriority(),r.getEnabled());
+		    		boolean flag=DatabaseRegularSchedule.updateRegularSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getDaymask(),r.getDayschedulerule().getRulename(),(String)list.get(2),r.getOnendaction(),r.getLockmanual(),r.getPriority(),r.getEnabled());
+		    		if (flag) return "OK"; else return "ERROR";
+		    	}
+		    }
+		    case "19b" : { //RegularScheduleSetOnStartAction
+		    	Regularschedule r=Cache.RegularSchedules.map.get(list.get(1));
+		    	if (r==null) return "SCHEDULE_NOT_EXIST";
+		    	else {
+		    		boolean flag=DatabaseRegularSchedule.updateRegularSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getDaymask(),r.getDayschedulerule().getRulename(),r.getOnstartaction(),(String)list.get(2),r.getLockmanual(),r.getPriority(),r.getEnabled());
+		    		if (flag) return "OK"; else return "ERROR";
+		    	}
+		    }
+		    case "19c" : { //RegularScheduleSetOnStartAction
+		    	Regularschedule r=Cache.RegularSchedules.map.get(list.get(1));
+		    	if (r==null) return "SCHEDULE_NOT_EXIST";
+		    	else {
+		    		boolean flag=DatabaseRegularSchedule.updateRegularSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getDaymask(),r.getDayschedulerule().getRulename(),r.getOnstartaction(),r.getOnendaction(),(boolean)list.get(2),r.getPriority(),r.getEnabled());
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
@@ -168,7 +184,7 @@ public class GWTServer {
 		    	Regularschedule r=Cache.RegularSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
-		    		boolean flag=DatabaseRegularSchedule.updateRegularSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getDaymask(),r.getDayschedulerule().getRulename(),r.getActuatoron(),(int)list.get(2),r.getEnabled());
+		    		boolean flag=DatabaseRegularSchedule.updateRegularSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getDaymask(),r.getDayschedulerule().getRulename(),r.getOnendaction(),r.getOnendaction(),r.getLockmanual(),(int)list.get(2),r.getEnabled());
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
@@ -176,7 +192,7 @@ public class GWTServer {
 		    	Regularschedule r=Cache.RegularSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
-		    		boolean flag=DatabaseRegularSchedule.updateRegularSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getDaymask(),r.getDayschedulerule().getRulename(),r.getActuatoron(),r.getPriority(),(boolean)(list.get(2)));
+		    		boolean flag=DatabaseRegularSchedule.updateRegularSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getDaymask(),r.getDayschedulerule().getRulename(),r.getOnstartaction(),r.getOnendaction(),r.getLockmanual(),r.getPriority(),(boolean)(list.get(2)));
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
@@ -189,7 +205,8 @@ public class GWTServer {
 		    	else {
 		    		boolean flag=DatabaseRegularSchedule.createRegularSchedule( (String)list.get(1),Cache.Actuators.map.get(list.get(2)).getName(),
 		    																	(int)list.get(3), Cache.DayScheduleRules.map.get(list.get(4)).getRulename(),
-		    																	(boolean)list.get(5), (int)list.get(6), (boolean)list.get(7));
+		    																	(String)list.get(5), (String)list.get(6), (boolean)list.get(7),
+		    																	(int)list.get(8), (boolean)list.get(9));
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
@@ -211,7 +228,7 @@ public class GWTServer {
 		    	Specialschedule r=Cache.SpecialSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
-		    		boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule(r.getSchedulename(),(String)list.get(2),r.getActuator().getName(),r.getYear(),r.getMonth(),r.getDay(),r.getDayschedulerule().getRulename(),r.getActuatoron(),r.getPriority(),r.getEnabled());
+		    		boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule(r.getSchedulename(),(String)list.get(2),r.getActuator().getName(),r.getYear(),r.getMonth(),r.getDay(),r.getDayschedulerule().getRulename(),r.getOnstartaction(),r.getOnendaction(),r.getLockmanual(),r.getPriority(),r.getEnabled());
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
@@ -220,15 +237,15 @@ public class GWTServer {
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else if (!Cache.Actuators.map.containsKey(list.get(2))) return "ACTUATOR_NOT_EXIST";
 		    	else {
-		    		boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule(r.getSchedulename(),r.getSchedulename(),Cache.Actuators.map.get(list.get(2)).getName(),r.getYear(),r.getMonth(),r.getDay(),r.getDayschedulerule().getRulename(),r.getActuatoron(),r.getPriority(),r.getEnabled());
+		    		boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule(r.getSchedulename(),r.getSchedulename(),Cache.Actuators.map.get(list.get(2)).getName(),r.getYear(),r.getMonth(),r.getDay(),r.getDayschedulerule().getRulename(),r.getOnstartaction(),r.getOnendaction(),r.getLockmanual(),r.getPriority(),r.getEnabled());
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
-		    case "27" : { //SpecialScheduleUpdateDay
+		    case "27a" : { //SpecialScheduleUpdateDay
 		    	Specialschedule r=Cache.SpecialSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
-		    		boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),(int)(list.get(2)),(int)(list.get(3)),(int)(list.get(4)),r.getDayschedulerule().getRulename(),r.getActuatoron(),r.getPriority(),r.getEnabled());
+		    		boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),(int)(list.get(2)),(int)(list.get(3)),(int)(list.get(4)),r.getDayschedulerule().getRulename(),r.getOnstartaction(),r.getOnendaction(),r.getLockmanual(),r.getPriority(),r.getEnabled());
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
@@ -237,15 +254,31 @@ public class GWTServer {
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else if (!Cache.DayScheduleRules.map.containsKey(list.get(2))) return "RULE_NOT_EXIST";
 		    	else {
-		    		boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getYear(),r.getMonth(),r.getDay(),Cache.DayScheduleRules.map.get(list.get(2)).getRulename(),r.getActuatoron(),r.getPriority(),r.getEnabled());
+		    		boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getYear(),r.getMonth(),r.getDay(),Cache.DayScheduleRules.map.get(list.get(2)).getRulename(),r.getOnstartaction(),r.getOnendaction(),r.getLockmanual(),r.getPriority(),r.getEnabled());
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
-		    case "29" : { //SpecialScheduleActuatorOn
+		    case "29a" : { //SpecialScheduleStartAction
 		    	Specialschedule r=Cache.SpecialSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
-		    		boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getYear(),r.getMonth(),r.getDay(),r.getDayschedulerule().getRulename(),(boolean)(list.get(2)),r.getPriority(),r.getEnabled());
+		    		boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getYear(),r.getMonth(),r.getDay(),r.getDayschedulerule().getRulename(),(String)(list.get(2)),r.getOnendaction(),r.getLockmanual(),r.getPriority(),r.getEnabled());
+		    		if (flag) return "OK"; else return "ERROR";
+		    	}
+		    }
+		    case "29b" : { //SpecialScheduleEndAction
+		    	Specialschedule r=Cache.SpecialSchedules.map.get(list.get(1));
+		    	if (r==null) return "SCHEDULE_NOT_EXIST";
+		    	else {
+		    		boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getYear(),r.getMonth(),r.getDay(),r.getDayschedulerule().getRulename(),r.getOnstartaction(),(String)(list.get(2)),r.getLockmanual(),r.getPriority(),r.getEnabled());
+		    		if (flag) return "OK"; else return "ERROR";
+		    	}
+		    }
+		    case "29c" : { //SpecialScheduleLock
+		    	Specialschedule r=Cache.SpecialSchedules.map.get(list.get(1));
+		    	if (r==null) return "SCHEDULE_NOT_EXIST";
+		    	else {
+		    		boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getYear(),r.getMonth(),r.getDay(),r.getDayschedulerule().getRulename(),r.getOnstartaction(),r.getOnendaction(),(boolean)(list.get(2)),r.getPriority(),r.getEnabled());
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
@@ -253,7 +286,7 @@ public class GWTServer {
 		    	Specialschedule r=Cache.SpecialSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
-		    		boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getYear(),r.getMonth(),r.getDay(),r.getDayschedulerule().getRulename(),r.getActuatoron(),(int)(list.get(2)),r.getEnabled());
+		    		boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getYear(),r.getMonth(),r.getDay(),r.getDayschedulerule().getRulename(),r.getOnstartaction(),r.getOnendaction(),r.getLockmanual(),(int)(list.get(2)),r.getEnabled());
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
@@ -261,7 +294,7 @@ public class GWTServer {
 		    	Specialschedule r=Cache.SpecialSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
-		    		boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getYear(),r.getMonth(),r.getDay(),r.getDayschedulerule().getRulename(),(boolean)(list.get(2)),r.getPriority(),(boolean)(list.get(2)));
+		    		boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule(r.getSchedulename(),r.getSchedulename(),r.getActuator().getName(),r.getYear(),r.getMonth(),r.getDay(),r.getDayschedulerule().getRulename(),r.getOnstartaction(),r.getOnendaction(),r.getLockmanual(),r.getPriority(),(boolean)(list.get(2)));
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
@@ -274,7 +307,8 @@ public class GWTServer {
 		    		boolean flag=DatabaseSpecialSchedule.createSpecialSchedule( (String)list.get(1),Cache.Actuators.map.get(list.get(2)).getName(),
 		    																	(int)list.get(3), (int)list.get(4), (int)list.get(5), 
 		    																	Cache.DayScheduleRules.map.get(list.get(6)).getRulename(),
-		    																	(boolean)list.get(7), (int)list.get(8), (boolean)(list.get(9)));
+		    																	(String)list.get(7),(String)list.get(8),(boolean)list.get(9),
+		    																	(int)list.get(10), (boolean)(list.get(11)));
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
@@ -284,7 +318,7 @@ public class GWTServer {
 		    case "34" : { //OngoingScheduleGetAll
 		    	ArrayList<Object []> result=new ArrayList<>();
 		    	for (SchedulingData d : SchedulingServer.getSchedulingThread().data.values()) {
-		    		result.add(new Object [] {d.getName(),d.getActuatorName(),d.getActuatorFlag(),d.getPriority(),d.getNextStartTime(),d.getNextEndTime()});
+		    		result.add(new Object [] {d.getName(),d.getActuatorName(),d.getStartAction(),d.getEndAction(),d.getLock(),d.getPriority(),d.getNextStartTime(),d.getNextEndTime()});
 		    	}
 		    	return result;
 		    }
@@ -292,7 +326,7 @@ public class GWTServer {
 		    	ArrayList<Object []> result=new ArrayList<>();
 		    	for (SchedulingData d : SchedulingServer.getSchedulingThread().data.values())
 		    		if (d.getActuatorName().equals(list.get(1)))
-		    			result.add(new Object [] {d.getName(),d.getActuatorName(),d.getActuatorFlag(),d.getPriority(),d.getNextStartTime(),d.getNextEndTime()});
+		    			result.add(new Object [] {d.getName(),d.getActuatorName(),d.getStartAction(),d.getEndAction(),d.getLock(),d.getPriority(),d.getNextStartTime(),d.getNextEndTime()});
 		    	return result;
 		    }
 		    case "36" : { //SensorGetByName

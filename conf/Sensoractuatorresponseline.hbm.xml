@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Oct 10, 2016 8:50:49 PM by Hibernate Tools 5.2.0.Beta1 -->
+<hibernate-mapping>
+    <class name="Chi.Sensoractuatorresponseline" table="SENSORACTUATORRESPONSELINE" schema="PUBLIC" catalog="PUBLIC" optimistic-lock="version">
+        <composite-id name="id" class="Chi.SensoractuatorresponselineId">
+            <key-property name="id" type="int">
+                <column name="ID" />
+            </key-property>
+            <key-property name="sensorname" type="string">
+                <column name="SENSORNAME" length="100" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="sensor" class="Chi.Sensor" update="false" insert="false" fetch="select">
+            <column name="SENSORNAME" length="100" not-null="true" />
+        </many-to-one>
+        <many-to-one name="sensoractuatorresponse" class="Chi.Sensoractuatorresponse" update="false" insert="false" fetch="select">
+            <column name="ID" not-null="true" />
+        </many-to-one>
+        <property name="triggervalue" type="string">
+            <column name="TRIGGERVALUE" length="100" />
+        </property>
+        <property name="triggerequality" type="string">
+            <column name="TRIGGEREQUALITY" length="2" />
+        </property>
+    </class>
+</hibernate-mapping>

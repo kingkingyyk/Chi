@@ -29,7 +29,7 @@ public class FrameSpecialScheduleManagementContextMenu extends JPopupMenu {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Specialschedule s=m.getSelectedSchedule();
-				DialogSpecialScheduleAddEdit diag=new DialogSpecialScheduleAddEdit(s.getSchedulename(),s.getActuator().getName(),s.getYear(),s.getMonth(),s.getDay(),s.getDayschedulerule().getRulename(),s.getActuatoron(),s.getPriority(),s.getEnabled());
+				DialogSpecialScheduleAddEdit diag=new DialogSpecialScheduleAddEdit(s.getSchedulename(),s.getActuator().getName(),s.getYear(),s.getMonth(),s.getDay(),s.getDayschedulerule().getRulename(),s.getOnstartaction(),s.getOnendaction(),s.getLockmanual(),s.getPriority(),s.getEnabled());
 				diag.setVisible(true);
 			}
 		});

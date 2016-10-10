@@ -34,7 +34,7 @@ public class FrameOngoingSchedules extends JFrame {
 		public boolean isCellEditable(int row, int column){ return false;  }
 		
 		@SuppressWarnings("rawtypes")
-		private Class [] colClass={String.class,String.class,String.class,Boolean.class,Integer.class,LocalDateTime.class,LocalDateTime.class};
+		private Class [] colClass={String.class,String.class,String.class,String.class,String.class,Boolean.class,Integer.class,LocalDateTime.class,LocalDateTime.class};
 	    @Override
 	    public Class<?> getColumnClass(int colNum) {
 	    	return colClass[colNum];
@@ -43,7 +43,7 @@ public class FrameOngoingSchedules extends JFrame {
 	}
 	
 	private static class OnGoingSchedulesTableModel extends AbstractTreeTableModel {
-		public static final String [] COLUMNS= {"Name","Type","Actuator","Switch","Priority","Start At","End At"};
+		public static final String [] COLUMNS= {"Name","Type","Actuator","OnStart","OnEnd","Lock","Priority","Start At","End At"};
 		
 		public OnGoingSchedulesTableModel (OnGoingSchedulesTableRow r) {
 			super(r);
@@ -89,15 +89,16 @@ public class FrameOngoingSchedules extends JFrame {
 		
 		public OnGoingSchedulesTableRow(SchedulingData d) {
 			if (d!=null) {
-				renderText=new String[7];
+				renderText=new String[9];
 				renderText[0]=d.getName();
 				renderText[1]="";
 				renderText[2]=d.getActuatorName();
-				if (d.getActuatorFlag()) renderText[3]="ON";
-				else renderText[3]="OFF";
-				renderText[4]=String.valueOf(d.getPriority());
-				renderText[5]=dt.format(d.getNextStartTime());
-				renderText[6]=dt.format(d.getNextEndTime());
+				renderText[3]=d.getStartAction();
+				renderText[4]=d.getEndAction();
+				renderText[5]=String.valueOf(d.getLock());
+				renderText[6]=String.valueOf(d.getPriority());
+				renderText[7]=dt.format(d.getNextStartTime());
+				renderText[8]=dt.format(d.getNextEndTime());
 				
 				this.data=d;
 			} else {
@@ -275,14 +276,18 @@ public class FrameOngoingSchedules extends JFrame {
 			table.getColumn(4).setCellRenderer(new OnGoingSchedulesTableCellRenderer());
 			table.getColumn(5).setCellRenderer(new OnGoingSchedulesTableCellRenderer());
 			table.getColumn(6).setCellRenderer(new OnGoingSchedulesTableCellRenderer());
+			table.getColumn(7).setCellRenderer(new OnGoingSchedulesTableCellRenderer());
+			table.getColumn(8).setCellRenderer(new OnGoingSchedulesTableCellRenderer());
 			
 			table.getColumnModel().getColumn(0).setPreferredWidth(133);
 			table.getColumnModel().getColumn(1).setPreferredWidth(20);
 			table.getColumnModel().getColumn(2).setPreferredWidth(67);
 			table.getColumnModel().getColumn(3).setPreferredWidth(30);
 			table.getColumnModel().getColumn(4).setPreferredWidth(30);
-			table.getColumnModel().getColumn(5).setPreferredWidth(133);
-			table.getColumnModel().getColumn(6).setPreferredWidth(133);
+			table.getColumnModel().getColumn(5).setPreferredWidth(30);
+			table.getColumnModel().getColumn(6).setPreferredWidth(30);
+			table.getColumnModel().getColumn(7).setPreferredWidth(133);
+			table.getColumnModel().getColumn(8).setPreferredWidth(133);
 		}
 	}
 	

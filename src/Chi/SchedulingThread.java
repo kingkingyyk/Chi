@@ -45,8 +45,8 @@ public class SchedulingThread extends Thread {
 	
 	public class OnRegularScheduleCreate implements DatabaseRegularSchedule.OnCreateAction {
 		@Override
-		public void run(String sn, String an, int day, String rn, boolean ao, int pr, boolean en) {
-			SchedulingData d=new SchedulingDataRegular(sn,an,day,rn,ao,pr,en);
+		public void run(String sn, String an, int day, String rn, String start, String end, boolean lock, int pr, boolean en) {
+			SchedulingData d=new SchedulingDataRegular(sn,an,day,rn,start,end,lock,pr,en);
 			if (en && day!=0) {
 				data.put(sn,d);
 				FrameOngoingSchedules.refresh();
@@ -56,10 +56,10 @@ public class SchedulingThread extends Thread {
 	
 	public class OnRegularScheduleUpdate implements DatabaseRegularSchedule.OnUpdateAction {
 		@Override
-		public void run(String oldSN, String sn, String an, int day, String rn, boolean ao, int pr, boolean en) {
+		public void run(String oldSN, String sn, String an, int day, String rn, String start, String end, boolean lock, int pr, boolean en) {
 			SchedulingDataRegular d=(SchedulingDataRegular)data.get(oldSN);
 			if (d==null) {
-				d=new SchedulingDataRegular(sn,an,day,rn,ao,pr,en);
+				d=new SchedulingDataRegular(sn,an,day,rn,start,end,lock,pr,en);
 				if (d.enabled && day!=0) {
 					data.put(sn,d);
 					FrameOngoingSchedules.refresh();
@@ -73,7 +73,9 @@ public class SchedulingThread extends Thread {
 				d.setActuatorName(an);
 				d.setDay(day);
 				d.setTimeRule(rn);
-				d.setActuatorFlag(ao);
+				d.setStartAction(start);
+				d.setEndAction(end);
+				d.setLock(lock);
 				if (d.isEnabled()!=en) {
 					d.setEnabled(en);
 				}
@@ -107,10 +109,10 @@ public class SchedulingThread extends Thread {
 			}
 			
 			if (!hasConflict) {
-				Logger.log("RegularSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.actuatorFlag+". [SET]");
-				TriggerActuator(Cache.Actuators.map.get(dat.actuatorName).getController().getControllername(),this.dat.actuatorName,this.dat.actuatorFlag);
+				Logger.log("RegularSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getStartAction()+". [SET]");
+				TriggerActuator(Cache.Actuators.map.get(dat.actuatorName).getController().getControllername(),this.dat.actuatorName,this.dat.getStartAction());
 			} else {
-				Logger.log("RegularSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.actuatorFlag+". [NOT SET DUE TO LOW PRIORITY]");
+				Logger.log("RegularSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getStartAction()+". [NOT SET DUE TO LOW PRIORITY]");
 			}
 		}
 	}
@@ -118,7 +120,21 @@ public class SchedulingThread extends Thread {
 	public class OnRegularScheduleEnd extends ScheduleOnEndAction {
 		@Override
 		public void run() {
-			Logger.log("RegularSchedule ("+this.dat.name+") : Ended");
+			boolean hasConflict=false;
+			for (SchedulingData d : data.values()) {
+				if (d.getActuatorName().equals(dat.getActuatorName()) && d.getNextEndTime().compareTo(dat.getNextStartTime())>0 && d.getPriority()>dat.getPriority()) {
+					hasConflict=true;
+					break;
+				}
+			}
+			
+			if (!hasConflict) {
+				Logger.log("RegularSchedule ("+this.dat.name+") : Ended -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getEndAction()+". [SET]");
+				TriggerActuator(Cache.Actuators.map.get(dat.actuatorName).getController().getControllername(),this.dat.actuatorName,this.dat.getEndAction());
+			} else {
+				Logger.log("RegularSchedule ("+this.dat.name+") : Ended -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getEndAction()+". [NOT SET DUE TO LOW PRIORITY]");
+			}
+			
 			FrameOngoingSchedules.refresh();
 		}
 	}
@@ -126,8 +142,8 @@ public class SchedulingThread extends Thread {
 	
 	public class OnSpecialScheduleCreate implements DatabaseSpecialSchedule.OnCreateAction {
 		@Override
-		public void run(String sn, String an, int year, int month, int day, String rn, boolean ao, int pr, boolean en) {
-			SchedulingData d=new SchedulingDataSpecial(sn,an,year,month,day,rn,ao,pr,en);
+		public void run(String sn, String an, int year, int month, int day, String rn, String startAct, String endAct, boolean lock, int pr, boolean en) {
+			SchedulingData d=new SchedulingDataSpecial(sn,an,year,month,day,rn,startAct,endAct,lock,pr,en);
 			if (d.getNextEndTime().compareTo(LocalDateTime.now())>0 && en) {
 				data.put(sn,d);
 				FrameOngoingSchedules.refresh();
@@ -137,10 +153,10 @@ public class SchedulingThread extends Thread {
 	
 	public class OnSpecialScheduleUpdate implements DatabaseSpecialSchedule.OnUpdateAction {
 		@Override
-		public void run(String oldSN, String sn, String an, int year, int month, int day, String rn, boolean ao, int pr, boolean en) {
+		public void run(String oldSN, String sn, String an, int year, int month, int day, String rn, String startAct, String endAct, boolean lock, int pr, boolean en) {
 			SchedulingDataSpecial d=(SchedulingDataSpecial)data.getOrDefault(oldSN,null);
 			if (d==null) {
-				d=new SchedulingDataSpecial(sn,an,year,month,day,rn,ao,pr,en);
+				d=new SchedulingDataSpecial(sn,an,year,month,day,rn,startAct,endAct,lock,pr,en);
 				if (d.getNextEndTime().compareTo(LocalDateTime.now())>0 && d.enabled && day!=0) {
 					data.put(sn,d);
 					FrameOngoingSchedules.refresh();
@@ -159,7 +175,9 @@ public class SchedulingThread extends Thread {
 					d.setActuatorName(an);
 	
 					d.setTimeRule(rn);
-					d.setActuatorFlag(ao);
+					d.setStartAction(startAct);
+					d.setEndAction(endAct);
+					d.setLock(lock);
 					if (d.isEnabled()!=en) {
 						d.setEnabled(en);
 						if (en) data.put(sn,d);
@@ -194,10 +212,10 @@ public class SchedulingThread extends Thread {
 			}
 			
 			if (!hasConflict) {
-				Logger.log("SpecialSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.actuatorFlag+". [SET]");
-				TriggerActuator(Cache.Actuators.map.get(dat.actuatorName).getController().getControllername(),this.dat.actuatorName,this.dat.actuatorFlag);
+				Logger.log("SpecialSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getStartAction()+". [SET]");
+				TriggerActuator(Cache.Actuators.map.get(dat.actuatorName).getController().getControllername(),this.dat.actuatorName,this.dat.getStartAction());
 			} else {
-				Logger.log("SpecialSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.actuatorFlag+". [NOT SET DUE TO LOW PRIORITY]");
+				Logger.log("SpecialSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getStartAction()+". [NOT SET DUE TO LOW PRIORITY]");
 			}
 		}
 	}
@@ -205,15 +223,26 @@ public class SchedulingThread extends Thread {
 	public class OnSpecialScheduleEnd extends ScheduleOnEndAction {
 		@Override
 		public void run() {
-			Logger.log("SpecialSchedule ("+this.dat.name+") : Ended");
+			boolean hasConflict=false;
+			for (SchedulingData d : data.values()) {
+				if (d instanceof SchedulingDataSpecial && d.getActuatorName().equals(dat.getActuatorName()) && d.getNextEndTime().compareTo(dat.getNextStartTime())>0 && d.getPriority()>dat.getPriority()) {
+					hasConflict=true;
+					break;
+				}
+			}
+			
+			if (!hasConflict) {
+				Logger.log("SpecialSchedule ("+this.dat.name+") : Ended -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getEndAction()+". [SET]");
+				TriggerActuator(Cache.Actuators.map.get(dat.actuatorName).getController().getControllername(),this.dat.actuatorName,this.dat.getEndAction());
+			} else {
+				Logger.log("SpecialSchedule ("+this.dat.name+") : Ended -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getEndAction()+". [NOT SET DUE TO LOW PRIORITY]");
+			}
+			
 			FrameOngoingSchedules.refresh();
 		}
 	}
 	
-	private static void TriggerActuator (String cn, String sn, boolean flag) {
-		String status;
-		if (flag) status="ON";
-		else status="OFF";
+	private static void TriggerActuator (String cn, String sn, String status) {
 		ControllerPacketActuatorTrigger trig=new ControllerPacketActuatorTrigger(cn,sn,status);
 		trig.trigger();
 	}
@@ -241,7 +270,7 @@ public class SchedulingThread extends Thread {
 		for (Specialschedule s : Cache.SpecialSchedules.map.values()) {
 			SchedulingDataSpecial d=new SchedulingDataSpecial(	s.getSchedulename(),s.getActuator().getName(),
 																s.getYear(), s.getMonth(), s.getDay(), s.getDayschedulerule().getRulename(),
-																s.getActuatoron(),s.getPriority(),s.getEnabled() );
+																s.getOnstartaction(),s.getOnendaction(),s.getLockmanual(),s.getPriority(),s.getEnabled() );
 			if (d.getNextEndTime().compareTo(LocalDateTime.now())>0 && d.isEnabled()) {
 				d.registerOnStartFunc(osss);
 				d.registerOnEndFunc(osse);
@@ -260,7 +289,8 @@ public class SchedulingThread extends Thread {
 		
 		for (Regularschedule r : Cache.RegularSchedules.map.values()) {
 			SchedulingDataRegular d=new SchedulingDataRegular(	r.getSchedulename(), r.getActuator().getName(), r.getDaymask(),
-																r.getDayschedulerule().getRulename(), r.getActuatoron(), r.getPriority(),
+																r.getDayschedulerule().getRulename(), r.getOnstartaction(),
+																r.getOnendaction(), r.getLockmanual(), r.getPriority(),
 																r.getEnabled());
 			if (d.getNextEndTime().compareTo(LocalDateTime.now())>0 && d.isEnabled() && d.getDay()!=0) {
 				d.registerOnStartFunc(orss);

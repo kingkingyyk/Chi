@@ -107,6 +107,10 @@ public class Cache {
 		}
 	}
 	
+	public static void Stop() {
+		if (factory!=null) factory.close();
+	}
+	
 	private static abstract class Data<T> {
 		public ConcurrentHashMap<String,T> map=new ConcurrentHashMap<>();
 		public String getType() {return "data";}

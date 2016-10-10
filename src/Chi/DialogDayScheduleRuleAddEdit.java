@@ -20,7 +20,6 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textFieldName;
 	private JLabel lblNameInfo;
-	private JLabel lblTimeInfo;
 	private JButton okButton;
 	private JButton cancelButton;
 	private JComboBox<String> comboBoxStartHour;
@@ -64,25 +63,12 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 		return t;
 	}
 	
-	private boolean validateTime() {
-		int [][] t=getTime();
-		return (t[0][0]<t[1][0]) || (t[0][0]==t[1][0] && t[0][1]<t[1][1]);
-	}
-	
-	private void comboBoxCheckTime () {
-		if (validateTime()) {
-			lblTimeInfo.setText("<html><font color=\"green\">OK!</font></html>");
-		} else {
-			lblTimeInfo.setText("<html><font color=\"red\">End time must be later than start time!</font></html>");
-		}
-	}
-	
 	private void create() {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setModal(true);
 		setResizable(false);
 		setIconImage(Theme.getIcon("ChiLogo").getImage());
-		setBounds(100, 100, 439, 175);
+		setBounds(100, 100, 322, 175);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(null);
 		contentPanel.setBounds(0, 11, 433, 102);
@@ -125,72 +111,32 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 		lblEndTimeSep.setBounds(152, 74, 11, 14);
 		contentPanel.add(lblEndTimeSep);
 		
-		lblTimeInfo = new JLabel("");
-		lblTimeInfo.setBounds(292, 36, 131, 52);
-		contentPanel.add(lblTimeInfo);
-		
 		comboBoxStartHour = new JComboBox<>();
 		comboBoxStartHour.setBounds(86, 40, 56, 20);
-		comboBoxStartHour.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				comboBoxCheckTime();
-			}
-		});
 		contentPanel.add(comboBoxStartHour);
 		
 		comboBoxEndHour = new JComboBox<>();
 		comboBoxEndHour.setBounds(86, 71, 56, 20);
-		comboBoxEndHour.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				comboBoxCheckTime();
-			}
-		});
 		contentPanel.add(comboBoxEndHour);
 		
 		comboBoxStartMinute = new JComboBox<>();
 		comboBoxStartMinute.setBounds(162, 39, 56, 20);
-		comboBoxStartMinute.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				comboBoxCheckTime();
-			}
-		});
 		contentPanel.add(comboBoxStartMinute);
 		
 		comboBoxEndMinute = new JComboBox<>();
 		comboBoxEndMinute.setBounds(162, 71, 56, 20);
-		comboBoxEndMinute.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				comboBoxCheckTime();
-			}
-		});
 		contentPanel.add(comboBoxEndMinute);
 		
 		comboBoxStartTimeAMPM = new JComboBox<>();
 		comboBoxStartTimeAMPM.setBounds(227, 39, 56, 20);
-		comboBoxStartTimeAMPM.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				comboBoxCheckTime();
-			}
-		});
 		contentPanel.add(comboBoxStartTimeAMPM);
 		
 		comboBoxEndTimeAMPM = new JComboBox<>();
 		comboBoxEndTimeAMPM.setBounds(228, 71, 55, 20);
-		comboBoxEndTimeAMPM.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				comboBoxCheckTime();
-			}
-		});
 		contentPanel.add(comboBoxEndTimeAMPM);
 		{
 			JPanel buttonPane = new JPanel();
-			buttonPane.setBounds(0, 115, 433, 33);
+			buttonPane.setBounds(0, 115, 316, 33);
 			getContentPane().add(buttonPane);
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			{
@@ -261,7 +207,7 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || !lblTimeInfo.getText().contains("OK") || Cache.DayScheduleRules.map.containsKey(txt) || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+				if (txt==null || txt.isEmpty() || Cache.DayScheduleRules.map.containsKey(txt) || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Day Schedule Rule",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -310,7 +256,7 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || !lblTimeInfo.getText().contains("OK") || (Cache.DayScheduleRules.map.containsKey(txt) && !txt.equals(n)) || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+				if (txt==null || txt.isEmpty() || (Cache.DayScheduleRules.map.containsKey(txt) && !txt.equals(n)) || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Edit Day Schedule Rule",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

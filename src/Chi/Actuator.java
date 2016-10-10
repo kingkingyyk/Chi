@@ -12,8 +12,9 @@ public class Actuator implements java.io.Serializable {
 	private String status;
 	private Double positionx;
 	private Double positiony;
-	private Set<Regularschedule> regularschedules = new HashSet<Regularschedule>(0);
-	private Set<Specialschedule> specialschedules = new HashSet<Specialschedule>(0);
+	private Set<Sensoractuatorresponse> sensoractuatorresponses = new HashSet<>(0);
+	private Set<Specialschedule> specialschedules = new HashSet<>(0);
+	private Set<Regularschedule> regularschedules = new HashSet<>(0);
 
 	public Actuator() {
 	}
@@ -22,15 +23,16 @@ public class Actuator implements java.io.Serializable {
 		this.name = name;
 	}
 
-	public Actuator(String name, Controller controller, String status, double positionx, double positiony,
-			Set<Regularschedule> regularschedules,Set<Specialschedule> specialschedules) {
+	public Actuator(String name, Controller controller, String status, Double positionx, Double positiony,
+			Set<Sensoractuatorresponse> sensoractuatorresponses, Set<Specialschedule> specialschedules, Set<Regularschedule> regularschedules) {
 		this.name = name;
 		this.controller = controller;
 		this.status = status;
 		this.positionx = positionx;
 		this.positiony = positiony;
-		this.regularschedules = regularschedules;
+		this.sensoractuatorresponses = sensoractuatorresponses;
 		this.specialschedules = specialschedules;
+		this.regularschedules = regularschedules;
 	}
 
 	public String getName() {
@@ -72,13 +74,13 @@ public class Actuator implements java.io.Serializable {
 	public void setPositiony(Double positiony) {
 		this.positiony = positiony;
 	}
-	
-	public Set<Regularschedule> getRegularschedules() {
-		return this.regularschedules;
+
+	public Set<Sensoractuatorresponse> getSensoractuatorresponses() {
+		return this.sensoractuatorresponses;
 	}
 
-	public void setRegularschedules(Set<Regularschedule> regularschedules) {
-		this.regularschedules = regularschedules;
+	public void setSensoractuatorresponses(Set<Sensoractuatorresponse> sensoractuatorresponses) {
+		this.sensoractuatorresponses = sensoractuatorresponses;
 	}
 
 	public Set<Specialschedule> getSpecialschedules() {
@@ -89,6 +91,13 @@ public class Actuator implements java.io.Serializable {
 		this.specialschedules = specialschedules;
 	}
 
+	public Set<Regularschedule> getRegularschedules() {
+		return this.regularschedules;
+	}
+
+	public void setRegularschedules(Set<Regularschedule> regularschedules) {
+		this.regularschedules = regularschedules;
+	}
 	public Object [] toObj () {
 		return new Object [] {this.getName(), this.getController().getControllername(), this.getStatus(),this.positionx,this.positiony};
 	}

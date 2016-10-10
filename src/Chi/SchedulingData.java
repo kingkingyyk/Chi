@@ -9,7 +9,9 @@ public abstract class SchedulingData implements Comparable<SchedulingData> {
 	protected String name;
 	protected String actuatorName;
 	protected String rule;
-	protected boolean actuatorFlag;
+	protected String onStartAction;
+	protected String onEndAction;
+	protected boolean lock;
 	protected int priority;
 	protected boolean enabled;
 	protected LocalDateTime nextStartTime;
@@ -54,11 +56,13 @@ public abstract class SchedulingData implements Comparable<SchedulingData> {
 		public void execute() {};
 	}
 	
-	public SchedulingData (String sn, String an, String rn, boolean af, int pr, boolean en, int cp) {
+	public SchedulingData (String sn, String an, String rn, String startAct, String endAct, boolean lock, int pr, boolean en, int cp) {
 		this.name=sn;
 		this.actuatorName=an;
 		this.rule=rn;
-		this.actuatorFlag=af;
+		this.onStartAction=startAct;
+		this.onEndAction=endAct;
+		this.lock=lock;
 		this.priority=pr;
 		this.enabled=en;
 		this.onStartScheduler=new Timer();
@@ -70,7 +74,9 @@ public abstract class SchedulingData implements Comparable<SchedulingData> {
 	
 	public void setName (String n) {this.name=n;}
 	public void setActuatorName(String an) {this.actuatorName=an;}
-	public void setActuatorFlag(boolean f) {this.actuatorFlag=f;}
+	public void setStartAction(String s) {this.onStartAction=s;}
+	public void setEndAction(String s) {this.onEndAction=s;}
+	public void setLock(boolean flag) {this.lock=flag;}
 	
 	protected void updateScheduler(boolean updateScheduler) {
 	}
@@ -105,7 +111,9 @@ public abstract class SchedulingData implements Comparable<SchedulingData> {
 	public String getName(){ return this.name;}
 	public String getActuatorName() {return this.actuatorName;}
 	public String getTimeRule(){return this.rule; }
-	public boolean getActuatorFlag(){return this.actuatorFlag;}
+	public String getStartAction() {return this.onStartAction;}
+	public String getEndAction() {return this.onEndAction;}
+	public boolean getLock() {return this.lock;}
 	public int getPriority(){return this.priority;}
 	public boolean isEnabled(){return this.enabled;}
 	public LocalDateTime getNextStartTime(){return this.nextStartTime;}

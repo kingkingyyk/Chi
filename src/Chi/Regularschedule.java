@@ -7,7 +7,9 @@ public class Regularschedule implements java.io.Serializable {
 	private Actuator actuator;
 	private Dayschedulerule dayschedulerule;
 	private Integer daymask;
-	private Boolean actuatoron;
+	private String onstartaction;
+	private String onendaction;
+	private Boolean lockmanual;
 	private Integer priority;
 	private Boolean enabled;
 
@@ -19,12 +21,14 @@ public class Regularschedule implements java.io.Serializable {
 	}
 
 	public Regularschedule(String schedulename, Actuator actuator, Dayschedulerule dayschedulerule, Integer daymask,
-			Boolean actuatoron, Integer priority, Boolean enabled) {
+			String onstartaction, String onendaction, Boolean lockmanual, Integer priority, Boolean enabled) {
 		this.schedulename = schedulename;
 		this.actuator = actuator;
 		this.dayschedulerule = dayschedulerule;
 		this.daymask = daymask;
-		this.actuatoron = actuatoron;
+		this.onstartaction = onstartaction;
+		this.onendaction = onendaction;
+		this.lockmanual = lockmanual;
 		this.priority = priority;
 		this.enabled = enabled;
 	}
@@ -61,12 +65,29 @@ public class Regularschedule implements java.io.Serializable {
 		this.daymask = daymask;
 	}
 
-	public Boolean getActuatoron() {
-		return this.actuatoron;
+
+	public String getOnstartaction() {
+		return this.onstartaction;
 	}
 
-	public void setActuatoron(Boolean actuatoron) {
-		this.actuatoron = actuatoron;
+	public void setOnstartaction(String onstartaction) {
+		this.onstartaction = onstartaction;
+	}
+
+	public String getOnendaction() {
+		return this.onendaction;
+	}
+
+	public void setOnendaction(String onendaction) {
+		this.onendaction = onendaction;
+	}
+
+	public Boolean getLockmanual() {
+		return this.lockmanual;
+	}
+
+	public void setLockmanual(Boolean lockmanual) {
+		this.lockmanual = lockmanual;
 	}
 
 	public Integer getPriority() {
@@ -88,6 +109,7 @@ public class Regularschedule implements java.io.Serializable {
 	public Object [] toObj () {
 		return new Object [] {this.getSchedulename(), this.getActuator().getName(),
 							  this.getDaymask(), this.getDayschedulerule().getRulename(),
-							  this.getActuatoron(), this.getPriority(), this.getEnabled()};
+							  this.getOnstartaction(), this.getOnendaction(), this.getLockmanual(),
+							  this.getPriority(),this.getEnabled()};
 	}
 }

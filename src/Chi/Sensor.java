@@ -18,6 +18,7 @@ public class Sensor implements java.io.Serializable {
 	private Double positionx;
 	private Double positiony;
 	private Set<Sensorevent> sensorevents = new HashSet<Sensorevent>(0);
+	private Set<Sensoractuatorresponseline> sensoractuatorresponselines = new HashSet<Sensoractuatorresponseline>(0);
 
 	public Sensor() {
 	}
@@ -27,8 +28,8 @@ public class Sensor implements java.io.Serializable {
 	}
 
 	public Sensor(String sensorname, Controller controller, Sensorclass sensorclass, Double minvalue, Double maxvalue,
-			Double transformationfactor, String unit, Double minthreshold, Double maxthreshold,
-			Double positionx, Double positiony, Set<Sensorevent> sensorevents) {
+			Double transformationfactor, String unit, Double minthreshold, Double maxthreshold, Double positionx,
+			Double positiony, Set<Sensorevent> sensorevents, Set<Sensoractuatorresponseline> sensoractuatorresponselines) {
 		this.sensorname = sensorname;
 		this.controller = controller;
 		this.sensorclass = sensorclass;
@@ -41,6 +42,7 @@ public class Sensor implements java.io.Serializable {
 		this.positionx = positionx;
 		this.positiony = positiony;
 		this.sensorevents = sensorevents;
+		this.sensoractuatorresponselines = sensoractuatorresponselines;
 	}
 
 	public String getSensorname() {
@@ -139,6 +141,14 @@ public class Sensor implements java.io.Serializable {
 		this.sensorevents = sensorevents;
 	}
 
+	public Set<Sensoractuatorresponseline> getSensoractuatorresponselines() {
+		return this.sensoractuatorresponselines;
+	}
+
+	public void setSensoractuatorresponselines(Set<Sensoractuatorresponseline> sensoractuatorresponselines) {
+		this.sensoractuatorresponselines = sensoractuatorresponselines;
+	}
+	
 	public double denormalizeValue(double d) {
 		return (d*(getMaxvalue()-getMinvalue()))+getMinvalue();
 	}

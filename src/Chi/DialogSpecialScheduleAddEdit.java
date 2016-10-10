@@ -32,12 +32,15 @@ public class DialogSpecialScheduleAddEdit extends JDialog {
 	private JButton cancelButton;
 	private JComboBox<String> comboBoxActuator;
 	private JTextField textFieldPriority;
-	private JComboBox<String> comboBoxSwitch;
+	private JComboBox<String> comboBoxOnStart;
 	private JLabel lblPriorityInfo;
 	private JCheckBox chckbxEnabled;
 	private JLabel lblTimeRule;
 	private JComboBox<String> comboBoxTimeRule;
 	private JXDatePicker datePickerDate;
+	private JComboBox<String> comboBoxOnEnd;
+	private JLabel lblOnEndDo;
+	private JCheckBox chckbxLock;
 	
 	public DialogSpecialScheduleAddEdit() {
 		create();
@@ -45,10 +48,10 @@ public class DialogSpecialScheduleAddEdit extends JDialog {
 		uiActionsAdd();
 	}
 	
-	public DialogSpecialScheduleAddEdit(String sn, String an, int year, int month, int day, String rn, boolean ao, int pr, boolean en) {
+	public DialogSpecialScheduleAddEdit(String sn, String an, int year, int month, int day, String rn, String startAct, String endAct, boolean lock, int pr, boolean en) {
 		create();
 		uiActionsNormal();
-		prefill(sn,an,year,month,day,rn,ao,pr,en);
+		prefill(sn,an,year,month,day,rn,startAct,endAct,lock,pr,en);
 		uiActionsEdit(sn);
 	}
 	
@@ -57,10 +60,10 @@ public class DialogSpecialScheduleAddEdit extends JDialog {
 		setModal(true);
 		setResizable(false);
 		setIconImage(Theme.getIcon("ChiLogo").getImage());
-		setBounds(100, 100, 463, 286);
+		setBounds(100, 100, 463, 321);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(null);
-		contentPanel.setBounds(0, 11, 457, 216);
+		contentPanel.setBounds(0, 11, 457, 283);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel);
 		contentPanel.setLayout(null);
@@ -96,38 +99,34 @@ public class DialogSpecialScheduleAddEdit extends JDialog {
 		lblDate.setBounds(10, 73, 78, 14);
 		contentPanel.add(lblDate);
 		
-		JLabel lblSwitch = new JLabel("Switch :");
-		lblSwitch.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblSwitch.setBounds(10, 137, 78, 14);
-		contentPanel.add(lblSwitch);
+		JLabel lblOnStart = new JLabel("On Start, Do :");
+		lblOnStart.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblOnStart.setBounds(10, 137, 78, 14);
+		contentPanel.add(lblOnStart);
 		
-		comboBoxSwitch = new JComboBox<String>();
-		comboBoxSwitch.addItem("ON");
-		comboBoxSwitch.addItem("OFF");
-		comboBoxSwitch.setBounds(98, 134, 206, 20);
-		contentPanel.add(comboBoxSwitch);
+		comboBoxOnStart = new JComboBox<String>();
+		comboBoxOnStart.addItem("ON");
+		comboBoxOnStart.addItem("OFF");
+		comboBoxOnStart.addItem("NOTHING");
+		comboBoxOnStart.setBounds(98, 134, 206, 20);
+		contentPanel.add(comboBoxOnStart);
 		
 		textFieldPriority = new JTextField();
-		textFieldPriority.setBounds(98, 165, 206, 20);
+		textFieldPriority.setBounds(98, 193, 206, 20);
 		contentPanel.add(textFieldPriority);
 		textFieldPriority.setColumns(10);
 		
 		JLabel lblPriority = new JLabel("Priority :");
 		lblPriority.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblPriority.setBounds(10, 168, 78, 14);
+		lblPriority.setBounds(10, 196, 78, 14);
 		contentPanel.add(lblPriority);
 		
-		JLabel lblEnabled = new JLabel("Enabled :");
-		lblEnabled.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblEnabled.setBounds(10, 196, 78, 14);
-		contentPanel.add(lblEnabled);
-		
-		chckbxEnabled = new JCheckBox("");
-		chckbxEnabled.setBounds(95, 192, 97, 23);
+		chckbxEnabled = new JCheckBox("Enabled");
+		chckbxEnabled.setBounds(179, 220, 97, 23);
 		contentPanel.add(chckbxEnabled);
 		
 		lblPriorityInfo = new JLabel("");
-		lblPriorityInfo.setBounds(314, 168, 133, 16);
+		lblPriorityInfo.setBounds(314, 197, 133, 16);
 		contentPanel.add(lblPriorityInfo);
 		
 		lblTimeRule = new JLabel("Time Rule :");
@@ -142,10 +141,27 @@ public class DialogSpecialScheduleAddEdit extends JDialog {
 		datePickerDate = new JXDatePicker(new Date());
 		datePickerDate.setBounds(98, 70, 206, 20);
 		contentPanel.add(datePickerDate);
+		
+		comboBoxOnEnd = new JComboBox<String>();
+		comboBoxOnEnd.setBounds(98, 162, 206, 20);
+		comboBoxOnEnd.addItem("ON");
+		comboBoxOnEnd.addItem("OFF");
+		comboBoxOnEnd.addItem("NOTHING");
+		contentPanel.add(comboBoxOnEnd);
+		
+		lblOnEndDo = new JLabel("On End, Do :");
+		lblOnEndDo.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblOnEndDo.setBounds(10, 165, 78, 14);
+		contentPanel.add(lblOnEndDo);
+		
+		chckbxLock = new JCheckBox("Manual Trigger Lock");
+		chckbxLock.setEnabled(true);
+		chckbxLock.setBounds(10, 220, 167, 23);
+		contentPanel.add(chckbxLock);
 		{
 			JPanel buttonPane = new JPanel();
-			buttonPane.setBounds(0, 225, 457, 33);
-			getContentPane().add(buttonPane);
+			buttonPane.setBounds(0, 250, 457, 33);
+			contentPanel.add(buttonPane);
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			{
 				okButton = new JButton("OK");
@@ -159,15 +175,16 @@ public class DialogSpecialScheduleAddEdit extends JDialog {
 		}
 	}
 	
-	private void prefill(String sn, String an, int year, int month, int day, String rn, boolean ao, int pr, boolean en) {
+	private void prefill(String sn, String an, int year, int month, int day, String rn, String startAct, String endAct, boolean lock, int pr, boolean en) {
 		textFieldName.setText(sn);
 		comboBoxActuator.setSelectedItem(an);
 		
 		datePickerDate.setDate(new Date(LocalDateTime.of(year,month,day,0,0).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()));
 		comboBoxTimeRule.setSelectedItem(rn);
 		
-		if (ao) comboBoxSwitch.setSelectedIndex(0);
-		else comboBoxSwitch.setSelectedIndex(1);
+		comboBoxOnStart.setSelectedItem(startAct);
+		comboBoxOnEnd.setSelectedItem(endAct);
+		chckbxLock.setSelected(lock);
 		
 		textFieldPriority.setText(String.valueOf(pr));
 		chckbxEnabled.setSelected(en);
@@ -263,7 +280,8 @@ public class DialogSpecialScheduleAddEdit extends JDialog {
 							LocalDate date=Instant.ofEpochMilli(datePickerDate.getDate().getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
 							flag=DatabaseSpecialSchedule.createSpecialSchedule(textFieldName.getText(),(String)comboBoxActuator.getSelectedItem(),
 																				date.getYear(),date.getMonth().getValue(),date.getDayOfMonth(),
-																				(String)comboBoxTimeRule.getSelectedItem(),comboBoxSwitch.getSelectedItem().equals("ON"),
+																				(String)comboBoxTimeRule.getSelectedItem(),(String)comboBoxOnStart.getSelectedItem(),
+																				(String)comboBoxOnEnd.getSelectedItem(),chckbxLock.isSelected(),
 																				Integer.parseInt(textFieldPriority.getText()),chckbxEnabled.isSelected());
 							u.dispose();
 						}
@@ -321,7 +339,8 @@ public class DialogSpecialScheduleAddEdit extends JDialog {
 							LocalDate date=Instant.ofEpochMilli(datePickerDate.getDate().getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
 							flag=DatabaseSpecialSchedule.updateSpecialSchedule(n,textFieldName.getText(),(String)comboBoxActuator.getSelectedItem(),
 																				date.getYear(),date.getMonth().getValue(),date.getDayOfMonth(),
-																				(String)comboBoxTimeRule.getSelectedItem(),comboBoxSwitch.getSelectedItem().equals("ON"),
+																				(String)comboBoxTimeRule.getSelectedItem(),(String)comboBoxOnStart.getSelectedItem(),
+																				(String)comboBoxOnEnd.getSelectedItem(),chckbxLock.isSelected(),
 																				Integer.parseInt(textFieldPriority.getText()),chckbxEnabled.isSelected());
 							u.dispose();
 						}

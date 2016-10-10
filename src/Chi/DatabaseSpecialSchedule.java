@@ -9,11 +9,11 @@ import org.hibernate.Transaction;
 public class DatabaseSpecialSchedule {
 
 	public static interface OnCreateAction {
-		public void run (String sn, String an, int year, int month, int day, String rn, boolean ao, int pr, boolean en);
+		public void run (String sn, String an, int year, int month, int day, String rn, String startAct, String endAct, boolean lock, int pr, boolean en);
 	}
 	
 	public static interface OnUpdateAction {
-		public void run (String oldSN, String sn, String an, int year, int month, int day, String rn, boolean ao, int pr, boolean en);
+		public void run (String oldSN, String sn, String an, int year, int month, int day, String rn, String startAct, String endAct, boolean lock, int pr, boolean en);
 	}
 	
 	public static interface OnDeleteAction {
@@ -66,7 +66,7 @@ public class DatabaseSpecialSchedule {
 		}
 	}
 	
-	public static boolean createSpecialSchedule (String sn, String an, int year, int month, int day, String rn, boolean ao, int pr, boolean en) {
+	public static boolean createSpecialSchedule (String sn, String an, int year, int month, int day, String rn, String startAct, String endAct, boolean lock, int pr, boolean en) {
 		Logger.log("DatabaseSpecialSchedule - Create");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
@@ -75,13 +75,13 @@ public class DatabaseSpecialSchedule {
 			tx = session.beginTransaction();
 			Specialschedule ss = session.get(Specialschedule.class,sn);
 			if (ss==null) {
-				ss=new Specialschedule(sn,session.get(Actuator.class,an),session.get(Dayschedulerule.class,rn),year,month,day,ao,pr,en);
+				ss=new Specialschedule(sn,session.get(Actuator.class,an),session.get(Dayschedulerule.class,rn),year,month,day,startAct,endAct,lock,pr,en);
 				session.save(ss);
 				tx.commit();
 				Cache.SpecialSchedules.map.put(sn, ss);
 	
 				Logger.log("DatabaseSpecialSchedule - Create - Execute Callbacks");
-				for (OnCreateAction a : OnCreateList) a.run(sn,an,year,month,day,rn,ao,pr,en);
+				for (OnCreateAction a : OnCreateList) a.run(sn,an,year,month,day,rn,startAct,endAct,lock,pr,en);
 				flag = true;
 			} else Logger.log("DB Create SpecialSchedule - Schedule already exists");
 		} catch (HibernateException e) {
@@ -92,7 +92,7 @@ public class DatabaseSpecialSchedule {
 		return flag;
 	}
 	
-	public static boolean updateSpecialSchedule (String oldSN, String sn, String an, int year, int month, int day, String rn, boolean ao, int pr, boolean en) {
+	public static boolean updateSpecialSchedule (String oldSN, String sn, String an, int year, int month, int day, String rn, String startAct, String endAct, boolean lock, int pr, boolean en) {
 		Logger.log("DatabaseSpecialSchedule - Update");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
@@ -110,7 +110,9 @@ public class DatabaseSpecialSchedule {
 				ss.setMonth(month);
 				ss.setDay(day);
 				ss.setDayschedulerule(session.get(Dayschedulerule.class,rn));
-				ss.setActuatoron(ao);
+				ss.setOnstartaction(startAct);
+				ss.setOnendaction(endAct);
+				ss.setLockmanual(lock);
 				ss.setPriority(pr);
 				ss.setEnabled(en);
 				session.update(ss);
@@ -118,7 +120,7 @@ public class DatabaseSpecialSchedule {
 				Cache.SpecialSchedules.map.put(sn, ss);
 	
 				Logger.log("DatabaseSpecialSchedule - Update - Execute Callbacks");
-				for (OnUpdateAction a : OnUpdateList) a.run(oldSN,sn,an,year,month,day,rn,ao,pr,en);
+				for (OnUpdateAction a : OnUpdateList) a.run(oldSN,sn,an,year,month,day,rn,startAct,endAct,lock,pr,en);
 				flag = true;
 			} else Logger.log("DB Update SpecialSchedule - Schedule doesn't exist");
 		} catch (HibernateException e) {

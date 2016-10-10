@@ -19,8 +19,8 @@ public class SchedulingDataSpecial extends SchedulingData {
 		public void execute() {}
 	}
 	
-	public SchedulingDataSpecial (String sn, String an, int y, int m, int d, String rn, boolean af, int pr, boolean en) {
-		super(sn,an,rn,af,pr,en,1);
+	public SchedulingDataSpecial (String sn, String an, int y, int m, int d, String rn, String startAct, String endAct, boolean lock, int pr, boolean en) {
+		super(sn,an,rn,startAct,endAct,lock,pr,en,1);
 		this.year=y;
 		this.month=m;
 		this.day=d;
@@ -56,6 +56,7 @@ public class SchedulingDataSpecial extends SchedulingData {
 		if (r!=null) {
 			this.nextStartTime=LocalDateTime.of(year,month,day,r.getStarthour(),r.getStartminute());
 			this.nextEndTime=LocalDateTime.of(year,month,day,r.getEndhour(),r.getEndminute());
+			if (this.nextEndTime.compareTo(this.nextStartTime)<0) this.nextEndTime=this.nextEndTime.plusDays(1);
 		}
 		if (this.isEnabled() && updateScheduler) {
 			this.onEndScheduler.purge();

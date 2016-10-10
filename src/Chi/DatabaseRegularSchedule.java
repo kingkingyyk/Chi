@@ -8,11 +8,11 @@ import org.hibernate.Transaction;
 public class DatabaseRegularSchedule {
 
 	public static interface OnCreateAction {
-		public void run (String sn, String an, int day, String rn, boolean ao, int pr, boolean en);
+		public void run (String sn, String an, int day, String rn, String onstartaction, String onendaction, boolean lockmanual, int pr, boolean en);
 	}
 	
 	public static interface OnUpdateAction {
-		public void run (String oldSN, String sn, String an, int day, String rn, boolean ao, int pr, boolean en);
+		public void run (String oldSN, String sn, String an, int day, String rn, String onstartaction, String onendaction, boolean lockmanual,  int pr, boolean en);
 	}
 	
 	public static interface OnDeleteAction {
@@ -65,7 +65,7 @@ public class DatabaseRegularSchedule {
 		}
 	}
 	
-	public static boolean createRegularSchedule (String sn, String an, int day, String rn, boolean ao, int pr, boolean en) {
+	public static boolean createRegularSchedule (String sn, String an, int day, String rn, String startAct, String endAct, boolean lock, int pr, boolean en) {
 		Logger.log("DatabaseRegularSchedule - Create");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
@@ -74,13 +74,13 @@ public class DatabaseRegularSchedule {
 			tx = session.beginTransaction();
 			Regularschedule r = session.get(Regularschedule.class,sn);
 			if (r==null) {
-				r=new Regularschedule(sn,session.get(Actuator.class,an),session.get(Dayschedulerule.class,rn),day,ao,pr,en);
+				r=new Regularschedule(sn,session.get(Actuator.class,an),session.get(Dayschedulerule.class,rn),day,startAct,endAct,lock,pr,en);
 				session.save(r);
 				tx.commit();
 				Cache.RegularSchedules.map.put(sn,r);
 	
 				Logger.log("DatabaseRegularSchedule - Create - Execute Callbacks");
-				for (OnCreateAction a : OnCreateList) a.run(sn,an,day,rn,ao,pr,en);
+				for (OnCreateAction a : OnCreateList) a.run(sn,an,day,rn,startAct,endAct,lock,pr,en);
 				flag = true;
 			} else Logger.log("DB Create RegularSchedule - Schedule already exists");
 		} catch (HibernateException e) {
@@ -91,7 +91,7 @@ public class DatabaseRegularSchedule {
 		return flag;
 	}
 	
-	public static boolean updateRegularSchedule (String oldSN, String sn, String an, int day, String rn, boolean ao, int pr, boolean en) {
+	public static boolean updateRegularSchedule (String oldSN, String sn, String an, int day, String rn, String startAct, String endAct, boolean lock, int pr, boolean en) {
 		Logger.log("DatabaseRegularSchedule - Update");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
@@ -107,7 +107,9 @@ public class DatabaseRegularSchedule {
 				r.setActuator(session.get(Actuator.class,an));
 				r.setDaymask(day);
 				r.setDayschedulerule(session.get(Dayschedulerule.class,rn));
-				r.setActuatoron(ao);
+				r.setOnstartaction(startAct);
+				r.setOnendaction(endAct);
+				r.setLockmanual(lock);
 				r.setPriority(pr);
 				r.setEnabled(en);
 				session.update(r);
@@ -115,7 +117,7 @@ public class DatabaseRegularSchedule {
 				Cache.RegularSchedules.map.put(sn,r);
 	
 				Logger.log("DatabaseRegularSchedule - Update - Execute Callbacks");
-				for (OnUpdateAction a : OnUpdateList) a.run(oldSN,sn,an,day,rn,ao,pr,en);
+				for (OnUpdateAction a : OnUpdateList) a.run(oldSN,sn,an,day,rn,startAct,endAct,lock,pr,en);
 				flag = true;
 			} else Logger.log("DB Update RegularSchedule - Schedule doesn't exist");
 		} catch (HibernateException e) {

@@ -9,7 +9,9 @@ public class Specialschedule implements java.io.Serializable {
 	private Integer year;
 	private Integer month;
 	private Integer day;
-	private Boolean actuatoron;
+	private String onstartaction;
+	private String onendaction;
+	private Boolean lockmanual;
 	private Integer priority;
 	private Boolean enabled;
 
@@ -20,15 +22,19 @@ public class Specialschedule implements java.io.Serializable {
 		this.schedulename = schedulename;
 	}
 
+
 	public Specialschedule(String schedulename, Actuator actuator, Dayschedulerule dayschedulerule, Integer year,
-			Integer month, Integer day, Boolean actuatoron, Integer priority, Boolean enabled) {
+			Integer month, Integer day, String onstartaction, String onendaction, Boolean lockmanual, Integer priority,
+			Boolean enabled) {
 		this.schedulename = schedulename;
 		this.actuator = actuator;
 		this.dayschedulerule = dayschedulerule;
 		this.year = year;
 		this.month = month;
 		this.day = day;
-		this.actuatoron = actuatoron;
+		this.onstartaction = onstartaction;
+		this.onendaction = onendaction;
+		this.lockmanual = lockmanual;
 		this.priority = priority;
 		this.enabled = enabled;
 	}
@@ -81,14 +87,31 @@ public class Specialschedule implements java.io.Serializable {
 		this.day = day;
 	}
 
-	public Boolean getActuatoron() {
-		return this.actuatoron;
+
+	public String getOnstartaction() {
+		return this.onstartaction;
 	}
 
-	public void setActuatoron(Boolean actuatoron) {
-		this.actuatoron = actuatoron;
+	public void setOnstartaction(String onstartaction) {
+		this.onstartaction = onstartaction;
 	}
 
+	public String getOnendaction() {
+		return this.onendaction;
+	}
+
+	public void setOnendaction(String onendaction) {
+		this.onendaction = onendaction;
+	}
+
+	public Boolean getLockmanual() {
+		return this.lockmanual;
+	}
+
+	public void setLockmanual(Boolean lockmanual) {
+		this.lockmanual = lockmanual;
+	}
+	
 	public Integer getPriority() {
 		return this.priority;
 	}
@@ -108,7 +131,8 @@ public class Specialschedule implements java.io.Serializable {
 	public Object [] toObj () {
 		return new Object [] {this.getSchedulename(), this.getActuator().getName(),
 							  this.getYear(),this.getMonth(),this.getDay(),
-							  this.getDayschedulerule().getRulename(),this.getActuatoron(),
-							  this.getPriority(),this.getEnabled()};
+							  this.getDayschedulerule().getRulename(),this.getOnstartaction(),
+							  this.getOnendaction(), this.getLockmanual(), this.getPriority(),
+							  this.getEnabled()};
 	}
 }

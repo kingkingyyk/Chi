@@ -29,14 +29,14 @@ public class FrameRegularScheduleManagementBind {
 	
 	public static class OnRegularScheduleCreate implements DatabaseRegularSchedule.OnCreateAction {
 		@Override
-		public void run(String sn, String an, int day, String rn, boolean ao, int pr, boolean en) {
+		public void run(String sn, String an, int day, String rn, String startAct, String endAct, boolean lock, int pr, boolean en) {
 			FrameRegularScheduleManagement.refresh();
 		}
 	}
 	
 	public static class OnRegularScheduleUpdate implements DatabaseRegularSchedule.OnUpdateAction {
 		@Override
-		public void run(String oldSN, String sn, String an, int day, String rn, boolean ao, int pr, boolean en) {
+		public void run(String oldSN, String sn, String an, int day, String rn, String startAct, String endAct, boolean lock, int pr, boolean en) {
 			FrameRegularScheduleManagement.refresh();
 		}
 	}

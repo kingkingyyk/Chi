@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Aug 30, 2016 1:51:22 PM by Hibernate Tools 5.1.0.Alpha1 -->
+<!-- Generated Oct 10, 2016 8:50:49 PM by Hibernate Tools 5.2.0.Beta1 -->
 <hibernate-mapping>
     <class name="Chi.Regularschedule" table="REGULARSCHEDULE" schema="PUBLIC" catalog="PUBLIC" optimistic-lock="version">
         <id name="schedulename" type="string">
@@ -17,8 +17,14 @@
         <property name="daymask" type="java.lang.Integer">
             <column name="DAYMASK" />
         </property>
-        <property name="actuatoron" type="java.lang.Boolean">
-            <column name="ACTUATORON" />
+        <property name="onstartaction" type="string">
+            <column name="ONSTARTACTION" length="100" />
+        </property>
+        <property name="onendaction" type="string">
+            <column name="ONENDACTION" length="100" />
+        </property>
+        <property name="lockmanual" type="java.lang.Boolean">
+            <column name="LOCKMANUAL" />
         </property>
         <property name="priority" type="java.lang.Integer">
             <column name="PRIORITY" />

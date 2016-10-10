@@ -19,6 +19,7 @@ import java.awt.Color;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
+import javax.swing.JSeparator;
 
 public class MenuUI extends JFrame {
 	private static final long serialVersionUID = -1439297640667763037L;
@@ -28,8 +29,8 @@ public class MenuUI extends JFrame {
 	private JButton btnStopDataServer;
 	private JTextField textFieldSQL;
 	private JButton btnStopGWTServer;
-	private JButton btnStopSchedulingServer;
-	private JButton btnStartSchedulingServer;
+	private JButton btnStopAutomationServer;
+	private JButton btnStartAutomationServer;
 	private JButton btnStartGWTServer;
 	private JButton btnOngoingSchedules;
 	private JButton btnStartNotificationServer;
@@ -51,6 +52,7 @@ public class MenuUI extends JFrame {
 		JButton btnExit = new JButton("Exit");
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				Cache.Stop();
 				System.exit(0);
 			}
 		});
@@ -123,14 +125,14 @@ public class MenuUI extends JFrame {
 		btnStopGWTServer.setBounds(273, 45, 130, 23);
 		panelServer.add(btnStopGWTServer);
 		
-		btnStartSchedulingServer = new JButton("Start");
-		btnStartSchedulingServer.setBounds(123, 79, 130, 23);
-		panelServer.add(btnStartSchedulingServer);
-		btnStartSchedulingServer.addActionListener(new ActionListener() {
+		btnStartAutomationServer = new JButton("Start");
+		btnStartAutomationServer.setBounds(123, 79, 130, 23);
+		panelServer.add(btnStartAutomationServer);
+		btnStartAutomationServer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (SchedulingServer.start()) {
-					btnStartSchedulingServer.setEnabled(false);
-					btnStopSchedulingServer.setEnabled(true);
+					btnStartAutomationServer.setEnabled(false);
+					btnStopAutomationServer.setEnabled(true);
 					btnOngoingSchedules.setEnabled(true);
 				} else {
 					JOptionPane.showMessageDialog(null,"Failed to connect to database. Server will now shut down.","Scheduling Server",JOptionPane.ERROR_MESSAGE);
@@ -138,20 +140,20 @@ public class MenuUI extends JFrame {
 			}
 		});
 		
-		btnStopSchedulingServer = new JButton("Stop");
-		btnStopSchedulingServer.setEnabled(false);
-		btnStopSchedulingServer.setBounds(273, 79, 130, 23);
-		btnStopSchedulingServer.addActionListener(new ActionListener() {
+		btnStopAutomationServer = new JButton("Stop");
+		btnStopAutomationServer.setEnabled(false);
+		btnStopAutomationServer.setBounds(273, 79, 130, 23);
+		btnStopAutomationServer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SchedulingServer.stop();
 				if (!SchedulingServer.started()) {
-					btnStartSchedulingServer.setEnabled(true);
-					btnStopSchedulingServer.setEnabled(false);
+					btnStartAutomationServer.setEnabled(true);
+					btnStopAutomationServer.setEnabled(false);
 					btnOngoingSchedules.setEnabled(false);
 				}
 			}
 		});
-		panelServer.add(btnStopSchedulingServer);
+		panelServer.add(btnStopAutomationServer);
 		
 		btnStartNotificationServer = new JButton("Start");
 		btnStartNotificationServer.addActionListener(new ActionListener() {
@@ -186,10 +188,10 @@ public class MenuUI extends JFrame {
 		lblGWTServer.setBounds(10, 49, 103, 14);
 		panelServer.add(lblGWTServer);
 		
-		JLabel lblSchedulingServer = new JLabel("Scheduling Server :");
-		lblSchedulingServer.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblSchedulingServer.setBounds(10, 84, 103, 14);
-		panelServer.add(lblSchedulingServer);
+		JLabel lblAutomationServer = new JLabel("Automation Server :");
+		lblAutomationServer.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblAutomationServer.setBounds(10, 84, 103, 14);
+		panelServer.add(lblAutomationServer);
 		
 		JLabel lblNewLabel = new JLabel("Notification Server :");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -405,9 +407,9 @@ public class MenuUI extends JFrame {
 		btnActuator.setBounds(10, 137, 130, 23);
 		panelModelling.add(btnActuator);
 		
-		JPanel panelScheduling = new JPanel();
-		tabbedPane.addTab("Scheduling", null, panelScheduling, null);
-		panelScheduling.setLayout(null);
+		JPanel panelAutomation = new JPanel();
+		tabbedPane.addTab("Automation", null, panelAutomation, null);
+		panelAutomation.setLayout(null);
 		
 		JButton btnDayScheduleRules = new JButton("Day Schedule Rules");
 		btnDayScheduleRules.addActionListener(new ActionListener() {
@@ -418,7 +420,7 @@ public class MenuUI extends JFrame {
 			}
 		});
 		btnDayScheduleRules.setBounds(10, 11, 127, 23);
-		panelScheduling.add(btnDayScheduleRules);
+		panelAutomation.add(btnDayScheduleRules);
 		
 		JButton btnRegularSchedules = new JButton("Regular Schedules");
 		btnRegularSchedules.setBounds(145, 11, 127, 23);
@@ -429,7 +431,7 @@ public class MenuUI extends JFrame {
 				f.toFront();
 			}
 		});
-		panelScheduling.add(btnRegularSchedules);
+		panelAutomation.add(btnRegularSchedules);
 		
 		JButton btnSpecialSchedules = new JButton("Special Schedules");
 		btnSpecialSchedules.addActionListener(new ActionListener() {
@@ -440,11 +442,11 @@ public class MenuUI extends JFrame {
 			}
 		});
 		btnSpecialSchedules.setBounds(277, 11, 127, 23);
-		panelScheduling.add(btnSpecialSchedules);
+		panelAutomation.add(btnSpecialSchedules);
 		
 		btnOngoingSchedules = new JButton("Ongoing Schedules");
 		btnOngoingSchedules.setEnabled(false);
-		btnOngoingSchedules.setBounds(10, 119, 127, 23);
+		btnOngoingSchedules.setBounds(10, 45, 127, 23);
 		btnOngoingSchedules.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				FrameOngoingSchedules f=FrameOngoingSchedules.getInstance();
@@ -452,7 +454,15 @@ public class MenuUI extends JFrame {
 				f.toFront();
 			}
 		});
-		panelScheduling.add(btnOngoingSchedules);
+		panelAutomation.add(btnOngoingSchedules);
+		
+		JButton btnSensorActuatorResponse = new JButton("Sensor Actuator Response");
+		btnSensorActuatorResponse.setBounds(10, 105, 175, 23);
+		panelAutomation.add(btnSensorActuatorResponse);
+		
+		JSeparator separator = new JSeparator();
+		separator.setBounds(10, 92, 394, 2);
+		panelAutomation.add(separator);
 		
 		JPanel panelNotification = new JPanel();
 		tabbedPane.addTab("Notification", null, panelNotification, null);

@@ -31,7 +31,7 @@ public class FrameRegularScheduleManagement extends JFrame {
 		public boolean isCellEditable(int row, int column){ return false;  }
 		
 		@SuppressWarnings("rawtypes")
-		private Class [] colClass={String.class,String.class,Integer.class,String.class,Boolean.class,Integer.class,Boolean.class};
+		private Class [] colClass={String.class,String.class,Integer.class,String.class,String.class,String.class,Boolean.class,Integer.class,Boolean.class};
 	    @Override
 	    public Class<?> getColumnClass(int colNum) {
 	    	return colClass[colNum];
@@ -40,7 +40,7 @@ public class FrameRegularScheduleManagement extends JFrame {
 	}
 	
 	private static class RegularScheduleTableModel extends AbstractTreeTableModel {
-		public static final String [] COLUMNS= {"Name","Actuator","Days","Time Rule","Switch","Priority","Enabled"};
+		public static final String [] COLUMNS= {"Name","Actuator","Days","Time Rule","OnStart","OnEnd","Lock","Priority","Enabled"};
 		
 		public RegularScheduleTableModel (RegularScheduleTableRow r) {
 			super(r);
@@ -84,15 +84,16 @@ public class FrameRegularScheduleManagement extends JFrame {
 		
 		public RegularScheduleTableRow(Regularschedule r) {
 			if (r!=null) {
-				renderText=new String[7];
+				renderText=new String[9];
 				renderText[0]=r.getSchedulename();
 				renderText[1]=r.getActuator().getName();
 				renderText[2]=Utility.dayMaskToStr(r.getDaymask());
 				renderText[3]=r.getDayschedulerule().getRulename();
-				if (r.getEnabled()) renderText[4]="ON";
-				else renderText[4]="OFF";
-				renderText[5]=r.getPriority().toString();
-				renderText[6]=r.getEnabled().toString();
+				renderText[4]=r.getOnstartaction();
+				renderText[5]=r.getOnendaction();
+				renderText[6]=String.valueOf(r.getLockmanual());
+				renderText[7]=r.getPriority().toString();
+				renderText[8]=r.getEnabled().toString();
 			} else {
 				renderText=new String [] {"root"};
 			}
@@ -263,6 +264,8 @@ public class FrameRegularScheduleManagement extends JFrame {
 			table.getColumn(4).setCellRenderer(new RegularScheduleTableCellRenderer());
 			table.getColumn(5).setCellRenderer(new RegularScheduleTableCellRenderer());
 			table.getColumn(6).setCellRenderer(new RegularScheduleTableCellRenderer());
+			table.getColumn(7).setCellRenderer(new RegularScheduleTableCellRenderer());
+			table.getColumn(8).setCellRenderer(new RegularScheduleTableCellRenderer());
 			
 			table.getColumnModel().getColumn(0).setPreferredWidth(133);
 			table.getColumnModel().getColumn(1).setPreferredWidth(54);
@@ -271,6 +274,8 @@ public class FrameRegularScheduleManagement extends JFrame {
 			table.getColumnModel().getColumn(4).setPreferredWidth(54);
 			table.getColumnModel().getColumn(5).setPreferredWidth(54);
 			table.getColumnModel().getColumn(6).setPreferredWidth(54);
+			table.getColumnModel().getColumn(7).setPreferredWidth(54);
+			table.getColumnModel().getColumn(8).setPreferredWidth(54);
 		}
 	}
 	

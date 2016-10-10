@@ -30,7 +30,7 @@ public class FrameSpecialScheduleManagement extends JFrame {
 		public boolean isCellEditable(int row, int column){ return false;  }
 		
 		@SuppressWarnings("rawtypes")
-		private Class [] colClass={String.class,String.class,Integer.class,Integer.class,Integer.class,String.class,Boolean.class,Integer.class,Boolean.class};
+		private Class [] colClass={String.class,String.class,Integer.class,Integer.class,Integer.class,String.class,String.class,String.class,Boolean.class,Integer.class,Boolean.class};
 	    @Override
 	    public Class<?> getColumnClass(int colNum) {
 	    	return colClass[colNum];
@@ -39,7 +39,7 @@ public class FrameSpecialScheduleManagement extends JFrame {
 	}
 	
 	private static class SpecialScheduleTableModel extends AbstractTreeTableModel {
-		public static final String [] COLUMNS= {"Name","Actuator","Year","Month","Day","Time Rule","Switch","Priority","Enabled"};
+		public static final String [] COLUMNS= {"Name","Actuator","Year","Month","Day","Time Rule","OnStart","OnEnd","Lock","Priority","Enabled"};
 		
 		public SpecialScheduleTableModel (SpecialScheduleTableRow r) {
 			super(r);
@@ -90,10 +90,11 @@ public class FrameSpecialScheduleManagement extends JFrame {
 				renderText[3]=s.getMonth().toString();
 				renderText[4]=s.getDay().toString();
 				renderText[5]=s.getDayschedulerule().getRulename();
-				if (s.getActuatoron()) renderText[6]="ON";
-				else renderText[6]="OFF";
-				renderText[7]=s.getPriority().toString();
-				renderText[8]=s.getEnabled().toString();
+				renderText[6]=s.getOnstartaction();
+				renderText[7]=s.getOnendaction();
+				renderText[8]=String.valueOf(s.getLockmanual());
+				renderText[9]=s.getPriority().toString();
+				renderText[10]=s.getEnabled().toString();
 			} else {
 				renderText=new String [] {"root"};
 			}
@@ -266,6 +267,8 @@ public class FrameSpecialScheduleManagement extends JFrame {
 			table.getColumn(6).setCellRenderer(new SpecialScheduleTableCellRenderer());
 			table.getColumn(7).setCellRenderer(new SpecialScheduleTableCellRenderer());
 			table.getColumn(8).setCellRenderer(new SpecialScheduleTableCellRenderer());
+			table.getColumn(9).setCellRenderer(new SpecialScheduleTableCellRenderer());
+			table.getColumn(10).setCellRenderer(new SpecialScheduleTableCellRenderer());
 			
 			table.getColumnModel().getColumn(0).setPreferredWidth(133);
 			table.getColumnModel().getColumn(1).setPreferredWidth(54);
@@ -276,6 +279,8 @@ public class FrameSpecialScheduleManagement extends JFrame {
 			table.getColumnModel().getColumn(6).setPreferredWidth(54);
 			table.getColumnModel().getColumn(7).setPreferredWidth(54);
 			table.getColumnModel().getColumn(8).setPreferredWidth(54);
+			table.getColumnModel().getColumn(9).setPreferredWidth(54);
+			table.getColumnModel().getColumn(10).setPreferredWidth(54);
 		}
 	}
 	

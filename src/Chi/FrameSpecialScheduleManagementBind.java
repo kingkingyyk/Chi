@@ -29,14 +29,14 @@ public class FrameSpecialScheduleManagementBind {
 	
 	public static class OnSpecialScheduleCreate implements DatabaseSpecialSchedule.OnCreateAction {
 		@Override
-		public void run(String sn, String an, int year, int month, int day, String rn, boolean ao, int pr, boolean en) {
+		public void run(String sn, String an, int year, int month, int day, String rn, String startAct, String endAct, boolean flag, int pr, boolean en) {
 			FrameSpecialScheduleManagement.refresh();
 		}
 	}
 	
 	public static class OnSpecialScheduleUpdate implements DatabaseSpecialSchedule.OnUpdateAction {
 		@Override
-		public void run(String oldSN, String sn, String an, int year, int month, int day, String rn, boolean ao, int pr,boolean en) {
+		public void run(String oldSN, String sn, String an, int year, int month, int day, String rn, String startAct, String endAct, boolean flag, int pr,boolean en) {
 			FrameSpecialScheduleManagement.refresh();
 		}
 	}
