@@ -53,7 +53,7 @@ public class DatabaseSensor {
 			tx = session.beginTransaction();
 			Sensor s = session.get(Sensor.class,sn);
 			if (s==null) {
-				s=new Sensor(sn,session.get(Controller.class,con),session.get(Sensorclass.class,cn),min,max,trans,unit,minT,maxT,px,py,null,null);
+				s=new Sensor(sn,session.get(Controller.class,con),session.get(Sensorclass.class,cn),min,max,trans,unit,minT,maxT,px,py,null);
 				session.save(s);
 				tx.commit();
 				Cache.Sensors.map.put(sn,s);

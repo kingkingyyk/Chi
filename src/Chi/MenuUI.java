@@ -473,7 +473,9 @@ public class MenuUI extends JFrame {
 		JButton btnSensorActuatorResponse = new JButton("Sensor Actuator Response");
 		btnSensorActuatorResponse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				FrameSensorActuatorResponseManagement f=FrameSensorActuatorResponseManagement.getInstance();
+				f.setVisible(true);
+				f.toFront();
 			}
 		});
 		btnSensorActuatorResponse.setBounds(10, 142, 175, 23);

@@ -19,12 +19,54 @@ public class SchedulingThread extends Thread {
 					d.setActuatorName(n);
 				}
 			}
+			
+			if (ctrlType.equals("Scheduled")) {
+				int count=0;
+				
+				for (SchedulingData d : data.values()) if (d.getActuatorName().equals(n)) count++;
+				
+				if (count==0) {
+					for (Regularschedule r : Cache.RegularSchedules.map.values()) {
+						if (r.getActuator().getName().equals(n) && r.getEnabled() && r.getDaymask()!=0) {
+							SchedulingData d=new SchedulingDataRegular(r.getSchedulename(),n,r.getDaymask(),
+																r.getDayschedulerule().getRulename(),
+																r.getOnstartaction(),r.getOnendaction(),
+																r.getLockmanual(),r.getPriority(),
+																r.getEnabled());
+							data.put(r.getSchedulename(),d);
+							FrameOngoingSchedules.refresh();
+						}
+					}
+					
+					for (Specialschedule ss : Cache.SpecialSchedules.map.values()) {
+						if (ss.getActuator().getName().equals(n) && ss.getEnabled()) {
+							SchedulingData dat=new SchedulingDataSpecial(ss.getSchedulename(),n,ss.getYear(),
+																		ss.getMonth(),ss.getDay(),
+																		ss.getDayschedulerule().getRulename(),
+																		ss.getOnstartaction(),ss.getOnendaction(),
+																		ss.getLockmanual(),ss.getPriority(),ss.getEnabled());
+							if (dat.getNextEndTime().compareTo(LocalDateTime.now())>0) {
+								data.put(ss.getSchedulename(),dat);
+								FrameOngoingSchedules.refresh();
+							}
+						}
+					}
+				}
+			} else {
+				for (SchedulingData d : data.values()) if (d.getActuatorName().equals(oldN)) data.remove(d.getName());
+			}
+			
 			FrameOngoingSchedules.refresh();
 		}
 	}
 	
 	public class OnActuatorDelete implements DatabaseActuator.OnDeleteAction {
-		public void run (String sn) {
+		public void run (String an) {
+			for (SchedulingData d : data.values()) {
+				if (d.getActuatorName().equals(an)) {
+					data.remove(d.getName());
+				}
+			}
 			FrameOngoingSchedules.refresh();
 		}
 	}
@@ -47,7 +89,7 @@ public class SchedulingThread extends Thread {
 		@Override
 		public void run(String sn, String an, int day, String rn, String start, String end, boolean lock, int pr, boolean en) {
 			SchedulingData d=new SchedulingDataRegular(sn,an,day,rn,start,end,lock,pr,en);
-			if (en && day!=0) {
+			if (en && day!=0 && Cache.Actuators.map.get(an).getControltype().equals("Scheduled")) {
 				data.put(sn,d);
 				FrameOngoingSchedules.refresh();
 			}
@@ -60,7 +102,7 @@ public class SchedulingThread extends Thread {
 			SchedulingDataRegular d=(SchedulingDataRegular)data.get(oldSN);
 			if (d==null) {
 				d=new SchedulingDataRegular(sn,an,day,rn,start,end,lock,pr,en);
-				if (d.enabled && day!=0) {
+				if (d.enabled && day!=0 && Cache.Actuators.map.get(an).getControltype().equals("Scheduled")) {
 					data.put(sn,d);
 					FrameOngoingSchedules.refresh();
 				}
@@ -144,7 +186,7 @@ public class SchedulingThread extends Thread {
 		@Override
 		public void run(String sn, String an, int year, int month, int day, String rn, String startAct, String endAct, boolean lock, int pr, boolean en) {
 			SchedulingData d=new SchedulingDataSpecial(sn,an,year,month,day,rn,startAct,endAct,lock,pr,en);
-			if (d.getNextEndTime().compareTo(LocalDateTime.now())>0 && en) {
+			if (d.getNextEndTime().compareTo(LocalDateTime.now())>0 && en && Cache.Actuators.map.get(an).getControltype().equals("Scheduled")) {
 				data.put(sn,d);
 				FrameOngoingSchedules.refresh();
 			}
@@ -157,7 +199,7 @@ public class SchedulingThread extends Thread {
 			SchedulingDataSpecial d=(SchedulingDataSpecial)data.getOrDefault(oldSN,null);
 			if (d==null) {
 				d=new SchedulingDataSpecial(sn,an,year,month,day,rn,startAct,endAct,lock,pr,en);
-				if (d.getNextEndTime().compareTo(LocalDateTime.now())>0 && d.enabled && day!=0) {
+				if (d.getNextEndTime().compareTo(LocalDateTime.now())>0 && d.enabled && day!=0 && Cache.Actuators.map.get(an).getControltype().equals("Scheduled")) {
 					data.put(sn,d);
 					FrameOngoingSchedules.refresh();
 				}

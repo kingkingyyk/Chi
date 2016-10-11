@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Oct 10, 2016 10:27:12 PM by Hibernate Tools 5.2.0.Beta1 -->
+<!-- Generated Oct 11, 2016 11:19:14 PM by Hibernate Tools 5.2.0.Beta1 -->
 <hibernate-mapping>
     <class name="Chi.Sensoractuatorresponse" table="SENSORACTUATORRESPONSE" schema="PUBLIC" catalog="PUBLIC" optimistic-lock="version">
         <id name="id" type="java.lang.Integer">
@@ -14,17 +14,17 @@
         <property name="ontriggeraction" type="string">
             <column name="ONTRIGGERACTION" length="100" />
         </property>
+        <property name="onnottriggeraction" type="string">
+            <column name="ONNOTTRIGGERACTION" length="100" />
+        </property>
         <property name="expression" type="string">
-            <column name="EXPRESSION" length="300" />
+            <column name="EXPRESSION" length="500" />
         </property>
         <property name="enabled" type="java.lang.Boolean">
             <column name="ENABLED" />
         </property>
-        <set name="sensoractuatorresponselines" table="SENSORACTUATORRESPONSELINE" inverse="true" lazy="true" fetch="select">
-            <key>
-                <column name="ID" not-null="true" />
-            </key>
-            <one-to-many class="Chi.Sensoractuatorresponseline" />
-        </set>
+        <property name="timeout" type="java.lang.Integer">
+            <column name="TIMEOUT" />
+        </property>
     </class>
 </hibernate-mapping>

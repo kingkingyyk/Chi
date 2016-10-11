@@ -94,19 +94,11 @@ CREATE TABLE SensorActuatorResponse (
 	ID int IDENTITY PRIMARY KEY,
 	ActuatorName varchar(100),
 	OnTriggerAction varchar(100),
-	Expression varchar(300),
+	OnNotTriggerAction varchar(100),
+	Expression varchar(500),
 	Enabled boolean,
+	Timeout int,
 	FOREIGN KEY (ActuatorName) REFERENCES Actuator(Name) ON UPDATE CASCADE ON DELETE CASCADE
-)
-@
-CREATE TABLE SensorActuatorResponseLine(
-	ID int,
-	SensorName varchar(100),
-	TriggerValue varchar(100),
-	TriggerEquality varchar(2),
-	FOREIGN KEY (SensorName) REFERENCES Sensor(SensorName) ON UPDATE CASCADE ON DELETE CASCADE,
-	FOREIGN KEY (ID) REFERENCES SensorActuatorResponse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-	PRIMARY KEY (ID, SensorName)
 )
 @
 CREATE TABLE SensorEvent (

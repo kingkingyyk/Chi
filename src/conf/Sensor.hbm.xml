@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Sep 29, 2016 3:25:30 PM by Hibernate Tools 5.2.0.Beta1 -->
+<!-- Generated Oct 11, 2016 10:46:39 PM by Hibernate Tools 5.2.0.Beta1 -->
 <hibernate-mapping>
     <class name="Chi.Sensor" table="SENSOR" schema="PUBLIC" catalog="PUBLIC" optimistic-lock="version">
         <id name="sensorname" type="string">

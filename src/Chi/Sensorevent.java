@@ -1,6 +1,6 @@
 package Chi;
-
 import java.util.Date;
+
 
 public class Sensorevent implements java.io.Serializable {
 	private static final long serialVersionUID = 3473876954626305649L;

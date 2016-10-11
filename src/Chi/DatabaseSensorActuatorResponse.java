@@ -8,11 +8,11 @@ import org.hibernate.Transaction;
 public class DatabaseSensorActuatorResponse {
 
 	public static interface OnCreateAction {
-		public void run (int id, String an, String action, String expression, boolean en);
+		public void run (int id, String an, String onTrigAct, String onNotTrigAct, String expression, boolean en, int timeout);
 	}
 	
 	public static interface OnUpdateAction {
-		public void run (int id, String an, String action, String expression, boolean en);
+		public void run (int id, String an, String onTrigAct, String onNotTrigAct, String expression, boolean en, int timeout);
 	}
 	
 	public static interface OnDeleteAction {
@@ -44,20 +44,21 @@ public class DatabaseSensorActuatorResponse {
 		}
 	}
 	
-	public static boolean createSensorActuatorResponse (String an, String action, String expression, boolean en) {
+	public static boolean createSensorActuatorResponse (String an, String onTrigAct, String onNotTrigAct,
+														String expression, boolean en, int timeout) {
 		Logger.log("DatabaseSensorActuatorResponse - Create");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
 		boolean flag=false;
 		try {
 			tx = session.beginTransaction();
-			Sensoractuatorresponse s=new Sensoractuatorresponse(Cache.Actuators.map.get(an),action,expression,en,null);
+			Sensoractuatorresponse s=new Sensoractuatorresponse(Cache.Actuators.map.get(an),onTrigAct,onNotTrigAct,expression,en,timeout);
 			session.save(s);
 			tx.commit();
 			Cache.SensorActuatorResponses.map.put(String.valueOf(s.getId()),s);
 	
 			Logger.log("DatabaseSensorActuatorResponse - Create - Execute Callbacks");
-			for (OnCreateAction a : OnCreateList) a.run(s.getId(), an, action, expression, en);
+			for (OnCreateAction a : OnCreateList) a.run(s.getId(), an, onTrigAct, onNotTrigAct, expression, en, timeout);
 			flag = true;
 		} catch (HibernateException e) {
 			if (tx != null)
@@ -67,7 +68,8 @@ public class DatabaseSensorActuatorResponse {
 		return flag;
 	}
 	
-	public static boolean updateSensorActuatorResponse (int id, String an, String action, String expression, boolean en) {
+	public static boolean updateSensorActuatorResponse (int id, String an, String onTrigAct, String onNotTrigAct,
+														String expression, boolean en, int timeout) {
 		Logger.log("DatabaseSensorActuatorResponse - Update");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
@@ -77,14 +79,15 @@ public class DatabaseSensorActuatorResponse {
 			Sensoractuatorresponse s = session.get(Sensoractuatorresponse.class,id);
 			if (s!=null) {
 				s.setActuator(Cache.Actuators.map.get(an));
-				s.setOntriggeraction(action);
+				s.setOntriggeraction(onTrigAct);
+				s.setOnnottriggeraction(onNotTrigAct);
 				s.setExpression(expression);
 				s.setEnabled(en);
 				session.save(s);
 				tx.commit();
 	
 				Logger.log("DatabaseSensorActuatorResponse - Update - Execute Callbacks");
-				for (OnUpdateAction a : OnUpdateList) a.run(id,an,action,expression,en);
+				for (OnUpdateAction a : OnUpdateList) a.run(id,an,onTrigAct,onNotTrigAct,expression,en,timeout);
 				flag = true;
 			} else Logger.log("DB Update SensorActuatorResponse - Sensor doesn't exist");
 		} catch (HibernateException e) {

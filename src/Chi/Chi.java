@@ -54,6 +54,7 @@ public class Chi {
 				FrameOngoingSchedulesBind.initialize();
 				FrameNotificationBind.initialize();
 				CacheRelationshipBind.initialize();
+				
 				diag.setProgBarValue(4);
 				Logger.log("GUI & data binding done.");
 				

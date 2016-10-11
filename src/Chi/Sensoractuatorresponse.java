@@ -1,27 +1,26 @@
 package Chi;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class Sensoractuatorresponse implements java.io.Serializable {
-	private static final long serialVersionUID = -3304571642140500719L;
+	private static final long serialVersionUID = 5413831594834406684L;
 	private Integer id;
 	private Actuator actuator;
 	private String ontriggeraction;
+	private String onnottriggeraction;
 	private String expression;
 	private Boolean enabled;
-	private Set<Sensoractuatorresponseline> sensoractuatorresponselines = new HashSet<>(0);
+	private Integer timeout;
 
 	public Sensoractuatorresponse() {
 	}
 
-	public Sensoractuatorresponse(Actuator actuator, String ontriggeraction, String expression, Boolean enabled,
-			Set<Sensoractuatorresponseline> sensoractuatorresponselines) {
+	public Sensoractuatorresponse(Actuator actuator, String ontriggeraction, String onnottriggeraction,
+			String expression, Boolean enabled, Integer timeout) {
 		this.actuator = actuator;
 		this.ontriggeraction = ontriggeraction;
+		this.onnottriggeraction = onnottriggeraction;
 		this.expression = expression;
 		this.enabled = enabled;
-		this.sensoractuatorresponselines = sensoractuatorresponselines;
+		this.timeout = timeout;
 	}
 
 	public Integer getId() {
@@ -48,6 +47,14 @@ public class Sensoractuatorresponse implements java.io.Serializable {
 		this.ontriggeraction = ontriggeraction;
 	}
 
+	public String getOnnottriggeraction() {
+		return this.onnottriggeraction;
+	}
+
+	public void setOnnottriggeraction(String onnottriggeraction) {
+		this.onnottriggeraction = onnottriggeraction;
+	}
+
 	public String getExpression() {
 		return this.expression;
 	}
@@ -64,12 +71,12 @@ public class Sensoractuatorresponse implements java.io.Serializable {
 		this.enabled = enabled;
 	}
 
-	public Set<Sensoractuatorresponseline> getSensoractuatorresponselines() {
-		return this.sensoractuatorresponselines;
+	public Integer getTimeout() {
+		return this.timeout;
 	}
 
-	public void setSensoractuatorresponselines(Set<Sensoractuatorresponseline> sensoractuatorresponselines) {
-		this.sensoractuatorresponselines = sensoractuatorresponselines;
+	public void setTimeout(Integer timeout) {
+		this.timeout = timeout;
 	}
 
 }
