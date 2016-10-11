@@ -21,6 +21,7 @@ public class Cache {
 	public static DayScheduleRuleData DayScheduleRules;
 	public static RegularScheduleData RegularSchedules;
 	public static SpecialScheduleData SpecialSchedules;
+	public static SensorActuatorResponseData SensorActuatorResponses;
 	
 	private static String getHSQLAddress () {
 		StringBuilder sb=new StringBuilder();
@@ -66,6 +67,7 @@ public class Cache {
 			    DayScheduleRules=new DayScheduleRuleData();
 			    RegularSchedules=new RegularScheduleData();
 			    SpecialSchedules=new SpecialScheduleData();
+			    SensorActuatorResponses=new SensorActuatorResponseData();
 			    
 			    boolean flag=(factory!=null);
 			    if (flag) {
@@ -79,6 +81,7 @@ public class Cache {
 				    flag &=DayScheduleRules.update();
 				    flag &=RegularSchedules.update();
 				    flag &=SpecialSchedules.update();
+				    flag &=SensorActuatorResponses.update();
 			    }
 			    
 			    if (!flag) JOptionPane.showMessageDialog(null,"Fail to update data from database!\nMost functionalities will not be working.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
@@ -248,6 +251,19 @@ public class Cache {
 			for (Object o : l) {
 				Specialschedule s=(Specialschedule)o;
 				map.put(s.getSchedulename(),s);
+			}
+		}
+	}
+	
+	public static class SensorActuatorResponseData extends Data<Sensoractuatorresponse> {
+		public String getType() {return "sensor actuator responses";}
+		public String getClassName() {return "Sensoractuatorresponse";}
+		
+		public void onAcquired (@SuppressWarnings("rawtypes") List l) {
+			map.clear();
+			for (Object o : l) {
+				Sensoractuatorresponse s=(Sensoractuatorresponse)o;
+				map.put(String.valueOf(s.getId()),s);
 			}
 		}
 	}

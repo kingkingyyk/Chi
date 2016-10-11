@@ -164,7 +164,7 @@ public class GWTServer {
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
-		    case "19b" : { //RegularScheduleSetOnStartAction
+		    case "19b" : { //RegularScheduleSetOnEndAction
 		    	Regularschedule r=Cache.RegularSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
@@ -172,7 +172,7 @@ public class GWTServer {
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
-		    case "19c" : { //RegularScheduleSetOnStartAction
+		    case "19c" : { //RegularScheduleSetLock
 		    	Regularschedule r=Cache.RegularSchedules.map.get(list.get(1));
 		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
@@ -510,7 +510,7 @@ public class GWTServer {
 	
 	public static boolean stop() {
 		if (t!=null) {
-			Logger.log("GWTSecure/Server - Requested to stop");
+			Logger.log("GWTSecureServer - Requested to stop");
 			t.stopFlag=true;
 			if (t instanceof GWTSecureServerThread) {
 				try {

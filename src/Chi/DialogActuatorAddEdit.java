@@ -44,6 +44,7 @@ public class DialogActuatorAddEdit extends JDialog {
 	private double [] positionTargetFactor=new double [2];
 	private String currentMapURL;
 	private JPanel panelMap;
+	private JComboBox<String> comboBoxControlType;
 
 	
 	public DialogActuatorAddEdit() {
@@ -54,12 +55,12 @@ public class DialogActuatorAddEdit extends JDialog {
 		uiActionsAdd();
 	}
 	
-	public DialogActuatorAddEdit(String n, String u, double px, double py) {
+	public DialogActuatorAddEdit(String n, String u, double px, double py, String type) {
 		positionTargetFactor[0]=px;
 		positionTargetFactor[1]=py;
 		create();
 		uiActionsNormal();
-		prefill(n,u);
+		prefill(n,u,type);
 		uiActionsEdit(n);
 	}
 	
@@ -68,7 +69,7 @@ public class DialogActuatorAddEdit extends JDialog {
 		setModal(true);
 		setResizable(false);
 		setIconImage(Theme.getIcon("ChiLogo").getImage());
-		setBounds(100, 100, 608, 458);
+		setBounds(100, 100, 608, 490);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(null);
 		contentPanel.setBounds(0, 11, 602, 391);
@@ -114,12 +115,12 @@ public class DialogActuatorAddEdit extends JDialog {
 		
 		JLabel lblPosition = new JLabel("Position :");
 		lblPosition.setHorizontalAlignment(SwingConstants.LEFT);
-		lblPosition.setBounds(15, 72, 75, 14);
+		lblPosition.setBounds(10, 105, 75, 14);
 		contentPanel.add(lblPosition);
 		
 		panelMap = new JPanel();
 		panelMap.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		panelMap.setBounds(10, 98, 584, 278);
+		panelMap.setBounds(10, 130, 584, 278);
 		contentPanel.add(panelMap);
 		panelMap.setLayout(null);
 		
@@ -168,9 +169,21 @@ public class DialogActuatorAddEdit extends JDialog {
 		lblPositionMap.setBackground(Color.WHITE);
 		lblPositionMap.setBounds(0, 0, 584, 278);
 		panelMap.add(lblPositionMap);
+		
+		comboBoxControlType = new JComboBox<String>();
+		comboBoxControlType.setBounds(98, 70, 206, 20);
+		comboBoxControlType.addItem("Manual");
+		comboBoxControlType.addItem("Scheduled");
+		comboBoxControlType.addItem("Sensor Response");
+		contentPanel.add(comboBoxControlType);
+		
+		JLabel lblControlType = new JLabel("Control Type :");
+		lblControlType.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblControlType.setBounds(10, 72, 78, 14);
+		contentPanel.add(lblControlType);
 		{
 			JPanel buttonPane = new JPanel();
-			buttonPane.setBounds(0, 400, 602, 33);
+			buttonPane.setBounds(0, 429, 602, 33);
 			getContentPane().add(buttonPane);
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			{
@@ -185,9 +198,10 @@ public class DialogActuatorAddEdit extends JDialog {
 		}
 	}
 	
-	private void prefill(String n, String c) {
+	private void prefill(String n, String c, String type) {
 		textFieldName.setText(n);
 		comboBoxController.setSelectedItem(c);
+		comboBoxControlType.setSelectedItem(type);
 	}
 	
 	
@@ -280,7 +294,7 @@ public class DialogActuatorAddEdit extends JDialog {
 					u.setText("Creating actuator");
 					Thread t=new Thread() {
 						public void run () {
-							flag=DatabaseActuator.createActuator(textFieldName.getText(),(String) comboBoxController.getSelectedItem(),positionTargetFactor[0],positionTargetFactor[1]);
+							flag=DatabaseActuator.createActuator(textFieldName.getText(),(String) comboBoxController.getSelectedItem(),positionTargetFactor[0],positionTargetFactor[1],(String)comboBoxControlType.getSelectedItem());
 							u.dispose();
 						}
 					};
@@ -328,7 +342,7 @@ public class DialogActuatorAddEdit extends JDialog {
 					u.setText("Updating actuator");
 					Thread t=new Thread() {
 						public void run () {
-							flag=DatabaseActuator.updateActuator(n, textFieldName.getText(),(String)comboBoxController.getSelectedItem(),positionTargetFactor[0],positionTargetFactor[1]);
+							flag=DatabaseActuator.updateActuator(n, textFieldName.getText(),(String)comboBoxController.getSelectedItem(),positionTargetFactor[0],positionTargetFactor[1],(String)comboBoxControlType.getSelectedItem());
 							u.dispose();
 						}
 					};

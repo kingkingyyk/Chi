@@ -13,7 +13,7 @@ public class SchedulingThread extends Thread {
 	
 	public class OnActuatorUpdate implements DatabaseActuator.OnUpdateAction {
 		@Override
-		public void run(String oldN, String n, String u, double px, double py) {
+		public void run(String oldN, String n, String u, double px, double py, String ctrlType) {
 			for (SchedulingData d : data.values()) {
 				if (d.getActuatorName().equals(oldN)) {
 					d.setActuatorName(n);

@@ -10,7 +10,7 @@ public class FrameActuatorManagementBind {
 	}
 	public static class OnActuatorUpdate implements DatabaseActuator.OnUpdateAction {
 		@Override
-		public void run(String oldN, String n, String u, double px, double py) {
+		public void run(String oldN, String n, String u, double px, double py, String ctrlType) {
 			FrameActuatorManagement.refresh();
 		}
 	}

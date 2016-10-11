@@ -48,7 +48,8 @@ CREATE TABLE Actuator(
 	Status varchar(100),
 	PositionX double,
 	PositionY double,
-	FOREIGN KEY (Controller) REFERENCES Controller(ControllerName)  ON UPDATE CASCADE
+	ControlType varchar(100),
+	FOREIGN KEY (Controller) REFERENCES Controller(ControllerName) ON UPDATE CASCADE
 )
 @
 CREATE TABLE DayScheduleRule(

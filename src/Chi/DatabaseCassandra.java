@@ -28,6 +28,11 @@ public class DatabaseCassandra {
 		t.start();
 	}
 	
+	public static void Stop() {
+		if (session!=null) session.close();
+		if (cluster!=null) cluster.close();
+	}
+	
 	protected static Cluster getCluster() {
 		return cluster;
 	}

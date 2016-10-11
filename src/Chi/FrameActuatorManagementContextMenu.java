@@ -66,7 +66,7 @@ public class FrameActuatorManagementContextMenu extends JPopupMenu {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Actuator act =m.getSelectedActuator();
-				DialogActuatorAddEdit diag=new DialogActuatorAddEdit(act.getName(),act.getController().getControllername(),act.getPositionx(),act.getPositiony());
+				DialogActuatorAddEdit diag=new DialogActuatorAddEdit(act.getName(),act.getController().getControllername(),act.getPositionx(),act.getPositiony(),act.getControltype());
 				diag.setVisible(true);
 			}
 		});

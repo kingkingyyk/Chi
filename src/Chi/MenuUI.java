@@ -41,7 +41,7 @@ public class MenuUI extends JFrame {
 	public MenuUI() {
 		setTitle(Config.APP_NAME);
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 530, 412);
 		setIconImage(Theme.getIcon("ChiLogo").getImage());
 		contentPane = new JPanel();
@@ -52,7 +52,21 @@ public class MenuUI extends JFrame {
 		JButton btnExit = new JButton("Exit");
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Cache.Stop();
+				WaitUI u=new WaitUI();
+				u.setText("Closing database connection...");
+				u.setProgressBarMax(2);
+				Thread t=new Thread() {
+					public void run () {
+						Cache.Stop();
+						u.setProgressBarValue(1);
+						DatabaseCassandra.Stop();
+						u.setProgressBarValue(2);
+						u.dispose();
+					}
+				};
+				t.start();
+				u.setVisible(true);
+
 				System.exit(0);
 			}
 		});
@@ -419,11 +433,11 @@ public class MenuUI extends JFrame {
 				f.toFront();
 			}
 		});
-		btnDayScheduleRules.setBounds(10, 11, 127, 23);
+		btnDayScheduleRules.setBounds(10, 61, 127, 23);
 		panelAutomation.add(btnDayScheduleRules);
 		
 		JButton btnRegularSchedules = new JButton("Regular Schedules");
-		btnRegularSchedules.setBounds(145, 11, 127, 23);
+		btnRegularSchedules.setBounds(145, 61, 127, 23);
 		btnRegularSchedules.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				FrameRegularScheduleManagement f=FrameRegularScheduleManagement.getInstance();
@@ -441,12 +455,12 @@ public class MenuUI extends JFrame {
 				f.toFront();
 			}
 		});
-		btnSpecialSchedules.setBounds(277, 11, 127, 23);
+		btnSpecialSchedules.setBounds(277, 61, 127, 23);
 		panelAutomation.add(btnSpecialSchedules);
 		
 		btnOngoingSchedules = new JButton("Ongoing Schedules");
 		btnOngoingSchedules.setEnabled(false);
-		btnOngoingSchedules.setBounds(10, 45, 127, 23);
+		btnOngoingSchedules.setBounds(10, 95, 127, 23);
 		btnOngoingSchedules.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				FrameOngoingSchedules f=FrameOngoingSchedules.getInstance();
@@ -457,12 +471,29 @@ public class MenuUI extends JFrame {
 		panelAutomation.add(btnOngoingSchedules);
 		
 		JButton btnSensorActuatorResponse = new JButton("Sensor Actuator Response");
-		btnSensorActuatorResponse.setBounds(10, 105, 175, 23);
+		btnSensorActuatorResponse.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		btnSensorActuatorResponse.setBounds(10, 142, 175, 23);
 		panelAutomation.add(btnSensorActuatorResponse);
 		
 		JSeparator separator = new JSeparator();
-		separator.setBounds(10, 92, 394, 2);
+		separator.setBounds(10, 48, 394, 2);
 		panelAutomation.add(separator);
+		
+		JSeparator separator_1 = new JSeparator();
+		separator_1.setBounds(10, 129, 394, 2);
+		panelAutomation.add(separator_1);
+		
+		JButton btnAutomationSummary = new JButton("Automation Summary");
+		btnAutomationSummary.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		btnAutomationSummary.setBounds(10, 14, 175, 23);
+		panelAutomation.add(btnAutomationSummary);
 		
 		JPanel panelNotification = new JPanel();
 		tabbedPane.addTab("Notification", null, panelNotification, null);

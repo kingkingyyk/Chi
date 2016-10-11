@@ -12,7 +12,7 @@ public class DatabaseActuator {
 	}
 
 	public static interface OnUpdateAction {
-		public void run(String oldN, String n, String u, double px, double py);
+		public void run(String oldN, String n, String u, double px, double py, String ctrlType);
 	}
 
 	public static interface OnUpdateStatusAction {
@@ -56,7 +56,7 @@ public class DatabaseActuator {
 		}
 	}
 
-	public static boolean createActuator(String n, String u, double px, double py) {
+	public static boolean createActuator(String n, String u, double px, double py, String ctrlType) {
 		Logger.log("DatabaseActuator - Create");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
@@ -65,7 +65,7 @@ public class DatabaseActuator {
 			tx = session.beginTransaction();
 			Actuator act = session.get(Actuator.class,n);
 			if (act==null) {
-				act = new Actuator(n, (Controller) session.get(Controller.class, u),"Pending Update", px, py, null, null, null);
+				act = new Actuator(n, (Controller) session.get(Controller.class, u),"Pending Update", px, py, ctrlType, null, null, null);
 				session.save(act);
 				tx.commit();
 				Cache.Actuators.map.put(n,act);
@@ -82,7 +82,7 @@ public class DatabaseActuator {
 		return flag;
 	}
 
-	public static boolean updateActuator(String oldN, String n, String u, double px, double py) {
+	public static boolean updateActuator(String oldN, String n, String u, double px, double py, String ctrlType) {
 		Logger.log("DBActuator Update");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
@@ -99,6 +99,7 @@ public class DatabaseActuator {
 				act.setController((Controller) session.get(Controller.class, u));
 				act.setPositionx(px);
 				act.setPositiony(py);
+				act.setControltype(ctrlType);
 				session.update(act);
 				tx.commit();
 				Cache.Actuators.map.put(n,act);
@@ -110,7 +111,7 @@ public class DatabaseActuator {
 						s.setActuator(act);
 				
 				Logger.log("DB Update Actuator - Execute Callbacks");
-				for (OnUpdateAction a : OnUpdateList) a.run(oldN, n, u, px, py);
+				for (OnUpdateAction a : OnUpdateList) a.run(oldN, n, u, px, py, ctrlType);
 				flag = true;
 			} else Logger.log("DB Update Actuator - Actuator doesn't exist");
 		} catch (HibernateException e) {

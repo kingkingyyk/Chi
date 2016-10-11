@@ -12,6 +12,7 @@ public class Actuator implements java.io.Serializable {
 	private String status;
 	private Double positionx;
 	private Double positiony;
+	private String controltype;
 	private Set<Sensoractuatorresponse> sensoractuatorresponses = new HashSet<>(0);
 	private Set<Specialschedule> specialschedules = new HashSet<>(0);
 	private Set<Regularschedule> regularschedules = new HashSet<>(0);
@@ -24,14 +25,15 @@ public class Actuator implements java.io.Serializable {
 	}
 
 	public Actuator(String name, Controller controller, String status, Double positionx, Double positiony,
-			Set<Sensoractuatorresponse> sensoractuatorresponses, Set<Specialschedule> specialschedules, Set<Regularschedule> regularschedules) {
+			String controltype, Set<Specialschedule> specialschedules, Set<Sensoractuatorresponse> sensoractuatorresponses, Set<Regularschedule> regularschedules) {
 		this.name = name;
 		this.controller = controller;
 		this.status = status;
 		this.positionx = positionx;
 		this.positiony = positiony;
-		this.sensoractuatorresponses = sensoractuatorresponses;
+		this.controltype = controltype;
 		this.specialschedules = specialschedules;
+		this.sensoractuatorresponses = sensoractuatorresponses;
 		this.regularschedules = regularschedules;
 	}
 
@@ -75,6 +77,14 @@ public class Actuator implements java.io.Serializable {
 		this.positiony = positiony;
 	}
 
+	public String getControltype() {
+		return this.controltype;
+	}
+
+	public void setControltype(String controltype) {
+		this.controltype = controltype;
+	}
+	
 	public Set<Sensoractuatorresponse> getSensoractuatorresponses() {
 		return this.sensoractuatorresponses;
 	}
@@ -99,6 +109,6 @@ public class Actuator implements java.io.Serializable {
 		this.regularschedules = regularschedules;
 	}
 	public Object [] toObj () {
-		return new Object [] {this.getName(), this.getController().getControllername(), this.getStatus(),this.positionx,this.positiony};
+		return new Object [] {this.getName(), this.getController().getControllername(), this.getStatus(),this.positionx,this.positiony,this.controltype};
 	}
 }

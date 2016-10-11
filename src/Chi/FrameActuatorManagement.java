@@ -33,7 +33,7 @@ public class FrameActuatorManagement extends JFrame {
 		public boolean isCellEditable(int row, int column){ return false;  }
 		
 		@SuppressWarnings("rawtypes")
-		private Class [] colClass={String.class,String.class,String.class,String.class};
+		private Class [] colClass={String.class,String.class,String.class,String.class,String.class};
 	    @Override
 	    public Class<?> getColumnClass(int colNum) {
 	    	return colClass[colNum];
@@ -42,7 +42,7 @@ public class FrameActuatorManagement extends JFrame {
 	}
 	
 	private static class ActuatorTableModel extends AbstractTreeTableModel {
-		public static final String [] COLUMNS= {"Name","Attached On","Status","Position"};
+		public static final String [] COLUMNS= {"Name","Attached On","Status","Position","Control Type"};
 		
 		public ActuatorTableModel (ActuatorTableRow r) {
 			super(r);
@@ -98,7 +98,7 @@ public class FrameActuatorManagement extends JFrame {
 		}
 		
 		public void updateInfo () {
-			renderText=new String [] {obj.getName(), obj.getController().getControllername(), obj.getStatus(),String.format("%.2f,%.2f",obj.getPositionx(),obj.getPositiony())};
+			renderText=new String [] {obj.getName(), obj.getController().getControllername(), obj.getStatus(),String.format("%.2f,%.2f",obj.getPositionx(),obj.getPositiony()),obj.getControltype()};
 		}
 		public void addRow (ActuatorTableRow r) {
 			this.subRow.add(r);
@@ -282,6 +282,7 @@ public class FrameActuatorManagement extends JFrame {
 			table.getColumn(1).setCellRenderer(new ActuatorTableCellRenderer());
 			table.getColumn(2).setCellRenderer(new ActuatorTableCellRenderer());
 			table.getColumn(3).setCellRenderer(new ActuatorTableCellRenderer());
+			table.getColumn(4).setCellRenderer(new ActuatorTableCellRenderer());
 		}
 		
 		selectedRow=Math.min(selectedRow,rootRow.rowObj.size()-1);

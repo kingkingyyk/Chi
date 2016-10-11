@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Oct 10, 2016 8:50:49 PM by Hibernate Tools 5.2.0.Beta1 -->
+<!-- Generated Oct 11, 2016 3:06:40 PM by Hibernate Tools 5.2.0.Beta1 -->
 <hibernate-mapping>
     <class name="Chi.Actuator" table="ACTUATOR" schema="PUBLIC" catalog="PUBLIC" optimistic-lock="version">
         <id name="name" type="string">
@@ -20,17 +20,20 @@
         <property name="positiony" type="java.lang.Double">
             <column name="POSITIONY" precision="64" scale="0" />
         </property>
-        <set name="sensoractuatorresponses" table="SENSORACTUATORRESPONSE" inverse="true" lazy="true" fetch="select">
-            <key>
-                <column name="ACTUATORNAME" length="100" />
-            </key>
-            <one-to-many class="Chi.Sensoractuatorresponse" />
-        </set>
+        <property name="controltype" type="string">
+            <column name="CONTROLTYPE" length="100" />
+        </property>
         <set name="specialschedules" table="SPECIALSCHEDULE" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="ACTUATORNAME" length="100" />
             </key>
             <one-to-many class="Chi.Specialschedule" />
+        </set>
+        <set name="sensoractuatorresponses" table="SENSORACTUATORRESPONSE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ACTUATORNAME" length="100" />
+            </key>
+            <one-to-many class="Chi.Sensoractuatorresponse" />
         </set>
         <set name="regularschedules" table="REGULARSCHEDULE" inverse="true" lazy="true" fetch="select">
             <key>
