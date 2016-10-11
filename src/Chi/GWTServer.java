@@ -95,8 +95,9 @@ public class GWTServer {
 		    }
 		    case "11" : { //ActuatorGetRegularSchedules
 		    	ArrayList<Object []> result=new ArrayList<>();
-		    	for (Regularschedule r : Cache.Actuators.map.get(list.get(1)).getRegularschedules()) {
-		    		result.add(r.toObj());
+		    	for (Regularschedule r : Cache.RegularSchedules.map.values()) {
+		    		if (r.getActuator().getName().equals(list.get(1)))
+		    			result.add(r.toObj());
 		    	}
 		    	return result;
 		    }

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Oct 11, 2016 3:06:40 PM by Hibernate Tools 5.2.0.Beta1 -->
+<!-- Generated Oct 11, 2016 4:13:20 PM by Hibernate Tools 5.2.0.Beta1 -->
 <hibernate-mapping>
     <class name="Chi.Actuator" table="ACTUATOR" schema="PUBLIC" catalog="PUBLIC" optimistic-lock="version">
         <id name="name" type="string">
@@ -23,11 +23,11 @@
         <property name="controltype" type="string">
             <column name="CONTROLTYPE" length="100" />
         </property>
-        <set name="specialschedules" table="SPECIALSCHEDULE" inverse="true" lazy="true" fetch="select">
+        <set name="regularschedules" table="REGULARSCHEDULE" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="ACTUATORNAME" length="100" />
             </key>
-            <one-to-many class="Chi.Specialschedule" />
+            <one-to-many class="Chi.Regularschedule" />
         </set>
         <set name="sensoractuatorresponses" table="SENSORACTUATORRESPONSE" inverse="true" lazy="true" fetch="select">
             <key>
@@ -35,11 +35,11 @@
             </key>
             <one-to-many class="Chi.Sensoractuatorresponse" />
         </set>
-        <set name="regularschedules" table="REGULARSCHEDULE" inverse="true" lazy="true" fetch="select">
+        <set name="specialschedules" table="SPECIALSCHEDULE" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="ACTUATORNAME" length="100" />
             </key>
-            <one-to-many class="Chi.Regularschedule" />
+            <one-to-many class="Chi.Specialschedule" />
         </set>
     </class>
 </hibernate-mapping>
