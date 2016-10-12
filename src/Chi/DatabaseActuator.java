@@ -55,6 +55,34 @@ public class DatabaseActuator {
 			OnDeleteList.add(a);
 		}
 	}
+	
+	public static void unregisterOnCreateAction(OnCreateAction a) {
+		if (OnCreateList.contains(a)) {
+			Logger.log("DatabaseActuator - Unregistered " + a.toString() + " to OnCreate callback");
+			OnCreateList.remove(a);
+		}
+	}
+
+	public static void unregisterOnUpdateAction(OnUpdateAction a) {
+		if (OnUpdateList.contains(a)) {
+			Logger.log("DatabaseActuator - Unregistered " + a.toString() + " to OnUpdate callback");
+			OnUpdateList.remove(a);
+		}
+	}
+
+	public static void unregisterOnUpdateStatusAction(OnUpdateStatusAction a) {
+		if (OnUpdateStatusList.contains(a)) {
+			Logger.log("DatabaseActuator - Unregistered " + a.toString() + " to OnUpdateStatus callback");
+			OnUpdateStatusList.remove(a);
+		}
+	}
+
+	public static void unregisterOnDeleteAction(OnDeleteAction a) {
+		if (OnDeleteList.contains(a)) {
+			Logger.log("DatabaseActuator - Unregistered " + a.toString() + " to OnDelete callback");
+			OnDeleteList.remove(a);
+		}
+	}
 
 	public static boolean createActuator(String n, String u, double px, double py, String ctrlType) {
 		Logger.log("DatabaseActuator - Create");
@@ -164,6 +192,13 @@ public class DatabaseActuator {
 				Logger.log("DB Delete Actuator - Execute Callbacks");
 				for (OnDeleteAction a : OnDeleteList) a.run(n);
 				flag = true;
+				
+				for (Sensoractuatorresponse res : Cache.SensorActuatorResponses.map.values()) {
+					if (res.getActuator().getName().equals(n)) {
+						DatabaseSensorActuatorResponse.deleteSensorActuatorResponse(res.getId());
+						Cache.SensorActuatorResponses.map.remove(String.valueOf(res.getId()));
+					}
+				}
 			} else Logger.log("DB Delete Actuator - Actuator doesn't exist");
 		} catch (HibernateException e) {
 			if (tx != null) tx.rollback();

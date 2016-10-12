@@ -44,6 +44,27 @@ public class DatabaseSensorActuatorResponse {
 		}
 	}
 	
+	public static void unregisterOnCreateAction (OnCreateAction a) {
+		if (OnCreateList.contains(a)) {
+			Logger.log("DatabaseSensorActuatorResponse - Unegistered "+a.toString()+" to OnCreate callback");
+			OnCreateList.remove(a);
+		}
+	}
+	
+	public static void unregisterOnUpdateAction (OnUpdateAction a) {
+		if (OnUpdateList.contains(a)) {
+			Logger.log("DatabaseSensorActuatorResponse - Unregistered "+a.toString()+" to OnUpdate callback");
+			OnUpdateList.remove(a);
+		}
+	}
+	
+	public static void unregisterOnDeleteAction (OnDeleteAction a) {
+		if (OnDeleteList.contains(a)) {
+			Logger.log("DatabaseSensorActuatorResponse - Unregistered "+a.toString()+" to OnDelete callback");
+			OnDeleteList.remove(a);
+		}
+	}
+	
 	public static boolean createSensorActuatorResponse (String an, String onTrigAct, String onNotTrigAct,
 														String expression, boolean en, int timeout) {
 		Logger.log("DatabaseSensorActuatorResponse - Create");

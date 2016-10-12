@@ -151,6 +151,8 @@ public class MenuUI extends JFrame {
 				} else {
 					JOptionPane.showMessageDialog(null,"Failed to connect to database. Server will now shut down.","Scheduling Server",JOptionPane.ERROR_MESSAGE);
 				}
+				
+				SensorActuatorResponseServer.start();
 			}
 		});
 		
@@ -165,6 +167,8 @@ public class MenuUI extends JFrame {
 					btnStopAutomationServer.setEnabled(false);
 					btnOngoingSchedules.setEnabled(false);
 				}
+				
+				SensorActuatorResponseServer.stop();
 			}
 		});
 		panelServer.add(btnStopAutomationServer);
