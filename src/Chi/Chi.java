@@ -69,6 +69,8 @@ public class Chi {
 		}; t.start();
 		diag.setVisible(true);
 		
+		DatabaseReading.initialize();
+		
 		Logger.log("MainUI started.");
 		MenuUI ss=new MenuUI();
 		ss.setLocationRelativeTo(null);

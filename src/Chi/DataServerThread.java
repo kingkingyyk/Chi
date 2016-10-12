@@ -52,8 +52,11 @@ public class DataServerThread extends Thread {
 							case "0" : {
 								try {
 									String cn=st.nextToken(); //controller name
+									String sn=st.nextToken(); //sensor name
+									double reading=Double.parseDouble(st.nextToken());
 									DatabaseController.updateControllerReport(cn,sc.getInetAddress().getHostAddress(),LocalDateTime.now());
-									DataServerReadingToDatabase.queueData(st.nextToken(),Double.parseDouble(st.nextToken()));
+									DatabaseReading.updateLastReading(sn, reading);
+									DataServerReadingToDatabase.queueData(sn,reading);
 								} catch (NumberFormatException e) {}
 								break;
 							}

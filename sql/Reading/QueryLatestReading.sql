@@ -1,0 +1,1 @@
+SELECT Value FROM SensorReading WHERE SensorName=? LIMIT 1;

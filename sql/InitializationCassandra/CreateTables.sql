@@ -1,6 +1,7 @@
 USE Chi
 @
 CREATE TABLE SensorReading(
+	Id uuid,
 	SensorName text,
 	Year int,
 	Month int,
@@ -9,5 +10,5 @@ CREATE TABLE SensorReading(
 	IsMorning Boolean,
 	TimeStp timestamp,
 	Value double,
-	PRIMARY KEY (SensorName,TimeStp)
+	PRIMARY KEY (Id,TimeStp)
 ) WITH CLUSTERING ORDER BY (TimeStp DESC);

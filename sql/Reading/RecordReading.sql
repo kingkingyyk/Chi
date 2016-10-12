@@ -1,1 +1,1 @@
-INSERT INTO SensorReading(SensorName,Year,Month,Day,Weekday,IsMorning,TimeStp,Value) VALUES(?,?,?,?,?,?,?,?);
+INSERT INTO SensorReading(Id,SensorName,Year,Month,Day,Weekday,IsMorning,TimeStp,Value) VALUES(uuid(),?,?,?,?,?,?,?,?);

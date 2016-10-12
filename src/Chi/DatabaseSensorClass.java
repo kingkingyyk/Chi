@@ -1,6 +1,6 @@
 package Chi;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -20,9 +20,9 @@ public class DatabaseSensorClass {
 		public void run (String name);
 	}
 	
-	private static ArrayList<OnCreateAction> OnCreateList=new ArrayList<>();
-	private static ArrayList<OnUpdateAction> OnUpdateList=new ArrayList<>();
-	private static ArrayList<OnDeleteAction> OnDeleteList=new ArrayList<>();
+	private static LinkedList<OnCreateAction> OnCreateList=new LinkedList<>();
+	private static LinkedList<OnUpdateAction> OnUpdateList=new LinkedList<>();
+	private static LinkedList<OnDeleteAction> OnDeleteList=new LinkedList<>();
 	
 	public static void registerOnCreateAction (OnCreateAction a) {
 		if (!OnCreateList.contains(a)) {

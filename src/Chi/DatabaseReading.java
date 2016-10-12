@@ -3,6 +3,7 @@ package Chi;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import com.datastax.driver.core.BoundStatement;
@@ -11,6 +12,68 @@ import com.datastax.driver.core.Row;
 import com.datastax.driver.core.exceptions.NoHostAvailableException;
 
 public class DatabaseReading extends DatabaseCassandra {
+	public static HashMap<Sensor,Double> SensorLastReading=new HashMap<>();
+	
+	public static interface OnReceivedAction {
+		public void run (String sensorName,double value);
+	}
+	public static interface OnRecalculateAction {
+		public void run (String sensorName,double value);
+	}
+	
+	private static LinkedList<OnReceivedAction> OnReceivedList=new LinkedList<>();
+	private static LinkedList<OnRecalculateAction> OnRecalculateList=new LinkedList<>();
+	
+	public static void registerOnReceivedAction (OnReceivedAction a) {
+		if (!OnReceivedList.contains(a)) {
+			Logger.log("DatabaseReading - Registered "+a.toString()+" to OnReceived callback");
+			OnReceivedList.add(a);
+		}
+	}
+	
+	public static void registerOnRecalculateAction (OnRecalculateAction a) {
+		if (!OnRecalculateList.contains(a)) {
+			Logger.log("DatabaseReading - Registered "+a.toString()+" to OnRecalculate callback");
+			OnRecalculateList.add(a);
+		}
+	}
+	
+	public static void unregisterOnReceivedAction (OnReceivedAction a) {
+		if (OnReceivedList.contains(a)) {
+			Logger.log("DatabaseReading - Unregistered "+a.toString()+" to OnReceived callback");
+			OnReceivedList.remove(a);
+		}
+	}
+	
+	public static void unregisterOnRecalculateAction (OnRecalculateAction a) {
+		if (OnRecalculateList.contains(a)) {
+			Logger.log("DatabaseReading - Unregistered "+a.toString()+" to OnRecalculate callback");
+			OnRecalculateList.remove(a);
+		}
+	}
+	
+	public static void initialize() {
+		SensorLastReading.clear();
+		for (Sensor s : Cache.Sensors.map.values()) {
+			SensorLastReading.put(s,getLatestReading(s.getSensorname()));
+		}
+		DatabaseSensorReadingBind.initialize();
+	}
+	
+	public static void updateLastReading (String sn, double reading) {
+		Sensor s=Cache.Sensors.map.getOrDefault(sn,null);
+		if (s!=null) {
+			SensorLastReading.put(s,s.denormalizeValue(reading));
+		}
+	}
+	
+	public static void refreshReading (String sn) {
+		Sensor s=Cache.Sensors.map.getOrDefault(sn,null);
+		if (s!=null) {
+			LinkedList<SensorReading> list =getReadingBetweenTime(s.getSensorname(),LocalDateTime.of(1990,01,01,0,0,0),LocalDateTime.now());
+			if (list.size()>0) SensorLastReading.put(s,list.get(0).getActualValue());
+		}
+	}
 	
 	public static boolean storeReading () {
 		String ip=Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY);
@@ -73,6 +136,32 @@ public class DatabaseReading extends DatabaseCassandra {
 		return list;
 	}
 	
+	public static double getLatestReading (String sn) {
+		String ip=Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY);
+		int port=Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
+		Logger.log("DB Get Latest Reading : "+Config.getConfig(Config.DATABASE_RECORD_QUERY_LATEST_FILE_KEY));
+		try {
+			Logger.log("DB Get Latest Reading - Connecting to database : "+ip+":"+port);
+			Logger.log("DB Get Latest Reading - Database connection OK!");
+			
+			BoundStatement [] sql=getBoundSQLStatementFromFile(DatabaseCassandra.getSession(),Config.getConfig(Config. DATABASE_RECORD_QUERY_BETWEEN_TIME_FILE_KEY));
+			sql[0].setString(0, sn);
+			ResultSet rs=executeSQL("DB Get Latest Reading", DatabaseCassandra.getSession(), sql[0]);
+			
+			double d=0;
+			for (Row r : rs) {
+				d=Cache.Sensors.map.get(sn).denormalizeValue(r.getDouble("Value"));
+			}
+			return d;
+		} catch (NoHostAvailableException e) {
+			Logger.log("DB Get Latest Reading - Database connection fail!");
+		} catch (Exception e) {
+			Logger.log("DB Get Latest Reading - Error - "+e.getMessage());
+			e.printStackTrace();
+		}
+		return 0.0;
+	}
+	
 	public static LinkedList<SensorReading> getReadingMonthly (String sn, int year, int month) {
 		String ip=Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY);
 		int port=Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
@@ -99,6 +188,19 @@ public class DatabaseReading extends DatabaseCassandra {
 			e.printStackTrace();
 		}
 		return list;
+	}
+	
+	public static void updateSensorName (String oldSN, String newSN) {;
+		try {
+			Logger.log("DB updateSensorName");
+			
+			DatabaseCassandra.getSession().execute("UPDATE SensorReading SET SensorName='"+newSN+"' WHERE SensorName='"+oldSN+"';");
+		} catch (NoHostAvailableException e) {
+			Logger.log("DB updateSensorName - Database connection fail!");
+		} catch (Exception e) {
+			Logger.log("DB updateSensorName - Error - "+e.getMessage());
+			e.printStackTrace();
+		}
 	}
 	
 	public static void clearReading (String sn) {
