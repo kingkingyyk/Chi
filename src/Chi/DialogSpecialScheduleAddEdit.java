@@ -250,8 +250,8 @@ public class DialogSpecialScheduleAddEdit extends JDialog {
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
 				} else if (Cache.SpecialSchedules.map.containsKey(txt) || Cache.RegularSchedules.map.containsKey(txt)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
-				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
-					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
+				} else if (!Utility.validateName(txt)) {
+					lblNameInfo.setText("<html><font color=\"red\">Contains invalid character</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
 				}
@@ -270,7 +270,7 @@ public class DialogSpecialScheduleAddEdit extends JDialog {
 					priorityOK=(i>0);
 				} catch (NumberFormatException e) {};
 				
-				if (txt==null || txt.isEmpty() || Cache.SpecialSchedules.map.containsKey(txt) || Cache.RegularSchedules.map.containsKey(txt) || !priorityOK || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+				if (txt==null || txt.isEmpty() || Cache.SpecialSchedules.map.containsKey(txt) || Cache.RegularSchedules.map.containsKey(txt) || !priorityOK || !Utility.validateName(txt)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Special Schedule",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -310,8 +310,8 @@ public class DialogSpecialScheduleAddEdit extends JDialog {
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
 				} else if ((Cache.SpecialSchedules.map.containsKey(txt) || Cache.RegularSchedules.map.containsKey(txt)) && !txt.equals(n)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
-				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
-					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
+				} else if (!Utility.validateName(txt)) {
+					lblNameInfo.setText("<html><font color=\"red\">Contains invald character</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
 				}
@@ -329,7 +329,7 @@ public class DialogSpecialScheduleAddEdit extends JDialog {
 					int i=Integer.parseInt(textFieldPriority.getText());
 					priorityOK=(i>0);
 				} catch (NumberFormatException e) {};
-				if (txt==null || txt.isEmpty() || ((Cache.SpecialSchedules.map.containsKey(txt) || Cache.RegularSchedules.map.containsKey(txt)) && !txt.equals(n)) || !priorityOK || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+				if (txt==null || txt.isEmpty() || ((Cache.SpecialSchedules.map.containsKey(txt) || Cache.RegularSchedules.map.containsKey(txt)) && !txt.equals(n)) || !priorityOK || !Utility.validateName(txt)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Edit Special Schedule",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

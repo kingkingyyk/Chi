@@ -467,8 +467,8 @@ public class DialogSensorAddEdit extends JDialog {
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
 				} else if (Cache.Sensors.map.containsKey(txt)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
-				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
-					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
+				} else if (!Utility.validateName(txt)) {
+					lblNameInfo.setText("<html><font color=\"red\">Contains invalid character</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
 				}
@@ -480,7 +480,7 @@ public class DialogSensorAddEdit extends JDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (!validateInput() || Cache.Sensors.map.containsKey(textFieldName.getText()) || textFieldName.getText().contains(Config.PACKET_FIELD_DELIMITER) && comboBoxController.getSelectedIndex()!=-1) {
+				if (!validateInput() || Cache.Sensors.map.containsKey(textFieldName.getText()) || !Utility.validateName(textFieldName.getText()) && comboBoxController.getSelectedIndex()!=-1) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Sensor",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -521,8 +521,8 @@ public class DialogSensorAddEdit extends JDialog {
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
 				} else if (Cache.Sensors.map.containsKey(txt) && !txt.equals(n)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
-				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
-					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
+				} else if (!Utility.validateName(txt)) {
+					lblNameInfo.setText("<html><font color=\"red\">Contains invalid character</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
 				}
@@ -534,7 +534,7 @@ public class DialogSensorAddEdit extends JDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (!validateInput() || (Cache.Sensors.map.containsKey(textFieldName.getText()) && !textFieldName.getText().equals(n)) || textFieldName.getText().contains(Config.PACKET_FIELD_DELIMITER)) {
+				if (!validateInput() || (Cache.Sensors.map.containsKey(textFieldName.getText()) && !textFieldName.getText().equals(n)) || !Utility.validateName(textFieldName.getText())) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Sensor",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

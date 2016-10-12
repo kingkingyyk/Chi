@@ -312,8 +312,8 @@ public class DialogControllerAddEdit extends JDialog {
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
 				} else if (Cache.Controllers.map.containsKey(txt)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
-				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
-					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
+				} else if (!Utility.validateName(txt)) {
+					lblNameInfo.setText("<html><font color=\"red\">Contains invalid character</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
 				}
@@ -332,7 +332,7 @@ public class DialogControllerAddEdit extends JDialog {
 					reportTimeOK=(i>0);
 				} catch (NumberFormatException e) {};
 				
-				if (txt==null || txt.isEmpty() || Cache.Controllers.map.containsKey(txt) || !reportTimeOK || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+				if (txt==null || txt.isEmpty() || Cache.Controllers.map.containsKey(txt) || !reportTimeOK || !Utility.validateName(txt)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Site",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -370,8 +370,8 @@ public class DialogControllerAddEdit extends JDialog {
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
 				} else if (Cache.Controllers.map.containsKey(txt) && !txt.equals(n)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
-				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
-					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
+				} else if (!Utility.validateName(txt)) {
+					lblNameInfo.setText("<html><font color=\"red\">Contains invalid character</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
 				}
@@ -390,7 +390,7 @@ public class DialogControllerAddEdit extends JDialog {
 					reportTimeOK=(i>0);
 				} catch (NumberFormatException e) {};
 				
-				if (txt==null || txt.isEmpty() || (Cache.Controllers.map.containsKey(txt) && !txt.equals(n)) || !reportTimeOK || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+				if (txt==null || txt.isEmpty() || (Cache.Controllers.map.containsKey(txt) && !txt.equals(n)) || !reportTimeOK || !Utility.validateName(txt)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Site",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

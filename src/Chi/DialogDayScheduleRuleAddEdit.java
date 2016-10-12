@@ -193,8 +193,8 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
 				} else if (Cache.DayScheduleRules.map.containsKey(txt)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
-				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
-					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
+				} else if (!Utility.validateName(txt)) {
+					lblNameInfo.setText("<html><font color=\"red\">Contains invalid character</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
 				}
@@ -207,7 +207,7 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || Cache.DayScheduleRules.map.containsKey(txt) || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+				if (txt==null || txt.isEmpty() || Cache.DayScheduleRules.map.containsKey(txt) || !Utility.validateName(txt)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Day Schedule Rule",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -242,8 +242,8 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
 				} else if (Cache.DayScheduleRules.map.containsKey(txt) && !txt.equals(n)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
-				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
-					lblNameInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
+				} else if (!Utility.validateName(txt)) {
+					lblNameInfo.setText("<html><font color=\"red\">Contains invalid character</font></html>");
 				} else {
 					lblNameInfo.setText("<html><font color=\"green\">OK!</font></html>");
 				}
@@ -256,7 +256,7 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || (Cache.DayScheduleRules.map.containsKey(txt) && !txt.equals(n)) || txt.contains(Config.PACKET_FIELD_DELIMITER)) {
+				if (txt==null || txt.isEmpty() || (Cache.DayScheduleRules.map.containsKey(txt) && !txt.equals(n)) || !Utility.validateName(txt)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Edit Day Schedule Rule",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

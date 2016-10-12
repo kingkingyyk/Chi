@@ -45,6 +45,16 @@ public class Utility {
         return LocalDateTime.ofInstant(Instant.ofEpochMilli(d.getTime()), ZoneOffset.systemDefault());
     }
     
+    public static boolean validateName (String s) {
+    	if (s.length()==0) return false;
+    	char [] ary=s.toCharArray();
+    	boolean flag=Character.isJavaIdentifierStart(ary[0]);
+    	for (int i=1;i<ary.length && flag;i++) {
+    		flag&=Character.isLetterOrDigit(ary[i]) || ary[i]=='_';
+    	}
+    	return flag;
+    }
+    
 	public static String [] Days={"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"};
 	public static String [] DaysShort={"Mo","Tu","We","Th","Fr","Sa","Su"};
     public static String [] Hours={"12","01","02","03","04","05","06","07","08","09","10","11"};
