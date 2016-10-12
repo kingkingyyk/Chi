@@ -105,7 +105,7 @@ public class SensorActuatorResponseServer {
 			t=new Timer();
 			ResetReady tt=new ResetReady();
 			tt.dat=this;
-			t.schedule(tt,res.getTimeout());
+			t.schedule(tt,res.getTimeout()*1000);
 		}
 		
 		public void checkAndExecute() {
