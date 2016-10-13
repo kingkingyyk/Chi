@@ -37,6 +37,8 @@ public class MenuUI extends JFrame {
 	private JButton btnStopNotificationServer;
 	private JTextArea textAreaLog;
 	private JScrollPane scrollPaneLog;
+	private JTextArea textAreaEvaluate;
+	private JLabel lblEvaluateResult;
 
 	public MenuUI() {
 		setTitle(Config.APP_NAME);
@@ -524,11 +526,35 @@ public class MenuUI extends JFrame {
 		btnConfig.setBounds(10, 11, 96, 23);
 		panelConfig.add(btnConfig);
 		
-		JLabel label = new JLabel("Administration Center");
-		label.setForeground(Color.WHITE);
-		label.setFont(label.getFont().deriveFont(label.getFont().getStyle() | Font.BOLD, label.getFont().getSize() + 1f));
-		label.setBounds(10, 12, 140, 23);
-		contentPane.add(label);
+		JPanel panelDebug = new JPanel();
+		tabbedPane.addTab("Debug", null, panelDebug, "It might hurts!");
+		panelDebug.setLayout(null);
+		
+		JButton btnEvaluate = new JButton("Evaluate");
+		btnEvaluate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				lblEvaluateResult.setText(String.valueOf(SensoractuatorresponseEvaluator.evaluateStatement(textAreaEvaluate.getText())));
+			}
+		});
+		btnEvaluate.setBounds(314, 86, 89, 23);
+		panelDebug.add(btnEvaluate);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 11, 393, 64);
+		panelDebug.add(scrollPane);
+		
+		textAreaEvaluate = new JTextArea();
+		scrollPane.setViewportView(textAreaEvaluate);
+		
+		lblEvaluateResult = new JLabel("");
+		lblEvaluateResult.setBounds(10, 90, 46, 14);
+		panelDebug.add(lblEvaluateResult);
+		
+		JLabel labelTitle = new JLabel("Administration Center");
+		labelTitle.setForeground(Color.WHITE);
+		labelTitle.setFont(labelTitle.getFont().deriveFont(labelTitle.getFont().getStyle() | Font.BOLD, labelTitle.getFont().getSize() + 1f));
+		labelTitle.setBounds(10, 12, 140, 23);
+		contentPane.add(labelTitle);
 		
 		JLabel labelBackground = new JLabel();
 		labelBackground.setBounds(0, 0, 524, 47);
