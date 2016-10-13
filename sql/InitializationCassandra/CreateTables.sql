@@ -11,4 +11,4 @@ CREATE TABLE SensorReading(
 	TimeStp timestamp,
 	Value double,
 	PRIMARY KEY (Id,TimeStp)
-) WITH CLUSTERING ORDER BY (TimeStp DESC);
+) WITH CLUSTERING ORDER BY (TimeStp ASC);

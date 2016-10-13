@@ -50,7 +50,7 @@ public class Utility {
     	char [] ary=s.toCharArray();
     	boolean flag=Character.isJavaIdentifierStart(ary[0]);
     	for (int i=1;i<ary.length && flag;i++) {
-    		flag&=Character.isLetterOrDigit(ary[i]) || ary[i]=='_';
+    		flag&=Character.isLetterOrDigit(ary[i]) || ary[i]=='_' || ary[i]==' ';
     	}
     	return flag;
     }

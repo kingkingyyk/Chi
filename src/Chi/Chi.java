@@ -5,7 +5,6 @@ import javax.swing.UIManager;
 public class Chi {
 
 	public static void main (String [] args) {
-
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {}
@@ -68,8 +67,6 @@ public class Chi {
 			}
 		}; t.start();
 		diag.setVisible(true);
-		
-		DatabaseReading.initialize();
 		
 		Logger.log("MainUI started.");
 		MenuUI ss=new MenuUI();

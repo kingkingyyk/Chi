@@ -334,7 +334,7 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 					priorityOK=(i>0);
 				} catch (NumberFormatException e) {};
 				
-				if (txt==null || txt.isEmpty() || Cache.RegularSchedules.map.containsKey(txt) || Cache.SpecialSchedules.map.containsKey(txt) || !priorityOK || !Utility.validateName(Config.PACKET_FIELD_DELIMITER)) {
+				if (txt==null || txt.isEmpty() || Cache.RegularSchedules.map.containsKey(txt) || Cache.SpecialSchedules.map.containsKey(txt) || !priorityOK || !Utility.validateName(txt)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Regular Schedule",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -398,7 +398,7 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 					int i=Integer.parseInt(textFieldPriority.getText());
 					priorityOK=(i>0);
 				} catch (NumberFormatException e) {};
-				if (txt==null || txt.isEmpty() || ((Cache.RegularSchedules.map.containsKey(txt) || Cache.SpecialSchedules.map.containsKey(txt)) && !txt.equals(n)) || !priorityOK || !Utility.validateName(txt)) {
+				if (txt==null || txt.isEmpty() || ((Cache.RegularSchedules.map.containsKey(txt) && !txt.equals(n))) || !priorityOK || !Utility.validateName(txt)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Edit Regular Schedule",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

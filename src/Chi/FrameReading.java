@@ -42,7 +42,7 @@ public class FrameReading extends JFrame {
 			if (r.chart.isNotify()) {
 				r.chart.setNotify(false);
 				LocalDateTime now=LocalDateTime.now();
-				LinkedList<SensorReading> list=DatabaseReading.getReadingBetweenTime("Current",r.lastUpdateTime,now);
+				LinkedList<SensorReading> list=DatabaseReading.getReadingBetweenTime("AirCondTemp",r.lastUpdateTime,now);
 				r.lastUpdateTime=now;
 				for (SensorReading r : list) this.r.tSeries.addOrUpdate(new Second(Utility.localDateTimeToUtilDate(r.getTimestamp())),r.getActualValue());
 				r.chart.setNotify(true);
@@ -69,7 +69,7 @@ public class FrameReading extends JFrame {
 		//tSeries.setMaximumItemCount(60);
 		dataset.addSeries(tSeries);
 		
-    	chart = ChartFactory.createTimeSeriesChart("Current", "Time", "A", dataset, true, true, false);
+    	chart = ChartFactory.createTimeSeriesChart("AircondTemp", "Time", "C", dataset, true, true, false);
     	chart.removeLegend();
     	chart.getTitle().setFont(new Font("Segoe UI",Font.BOLD,20));
     	chart.fireChartChanged();
@@ -79,7 +79,7 @@ public class FrameReading extends JFrame {
 		ChartPanel panel = new ChartPanel(chart);
 		contentPane.add(panel, BorderLayout.CENTER);
 		
-		chart.getXYPlot().getRangeAxis().setRangeWithMargins(0,30);
+		chart.getXYPlot().getRangeAxis().setRangeWithMargins(20,50);
 		
         lastUpdateTime=LocalDateTime.of(1970,1,1,0,0);
 		t=new Timer();

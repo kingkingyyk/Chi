@@ -202,13 +202,14 @@ public class GWTServer {
 		    	Regularschedule r=Cache.RegularSchedules.map.get(list.get(1));
 		    	if (r!=null) return "SCHEDULE_ALREADY_EXISTS";
 		    	else if (!Cache.Actuators.map.containsKey(list.get(2))) return "ACTUATOR_NOT_EXIST";
-		    	else if ((int)(list.get(3))>=128) return "INVALID_DAY";
+		    	//else if ((int)(list.get(3))>=128) return "INVALID_DAY";
 		    	else if (!Cache.DayScheduleRules.map.containsKey(list.get(4))) return "RULE_NOT_EXIST";
 		    	else {
 		    		boolean flag=DatabaseRegularSchedule.createRegularSchedule( (String)list.get(1),Cache.Actuators.map.get(list.get(2)).getName(),
 		    																	(int)list.get(3), Cache.DayScheduleRules.map.get(list.get(4)).getRulename(),
 		    																	(String)list.get(5), (String)list.get(6), (boolean)list.get(7),
 		    																	(int)list.get(8), (boolean)list.get(9));
+
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }

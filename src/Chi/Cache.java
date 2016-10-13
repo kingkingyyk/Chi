@@ -11,7 +11,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 public class Cache {
-	public static SessionFactory factory;
+	public static volatile SessionFactory factory;
 	public static ActuatorData Actuators;
 	public static SiteData Sites;
 	public static ControllerData Controllers;

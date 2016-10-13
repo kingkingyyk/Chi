@@ -144,7 +144,7 @@ public class SchedulingThread extends Thread {
 		public void run() {
 			boolean hasConflict=false;
 			for (SchedulingData d : data.values()) {
-				if (d.getActuatorName().equals(dat.getActuatorName()) && d.getNextEndTime().compareTo(dat.getNextStartTime())>0 && d.getPriority()>dat.getPriority()) {
+				if (d!=dat && d.getActuatorName().equals(dat.getActuatorName()) && d.getNextEndTime().compareTo(dat.getNextStartTime())>0 && d.getPriority()>dat.getPriority()) {
 					hasConflict=true;
 					break;
 				}
@@ -164,7 +164,7 @@ public class SchedulingThread extends Thread {
 		public void run() {
 			boolean hasConflict=false;
 			for (SchedulingData d : data.values()) {
-				if (d.getActuatorName().equals(dat.getActuatorName()) && d.getNextEndTime().compareTo(dat.getNextStartTime())>0 && d.getPriority()>dat.getPriority()) {
+				if (d!=dat && d.getActuatorName().equals(dat.getActuatorName()) && d.getNextEndTime().compareTo(dat.getNextStartTime())>0 && d.getPriority()>dat.getPriority()) {
 					hasConflict=true;
 					break;
 				}

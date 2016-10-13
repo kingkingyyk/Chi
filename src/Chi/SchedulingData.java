@@ -28,7 +28,7 @@ public abstract class SchedulingData implements Comparable<SchedulingData> {
 		public SchedulingData d;
 		@Override
 		public void run() {
-			if (d.nextEndTime.compareTo(LocalDateTime.now())>=0) {
+			//if (d.nextEndTime.compareTo(LocalDateTime.now())>=0) {
 				d.updateScheduler(true);
 				if (d.enabled) {
 					for (ScheduleOnEndAction s : d.onEndFunc) {
@@ -37,7 +37,8 @@ public abstract class SchedulingData implements Comparable<SchedulingData> {
 					}
 				}
 				this.execute();
-			}
+			//}
+
 		}
 		public void execute() {};
 	}

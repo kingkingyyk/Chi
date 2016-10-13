@@ -2,7 +2,7 @@ package Chi;
 
 import java.time.LocalDateTime;
 
-public class SensorReading {
+public class SensorReading implements Comparable<SensorReading> {
 	private String sensorName;
 	private LocalDateTime timeStp;
 	private double value;
@@ -29,5 +29,13 @@ public class SensorReading {
 	
 	public double getActualValue() {
 		return this.actualValue;
+	}
+
+	@Override
+	public int compareTo(SensorReading arg0) {
+		if (!this.sensorName.equals(arg0)) {
+			return this.timeStp.compareTo(arg0.timeStp);
+		}
+		return this.sensorName.compareTo(arg0.sensorName);
 	}
 }

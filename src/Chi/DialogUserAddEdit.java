@@ -186,7 +186,7 @@ public class DialogUserAddEdit extends JDialog {
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldUsername.getText();
 				char [] pw=textFieldPassword.getPassword();
-				if (txt==null || txt.isEmpty() || Cache.Users.map.containsKey(txt) || pw==null || pw.length==0 || Utility.validateName(txt)) {
+				if (txt==null || txt.isEmpty() || Cache.Users.map.containsKey(txt) || pw==null || pw.length==0 || !Utility.validateName(txt)) {
 					JOptionPane.showMessageDialog(null,"Invalid credential!",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

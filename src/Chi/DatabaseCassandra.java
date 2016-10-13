@@ -23,6 +23,8 @@ public class DatabaseCassandra {
 						*/.withPort(Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY)))/*
 						*/.addContactPoint(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)).build();
 				session=cluster.connect("Chi");
+				
+				DatabaseReading.initialize();
 			}
 		};
 		t.start();

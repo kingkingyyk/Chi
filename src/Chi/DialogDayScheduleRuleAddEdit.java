@@ -68,7 +68,7 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 		setModal(true);
 		setResizable(false);
 		setIconImage(Theme.getIcon("ChiLogo").getImage());
-		setBounds(100, 100, 322, 175);
+		setBounds(100, 100, 440, 175);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(null);
 		contentPanel.setBounds(0, 11, 433, 102);
@@ -136,7 +136,7 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 		contentPanel.add(comboBoxEndTimeAMPM);
 		{
 			JPanel buttonPane = new JPanel();
-			buttonPane.setBounds(0, 115, 316, 33);
+			buttonPane.setBounds(0, 115, 433, 33);
 			getContentPane().add(buttonPane);
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			{

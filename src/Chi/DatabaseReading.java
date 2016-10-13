@@ -3,6 +3,7 @@ package Chi;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -127,6 +128,8 @@ public class DatabaseReading extends DatabaseCassandra {
 				SensorReading sr=new SensorReading(sn,Utility.dateToLocalDateTime(new Date(r.getTimestamp("TimeStp").getTime())),r.getDouble("Value"),Cache.Sensors.map.get(sn).denormalizeValue(r.getDouble("Value")));
 				list.addLast(sr);
 			}
+			
+			Collections.sort(list);
 		} catch (NoHostAvailableException e) {
 			Logger.log("DB Get Reading - Database connection fail!");
 		} catch (Exception e) {
@@ -144,7 +147,7 @@ public class DatabaseReading extends DatabaseCassandra {
 			Logger.log("DB Get Latest Reading - Connecting to database : "+ip+":"+port);
 			Logger.log("DB Get Latest Reading - Database connection OK!");
 			
-			BoundStatement [] sql=getBoundSQLStatementFromFile(DatabaseCassandra.getSession(),Config.getConfig(Config. DATABASE_RECORD_QUERY_BETWEEN_TIME_FILE_KEY));
+			BoundStatement [] sql=getBoundSQLStatementFromFile(DatabaseCassandra.getSession(),Config.getConfig(Config.DATABASE_RECORD_QUERY_LATEST_FILE_KEY));
 			sql[0].setString(0, sn);
 			ResultSet rs=executeSQL("DB Get Latest Reading", DatabaseCassandra.getSession(), sql[0]);
 			
@@ -181,6 +184,8 @@ public class DatabaseReading extends DatabaseCassandra {
 				if (rs.getAvailableWithoutFetching() == 100 && !rs.isFullyFetched()) rs.fetchMoreResults();
 				list.addLast(new SensorReading(sn,Utility.dateToLocalDateTime(new Date(r.getTimestamp("TimeStp").getTime())),r.getDouble("Value"),Cache.Sensors.map.get(sn).denormalizeValue(r.getDouble("Value"))));
 			}
+			
+			Collections.sort(list);
 		} catch (NoHostAvailableException e) {
 			Logger.log("DB Get Reading - Database connection fail!");
 		} catch (Exception e) {
