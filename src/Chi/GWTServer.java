@@ -61,7 +61,7 @@ public class GWTServer {
 		    }
 		    case "7" : { //DayScheduleRuleGetAll
 		    	ArrayList<Object []> result=new ArrayList<>();
-			    for (Dayschedulerule r : Cache.DayScheduleRules.map.values()) result.add(r.toObj());
+			    for (Dayschedulerule r : Cache.DayScheduleRules.map.values()) result.add(r.toObj());	
 		    	return result;
 		    }
 		    case "8" : { //DayScheduleRuleGetByName
@@ -75,7 +75,6 @@ public class GWTServer {
 		    	else {
 		    		int sh=(int)list.get(3); int sm=(int)list.get(4);
 		    		int eh=(int)list.get(5); int em=(int)list.get(6);
-		    		if (sh>eh || (sh==eh && sm>em)) return "INVALID_TIME";
 		    		boolean flag=DatabaseDayScheduleRule.updateDayScheduleRule((String)list.get(1),(String)list.get(2), sh, sm, eh, em);
 		    		if (flag) return "OK";
 		    		else return "ERROR";
@@ -83,11 +82,10 @@ public class GWTServer {
 		    }
 		    case "10" : { //DayScheduleRuleCreate
 		    	Dayschedulerule r=Cache.DayScheduleRules.map.get(list.get(1));
-		    	if (r==null) return "RULE_ALREADY_EXISTS";
+		    	if (r!=null) return "RULE_ALREADY_EXISTS";
 		    	else {
 		    		int sh=(int)list.get(2); int sm=(int)list.get(3);
 		    		int eh=(int)list.get(4); int em=(int)list.get(5);
-		    		if (sh>eh || (sh==eh && sm>em)) return "INVALID_TIME";
 		    		boolean flag=DatabaseDayScheduleRule.createDayScheduleRule((String)list.get(1), sh, sm, eh, em);
 		    		if (flag) return "OK";
 		    		else return "ERROR";

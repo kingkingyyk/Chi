@@ -23,7 +23,7 @@ public class DatabaseCassandra {
 						*/.withPort(Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY)))/*
 						*/.addContactPoint(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)).build();
 				session=cluster.connect("Chi");
-				
+				if (session==null) session=cluster.connect("Chi");
 				DatabaseReading.initialize();
 			}
 		};
@@ -48,7 +48,9 @@ public class DatabaseCassandra {
 	}
 	
 	public static boolean freshStart () {
-		return runSQLFromFile("DB Init",Config.getConfig(Config.DATABASE_INIT_SQL_CASSANDRA_FILE_KEY));
+		boolean flag=runSQLFromFile("DB Init",Config.getConfig(Config.DATABASE_INIT_SQL_CASSANDRA_FILE_KEY));
+		if (flag) session=cluster.connect("Chi");
+		return flag;
 	}
 	
 	public static boolean createTables () {
