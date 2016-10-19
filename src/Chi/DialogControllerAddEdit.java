@@ -252,7 +252,7 @@ public class DialogControllerAddEdit extends JDialog {
 					if (currentMapURL.equals(u)) {
 						lblPositionMap.setIcon(null);
 						lblPositionMap.setText("Image loading failed.");
-						Logger.log("DialogControllerAddEdit - drawMap - "+e.getMessage());
+						Logger.log(Logger.LEVEL_ERROR,"DialogControllerAddEdit - drawMap - "+e.getMessage());
 					}
 				}
 			}

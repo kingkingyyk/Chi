@@ -7,3 +7,4 @@ bin/
 CHI_LOCK
 .classpath
 .classpath
+*.classpath

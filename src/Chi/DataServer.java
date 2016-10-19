@@ -28,14 +28,14 @@ public class DataServer {
 	
 	public static void registerOnReportReceived (OnReportReceived r) {
 		if (!OnReportReceivedCallbacks.contains(r)) {
-			Logger.log("DataServer - Registered "+r.toString()+" to OnReportReceived callback");
+			Logger.log(Logger.LEVEL_INFO,"DataServer - Registered "+r.toString()+" to OnReportReceived callback");
 			OnReportReceivedCallbacks.add(r);
 		}
 	}
 	
 	public static void unregisterOnReportReceived (OnReportReceived r) {
 		if (OnReportReceivedCallbacks.contains(r)) {
-			Logger.log("DataServer - Unregistered "+r.toString()+" from OnReportReceived callback");
+			Logger.log(Logger.LEVEL_INFO,"DataServer - Unregistered "+r.toString()+" from OnReportReceived callback");
 			OnReportReceivedCallbacks.remove(r);
 		}
 	}
@@ -48,14 +48,14 @@ public class DataServer {
 	
 	public static void registerOnReadingReceived (OnReadingReceived r) {
 		if (!OnReadingReceivedCallbacks.contains(r)) {
-			Logger.log("DataServer - Registered "+r.toString()+" to OnReadingReceived callback");
+			Logger.log(Logger.LEVEL_INFO,"DataServer - Registered "+r.toString()+" to OnReadingReceived callback");
 			OnReadingReceivedCallbacks.add(r);
 		}
 	}
 	
 	public static void unregisterOnReadingReceived (OnReadingReceived r) {
 		if (OnReadingReceivedCallbacks.contains(r)) {
-			Logger.log("DataServer - Unregistered "+r.toString()+" from OnReportReceived callback");
+			Logger.log(Logger.LEVEL_INFO,"DataServer - Unregistered "+r.toString()+" from OnReportReceived callback");
 			OnReadingReceivedCallbacks.remove(r);
 		}
 	}
@@ -71,26 +71,26 @@ public class DataServer {
 	}
 	
 	public static void start() {
-		Logger.log("Attempting to start listening server.");
+		Logger.log(Logger.LEVEL_INFO,"Attempting to start listening server.");
 		attempted=false;
 		Thread t=new Thread() {
 			public void run() {
 				try {
-					Logger.log("Data Server - StartP1 - Checking lock file");
+					Logger.log(Logger.LEVEL_INFO,"Data Server - StartP1 - Checking lock file");
 					File lockFile=new File(Config.getConfig(Config.CONFIG_SERVER_LOCK_FILE_KEY));
 					boolean unlocked=!lockFile.exists() || lockFile.delete();
 					if (unlocked && lockFile.createNewFile()) {
 						DataServer.fileLocker=new FileOutputStream(lockFile);
 						lockFile.deleteOnExit();
 						lockedFile=lockFile;
-						Logger.log("Data Server - StartP1 - Start up queued.");
+						Logger.log(Logger.LEVEL_INFO,"Data Server - StartP1 - Start up queued.");
 						isStarted=true;
 					} else {
-						Logger.log("Data Server - StartP1 - Start failed. Unable to get the lock. Please stop any other instances.");
+						Logger.log(Logger.LEVEL_ERROR,"Data Server - StartP1 - Start failed. Unable to get the lock. Please stop any other instances.");
 						return;
 					}
 				} catch (IOException e) {
-					Logger.log("Data Server - StartP1 - Start failed. "+e.getMessage());
+					Logger.log(Logger.LEVEL_ERROR,"Data Server - StartP1 - Start failed. "+e.getMessage());
 				}
 				attempted=true;
 			}
@@ -111,11 +111,11 @@ public class DataServer {
 	public static void stop() {
 		attempted=false;
 		try {
-			Logger.log("Data server - StopP1 - Unlocking lock file.");
+			Logger.log(Logger.LEVEL_INFO,"Data server - StopP1 - Unlocking lock file.");
 			DataServer.fileLocker.close();
-			Logger.log("Data server - StopP1 - Deleting lock file.");
+			Logger.log(Logger.LEVEL_INFO,"Data server - StopP1 - Deleting lock file.");
 			DataServer.lockedFile.delete();
-			Logger.log("Data server - StopP1 - Stop queued.");
+			Logger.log(Logger.LEVEL_INFO,"Data server - StopP1 - Stop queued.");
 			isStarted=false;
 			
 			DataServer.listeningThread.setFlag(false);
@@ -127,7 +127,7 @@ public class DataServer {
 			dos.close();
 			sc.close();
 		} catch (IOException e) {
-			Logger.log("Data server - StopP1 - "+e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"Data server - StopP1 - "+e.getMessage());
 		}
 		attempted=true;
 	}

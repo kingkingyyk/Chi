@@ -28,10 +28,10 @@ public class DatabaseHSQL {
 	public static boolean testConnection() {
 		try {
 			boolean flag=(getConnection()!=null);
-			Logger.log("DB HSQL Test Connection - Result : "+flag);
+			Logger.log(Logger.LEVEL_INFO,"DB HSQL Test Connection - Result : "+flag);
 			return flag;
 		} catch (SQLException e) {}
-		Logger.log("DB HSQL Test Connection - Result : "+false);
+		Logger.log(Logger.LEVEL_INFO,"DB HSQL Test Connection - Result : "+false);
 		return false;
 	}
 	public static boolean createTables () {
@@ -43,29 +43,28 @@ public class DatabaseHSQL {
 	}
 	
 	public static boolean runSQL(String cmdName, String sql) {
-		Logger.log(cmdName+" - Connecting to database  : "+getAddress());
+		Logger.log(Logger.LEVEL_INFO,cmdName+" - Connecting to database  : "+getAddress());
 		try {
 			Connection c = getConnection();
 			if (c!=null) {
-				Logger.log(cmdName+" - Database connection OK!");
+				Logger.log(Logger.LEVEL_INFO,cmdName+" - Database connection OK!");
 				c.createStatement().executeQuery(sql);
 			}
 			c.close();
 			return true;
 		} catch (SQLException e) {
-			Logger.log(cmdName+" - Error - "+e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,cmdName+" - "+e.getMessage());
 			e.printStackTrace();
 		}
 		return false;
 	}
 	
 	public static boolean runSQLFromFile(String cmdName, String filename) {
-		Logger.log("Database HSQL - Run SQL From File : "+filename);
-		Logger.log(cmdName+" - Connecting to database  : "+getAddress());
+		Logger.log(Logger.LEVEL_INFO,"Database HSQL - Run SQL From File : "+filename);
 		try {
 			Connection c = getConnection();
 			if (c!=null) {
-				Logger.log(cmdName+" - Database connection OK!");
+				Logger.log(Logger.LEVEL_INFO,cmdName+" - Database connection OK!");
 				if (filename!=null) {
 					String [] sql=getSQLStatementFromFile(filename);
 					for (int i=0;i<sql.length;i++) {
@@ -78,20 +77,19 @@ public class DatabaseHSQL {
 			c.close();
 			return true;
 		} catch (Exception e) {
-			Logger.log(cmdName+" - Error - "+e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,cmdName+" - "+e.getMessage());
 			e.printStackTrace();
 		}
 		return false;
 	}
 
 	protected static ResultSet runSQLFromFileAndGetData(String cmdName, String filename) {
-		Logger.log("Database HSQL - Run SQL From File : "+filename);
-		Logger.log(cmdName+" - Connecting to database  : "+getAddress());
+		Logger.log(Logger.LEVEL_INFO,"Database HSQL - Run SQL From File : "+filename);
 		try {
 			Connection c = getConnection();
 			ResultSet rs=null;
 			if (c!=null) {
-				Logger.log(cmdName+" - Database connection OK!");
+				Logger.log(Logger.LEVEL_INFO,cmdName+" - Database connection OK!");
 				if (filename!=null) {
 					String [] sql=getSQLStatementFromFile(filename);
 					for (int i=0;i<sql.length;i++) {
@@ -102,16 +100,16 @@ public class DatabaseHSQL {
 			c.close();
 			return rs;
 		} catch (Exception e) {
-			Logger.log(cmdName+" - Error - "+e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,cmdName+" - "+e.getMessage());
 			e.printStackTrace();
 		}
 		return null;
 	}
 	
 	protected static ResultSet executeSQL(String cmdName, Connection c, String statement) throws SQLException {
-		Logger.log(cmdName+" - Execute SQL : "+statement);
+		Logger.log(Logger.LEVEL_INFO,cmdName+" - Execute SQL : "+statement);
 		ResultSet rs=c.createStatement().executeQuery(statement);
-		Logger.log(cmdName+" - SQL Result : "+rs.toString());
+		Logger.log(Logger.LEVEL_INFO,cmdName+" - SQL Result : "+rs.toString());
 		return rs;
 	}
 	

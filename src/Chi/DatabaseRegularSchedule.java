@@ -25,48 +25,48 @@ public class DatabaseRegularSchedule {
 	
 	public static void registerOnCreateAction (OnCreateAction a) {
 		if (!OnCreateList.contains(a)) {
-			Logger.log("DatabaseRegularSchedule - Registered "+a.toString()+" to OnCreate callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseRegularSchedule - Registered "+a.toString()+" to OnCreate callback");
 			OnCreateList.add(a);
 		}
 	}
 	
 	public static void unregisterOnCreateAction (OnCreateAction a) {
 		if (OnCreateList.contains(a)) {
-			Logger.log("DatabaseRegularSchedule - Unregistered "+a.toString()+" to OnCreate callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseRegularSchedule - Unregistered "+a.toString()+" to OnCreate callback");
 			OnCreateList.remove(a);
 		}
 	}
 	
 	public static void registerOnUpdateAction (OnUpdateAction a) {
 		if (!OnUpdateList.contains(a)) {
-			Logger.log("DatabaseRegularSchedule - Registered "+a.toString()+" to OnUpdate callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseRegularSchedule - Registered "+a.toString()+" to OnUpdate callback");
 			OnUpdateList.add(a);
 		}
 	}
 	
 	public static void unregisterOnUpdateAction (OnUpdateAction a) {
 		if (OnUpdateList.contains(a)) {
-			Logger.log("DatabaseRegularSchedule - Unregistered "+a.toString()+" to OnUpdate callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseRegularSchedule - Unregistered "+a.toString()+" to OnUpdate callback");
 			OnUpdateList.remove(a);
 		}
 	}
 	
 	public static void registerOnDeleteAction (OnDeleteAction a) {
 		if (!OnDeleteList.contains(a)) {
-			Logger.log("DatabaseRegularSchedule - Registered "+a.toString()+" to OnDelete callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseRegularSchedule - Registered "+a.toString()+" to OnDelete callback");
 			OnDeleteList.add(a);
 		}
 	}
 	
 	public static void unregisterOnDeleteAction (OnDeleteAction a) {
 		if (OnDeleteList.contains(a)) {
-			Logger.log("DatabaseRegularSchedule - Unregistered "+a.toString()+" to OnDelete callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseRegularSchedule - Unregistered "+a.toString()+" to OnDelete callback");
 			OnDeleteList.remove(a);
 		}
 	}
 	
 	public static boolean createRegularSchedule (String sn, String an, int day, String rn, String startAct, String endAct, boolean lock, int pr, boolean en) {
-		Logger.log("DatabaseRegularSchedule - Create");
+		Logger.log(Logger.LEVEL_INFO,"DatabaseRegularSchedule - Create");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
 		boolean flag=false;
@@ -79,20 +79,20 @@ public class DatabaseRegularSchedule {
 				tx.commit();
 				Cache.RegularSchedules.map.put(sn,r);
 	
-				Logger.log("DatabaseRegularSchedule - Create - Execute Callbacks");
+				Logger.log(Logger.LEVEL_INFO,"DatabaseRegularSchedule - Create - Execute Callbacks");
 				for (OnCreateAction a : OnCreateList) a.run(sn,an,day,rn,startAct,endAct,lock,pr,en);
 				flag = true;
-			} else Logger.log("DB Create RegularSchedule - Schedule already exists");
+			} else Logger.log(Logger.LEVEL_WARNING,"DB Create RegularSchedule - Schedule already exists");
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
-			Logger.log("DatabaseRegularSchedule - Create - Error" + e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"DatabaseRegularSchedule - Create - " + e.getMessage());
 		} finally {session.close();}
 		return flag;
 	}
 	
 	public static boolean updateRegularSchedule (String oldSN, String sn, String an, int day, String rn, String startAct, String endAct, boolean lock, int pr, boolean en) {
-		Logger.log("DatabaseRegularSchedule - Update");
+		Logger.log(Logger.LEVEL_INFO,"DatabaseRegularSchedule - Update");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
 		boolean flag=false;
@@ -116,20 +116,20 @@ public class DatabaseRegularSchedule {
 				tx.commit();
 				Cache.RegularSchedules.map.put(sn,r);
 	
-				Logger.log("DatabaseRegularSchedule - Update - Execute Callbacks");
+				Logger.log(Logger.LEVEL_INFO,"DatabaseRegularSchedule - Update - Execute Callbacks");
 				for (OnUpdateAction a : OnUpdateList) a.run(oldSN,sn,an,day,rn,startAct,endAct,lock,pr,en);
 				flag = true;
-			} else Logger.log("DB Update RegularSchedule - Schedule doesn't exist");
+			} else Logger.log(Logger.LEVEL_WARNING,"DB Update RegularSchedule - Schedule doesn't exist");
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
-			Logger.log("DatabaseRegularSchedule - Update - Error" + e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"DatabaseRegularSchedule - Update - " + e.getMessage());
 		} finally {session.close();}
 		return flag;
 	}
 	
 	public static boolean deleteRegularSchedule (String sn) {
-		Logger.log("DatabaseRegularSchedule - Delete");
+		Logger.log(Logger.LEVEL_INFO,"DatabaseRegularSchedule - Delete");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
 		boolean flag=false;
@@ -141,14 +141,14 @@ public class DatabaseRegularSchedule {
 				tx.commit();
 				Cache.RegularSchedules.map.remove(sn);
 	
-				Logger.log("DatabaseRegularSchedule - Delete - Execute Callbacks");
+				Logger.log(Logger.LEVEL_INFO,"DatabaseRegularSchedule - Delete - Execute Callbacks");
 				for (OnDeleteAction a : OnDeleteList) a.run(sn);
 				flag = true;
-			} else Logger.log("DB Delete RegularSchedule - Schedule doesn't exist");
+			} else Logger.log(Logger.LEVEL_WARNING,"DB Delete RegularSchedule - Schedule doesn't exist");
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
-			Logger.log("DatabaseRegularSchedule - Delete - Error" + e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"DatabaseRegularSchedule - Delete - " + e.getMessage());
 		} finally {session.close();}
 		return flag;
 	}

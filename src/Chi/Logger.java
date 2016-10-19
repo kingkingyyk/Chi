@@ -16,30 +16,55 @@ public class Logger {
 	private static SimpleDateFormat logFileNameFormatter=new SimpleDateFormat("yyyy.MM.dd-HH.mm.ss");
 	private static File LogFile=null;
 	private static boolean EnableLogToFile=false;
-	private static ConcurrentLinkedQueue<String> eventQueue=new ConcurrentLinkedQueue<>();
+	private static ConcurrentLinkedQueue<Log> eventQueue=new ConcurrentLinkedQueue<>();
+	private static String [] LEVEL_TEXT={"ERROR","WARNING","INFO"};
+	public static int LEVEL_ERROR=0;
+	public static int LEVEL_WARNING=1;
+	public static int LEVEL_INFO=2;
+	private static int LOG_LEVEL=0;
 	
-	public static void log (String event) {
-		eventQueue.offer(formatter.format(new Date())+" | "+event);
-		if (eventQueue.size()==1) {
-			Thread t=new Thread() {
-				public void run () {
-					try {
-						PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile,true)));
-						while (eventQueue.size()>0) {
-							String s=eventQueue.poll();
-							System.out.println(s);
-							if (MenuUI.getCurrInstance()!=null) {
-								MenuUI.getCurrInstance().appendLog(s);
+	private static class Log {
+		@SuppressWarnings("unused")
+		int level;
+		String s;
+		
+		public Log (int l, String str) {
+			this.level=l;
+			this.s=str;
+		}
+	}
+	
+	public static void log (int logLevel, String event) {
+		if (logLevel<=LOG_LEVEL) {
+			StringBuilder sb=new StringBuilder();
+			sb.append(LEVEL_TEXT[logLevel]);
+			sb.append(" | ");
+			sb.append(formatter.format(new Date()));
+			sb.append(" | ");
+			sb.append(event);
+			Log l=new Log (logLevel,sb.toString());
+			eventQueue.offer(l);
+			if (eventQueue.size()==1) {
+				Thread t=new Thread() {
+					public void run () {
+						try {
+							PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile,true)));
+							while (eventQueue.size()>0) {
+								Log l=eventQueue.poll();
+								System.out.println();
+								if (MenuUI.getCurrInstance()!=null) {
+									MenuUI.getCurrInstance().appendLog(l.s);
+								}
+								if (EnableLogToFile) pw.println(l.s);
 							}
-							if (EnableLogToFile) pw.println(s);
+							pw.close();
+						} catch (IOException e) {
+							e.printStackTrace();
 						}
-						pw.close();
-					} catch (IOException e) {
-						e.printStackTrace();
 					}
-				}
-			};
-			t.start();
+				};
+				t.start();
+			}
 		}
 	}
 	

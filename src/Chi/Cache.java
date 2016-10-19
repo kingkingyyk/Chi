@@ -55,7 +55,7 @@ public class Cache {
 			        }
 			        factory=c.buildSessionFactory();
 			     }catch (Throwable ex) { 
-			        Logger.log("Cache failed to create factory object - "+ex.getMessage());
+			        Logger.log(Logger.LEVEL_ERROR,"Cache failed to create factory object - "+ex.getMessage());
 			        ex.printStackTrace();
 			     }
 			    Actuators=new ActuatorData();
@@ -129,7 +129,7 @@ public class Cache {
 				onAcquired(session.createQuery("FROM "+getClassName()).getResultList());
 				flag=true;
 			} catch (HibernateException e) {
-		        Logger.log("Cache.update"+getType()+" Error - "+e.getMessage());
+		        Logger.log(Logger.LEVEL_ERROR,"Cache.update"+getType()+" - "+e.getMessage());
 		        if (tx!=null) tx.rollback();
 		    } finally {
 		         session.close(); 

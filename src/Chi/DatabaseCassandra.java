@@ -63,37 +63,37 @@ public class DatabaseCassandra {
 
 	public static boolean testKeyspace () {
 		try {
-			Logger.log("DB Test Keyspace - Connecting to database : "+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)+":"+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
-			Logger.log("DB Test Keyspace - Database connection OK!");
+			Logger.log(Logger.LEVEL_INFO,"DB Test Keyspace - Connecting to database : "+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)+":"+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
+			Logger.log(Logger.LEVEL_INFO,"DB Test Keyspace - Database connection OK!");
 			KeyspaceMetadata ks=getCluster().getMetadata().getKeyspace(Config.APP_NAME);
 			return ks!=null;
 		} catch (NoHostAvailableException e) {
-			Logger.log("DB Test Keyspace - Database connection fail!");
+			Logger.log(Logger.LEVEL_WARNING,"DB Test Keyspace - Database connection fail!");
 		} catch (Exception e) {
-			Logger.log("DB Test Keyspace - Error - "+e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"DB Test Keyspace - "+e.getMessage());
 		}
 		return false;
 	}
 	
 	public static boolean runSQL(String cmdName, String sql) {
 		try {
-			Logger.log(cmdName+" - Connecting to database : "+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)+":"+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
-			Logger.log(cmdName+" - Database connection OK!");
+			Logger.log(Logger.LEVEL_INFO,cmdName+" - Connecting to database : "+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)+":"+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
+			Logger.log(Logger.LEVEL_INFO,cmdName+" - Database connection OK!");
 			System.out.println("Result : "+executeSQL(cmdName,getSession(),sql).toString());
 			return true;
 		} catch (NoHostAvailableException e) {
-			Logger.log(cmdName+" - Database connection fail!");
+			Logger.log(Logger.LEVEL_WARNING,cmdName+" - Database connection fail!");
 		} catch (Exception e) {
-			Logger.log(cmdName+" - Error - "+e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,cmdName+" - "+e.getMessage());
 		}
 		return false;
 	}
 	
 	public static boolean runSQLFromFile(String cmdName, String filename) {
-		Logger.log("Database - Run SQL From File : "+filename);
+		Logger.log(Logger.LEVEL_INFO,"Database - Run SQL From File : "+filename);
 		try {
-			Logger.log(cmdName+" - Connecting to database : "+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)+":"+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
-			Logger.log(cmdName+" - Database connection OK!");
+			Logger.log(Logger.LEVEL_INFO,cmdName+" - Connecting to database : "+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)+":"+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
+			Logger.log(Logger.LEVEL_INFO,cmdName+" - Database connection OK!");
 			if (filename!=null) {
 				String [] sql=getSQLStatementFromFile(filename);
 				for (int i=0;i<sql.length;i++) {
@@ -104,18 +104,18 @@ public class DatabaseCassandra {
 			}
 			return true;
 		} catch (NoHostAvailableException e) {
-			Logger.log(cmdName+" - Database connection fail!");
+			Logger.log(Logger.LEVEL_WARNING,cmdName+" - Database connection fail!");
 		} catch (Exception e) {
-			Logger.log(cmdName+" - Error - "+e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,cmdName+" - "+e.getMessage());
 		}
 		return false;
 	}
 
 	protected static ResultSet runSQLFromFileAndGetData(String cmdName, String filename) {
-		Logger.log("Database - Run SQL From File : "+filename);
+		Logger.log(Logger.LEVEL_INFO,"Database - Run SQL From File : "+filename);
 		try {
-			Logger.log(cmdName+" - Connecting to database : "+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)+":"+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
-			Logger.log(cmdName+" - Database connection OK!");
+			Logger.log(Logger.LEVEL_INFO,cmdName+" - Connecting to database : "+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)+":"+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
+			Logger.log(Logger.LEVEL_INFO,cmdName+" - Database connection OK!");
 			ResultSet rs=null;
 			if (filename!=null) {
 				String [] sql=getSQLStatementFromFile(filename);
@@ -125,24 +125,24 @@ public class DatabaseCassandra {
 			}
 			return rs;
 		} catch (NoHostAvailableException e) {
-			Logger.log(cmdName+" - Database connection fail!");
+			Logger.log(Logger.LEVEL_WARNING,cmdName+" - Database connection fail!");
 		} catch (Exception e) {
-			Logger.log(cmdName+" - Error - "+e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,cmdName+" - "+e.getMessage());
 		}
 		return null;
 	}
 	
 	protected static ResultSet executeSQL(String cmdName, Session session, String statement) {
-		Logger.log(cmdName+" - Execute SQL : "+statement);
+		Logger.log(Logger.LEVEL_INFO,cmdName+" - Execute SQL : "+statement);
 		ResultSet rs=session.execute(statement);
-		Logger.log(cmdName+" - SQL Result : "+rs.toString());
+		Logger.log(Logger.LEVEL_INFO,cmdName+" - SQL Result : "+rs.toString());
 		return rs;
 	}
 	
 	protected static ResultSet executeSQL(String cmdName, Session session, BoundStatement statement) {
-		Logger.log(cmdName+" - Execute SQL : "+statement.toString());
+		Logger.log(Logger.LEVEL_INFO,cmdName+" - Execute SQL : "+statement.toString());
 		ResultSet rs=session.execute(statement);
-		Logger.log(cmdName+" - SQL Result : "+rs.toString());
+		Logger.log(Logger.LEVEL_INFO,cmdName+" - SQL Result : "+rs.toString());
 		return rs;
 	}
 	

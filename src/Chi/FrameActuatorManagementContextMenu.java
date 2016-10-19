@@ -45,7 +45,7 @@ public class FrameActuatorManagementContextMenu extends JPopupMenu {
 						int wait=Config.CONTROLLER_READY_TIME_MS*(Config.CONTROLLER_MAX_RETRY+1);
 						try { Thread.sleep(wait); } catch (InterruptedException e) {};
 						if (fa!=null && fa.isVisible()) {
-							Logger.log("FrameActuatorManagement - Communication Error : "+act.getController().getControllername()+" doesn't reply in "+wait/1000+" seconds!");
+							Logger.log(Logger.LEVEL_ERROR,"FrameActuatorManagement - Communication Error : "+act.getController().getControllername()+" doesn't reply in "+wait/1000+" seconds!");
 							fa.setVisible(false);
 							JOptionPane.showMessageDialog(null,"Ops, looks like the controller has felt asleep."
 															 + "\nYou might perform the following steps :"

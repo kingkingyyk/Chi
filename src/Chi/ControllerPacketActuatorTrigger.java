@@ -12,17 +12,17 @@ public class ControllerPacketActuatorTrigger extends Thread {
 	}
 	
 	public void trigger() {
-		Logger.log("ControllerPacketActuatorTrigger - Actuator trigger packet queued");
+		Logger.log(Logger.LEVEL_INFO,"ControllerPacketActuatorTrigger - Actuator trigger packet queued");
 		this.start();
 	}
 	
 	public void run() {
 		String [] data={controllerName,actuatorName,status};
 		ControllerPacket p=new ControllerPacket(Cache.Controllers.map.get(controllerName),ControllerPacket.Type.SetActuator,data);
-		Logger.log("ControllerPacketActuatorTrigger - Send packet");
+		Logger.log(Logger.LEVEL_INFO,"ControllerPacketActuatorTrigger - Send packet");
 		String status;
 		if ((status=p.send())!=null) {
-			Logger.log("ControllerPacketActuatorTrigger - Packet sent successfully");
+			Logger.log(Logger.LEVEL_INFO,"ControllerPacketActuatorTrigger - Packet sent successfully");
 			DatabaseActuator.updateActuatorStatus(actuatorName,status);
 		}
 		if (FrameActuatorManagementFeedbackWait.getCurrent()!=null && FrameActuatorManagementFeedbackWait.getCurrent().isVisible()) {

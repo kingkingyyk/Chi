@@ -576,12 +576,12 @@ public class MenuUI extends JFrame {
 		
 		btnConfig.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Logger.log("Config UI started.");
+				Logger.log(Logger.LEVEL_INFO,"Config UI started.");
 				ConfigUI ui=new ConfigUI();
-				Logger.log("Config UI done.");
+				Logger.log(Logger.LEVEL_INFO,"Config UI done.");
 				ui.setLocationRelativeTo(null);
 				ui.setVisible(true);
-				Logger.log("Config UI closed.");
+				Logger.log(Logger.LEVEL_INFO,"Config UI closed.");
 			}
 		});
 		

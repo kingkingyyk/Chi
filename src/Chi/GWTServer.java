@@ -496,11 +496,11 @@ public class GWTServer {
 	public static boolean start() {
 		if (t==null) {
 			if (Boolean.parseBoolean(Config.getConfig(Config.CONFIG_SERVER_GWT_ENCRYPTION_KEY))) {
-				Logger.log("GWTSecureServer - Starting");
+				Logger.log(Logger.LEVEL_INFO,"GWTSecureServer - Starting");
 				t=new GWTSecureServerThread();
 				t.start();
 			} else {
-				Logger.log("GWTServer - Starting");
+				Logger.log(Logger.LEVEL_INFO,"GWTServer - Starting");
 				t=new GWTServerThread();
 				t.start();
 			}
@@ -511,7 +511,7 @@ public class GWTServer {
 	
 	public static boolean stop() {
 		if (t!=null) {
-			Logger.log("GWTSecureServer - Requested to stop");
+			Logger.log(Logger.LEVEL_INFO,"GWTSecureServer - Requested to stop");
 			t.stopFlag=true;
 			if (t instanceof GWTSecureServerThread) {
 				try {

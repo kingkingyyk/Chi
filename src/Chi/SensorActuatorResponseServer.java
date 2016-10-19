@@ -138,7 +138,7 @@ public class SensorActuatorResponseServer {
 	}
 	
 	public static void start() {
-		Logger.log("SensorActuatorResponseServer started.");
+		Logger.log(Logger.LEVEL_INFO,"SensorActuatorResponseServer started.");
 		isStarted=true;
 		
 		for (Sensoractuatorresponse res : Cache.SensorActuatorResponses.map.values()) {
@@ -158,7 +158,7 @@ public class SensorActuatorResponseServer {
 	}
 	
 	public static void stop() {
-		Logger.log("SensorActuatorResponseServer stopped.");
+		Logger.log(Logger.LEVEL_INFO,"SensorActuatorResponseServer stopped.");
 		isStarted=false;
 		
 		DatabaseReading.unregisterOnReceivedAction(ReceivedCallback);

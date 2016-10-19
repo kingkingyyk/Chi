@@ -23,28 +23,28 @@ public class DatabaseEvent {
 
 	public static void registerOnSensorEventLoggedAction(OnSensorEventLoggedAction a) {
 		if (!OnSensorEventLoggedList.contains(a)) {
-			Logger.log("DatabaseEvent - Registered " + a.toString() + " to OnSensorEventLogged callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseEvent - Registered " + a.toString() + " to OnSensorEventLogged callback");
 			OnSensorEventLoggedList.add(a);
 		}
 	}
 	
 	public static void unregisterOnSensorEventLoggedAction(OnSensorEventLoggedAction a) {
 		if (OnSensorEventLoggedList.contains(a)) {
-			Logger.log("DatabaseEvent - Unregistered " + a.toString() + " from OnSensorEventLogged callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseEvent - Unregistered " + a.toString() + " from OnSensorEventLogged callback");
 			OnSensorEventLoggedList.remove(a);
 		}
 	}
 	
 	public static void registerOnControllerEventLoggedAction(OnControllerEventLoggedAction a) {
 		if (!OnControllerEventLoggedList.contains(a)) {
-			Logger.log("DatabaseEvent - Registered " + a.toString() + " to OnControllerEventLogged callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseEvent - Registered " + a.toString() + " to OnControllerEventLogged callback");
 			OnControllerEventLoggedList.add(a);
 		}
 	}
 	
 	public static void unregisterOnControllerEventLoggedAction(OnControllerEventLoggedAction a) {
 		if (OnControllerEventLoggedList.contains(a)) {
-			Logger.log("DatabaseEvent - Unregistered " + a.toString() + " from OnControllerEventLogged callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseEvent - Unregistered " + a.toString() + " from OnControllerEventLogged callback");
 			OnControllerEventLoggedList.remove(a);
 		}
 	}
@@ -52,7 +52,7 @@ public class DatabaseEvent {
 	public static boolean logSensorEvent (String name, String eventType, String eventValue) {
 		StringBuilder sbLog=new StringBuilder("DatabaseEvent - Log Sensor Event ");
 		sbLog.append(name); sbLog.append("|"); sbLog.append(eventType); sbLog.append("|"); sbLog.append(eventValue);
-		Logger.log(sbLog.toString());
+		Logger.log(Logger.LEVEL_INFO,sbLog.toString());
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
 		boolean flag=false;
@@ -64,13 +64,13 @@ public class DatabaseEvent {
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
-			Logger.log("DatabaseSensorEvent - Log controller event - Error" + e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"DatabaseSensorEvent - Log controller event - " + e.getMessage());
 		} finally {session.close();}
 		return flag;
 	}
 
 	public static ArrayList<Sensorevent> getSensorEventByName (String name) {
-		Logger.log("DatabaseEvent - Get sensor event "+name);
+		Logger.log(Logger.LEVEL_INFO,"DatabaseEvent - Get sensor event "+name);
 		Session session=Cache.factory.openSession();
 		Transaction tx=null;
 		ArrayList<Sensorevent> list=new ArrayList<>();
@@ -82,7 +82,7 @@ public class DatabaseEvent {
 				list.add((Sensorevent) o);
 			}
 		} catch (HibernateException e) {
-	        Logger.log("DatabaseEvent - Get sensor event - Error - "+e.getMessage());
+	        Logger.log(Logger.LEVEL_ERROR,"DatabaseEvent - Get sensor event - "+e.getMessage());
 	        if (tx!=null) tx.rollback();
 	    } finally {
 	         session.close(); 
@@ -91,7 +91,7 @@ public class DatabaseEvent {
 	}
 	
 	public static ArrayList<Sensorevent> getSensorEventBetweenTime (LocalDateTime min, LocalDateTime max) {
-		Logger.log("DatabaseEvent - Get sensor event between time");
+		Logger.log(Logger.LEVEL_INFO,"DatabaseEvent - Get sensor event between time");
 		Session session=Cache.factory.openSession();
 		Transaction tx=null;
 		ArrayList<Sensorevent> list=new ArrayList<>();
@@ -104,7 +104,7 @@ public class DatabaseEvent {
 				list.add((Sensorevent) o);
 			}
 		} catch (HibernateException e) {
-	        Logger.log("DatabaseEvent - Get sensor event - Error - "+e.getMessage());
+	        Logger.log(Logger.LEVEL_ERROR,"DatabaseEvent - Get sensor event - Error - "+e.getMessage());
 	        if (tx!=null) tx.rollback();
 	    } finally {
 	         session.close(); 
@@ -115,7 +115,7 @@ public class DatabaseEvent {
 	public static boolean logControllerEvent (String name, String eventType, String eventValue) {
 		StringBuilder sbLog=new StringBuilder("DatabaseEvent - Log Controller Event ");
 		sbLog.append(name); sbLog.append("|"); sbLog.append(eventType); sbLog.append("|"); sbLog.append(eventValue);
-		Logger.log(sbLog.toString());
+		Logger.log(Logger.LEVEL_INFO,sbLog.toString());
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
 		boolean flag=false;
@@ -127,13 +127,13 @@ public class DatabaseEvent {
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
-			Logger.log("DatabaseSensorEvent - Log controller event - Error" + e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"DatabaseSensorEvent - Log controller event - " + e.getMessage());
 		} finally {session.close();}
 		return flag;
 	}
 	
 	public static ArrayList<Controllerevent> getControllerEventByName (String name) {
-		Logger.log("DatabaseEvent - Get controller event "+name);
+		Logger.log(Logger.LEVEL_INFO,"DatabaseEvent - Get controller event "+name);
 		Session session=Cache.factory.openSession();
 		Transaction tx=null;
 		ArrayList<Controllerevent> list=new ArrayList<>();
@@ -145,7 +145,7 @@ public class DatabaseEvent {
 				list.add((Controllerevent) o);
 			}
 		} catch (HibernateException e) {
-	        Logger.log("DatabaseEvent - Get controller event - Error - "+e.getMessage());
+	        Logger.log(Logger.LEVEL_ERROR,"DatabaseEvent - Get controller event - "+e.getMessage());
 	        if (tx!=null) tx.rollback();
 	    } finally {
 	         session.close(); 
@@ -154,7 +154,7 @@ public class DatabaseEvent {
 	}
 	
 	public static ArrayList<Controllerevent> getControllerEventBetweenTime (LocalDateTime min, LocalDateTime max) {
-		Logger.log("DatabaseEvent - Get controller event between time");
+		Logger.log(Logger.LEVEL_INFO,"DatabaseEvent - Get controller event between time");
 		Session session=Cache.factory.openSession();
 		Transaction tx=null;
 		ArrayList<Controllerevent> list=new ArrayList<>();
@@ -167,7 +167,7 @@ public class DatabaseEvent {
 				list.add((Controllerevent) o);
 			}
 		} catch (HibernateException e) {
-	        Logger.log("DatabaseEvent - Get controller event - Error - "+e.getMessage());
+	        Logger.log(Logger.LEVEL_ERROR,"DatabaseEvent - Get controller event - Error - "+e.getMessage());
 	        if (tx!=null) tx.rollback();
 	    } finally {
 	         session.close(); 

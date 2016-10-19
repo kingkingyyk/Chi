@@ -151,10 +151,10 @@ public class SchedulingThread extends Thread {
 			}
 			
 			if (!hasConflict) {
-				Logger.log("RegularSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getStartAction()+". [SET]");
+				Logger.log(Logger.LEVEL_INFO,"RegularSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getStartAction()+". [SET]");
 				TriggerActuator(Cache.Actuators.map.get(dat.actuatorName).getController().getControllername(),this.dat.actuatorName,this.dat.getStartAction());
 			} else {
-				Logger.log("RegularSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getStartAction()+". [NOT SET DUE TO LOW PRIORITY]");
+				Logger.log(Logger.LEVEL_INFO,"RegularSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getStartAction()+". [NOT SET DUE TO LOW PRIORITY]");
 			}
 		}
 	}
@@ -171,10 +171,10 @@ public class SchedulingThread extends Thread {
 			}
 			
 			if (!hasConflict) {
-				Logger.log("RegularSchedule ("+this.dat.name+") : Ended -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getEndAction()+". [SET]");
+				Logger.log(Logger.LEVEL_INFO,"RegularSchedule ("+this.dat.name+") : Ended -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getEndAction()+". [SET]");
 				TriggerActuator(Cache.Actuators.map.get(dat.actuatorName).getController().getControllername(),this.dat.actuatorName,this.dat.getEndAction());
 			} else {
-				Logger.log("RegularSchedule ("+this.dat.name+") : Ended -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getEndAction()+". [NOT SET DUE TO LOW PRIORITY]");
+				Logger.log(Logger.LEVEL_INFO,"RegularSchedule ("+this.dat.name+") : Ended -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getEndAction()+". [NOT SET DUE TO LOW PRIORITY]");
 			}
 			
 			FrameOngoingSchedules.refresh();
@@ -254,10 +254,10 @@ public class SchedulingThread extends Thread {
 			}
 			
 			if (!hasConflict) {
-				Logger.log("SpecialSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getStartAction()+". [SET]");
+				Logger.log(Logger.LEVEL_INFO,"SpecialSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getStartAction()+". [SET]");
 				TriggerActuator(Cache.Actuators.map.get(dat.actuatorName).getController().getControllername(),this.dat.actuatorName,this.dat.getStartAction());
 			} else {
-				Logger.log("SpecialSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getStartAction()+". [NOT SET DUE TO LOW PRIORITY]");
+				Logger.log(Logger.LEVEL_INFO,"SpecialSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getStartAction()+". [NOT SET DUE TO LOW PRIORITY]");
 			}
 		}
 	}
@@ -274,10 +274,10 @@ public class SchedulingThread extends Thread {
 			}
 			
 			if (!hasConflict) {
-				Logger.log("SpecialSchedule ("+this.dat.name+") : Ended -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getEndAction()+". [SET]");
+				Logger.log(Logger.LEVEL_INFO,"SpecialSchedule ("+this.dat.name+") : Ended -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getEndAction()+". [SET]");
 				TriggerActuator(Cache.Actuators.map.get(dat.actuatorName).getController().getControllername(),this.dat.actuatorName,this.dat.getEndAction());
 			} else {
-				Logger.log("SpecialSchedule ("+this.dat.name+") : Ended -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getEndAction()+". [NOT SET DUE TO LOW PRIORITY]");
+				Logger.log(Logger.LEVEL_INFO,"SpecialSchedule ("+this.dat.name+") : Ended -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getEndAction()+". [NOT SET DUE TO LOW PRIORITY]");
 			}
 			
 			FrameOngoingSchedules.refresh();

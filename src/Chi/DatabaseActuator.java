@@ -30,62 +30,62 @@ public class DatabaseActuator {
 
 	public static void registerOnCreateAction(OnCreateAction a) {
 		if (!OnCreateList.contains(a)) {
-			Logger.log("DatabaseActuator - Registered " + a.toString() + " to OnCreate callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseActuator - Registered " + a.toString() + " to OnCreate callback");
 			OnCreateList.add(a);
 		}
 	}
 
 	public static void registerOnUpdateAction(OnUpdateAction a) {
 		if (!OnUpdateList.contains(a)) {
-			Logger.log("DatabaseActuator - Registered " + a.toString() + " to OnUpdate callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseActuator - Registered " + a.toString() + " to OnUpdate callback");
 			OnUpdateList.add(a);
 		}
 	}
 
 	public static void registerOnUpdateStatusAction(OnUpdateStatusAction a) {
 		if (!OnUpdateStatusList.contains(a)) {
-			Logger.log("DatabaseActuator - Registered " + a.toString() + " to OnUpdateStatus callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseActuator - Registered " + a.toString() + " to OnUpdateStatus callback");
 			OnUpdateStatusList.add(a);
 		}
 	}
 
 	public static void registerOnDeleteAction(OnDeleteAction a) {
 		if (!OnDeleteList.contains(a)) {
-			Logger.log("DatabaseActuator - Registered " + a.toString() + " to OnDelete callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseActuator - Registered " + a.toString() + " to OnDelete callback");
 			OnDeleteList.add(a);
 		}
 	}
 	
 	public static void unregisterOnCreateAction(OnCreateAction a) {
 		if (OnCreateList.contains(a)) {
-			Logger.log("DatabaseActuator - Unregistered " + a.toString() + " to OnCreate callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseActuator - Unregistered " + a.toString() + " to OnCreate callback");
 			OnCreateList.remove(a);
 		}
 	}
 
 	public static void unregisterOnUpdateAction(OnUpdateAction a) {
 		if (OnUpdateList.contains(a)) {
-			Logger.log("DatabaseActuator - Unregistered " + a.toString() + " to OnUpdate callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseActuator - Unregistered " + a.toString() + " to OnUpdate callback");
 			OnUpdateList.remove(a);
 		}
 	}
 
 	public static void unregisterOnUpdateStatusAction(OnUpdateStatusAction a) {
 		if (OnUpdateStatusList.contains(a)) {
-			Logger.log("DatabaseActuator - Unregistered " + a.toString() + " to OnUpdateStatus callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseActuator - Unregistered " + a.toString() + " to OnUpdateStatus callback");
 			OnUpdateStatusList.remove(a);
 		}
 	}
 
 	public static void unregisterOnDeleteAction(OnDeleteAction a) {
 		if (OnDeleteList.contains(a)) {
-			Logger.log("DatabaseActuator - Unregistered " + a.toString() + " to OnDelete callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseActuator - Unregistered " + a.toString() + " to OnDelete callback");
 			OnDeleteList.remove(a);
 		}
 	}
 
 	public static boolean createActuator(String n, String u, double px, double py, String ctrlType) {
-		Logger.log("DatabaseActuator - Create");
+		Logger.log(Logger.LEVEL_INFO,"DatabaseActuator - Create");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
 		boolean flag=false;
@@ -98,20 +98,20 @@ public class DatabaseActuator {
 				tx.commit();
 				Cache.Actuators.map.put(n,act);
 	
-				Logger.log("DatabaseActuator - Create - Execute Callbacks");
+				Logger.log(Logger.LEVEL_INFO,"DatabaseActuator - Create - Execute Callbacks");
 				for (OnCreateAction a : OnCreateList) a.run(n, u, px, py);
 				flag = true;
-			} else Logger.log("DB Create Actuator - Actuator already exists");
+			} else Logger.log(Logger.LEVEL_WARNING,"DB Create Actuator - Actuator already exists");
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
-			Logger.log("DatabaseActuator - Create - Error" + e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"DatabaseActuator - Create - Error" + e.getMessage());
 		} finally {session.close();}
 		return flag;
 	}
 
 	public static boolean updateActuator(String oldN, String n, String u, double px, double py, String ctrlType) {
-		Logger.log("DBActuator Update");
+		Logger.log(Logger.LEVEL_INFO,"DBActuator Update");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
 		boolean flag = false;
@@ -138,19 +138,19 @@ public class DatabaseActuator {
 					if (s.getActuator().getName().equals(oldN))
 						s.setActuator(act);
 				
-				Logger.log("DB Update Actuator - Execute Callbacks");
+				Logger.log(Logger.LEVEL_INFO,"DB Update Actuator - Execute Callbacks");
 				for (OnUpdateAction a : OnUpdateList) a.run(oldN, n, u, px, py, ctrlType);
 				flag = true;
-			} else Logger.log("DB Update Actuator - Actuator doesn't exist");
+			} else Logger.log(Logger.LEVEL_WARNING,"DB Update Actuator - Actuator doesn't exist");
 		} catch (HibernateException e) {
 			if (tx != null) tx.rollback();
-			Logger.log("DB Update Actuator - Error" + e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"DB Update Actuator - Error" + e.getMessage());
 		} finally { session.close();}
 		return flag;
 	}
 
 	public static boolean updateActuatorStatus(String n, String st) {
-		Logger.log("DBActuator Update Status");
+		Logger.log(Logger.LEVEL_INFO,"DBActuator Update Status");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
 		boolean flag=false;
@@ -163,13 +163,13 @@ public class DatabaseActuator {
 				session.update(act);
 				tx.commit();
 				
-				Logger.log("DB Update Actuator Status - Execute Callbacks");
+				Logger.log(Logger.LEVEL_INFO,"DB Update Actuator Status - Execute Callbacks");
 				for (OnUpdateStatusAction a : OnUpdateStatusList) a.run(n, st);
 				flag = true;
-			} else Logger.log("DB Update Actuator Status - Actuator doesn't exist");
+			} else Logger.log(Logger.LEVEL_WARNING,"DB Update Actuator Status - Actuator doesn't exist");
 		} catch (HibernateException e) {
 			if (tx != null) tx.rollback();
-			Logger.log("DB Update Actuator Status - Error" + e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"DB Update Actuator Status - Error" + e.getMessage());
 		} finally {
 			session.close();
 		}
@@ -177,7 +177,7 @@ public class DatabaseActuator {
 	}
 
 	public static boolean deleteActuator(String n) {
-		Logger.log("DBActuator Delete ");
+		Logger.log(Logger.LEVEL_INFO,"DBActuator Delete ");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
 		boolean flag=false;
@@ -189,7 +189,7 @@ public class DatabaseActuator {
 				tx.commit();
 				Cache.Actuators.map.remove(n);
 				
-				Logger.log("DB Delete Actuator - Execute Callbacks");
+				Logger.log(Logger.LEVEL_INFO,"DB Delete Actuator - Execute Callbacks");
 				for (OnDeleteAction a : OnDeleteList) a.run(n);
 				flag = true;
 				
@@ -199,10 +199,10 @@ public class DatabaseActuator {
 						Cache.SensorActuatorResponses.map.remove(String.valueOf(res.getId()));
 					}
 				}
-			} else Logger.log("DB Delete Actuator - Actuator doesn't exist");
+			} else Logger.log(Logger.LEVEL_WARNING,"DB Delete Actuator - Actuator doesn't exist");
 		} catch (HibernateException e) {
 			if (tx != null) tx.rollback();
-			Logger.log("DB Delete Actuator - Error" + e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"DB Delete Actuator - Error" + e.getMessage());
 		} finally {
 			session.close();
 		}

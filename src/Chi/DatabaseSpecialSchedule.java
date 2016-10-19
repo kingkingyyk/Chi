@@ -26,48 +26,48 @@ public class DatabaseSpecialSchedule {
 	
 	public static void registerOnCreateAction (OnCreateAction a) {
 		if (!OnCreateList.contains(a)) {
-			Logger.log("DatabaseSpecialSchedule - Registered "+a.toString()+" to OnCreate callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseSpecialSchedule - Registered "+a.toString()+" to OnCreate callback");
 			OnCreateList.add(a);
 		}
 	}
 	
 	public static void unregisterOnCreateAction (OnCreateAction a) {
 		if (OnCreateList.contains(a)) {
-			Logger.log("DatabaseSpecialSchedule - Unregistered "+a.toString()+" to OnCreate callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseSpecialSchedule - Unregistered "+a.toString()+" to OnCreate callback");
 			OnCreateList.remove(a);
 		}
 	}
 	
 	public static void registerOnUpdateAction (OnUpdateAction a) {
 		if (!OnUpdateList.contains(a)) {
-			Logger.log("DatabaseSpecialSchedule - Registered "+a.toString()+" to OnUpdate callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseSpecialSchedule - Registered "+a.toString()+" to OnUpdate callback");
 			OnUpdateList.add(a);
 		}
 	}
 	
 	public static void unregisterOnUpdateAction (OnUpdateAction a) {
 		if (OnUpdateList.contains(a)) {
-			Logger.log("DatabaseSpecialSchedule - Unregistered "+a.toString()+" to OnUpdate callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseSpecialSchedule - Unregistered "+a.toString()+" to OnUpdate callback");
 			OnUpdateList.remove(a);
 		}
 	}
 	
 	public static void registerOnDeleteAction (OnDeleteAction a) {
 		if (!OnDeleteList.contains(a)) {
-			Logger.log("DatabaseSpecialSchedule - Registered "+a.toString()+" to OnDelete callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseSpecialSchedule - Registered "+a.toString()+" to OnDelete callback");
 			OnDeleteList.add(a);
 		}
 	}
 	
 	public static void unregisterOnDeleteAction (OnDeleteAction a) {
 		if (OnDeleteList.contains(a)) {
-			Logger.log("DatabaseSpecialSchedule - Unregistered "+a.toString()+" to OnDelete callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseSpecialSchedule - Unregistered "+a.toString()+" to OnDelete callback");
 			OnDeleteList.remove(a);
 		}
 	}
 	
 	public static boolean createSpecialSchedule (String sn, String an, int year, int month, int day, String rn, String startAct, String endAct, boolean lock, int pr, boolean en) {
-		Logger.log("DatabaseSpecialSchedule - Create");
+		Logger.log(Logger.LEVEL_INFO,"DatabaseSpecialSchedule - Create");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
 		boolean flag=false;
@@ -80,20 +80,20 @@ public class DatabaseSpecialSchedule {
 				tx.commit();
 				Cache.SpecialSchedules.map.put(sn, ss);
 	
-				Logger.log("DatabaseSpecialSchedule - Create - Execute Callbacks");
+				Logger.log(Logger.LEVEL_INFO,"DatabaseSpecialSchedule - Create - Execute Callbacks");
 				for (OnCreateAction a : OnCreateList) a.run(sn,an,year,month,day,rn,startAct,endAct,lock,pr,en);
 				flag = true;
-			} else Logger.log("DB Create SpecialSchedule - Schedule already exists");
+			} else Logger.log(Logger.LEVEL_WARNING,"DB Create SpecialSchedule - Schedule already exists");
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
-			Logger.log("DatabaseSpecialSchedule - Create - Error" + e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"DatabaseSpecialSchedule - Create - " + e.getMessage());
 		} finally {session.close();}
 		return flag;
 	}
 	
 	public static boolean updateSpecialSchedule (String oldSN, String sn, String an, int year, int month, int day, String rn, String startAct, String endAct, boolean lock, int pr, boolean en) {
-		Logger.log("DatabaseSpecialSchedule - Update");
+		Logger.log(Logger.LEVEL_INFO,"DatabaseSpecialSchedule - Update");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
 		boolean flag=false;
@@ -119,20 +119,20 @@ public class DatabaseSpecialSchedule {
 				tx.commit();
 				Cache.SpecialSchedules.map.put(sn, ss);
 	
-				Logger.log("DatabaseSpecialSchedule - Update - Execute Callbacks");
+				Logger.log(Logger.LEVEL_INFO,"DatabaseSpecialSchedule - Update - Execute Callbacks");
 				for (OnUpdateAction a : OnUpdateList) a.run(oldSN,sn,an,year,month,day,rn,startAct,endAct,lock,pr,en);
 				flag = true;
-			} else Logger.log("DB Update SpecialSchedule - Schedule doesn't exist");
+			} else Logger.log(Logger.LEVEL_WARNING,"DB Update SpecialSchedule - Schedule doesn't exist");
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
-			Logger.log("DatabaseSpecialSchedule - Update - Error" + e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"DatabaseSpecialSchedule - Update - Error" + e.getMessage());
 		} finally {session.close();}
 		return flag;
 	}
 	
 	public static boolean deleteSpecialSchedule (String sn) {
-		Logger.log("DatabaseSpecialSchedule - Delete");
+		Logger.log(Logger.LEVEL_INFO,"DatabaseSpecialSchedule - Delete");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
 		boolean flag=false;
@@ -144,14 +144,14 @@ public class DatabaseSpecialSchedule {
 				tx.commit();
 				Cache.SpecialSchedules.map.remove(sn);
 	
-				Logger.log("DatabaseSpecialSchedule - Delete - Execute Callbacks");
+				Logger.log(Logger.LEVEL_INFO,"DatabaseSpecialSchedule - Delete - Execute Callbacks");
 				for (OnDeleteAction a : OnDeleteList) a.run(sn);
 				flag = true;
-			} else Logger.log("DB Delete SpecialSchedule - Schedule doesn't exist");
+			} else Logger.log(Logger.LEVEL_WARNING,"DB Delete SpecialSchedule - Schedule doesn't exist");
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
-			Logger.log("DatabaseSpecialSchedule - Delete - Error" + e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"DatabaseSpecialSchedule - Delete - " + e.getMessage());
 		} finally {session.close();}
 		return flag;
 	}

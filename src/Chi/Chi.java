@@ -11,9 +11,9 @@ public class Chi {
 		
 		Logger.initialize();
 		
-		Logger.log("Loading theme started.");
+		Logger.log(Logger.LEVEL_INFO,"Loading theme started.");
 		Theme.initialize();
-		Logger.log("Loading theme done.");
+		Logger.log(Logger.LEVEL_INFO,"Loading theme done.");
 		
 		StartScreen diag=new StartScreen();
 		diag.setProgBarMax(5);
@@ -21,24 +21,24 @@ public class Chi {
 		Thread t=new Thread() {
 			public void run () {
 				
-				Logger.log("Initializing Utility class.");
+				Logger.log(Logger.LEVEL_INFO,"Initializing Utility class.");
 				diag.setText("Loading utilities...");
 				Utility.initialize();
 				diag.setProgBarValue(1);
 				
-				Logger.log("Reading configuration started.");
+				Logger.log(Logger.LEVEL_INFO,"Reading configuration started.");
 				diag.setText("Loading configurations...");
 				Config.initialize();
 				diag.setProgBarValue(2);
-				Logger.log("Reading configuration done.");
+				Logger.log(Logger.LEVEL_INFO,"Reading configuration done.");
 				
-				Logger.log("Initializing Cache");
+				Logger.log(Logger.LEVEL_INFO,"Initializing Cache");
 				diag.setText("Loading cache...");
 				Cache.initialize(diag);
 				DatabaseCassandra.initialize();
 				diag.setProgBarValue(3);
 				
-				Logger.log("GUI & data binding started.");
+				Logger.log(Logger.LEVEL_INFO,"GUI & data binding started.");
 				diag.setText("Binding GUI & Data...");
 				//In topological order
 				FrameUserManagementBind.initialize();
@@ -55,23 +55,23 @@ public class Chi {
 				CacheRelationshipBind.initialize();
 				
 				diag.setProgBarValue(4);
-				Logger.log("GUI & data binding done.");
+				Logger.log(Logger.LEVEL_INFO,"GUI & data binding done.");
 				
-				Logger.log("Data server to database started.");
+				Logger.log(Logger.LEVEL_INFO,"Data server to database started.");
 				diag.setText("Preloading data server...");
 				DataServerReadingToDatabase.initialize();
 				diag.setProgBarValue(5);
-				Logger.log("Data server to database done.");
+				Logger.log(Logger.LEVEL_INFO,"Data server to database done.");
 				
 				diag.setVisible(false);
 			}
 		}; t.start();
 		diag.setVisible(true);
 		
-		Logger.log("MainUI started.");
+		Logger.log(Logger.LEVEL_INFO,"MainUI started.");
 		MenuUI ss=new MenuUI();
 		ss.setLocationRelativeTo(null);
-		Logger.log("MainUI done.");
+		Logger.log(Logger.LEVEL_INFO,"MainUI done.");
 		ss.setVisible(true);
 		ss.setAlwaysOnTop(false);
 	}

@@ -27,28 +27,28 @@ public class DatabaseReading extends DatabaseCassandra {
 	
 	public static void registerOnReceivedAction (OnReceivedAction a) {
 		if (!OnReceivedList.contains(a)) {
-			Logger.log("DatabaseReading - Registered "+a.toString()+" to OnReceived callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseReading - Registered "+a.toString()+" to OnReceived callback");
 			OnReceivedList.add(a);
 		}
 	}
 	
 	public static void registerOnRecalculateAction (OnRecalculateAction a) {
 		if (!OnRecalculateList.contains(a)) {
-			Logger.log("DatabaseReading - Registered "+a.toString()+" to OnRecalculate callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseReading - Registered "+a.toString()+" to OnRecalculate callback");
 			OnRecalculateList.add(a);
 		}
 	}
 	
 	public static void unregisterOnReceivedAction (OnReceivedAction a) {
 		if (OnReceivedList.contains(a)) {
-			Logger.log("DatabaseReading - Unregistered "+a.toString()+" to OnReceived callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseReading - Unregistered "+a.toString()+" to OnReceived callback");
 			OnReceivedList.remove(a);
 		}
 	}
 	
 	public static void unregisterOnRecalculateAction (OnRecalculateAction a) {
 		if (OnRecalculateList.contains(a)) {
-			Logger.log("DatabaseReading - Unregistered "+a.toString()+" to OnRecalculate callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseReading - Unregistered "+a.toString()+" to OnRecalculate callback");
 			OnRecalculateList.remove(a);
 		}
 	}
@@ -77,13 +77,8 @@ public class DatabaseReading extends DatabaseCassandra {
 	}
 	
 	public static boolean storeReading () {
-		String ip=Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY);
-		int port=Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
-		Logger.log("DB Store Reading : "+Config.getConfig(Config.DATABASE_RECORD_SAVE_TO_DB_SQL_FILE_KEY));
+		Logger.log(Logger.LEVEL_INFO,"DB Store Reading : "+Config.getConfig(Config.DATABASE_RECORD_SAVE_TO_DB_SQL_FILE_KEY));
 		try {
-			Logger.log("DB Store Reading - Connecting to database : "+ip+":"+port);
-			Logger.log("DB Store Reading - Database connection OK!");
-			
 			BoundStatement [] sql=getBoundSQLStatementFromFile(DatabaseCassandra.getSession(),Config.getConfig(Config.DATABASE_RECORD_SAVE_TO_DB_SQL_FILE_KEY));
 			DataServerReadingToDatabase.Data d;
 			while ((d=DataServerReadingToDatabase.queue.poll())!=null) {
@@ -100,23 +95,18 @@ public class DatabaseReading extends DatabaseCassandra {
 			}
 			return true;
 		} catch (NoHostAvailableException e) {
-			Logger.log("DB Store Reading - Database connection fail!");
+			Logger.log(Logger.LEVEL_ERROR,"DB Store Reading - Database connection fail!");
 		} catch (Exception e) {
-			Logger.log("DB Store Reading - Error - "+e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"DB Store Reading - "+e.getMessage());
 			e.printStackTrace();
 		}
 		return false;
 	}
 	
 	public static LinkedList<SensorReading> getReadingBetweenTime (String sn, LocalDateTime min, LocalDateTime max) {
-		String ip=Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY);
-		int port=Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
-		Logger.log("DB Get Reading : "+Config.getConfig(Config. DATABASE_RECORD_QUERY_BETWEEN_TIME_FILE_KEY));
+		Logger.log(Logger.LEVEL_INFO,"DB Get Reading : "+Config.getConfig(Config. DATABASE_RECORD_QUERY_BETWEEN_TIME_FILE_KEY));
 		LinkedList<SensorReading> list=new LinkedList<>();
 		try {
-			Logger.log("DB Get Reading - Connecting to database : "+ip+":"+port);
-			Logger.log("DB Get Reading - Database connection OK!");
-			
 			BoundStatement [] sql=getBoundSQLStatementFromFile(DatabaseCassandra.getSession(),Config.getConfig(Config. DATABASE_RECORD_QUERY_BETWEEN_TIME_FILE_KEY));
 			sql[0].setString(0, sn);
 			sql[0].setTimestamp(1,Utility.localDateTimeToSQLDate(min));
@@ -131,22 +121,17 @@ public class DatabaseReading extends DatabaseCassandra {
 			
 			Collections.sort(list);
 		} catch (NoHostAvailableException e) {
-			Logger.log("DB Get Reading - Database connection fail!");
+			Logger.log(Logger.LEVEL_ERROR,"DB Get Reading - Database connection fail!");
 		} catch (Exception e) {
-			Logger.log("DB Get Reading - Error - "+e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"DB Get Reading - "+e.getMessage());
 			e.printStackTrace();
 		}
 		return list;
 	}
 	
 	public static double getLatestReading (String sn) {
-		String ip=Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY);
-		int port=Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
-		Logger.log("DB Get Latest Reading : "+Config.getConfig(Config.DATABASE_RECORD_QUERY_LATEST_FILE_KEY));
+		Logger.log(Logger.LEVEL_INFO,"DB Get Latest Reading : "+Config.getConfig(Config.DATABASE_RECORD_QUERY_LATEST_FILE_KEY));
 		try {
-			Logger.log("DB Get Latest Reading - Connecting to database : "+ip+":"+port);
-			Logger.log("DB Get Latest Reading - Database connection OK!");
-			
 			BoundStatement [] sql=getBoundSQLStatementFromFile(DatabaseCassandra.getSession(),Config.getConfig(Config.DATABASE_RECORD_QUERY_LATEST_FILE_KEY));
 			sql[0].setString(0, sn);
 			ResultSet rs=executeSQL("DB Get Latest Reading", DatabaseCassandra.getSession(), sql[0]);
@@ -157,23 +142,18 @@ public class DatabaseReading extends DatabaseCassandra {
 			}
 			return d;
 		} catch (NoHostAvailableException e) {
-			Logger.log("DB Get Latest Reading - Database connection fail!");
+			Logger.log(Logger.LEVEL_ERROR,"DB Get Latest Reading - Database connection fail!");
 		} catch (Exception e) {
-			Logger.log("DB Get Latest Reading - Error - "+e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"DB Get Latest Reading - "+e.getMessage());
 			e.printStackTrace();
 		}
 		return 0.0;
 	}
 	
 	public static LinkedList<SensorReading> getReadingMonthly (String sn, int year, int month) {
-		String ip=Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY);
-		int port=Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
-		Logger.log("DB Get Reading : "+Config.getConfig(Config.DATABASE_RECORD_QUERY_MONTH_FILE_KEY));
+		Logger.log(Logger.LEVEL_INFO,"DB Get Reading : "+Config.getConfig(Config.DATABASE_RECORD_QUERY_MONTH_FILE_KEY));
 		LinkedList<SensorReading> list=new LinkedList<>();
 		try {
-			Logger.log("DB Get Reading - Connecting to database : "+ip+":"+port);
-			Logger.log("DB Get Reading - Database connection OK!");
-			
 			BoundStatement [] sql=getBoundSQLStatementFromFile(DatabaseCassandra.getSession(),Config.getConfig(Config.DATABASE_RECORD_QUERY_MONTH_FILE_KEY));
 			
 			sql[0].setString(0, sn);
@@ -187,9 +167,9 @@ public class DatabaseReading extends DatabaseCassandra {
 			
 			Collections.sort(list);
 		} catch (NoHostAvailableException e) {
-			Logger.log("DB Get Reading - Database connection fail!");
+			Logger.log(Logger.LEVEL_ERROR,"DB Get Reading - Database connection fail!");
 		} catch (Exception e) {
-			Logger.log("DB Get Reading - Error - "+e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"DB Get Reading - "+e.getMessage());
 			e.printStackTrace();
 		}
 		return list;
@@ -197,30 +177,25 @@ public class DatabaseReading extends DatabaseCassandra {
 	
 	public static void updateSensorName (String oldSN, String newSN) {;
 		try {
-			Logger.log("DB updateSensorName");
+			Logger.log(Logger.LEVEL_INFO,"DB updateSensorName");
 			
 			DatabaseCassandra.getSession().execute("UPDATE SensorReading SET SensorName='"+newSN+"' WHERE SensorName='"+oldSN+"';");
 		} catch (NoHostAvailableException e) {
-			Logger.log("DB updateSensorName - Database connection fail!");
+			Logger.log(Logger.LEVEL_ERROR,"DB updateSensorName - Database connection fail!");
 		} catch (Exception e) {
-			Logger.log("DB updateSensorName - Error - "+e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"DB updateSensorName - "+e.getMessage());
 			e.printStackTrace();
 		}
 	}
 	
 	public static void clearReading (String sn) {
-		String ip=Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY);
-		int port=Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
-		Logger.log("DB Clear Reading : "+Config.getConfig(Config.DATABASE_RECORD_QUERY_MONTH_FILE_KEY));
+		Logger.log(Logger.LEVEL_INFO,"DB Clear Reading : "+Config.getConfig(Config.DATABASE_RECORD_QUERY_MONTH_FILE_KEY));
 		try {
-			Logger.log("DB Clear Reading - Connecting to database : "+ip+":"+port);
-			Logger.log("DB Clear Reading - Database connection OK!");
-			
 			DatabaseCassandra.getSession().execute("DELETE FROM SensorReading WHERE SensorName='"+sn+"';");
 		} catch (NoHostAvailableException e) {
-			Logger.log("DB Clear Reading - Database connection fail!");
+			Logger.log(Logger.LEVEL_ERROR,"DB Clear Reading - Database connection fail!");
 		} catch (Exception e) {
-			Logger.log("DB Clear Reading - Error - "+e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"DB Clear Reading - "+e.getMessage());
 			e.printStackTrace();
 		}
 	}

@@ -25,49 +25,49 @@ public class DatabaseSensorActuatorResponse {
 	
 	public static void registerOnCreateAction (OnCreateAction a) {
 		if (!OnCreateList.contains(a)) {
-			Logger.log("DatabaseSensorActuatorResponse - Registered "+a.toString()+" to OnCreate callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseSensorActuatorResponse - Registered "+a.toString()+" to OnCreate callback");
 			OnCreateList.add(a);
 		}
 	}
 	
 	public static void registerOnUpdateAction (OnUpdateAction a) {
 		if (!OnUpdateList.contains(a)) {
-			Logger.log("DatabaseSensorActuatorResponse - Registered "+a.toString()+" to OnUpdate callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseSensorActuatorResponse - Registered "+a.toString()+" to OnUpdate callback");
 			OnUpdateList.add(a);
 		}
 	}
 	
 	public static void registerOnDeleteAction (OnDeleteAction a) {
 		if (!OnDeleteList.contains(a)) {
-			Logger.log("DatabaseSensorActuatorResponse - Registered "+a.toString()+" to OnDelete callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseSensorActuatorResponse - Registered "+a.toString()+" to OnDelete callback");
 			OnDeleteList.add(a);
 		}
 	}
 	
 	public static void unregisterOnCreateAction (OnCreateAction a) {
 		if (OnCreateList.contains(a)) {
-			Logger.log("DatabaseSensorActuatorResponse - Unegistered "+a.toString()+" to OnCreate callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseSensorActuatorResponse - Unegistered "+a.toString()+" to OnCreate callback");
 			OnCreateList.remove(a);
 		}
 	}
 	
 	public static void unregisterOnUpdateAction (OnUpdateAction a) {
 		if (OnUpdateList.contains(a)) {
-			Logger.log("DatabaseSensorActuatorResponse - Unregistered "+a.toString()+" to OnUpdate callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseSensorActuatorResponse - Unregistered "+a.toString()+" to OnUpdate callback");
 			OnUpdateList.remove(a);
 		}
 	}
 	
 	public static void unregisterOnDeleteAction (OnDeleteAction a) {
 		if (OnDeleteList.contains(a)) {
-			Logger.log("DatabaseSensorActuatorResponse - Unregistered "+a.toString()+" to OnDelete callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseSensorActuatorResponse - Unregistered "+a.toString()+" to OnDelete callback");
 			OnDeleteList.remove(a);
 		}
 	}
 	
 	public static boolean createSensorActuatorResponse (String an, String onTrigAct, String onNotTrigAct,
 														String expression, boolean en, int timeout) {
-		Logger.log("DatabaseSensorActuatorResponse - Create");
+		Logger.log(Logger.LEVEL_INFO,"DatabaseSensorActuatorResponse - Create");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
 		boolean flag=false;
@@ -78,20 +78,20 @@ public class DatabaseSensorActuatorResponse {
 			tx.commit();
 			Cache.SensorActuatorResponses.map.put(String.valueOf(s.getId()),s);
 	
-			Logger.log("DatabaseSensorActuatorResponse - Create - Execute Callbacks");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseSensorActuatorResponse - Create - Execute Callbacks");
 			for (OnCreateAction a : OnCreateList) a.run(s.getId(), an, onTrigAct, onNotTrigAct, expression, en, timeout);
 			flag = true;
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
-			Logger.log("DatabaseSensorActuatorResponse - Create - Error" + e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"DatabaseSensorActuatorResponse - Create - " + e.getMessage());
 		} finally {session.close();}
 		return flag;
 	}
 	
 	public static boolean updateSensorActuatorResponse (int id, String an, String onTrigAct, String onNotTrigAct,
 														String expression, boolean en, int timeout) {
-		Logger.log("DatabaseSensorActuatorResponse - Update");
+		Logger.log(Logger.LEVEL_INFO,"DatabaseSensorActuatorResponse - Update");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
 		boolean flag=false;
@@ -107,20 +107,20 @@ public class DatabaseSensorActuatorResponse {
 				session.save(s);
 				tx.commit();
 	
-				Logger.log("DatabaseSensorActuatorResponse - Update - Execute Callbacks");
+				Logger.log(Logger.LEVEL_INFO,"DatabaseSensorActuatorResponse - Update - Execute Callbacks");
 				for (OnUpdateAction a : OnUpdateList) a.run(id,an,onTrigAct,onNotTrigAct,expression,en,timeout);
 				flag = true;
-			} else Logger.log("DB Update SensorActuatorResponse - Sensor doesn't exist");
+			} else Logger.log(Logger.LEVEL_WARNING,"DB Update SensorActuatorResponse - Sensor doesn't exist");
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
-			Logger.log("DatabaseSensorActuatorResponse - Update- Error" + e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"DatabaseSensorActuatorResponse - Update- " + e.getMessage());
 		} finally {session.close();}
 		return flag;
 	}
 	
 	public static boolean deleteSensorActuatorResponse (int id) {
-		Logger.log("DatabaseSensorActuatorResponse - Delete");
+		Logger.log(Logger.LEVEL_INFO,"DatabaseSensorActuatorResponse - Delete");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
 		boolean flag=false;
@@ -132,14 +132,14 @@ public class DatabaseSensorActuatorResponse {
 				tx.commit();
 				Cache.SensorActuatorResponses.map.remove(String.valueOf(id));
 	
-				Logger.log("DatabaseSensorActuatorResponse - Delete - Execute Callbacks");
+				Logger.log(Logger.LEVEL_INFO,"DatabaseSensorActuatorResponse - Delete - Execute Callbacks");
 				for (OnDeleteAction a : OnDeleteList) a.run(id);
 				flag = true;
-			} else Logger.log("DB Delete SensorActuatorResponse - Sensor doesn't exist");
+			} else Logger.log(Logger.LEVEL_WARNING,"DB Delete SensorActuatorResponse - Sensor doesn't exist");
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
-			Logger.log("DatabaseSensorActuatorResponse - Delete - Error" + e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"DatabaseSensorActuatorResponse - Delete - " + e.getMessage());
 		} finally {session.close();}
 		return flag;
 

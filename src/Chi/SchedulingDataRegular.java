@@ -10,7 +10,7 @@ public class SchedulingDataRegular extends SchedulingData {
 	private static class FireOnEndTaskRegular extends SchedulingData.FireOnEndTask implements Runnable {
 		@Override
 		public void execute() {
-			Logger.log("SchedulingDataRegular.FireOnStartTaskRegular - Scheduled To Fire On Next End");
+			Logger.log(Logger.LEVEL_INFO,"SchedulingDataRegular.FireOnStartTaskRegular - Scheduled To Fire On Next End");
 			this.d.fireOnEnd=new FireOnEndTaskRegular();
 			this.d.fireOnEnd.d=this.d;
 			this.d.onEndScheduler.schedule(this.d.fireOnEnd,Date.from(d.nextEndTime.atZone(ZoneId.systemDefault()).toInstant()));
@@ -22,7 +22,7 @@ public class SchedulingDataRegular extends SchedulingData {
 
 		@Override
 		public void execute() {
-			Logger.log("SchedulingDataRegular.FireOnStartTaskRegular - Scheduled To Fire On Next Start");
+			Logger.log(Logger.LEVEL_INFO,"SchedulingDataRegular.FireOnStartTaskRegular - Scheduled To Fire On Next Start");
 			this.d.fireOnStart=new FireOnStartTaskRegular();
 			this.d.fireOnStart.d=this.d;
 			this.d.onStartScheduler.schedule(this.d.fireOnStart,Date.from(d.nextStartTime.atZone(ZoneId.systemDefault()).toInstant()));
@@ -45,7 +45,7 @@ public class SchedulingDataRegular extends SchedulingData {
 	public int getDay(){return this.day;}
 	
 	protected void updateScheduler(boolean updateScheduler) {
-		Logger.log("Scheduling Data Regular - Calculating start & end time for "+this.name);
+		Logger.log(Logger.LEVEL_INFO,"Scheduling Data Regular - Calculating start & end time for "+this.name);
 		if (day!=0) {
 			LocalDateTime now=LocalDateTime.now();
 			Dayschedulerule r=Cache.DayScheduleRules.map.get(this.rule);

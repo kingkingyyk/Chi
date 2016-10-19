@@ -107,9 +107,9 @@ public class Config {
 			FileOutputStream fos=new FileOutputStream(Config.CONFIG_FOLDER_PATH+"/"+CONFIG_FILE_NAME);
 			prop.store(fos,"");
 			fos.close();
-			Logger.log("Configuration file write done!");
+			Logger.log(Logger.LEVEL_INFO,"Configuration file write done!");
 		} catch (IOException e) {
-			Logger.log("Configuration file write failed! Error : "+e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"Configuration file write failed! "+e.getMessage());
 		}
 	}
 	
@@ -164,7 +164,7 @@ public class Config {
 			prop.load(fis);
 			fis.close();
 		} catch (IOException e) {
-			Logger.log("Configuration file is invalid! Using default configuration.");
+			Logger.log(Logger.LEVEL_WARNING,"Configuration file is invalid! Using default configuration.");
 		}
 		
 	}

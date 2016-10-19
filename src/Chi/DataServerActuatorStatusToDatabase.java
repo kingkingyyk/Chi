@@ -20,7 +20,7 @@ public class DataServerActuatorStatusToDatabase {
 		d.cname=sn;
 		d.st=st;
 		queue.add(d);
-		Logger.log("Data Server - Queued write actuator status to database : "+d.toString());
+		Logger.log(Logger.LEVEL_INFO,"Data Server - Queued write actuator status to database : "+d.toString());
 		
 		if (queue.size()==1) {
 			Thread t=new Thread() {

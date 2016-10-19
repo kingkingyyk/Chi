@@ -27,29 +27,29 @@ public class DatabaseUser {
 	
 	public static void registerOnCreateAction (OnCreateAction a) {
 		if (!OnCreateList.contains(a)) {
-			Logger.log("DatabaseUser - Registered "+a.toString()+" to OnCreate callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseUser - Registered "+a.toString()+" to OnCreate callback");
 			OnCreateList.add(a);
 		}
 	}
 	
 	public static void registerOnUpdateAction (OnUpdateAction a) {
 		if (!OnUpdateList.contains(a)) {
-			Logger.log("DatabaseUser - Registered "+a.toString()+" to OnUpdate callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseUser - Registered "+a.toString()+" to OnUpdate callback");
 			OnUpdateList.add(a);
 		}
 	}
 	
 	public static void registerOnDeleteAction (OnDeleteAction a) {
 		if (!OnDeleteList.contains(a)) {
-			Logger.log("DatabaseUser - Registered "+a.toString()+" to OnDelete callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseUser - Registered "+a.toString()+" to OnDelete callback");
 			OnDeleteList.add(a);
 		}
 	}
 
 	public static boolean createUserCredential (String user, String pw, int lvl, String status) {
-		Logger.log("DB Create User");
+		Logger.log(Logger.LEVEL_INFO,"DB Create User");
 		if (Cache.Users.map.containsKey(user)) {
-			Logger.log("DB Create User[Cache] - User already exists!");
+			Logger.log(Logger.LEVEL_INFO,"DB Create User[Cache] - User already exists!");
 			return false;
 		} else {
 			Session session=Cache.factory.openSession();
@@ -62,14 +62,14 @@ public class DatabaseUser {
 				tx.commit();
 				Cache.Users.map.put(user,u);
 				
-				Logger.log("DB Create User - Execute Callbacks");
+				Logger.log(Logger.LEVEL_INFO,"DB Create User - Execute Callbacks");
 				for (OnCreateAction a : OnCreateList) {
 					a.run(user, lvl, status);
 				}
 				flag=true;
 			} catch (HibernateException e) {
 				if (tx!=null) tx.rollback();
-				Logger.log("DB Create User - Error"+e.getMessage());
+				Logger.log(Logger.LEVEL_ERROR,"DB Create User - "+e.getMessage());
 				flag=false;
 			} finally { session.close(); }
 			return flag;
@@ -77,9 +77,9 @@ public class DatabaseUser {
 	}
 	
 	public static boolean updateUserCredentialPassword (String oldN, String user, String pw, int lvl, String status) {
-		Logger.log("DB Update User");
+		Logger.log(Logger.LEVEL_INFO,"DB Update User");
 		if (!Cache.Users.map.containsKey(oldN)) {
-			Logger.log("DB Update User[Cache] - User doesn't exist!");
+			Logger.log(Logger.LEVEL_INFO,"DB Update User[Cache] - User doesn't exist!");
 			return false;
 		} else {
 			Session session=Cache.factory.openSession();
@@ -96,14 +96,14 @@ public class DatabaseUser {
 				session.update(u);
 				tx.commit();
 				Cache.Users.map.put(user,u);
-				Logger.log("DB Update User - Execute Callbacks");
+				Logger.log(Logger.LEVEL_INFO,"DB Update User - Execute Callbacks");
 				for (OnUpdateAction a : OnUpdateList) {
 					a.run(user, lvl, status);
 				}
 				flag=true;
 			}catch (HibernateException e) {
 				if (tx!=null) tx.rollback();
-				Logger.log("DB Create User - Error"+e.getMessage());
+				Logger.log(Logger.LEVEL_ERROR,"DB Create User - "+e.getMessage());
 				flag=false;
 			} finally { session.close(); }
 			return flag;
@@ -111,9 +111,9 @@ public class DatabaseUser {
 	}
 	
 	public static boolean updateUserCredentialNoPassword (String oldN, String user, int lvl, String status) {
-		Logger.log("DB Update User/2");
+		Logger.log(Logger.LEVEL_INFO,"DB Update User/2");
 		if (!Cache.Users.map.containsKey(oldN)) {
-			Logger.log("DB Update User/2[Cache] - User doesn't exists!");
+			Logger.log(Logger.LEVEL_INFO,"DB Update User/2[Cache] - User doesn't exists!");
 			return false;
 		} else {
 			Session session=Cache.factory.openSession();
@@ -130,14 +130,14 @@ public class DatabaseUser {
 				session.update(u);
 				tx.commit();
 				Cache.Users.map.put(user,u);
-				Logger.log("DB Update User/2 - Execute Callbacks");
+				Logger.log(Logger.LEVEL_INFO,"DB Update User/2 - Execute Callbacks");
 				for (OnUpdateAction a : OnUpdateList) {
 					a.run(user, lvl, status);
 				}
 				flag=true;
 			}catch (HibernateException e) {
 				if (tx!=null) tx.rollback();
-				Logger.log("DB Create User/2 - Error"+e.getMessage());
+				Logger.log(Logger.LEVEL_ERROR,"DB Create User/2 - "+e.getMessage());
 				flag=false;
 			} finally { session.close(); }
 			return flag;
@@ -145,9 +145,9 @@ public class DatabaseUser {
 	}
 	
 	public static boolean deleteUser (String user) {
-		Logger.log("DB Delete User");
+		Logger.log(Logger.LEVEL_INFO,"DB Delete User");
 		if (!Cache.Users.map.containsKey(user)) {
-			Logger.log("DB Delete User[Cache] - User doesn't exists!");
+			Logger.log(Logger.LEVEL_INFO,"DB Delete User[Cache] - User doesn't exists!");
 			return false;
 		} else {
 			Session session=Cache.factory.openSession();
@@ -159,14 +159,14 @@ public class DatabaseUser {
 				session.delete(u);
 				tx.commit();
 				Cache.Users.map.remove(user);
-				Logger.log("DB Delete User - Execute Callbacks");
+				Logger.log(Logger.LEVEL_INFO,"DB Delete User - Execute Callbacks");
 				for (OnDeleteAction a : OnDeleteList) {
 					a.run(user);
 				}
 				flag=true;
 			}catch (HibernateException e) {
 				if (tx!=null) tx.rollback();
-				Logger.log("DB Create User/2 - Error"+e.getMessage());
+				Logger.log(Logger.LEVEL_ERROR,"DB Create User/2 - "+e.getMessage());
 				flag=false;
 			} finally { session.close(); }
 			return flag;

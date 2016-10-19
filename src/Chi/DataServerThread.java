@@ -16,7 +16,7 @@ public class DataServerThread extends Thread {
 	private boolean running;
 	
 	public void setFlag(boolean flag) {
-		Logger.log("Data Server - SetFlag - "+flag);
+		Logger.log(Logger.LEVEL_INFO,"Data Server - SetFlag - "+flag);
 		this.running=flag;
 	}
 	
@@ -24,16 +24,16 @@ public class DataServerThread extends Thread {
 		ServerSocket ssc=null;
 		try {
 			ssc=new ServerSocket(Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_INCOMING_PORT_KEY)));
-			Logger.log("Data Server - StartP2 - Opening port "+Config.getConfig(Config.CONFIG_SERVER_INCOMING_PORT_KEY));
+			Logger.log(Logger.LEVEL_INFO,"Data Server - StartP2 - Opening port "+Config.getConfig(Config.CONFIG_SERVER_INCOMING_PORT_KEY));
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "Fail to start server : "+e.getMessage(),Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
-			Logger.log("Data Server - StartP2 - Error - "+e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"Data Server - StartP2 - Error - "+e.getMessage());
 		}
 		if (ssc==null) {
 			DataServer.notifyDataThreadFailure();
 		} else {
-			Logger.log("Data Server - StartP2 - Start OK!");
-			Logger.log("Data Server - Run - Data");
+			Logger.log(Logger.LEVEL_INFO,"Data Server - StartP2 - Start OK!");
+			Logger.log(Logger.LEVEL_INFO,"Data Server - Run - Data");
 			while (this.running) {
 				try {
 					Socket sc=ssc.accept();
@@ -45,7 +45,7 @@ public class DataServerThread extends Thread {
 						String received=sb.toString();
 						br.close();
 						sc.close();
-						Logger.log("Data Server - Received packet from "+sc.getInetAddress().getHostAddress()+" - "+received);
+						Logger.log(Logger.LEVEL_INFO,"Data Server - Received packet from "+sc.getInetAddress().getHostAddress()+" - "+received);
 						StringTokenizer st=new StringTokenizer(received,Config.PACKET_FIELD_DELIMITER);
 						String id=st.nextToken();
 						switch (id) {
@@ -83,10 +83,10 @@ public class DataServerThread extends Thread {
 						}
 					}
 				} catch (Exception e) {
-					Logger.log("Data Server - Error - "+e.getMessage());
+					Logger.log(Logger.LEVEL_ERROR,"Data Server - "+e.getMessage());
 				}
 			}
-			Logger.log("Data Server - StopP2 - Stop listening");
+			Logger.log(Logger.LEVEL_INFO,"Data Server - StopP2 - Stop listening");
 			try { ssc.close(); } catch (Exception e) {};
 		}
 	}

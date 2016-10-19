@@ -25,27 +25,27 @@ public class DatabaseSensor {
 	
 	public static void registerOnCreateAction (OnCreateAction a) {
 		if (!OnCreateList.contains(a)) {
-			Logger.log("DatabaseSensor - Registered "+a.toString()+" to OnCreate callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseSensor - Registered "+a.toString()+" to OnCreate callback");
 			OnCreateList.add(a);
 		}
 	}
 	
 	public static void registerOnUpdateAction (OnUpdateAction a) {
 		if (!OnUpdateList.contains(a)) {
-			Logger.log("DatabaseSensor - Registered "+a.toString()+" to OnUpdate callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseSensor - Registered "+a.toString()+" to OnUpdate callback");
 			OnUpdateList.add(a);
 		}
 	}
 	
 	public static void registerOnDeleteAction (OnDeleteAction a) {
 		if (!OnDeleteList.contains(a)) {
-			Logger.log("DatabaseSensor - Registered "+a.toString()+" to OnDelete callback");
+			Logger.log(Logger.LEVEL_INFO,"DatabaseSensor - Registered "+a.toString()+" to OnDelete callback");
 			OnDeleteList.add(a);
 		}
 	}
 	
 	public static boolean createSensor (String sn, String cn, double min, double max, double trans, String unit, String con, double minT, double maxT, double px, double py) {
-		Logger.log("DatabaseSensor - Create");
+		Logger.log(Logger.LEVEL_INFO,"DatabaseSensor - Create");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
 		boolean flag=false;
@@ -58,20 +58,20 @@ public class DatabaseSensor {
 				tx.commit();
 				Cache.Sensors.map.put(sn,s);
 	
-				Logger.log("DatabaseSensor - Create - Execute Callbacks");
+				Logger.log(Logger.LEVEL_INFO,"DatabaseSensor - Create - Execute Callbacks");
 				for (OnCreateAction a : OnCreateList) a.run(sn,cn,min,max,trans,unit,con,minT,maxT,px,py);
 				flag = true;
-			} else Logger.log("DB Create Sensor - Sensor already exists");
+			} else Logger.log(Logger.LEVEL_WARNING,"DB Create Sensor - Sensor already exists");
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
-			Logger.log("DatabaseSensor - Create - Error" + e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"DatabaseSensor - Create - " + e.getMessage());
 		} finally {session.close();}
 		return flag;
 	}
 	
 	public static boolean updateSensor (String oldSN, String sn, String cn, double min, double max, double trans, String unit, String con, double minT, double maxT, double px, double py) {
-		Logger.log("DatabaseSensor - Update");
+		Logger.log(Logger.LEVEL_INFO,"DatabaseSensor - Update");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
 		boolean flag=false;
@@ -97,20 +97,20 @@ public class DatabaseSensor {
 				tx.commit();
 				Cache.Sensors.map.put(sn,s);
 	
-				Logger.log("DatabaseSensor - Update - Execute Callbacks");
+				Logger.log(Logger.LEVEL_INFO,"DatabaseSensor - Update - Execute Callbacks");
 				for (OnUpdateAction a : OnUpdateList) a.run(oldSN, sn,cn,min,max,trans,unit,con,minT,maxT,px,py);
 				flag = true;
-			} else Logger.log("DB Update Sensor - Sensor doesn't exist");
+			} else Logger.log(Logger.LEVEL_WARNING,"DB Update Sensor - Sensor doesn't exist");
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
-			Logger.log("DatabaseSensor - Update- Error" + e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"DatabaseSensor - Update - " + e.getMessage());
 		} finally {session.close();}
 		return flag;
 	}
 	
 	public static boolean deleteSensor (String sn) {
-		Logger.log("DatabaseSensor - Delete");
+		Logger.log(Logger.LEVEL_INFO,"DatabaseSensor - Delete");
 		Session session = Cache.factory.openSession();
 		Transaction tx = null;
 		boolean flag=false;
@@ -122,14 +122,14 @@ public class DatabaseSensor {
 				tx.commit();
 				Cache.Sensors.map.remove(sn);
 	
-				Logger.log("DatabaseSensor - Delete - Execute Callbacks");
+				Logger.log(Logger.LEVEL_INFO,"DatabaseSensor - Delete - Execute Callbacks");
 				for (OnDeleteAction a : OnDeleteList) a.run(sn);
 				flag = true;
-			} else Logger.log("DB Delete Sensor - Sensor doesn't exist");
+			} else Logger.log(Logger.LEVEL_WARNING,"DB Delete Sensor - Sensor doesn't exist");
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
-			Logger.log("DatabaseSensor - Delete - Error" + e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"DatabaseSensor - Delete - " + e.getMessage());
 		} finally {session.close();}
 		return flag;
 

@@ -38,7 +38,7 @@ public class DataServerReadingToDatabase {
 		d.timestamp=LocalDateTime.now();
 		d.reading=r;
 		queue.add(d);
-		Logger.log("Data Server - Queued write reading to database : "+d.toString());
+		Logger.log(Logger.LEVEL_INFO,"Data Server - Queued write reading to database : "+d.toString());
 	}
 	
 	public static void initialize() {

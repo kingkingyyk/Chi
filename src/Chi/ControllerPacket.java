@@ -41,7 +41,7 @@ public class ControllerPacket {
 			Socket sc=null; DataInputStream dis=null; DataOutputStream pw=null;
 			try {
 				sc=new Socket(ct.getIpaddress(),Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_CONTROLLER_PORT_KEY)));
-				Logger.log("Controller Packet Info - Send content : "+sb.toString());
+				Logger.log(Logger.LEVEL_INFO,"Controller Packet Info - Send content : "+sb.toString());
 				while (sb.length()<=Config.PACKET_MAX_BYTE) sb.append('!');
 				
 				dis=new DataInputStream(sc.getInputStream());
@@ -56,14 +56,14 @@ public class ControllerPacket {
 				for (int i=0;i<data.length;i++) if (data[i]!=0) sb.append((char)data[i]); else break;
 				status=sb.toString();
 				if (!status.equals("ON") && !status.equals("OFF")) status=null;
-				Logger.log("Controller Packet Info - Received content : "+status);
+				Logger.log(Logger.LEVEL_INFO,"Controller Packet Info - Received content : "+status);
 				
 				try { Thread.sleep(Config.CONTROLLER_READY_TIME_MS); } catch (InterruptedException e) {}
 				if (status!=null && tryCount<Config.CONTROLLER_MAX_RETRY) {
 					packetQueue.get(this.ct).poll();
 				}
 			} catch (Exception e) {
-				Logger.log("Controller Packet Error - Attempting to send packet. "+e.getMessage());
+				Logger.log(Logger.LEVEL_ERROR,"Controller Packet Error - Attempting to send packet. "+e.getMessage());
 				e.printStackTrace();
 				status=null;
 			} finally {
