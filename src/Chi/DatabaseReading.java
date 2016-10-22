@@ -3,9 +3,11 @@ package Chi;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.UUID;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.ResultSet;
@@ -179,7 +181,24 @@ public class DatabaseReading extends DatabaseCassandra {
 		try {
 			Logger.log(Logger.LEVEL_INFO,"DB updateSensorName");
 			
-			DatabaseCassandra.getSession().execute("UPDATE SensorReading SET SensorName='"+newSN+"' WHERE SensorName='"+oldSN+"';");
+			ArrayList<UUID> idToUpdate=new ArrayList<>(); ArrayList<java.util.Date> dateList=new ArrayList<>();
+			ResultSet rs=executeSQL("DB updateSensorName", DatabaseCassandra.getSession(), "SELECT Id, SensorName, TimeStp From SensorReading");
+			for (Row r : rs) {
+				if (rs.getAvailableWithoutFetching() == 100 && !rs.isFullyFetched()) rs.fetchMoreResults();
+				UUID uuid=r.getUUID("Id"); String sName=r.getString("SensorName"); java.util.Date dat=r.getTimestamp("TimeStp");
+				if (sName.equals(oldSN)) {
+					idToUpdate.add(uuid);
+					dateList.add(dat);
+				}
+			}
+			BoundStatement bs=DatabaseCassandra.getSession().prepare("UPDATE SensorReading SET SensorName=? WHERE Id=? AND TimeStp=?").bind();
+			for (int i=0;i<idToUpdate.size();i++) {
+				bs.setString("SensorName",newSN);
+				bs.setUUID("Id",idToUpdate.get(i));
+				bs.setTimestamp("TimeStp",dateList.get(i));
+				DatabaseCassandra.getSession().execute(bs);
+			}
+			idToUpdate.clear(); dateList.clear();
 		} catch (NoHostAvailableException e) {
 			Logger.log(Logger.LEVEL_ERROR,"DB updateSensorName - Database connection fail!");
 		} catch (Exception e) {
@@ -189,9 +208,25 @@ public class DatabaseReading extends DatabaseCassandra {
 	}
 	
 	public static void clearReading (String sn) {
-		Logger.log(Logger.LEVEL_INFO,"DB Clear Reading : "+Config.getConfig(Config.DATABASE_RECORD_QUERY_MONTH_FILE_KEY));
+		Logger.log(Logger.LEVEL_INFO,"DB Clear Reading");
 		try {
-			DatabaseCassandra.getSession().execute("DELETE FROM SensorReading WHERE SensorName='"+sn+"';");
+			ArrayList<UUID> idToUpdate=new ArrayList<>(); ArrayList<java.util.Date> dateList=new ArrayList<>();
+			ResultSet rs=executeSQL("DB Clear Reading", DatabaseCassandra.getSession(), "SELECT Id, SensorName, TimeStp From SensorReading");
+			for (Row r : rs) {
+				if (rs.getAvailableWithoutFetching() == 100 && !rs.isFullyFetched()) rs.fetchMoreResults();
+				UUID uuid=r.getUUID("Id"); String sName=r.getString("SensorName"); java.util.Date dat=r.getTimestamp("TimeStp");
+				if (sName.equals(sn)) {
+					idToUpdate.add(uuid);
+					dateList.add(dat);
+				}
+			}
+			BoundStatement bs=DatabaseCassandra.getSession().prepare("DELETE FROM SensorReading WHERE Id=? AND TimeStp=?;").bind();
+			for (int i=0;i<idToUpdate.size();i++) {
+				bs.setUUID("Id",idToUpdate.get(i));
+				bs.setTimestamp("TimeStp",dateList.get(i));
+				DatabaseCassandra.getSession().execute(bs);
+			}
+			idToUpdate.clear(); dateList.clear();
 		} catch (NoHostAvailableException e) {
 			Logger.log(Logger.LEVEL_ERROR,"DB Clear Reading - Database connection fail!");
 		} catch (Exception e) {

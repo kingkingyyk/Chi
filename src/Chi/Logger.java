@@ -21,7 +21,7 @@ public class Logger {
 	public static int LEVEL_ERROR=0;
 	public static int LEVEL_WARNING=1;
 	public static int LEVEL_INFO=2;
-	private static int LOG_LEVEL=0;
+	private static int LOG_LEVEL=2;
 	
 	private static class Log {
 		@SuppressWarnings("unused")
@@ -51,7 +51,7 @@ public class Logger {
 							PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile,true)));
 							while (eventQueue.size()>0) {
 								Log l=eventQueue.poll();
-								System.out.println();
+								System.out.println(l.s);
 								if (MenuUI.getCurrInstance()!=null) {
 									MenuUI.getCurrInstance().appendLog(l.s);
 								}

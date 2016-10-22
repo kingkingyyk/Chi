@@ -9,17 +9,13 @@ import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
-import org.jfree.chart.axis.DateTickUnit;
-import org.jfree.chart.axis.DateTickUnitType;
 import org.jfree.data.time.Second;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
@@ -33,6 +29,7 @@ public class FrameReading extends JFrame {
 	private JFreeChart chart;
 	private Timer t;
 	private DateAxis dAxis;
+	private Sensor s;
 	
 	private static class UpdateTask extends TimerTask {
 		FrameReading r;
@@ -42,7 +39,7 @@ public class FrameReading extends JFrame {
 			if (r.chart.isNotify()) {
 				r.chart.setNotify(false);
 				LocalDateTime now=LocalDateTime.now();
-				LinkedList<SensorReading> list=DatabaseReading.getReadingBetweenTime("AirCondTemp",r.lastUpdateTime,now);
+				LinkedList<SensorReading> list=DatabaseReading.getReadingBetweenTime(r.s.getSensorname(),r.lastUpdateTime,now);
 				r.lastUpdateTime=now;
 				for (SensorReading r : list) this.r.tSeries.addOrUpdate(new Second(Utility.localDateTimeToUtilDate(r.getTimestamp())),r.getActualValue());
 				r.chart.setNotify(true);
@@ -55,7 +52,7 @@ public class FrameReading extends JFrame {
 		
 	}
 	
-	public FrameReading() {
+	public FrameReading(Sensor s) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 750, 400);
         
@@ -66,10 +63,9 @@ public class FrameReading extends JFrame {
 		
 		dataset=new TimeSeriesCollection();
 		tSeries=new TimeSeries("Current");
-		//tSeries.setMaximumItemCount(60);
 		dataset.addSeries(tSeries);
 		
-    	chart = ChartFactory.createTimeSeriesChart("AircondTemp", "Time", "C", dataset, true, true, false);
+    	chart = ChartFactory.createTimeSeriesChart(s.getSensorname(), "Time", s.getUnit(), dataset, true, true, false);
     	chart.removeLegend();
     	chart.getTitle().setFont(new Font("Segoe UI",Font.BOLD,20));
     	chart.fireChartChanged();
@@ -79,13 +75,11 @@ public class FrameReading extends JFrame {
 		ChartPanel panel = new ChartPanel(chart);
 		contentPane.add(panel, BorderLayout.CENTER);
 		
-		chart.getXYPlot().getRangeAxis().setRangeWithMargins(20,50);
-		
         lastUpdateTime=LocalDateTime.of(1970,1,1,0,0);
 		t=new Timer();
 		UpdateTask ut=new UpdateTask(); ut.r=this;
 		t.schedule(ut,10,2000);
-		
+		this.s=s;
 		addWindowListener(new WindowListener() {
 
 			@Override

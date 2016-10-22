@@ -54,24 +54,29 @@ public class DataServerThread extends Thread {
 									String cn=st.nextToken(); //controller name
 									String sn=st.nextToken(); //sensor name
 									double reading=Double.parseDouble(st.nextToken());
-									DatabaseController.updateControllerReport(cn,sc.getInetAddress().getHostAddress(),LocalDateTime.now());
-									DatabaseReading.updateLastReading(sn, reading);
-									DataServerReadingToDatabase.queueData(sn,reading);
+									if (Cache.Controllers.map.get(cn)!=null) {
+										if (!Cache.Controllers.map.get(cn).getIpaddress().equals(sc.getInetAddress().getHostAddress())) DatabaseController.updateControllerReport(cn,sc.getInetAddress().getHostAddress(),LocalDateTime.now());
+										DatabaseReading.updateLastReading(sn, reading);
+										DataServerReadingToDatabase.queueData(sn,reading);
+									}
 								} catch (NumberFormatException e) {}
 								break;
 							}
 							case "1" : {
 								String cn=st.nextToken();
-								DatabaseController.updateControllerReport(cn,sc.getInetAddress().getHostAddress(),LocalDateTime.now());
-								DataServer.fireOnReportReceived(cn);
+								if (Cache.Controllers.map.get(cn)!=null) {
+									if (!Cache.Controllers.map.get(cn).getIpaddress().equals(sc.getInetAddress().getHostAddress())) DatabaseController.updateControllerReport(cn,sc.getInetAddress().getHostAddress(),LocalDateTime.now());
+									DataServer.fireOnReportReceived(cn);
+								}
+
 								break;
 							}
 							case "2" : {
-								try {
-									String cn=st.nextToken();
-									DatabaseController.updateControllerReport(cn,sc.getInetAddress().getHostAddress(),LocalDateTime.now());
+								String cn=st.nextToken();
+								if (Cache.Controllers.map.get(cn)!=null) {
+									if (!Cache.Controllers.map.get(cn).getIpaddress().equals(sc.getInetAddress().getHostAddress())) DatabaseController.updateControllerReport(cn,sc.getInetAddress().getHostAddress(),LocalDateTime.now());
 									DataServerActuatorStatusToDatabase.queueData(st.nextToken(),st.nextToken());
-								} catch (NumberFormatException e) {}
+								}
 								break;
 							}
 							case "3" : {

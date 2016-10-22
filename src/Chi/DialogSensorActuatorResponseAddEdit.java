@@ -204,7 +204,8 @@ public class DialogSensorActuatorResponseAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textAreaStatement.getText();
-				if (txt==null || txt.isEmpty() || txt.contains(Config.PACKET_FIELD_DELIMITER) || !validateStatement(txt)) {
+				if (txt==null || txt.isEmpty() || txt.contains(Config.PACKET_FIELD_DELIMITER) || !validateStatement(txt) ||
+					comboBoxActuator.getItemCount()==0) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Sensor Actuator Response",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

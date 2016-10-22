@@ -220,6 +220,7 @@ public class DialogControllerAddEdit extends JDialog {
 			if (t%reportTimeoutUnitFactor[i]==0) {
 				textFieldReportTimeout.setText(String.valueOf(t/reportTimeoutUnitFactor[i]));
 				comboBoxReportTimeoutUnit.setSelectedIndex(i);
+				break;
 			}
 		}
 	}

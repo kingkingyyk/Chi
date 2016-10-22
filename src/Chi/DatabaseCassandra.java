@@ -62,9 +62,8 @@ public class DatabaseCassandra {
 	}
 
 	public static boolean testKeyspace () {
+		Logger.log(Logger.LEVEL_INFO,"DatabaseCassandra - Test keyspace");
 		try {
-			Logger.log(Logger.LEVEL_INFO,"DB Test Keyspace - Connecting to database : "+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)+":"+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
-			Logger.log(Logger.LEVEL_INFO,"DB Test Keyspace - Database connection OK!");
 			KeyspaceMetadata ks=getCluster().getMetadata().getKeyspace(Config.APP_NAME);
 			return ks!=null;
 		} catch (NoHostAvailableException e) {
@@ -76,9 +75,8 @@ public class DatabaseCassandra {
 	}
 	
 	public static boolean runSQL(String cmdName, String sql) {
+		Logger.log(Logger.LEVEL_INFO,"DatabaseCassandra - Run SQL");
 		try {
-			Logger.log(Logger.LEVEL_INFO,cmdName+" - Connecting to database : "+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)+":"+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
-			Logger.log(Logger.LEVEL_INFO,cmdName+" - Database connection OK!");
 			System.out.println("Result : "+executeSQL(cmdName,getSession(),sql).toString());
 			return true;
 		} catch (NoHostAvailableException e) {
@@ -90,10 +88,8 @@ public class DatabaseCassandra {
 	}
 	
 	public static boolean runSQLFromFile(String cmdName, String filename) {
-		Logger.log(Logger.LEVEL_INFO,"Database - Run SQL From File : "+filename);
+		Logger.log(Logger.LEVEL_INFO,"DatabaseCassandra - Run SQL From File : "+filename);
 		try {
-			Logger.log(Logger.LEVEL_INFO,cmdName+" - Connecting to database : "+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)+":"+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
-			Logger.log(Logger.LEVEL_INFO,cmdName+" - Database connection OK!");
 			if (filename!=null) {
 				String [] sql=getSQLStatementFromFile(filename);
 				for (int i=0;i<sql.length;i++) {
@@ -112,10 +108,8 @@ public class DatabaseCassandra {
 	}
 
 	protected static ResultSet runSQLFromFileAndGetData(String cmdName, String filename) {
-		Logger.log(Logger.LEVEL_INFO,"Database - Run SQL From File : "+filename);
+		Logger.log(Logger.LEVEL_INFO,"DatabaseCassandra - Run SQL From File : "+filename);
 		try {
-			Logger.log(Logger.LEVEL_INFO,cmdName+" - Connecting to database : "+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)+":"+Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY));
-			Logger.log(Logger.LEVEL_INFO,cmdName+" - Database connection OK!");
 			ResultSet rs=null;
 			if (filename!=null) {
 				String [] sql=getSQLStatementFromFile(filename);
@@ -133,14 +127,14 @@ public class DatabaseCassandra {
 	}
 	
 	protected static ResultSet executeSQL(String cmdName, Session session, String statement) {
-		Logger.log(Logger.LEVEL_INFO,cmdName+" - Execute SQL : "+statement);
+		Logger.log(Logger.LEVEL_INFO,cmdName+" - Execute SQL");
 		ResultSet rs=session.execute(statement);
 		Logger.log(Logger.LEVEL_INFO,cmdName+" - SQL Result : "+rs.toString());
 		return rs;
 	}
 	
 	protected static ResultSet executeSQL(String cmdName, Session session, BoundStatement statement) {
-		Logger.log(Logger.LEVEL_INFO,cmdName+" - Execute SQL : "+statement.toString());
+		Logger.log(Logger.LEVEL_INFO,cmdName+" - Execute SQL");
 		ResultSet rs=session.execute(statement);
 		Logger.log(Logger.LEVEL_INFO,cmdName+" - SQL Result : "+rs.toString());
 		return rs;

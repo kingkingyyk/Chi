@@ -334,7 +334,8 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 					priorityOK=(i>0);
 				} catch (NumberFormatException e) {};
 				
-				if (txt==null || txt.isEmpty() || Cache.RegularSchedules.map.containsKey(txt) || Cache.SpecialSchedules.map.containsKey(txt) || !priorityOK || !Utility.validateName(txt)) {
+				if (txt==null || txt.isEmpty() || Cache.RegularSchedules.map.containsKey(txt) || Cache.SpecialSchedules.map.containsKey(txt) ||
+					!priorityOK || !Utility.validateName(txt) || comboBoxActuator.getItemCount()==0 || comboBoxTimeRule.getItemCount()==0) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Regular Schedule",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

@@ -5,13 +5,10 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.DefaultCaret;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 import java.awt.Font;
@@ -27,7 +24,6 @@ public class MenuUI extends JFrame {
 	private JPanel contentPane;
 	private JButton btnStartDataServer;
 	private JButton btnStopDataServer;
-	private JTextField textFieldSQL;
 	private JButton btnStopGWTServer;
 	private JButton btnStopAutomationServer;
 	private JButton btnStartAutomationServer;
@@ -223,95 +219,106 @@ public class MenuUI extends JFrame {
 		panelDatabase.setLayout(null);
 		
 		JButton btnCreateTables = new JButton("Create Tables");
-		btnCreateTables.setBounds(10, 11, 109, 23);
+		btnCreateTables.setBounds(10, 11, 121, 23);
 		panelDatabase.add(btnCreateTables);
 		
 		JButton btnResetDatabase = new JButton("Reset Database");
-		btnResetDatabase.setBounds(147, 11, 109, 23);
+		btnResetDatabase.setBounds(141, 11, 127, 23);
 		panelDatabase.add(btnResetDatabase);
 		
 		JButton btnClearReadings = new JButton("Clear Readings");
-		btnClearReadings.setBounds(278, 11, 109, 23);
+		btnClearReadings.setBounds(278, 11, 125, 23);
 		panelDatabase.add(btnClearReadings);
 		
 		JButton btnRunSQL = new JButton("Run SQL");
-		btnRunSQL.setBounds(10, 45, 109, 23);
+		btnRunSQL.setBounds(141, 45, 127, 23);
 		panelDatabase.add(btnRunSQL);
 		
-		textFieldSQL = new JTextField();
-		textFieldSQL.setBounds(129, 45, 258, 20);
-		panelDatabase.add(textFieldSQL);
-		textFieldSQL.setColumns(10);
-		
-		JButton btnLoadSQLFromFile = new JButton("Run SQL From File");
-		btnLoadSQLFromFile.setBounds(10, 79, 377, 23);
-		panelDatabase.add(btnLoadSQLFromFile);
-		
-		JButton btnViewReadings = new JButton("View All Readings");
-		btnViewReadings.setBounds(10, 113, 377, 23);
+		JButton btnViewReadings = new JButton("View Readings");
+		btnViewReadings.setBounds(10, 45, 121, 23);
 		panelDatabase.add(btnViewReadings);
-		btnViewReadings.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				FrameReading fr=new FrameReading();
-				fr.setVisible(true);/*
-				ArrayList<SensorReading> list=DatabaseReading.getReadingMonthly("testTemp",2016,9);
-				ReadingExport.export(list); */
+		
+		JButton btnRunCql = new JButton("Run CQL");
+		btnRunCql.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DialogMenuUIRunCQL.getInstance();
 			}
 		});
-		btnLoadSQLFromFile.addActionListener(new ActionListener() {
+		btnRunCql.setBounds(278, 45, 125, 23);
+		panelDatabase.add(btnRunCql);
+		btnViewReadings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser fc=new JFileChooser();
-				if (fc.showOpenDialog(MenuUI.this)==JFileChooser.APPROVE_OPTION) {
-					File selectedFile=fc.getSelectedFile();
-					DatabaseCassandra.runSQLFromFile("Run SQL From File",selectedFile.getPath());
+				DialogReadingSelectSensor diag=new DialogReadingSelectSensor();
+				diag.setLocationRelativeTo(null);
+				diag.setVisible(true);
+				if (diag.OKPressed) {
+					FrameReading fr=new FrameReading(Cache.Sensors.map.get(diag.selectedSensor));
+					fr.setVisible(true);
 				}
 			}
 		});
 		btnRunSQL.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				DatabaseCassandra.runSQL("Run SQL", textFieldSQL.getText());
+				DialogMenuUIRunSQL.getInstance();
 			}
 		});
 		btnClearReadings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				DatabaseReading.clearReading("testTemp");
+				DialogReadingSelectSensor diag=new DialogReadingSelectSensor();
+				diag.setLocationRelativeTo(null);
+				diag.setVisible(true);
+				if (diag.OKPressed && JOptionPane.showConfirmDialog(diag,"Confirm to delete all readings of "+diag.selectedSensor+"?","Clear readings",JOptionPane.WARNING_MESSAGE)==JOptionPane.YES_OPTION) {
+					WaitUI u=new WaitUI();
+					u.setText("Deleting readings...");
+					Thread t=new Thread() {
+						public void run () {
+							DatabaseReading.clearReading(diag.selectedSensor);
+							u.setVisible(false);
+						}
+					};
+					t.start();
+					u.setVisible(true);
+					u.dispose();
+				}
 			}
 		});
 		btnResetDatabase.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				WaitUI u=new WaitUI();
-				u.setProgressBarMin(1);
-				u.setProgressBarMax(4);
-				Thread t=new Thread() {
-					public void run () {
-						u.setText("Step (1/3) Cassandra - Checking keyspace existence");
-						u.setProgressBarValue(2);
-						boolean flag=DatabaseCassandra.testKeyspace();
-						if (!flag) {
-		            		JOptionPane.showMessageDialog(MenuUI.this,"No matching keyspace to reset!",Config.APP_NAME,JOptionPane.INFORMATION_MESSAGE);
-		                	u.dispose();
-		            		return;
+				if (JOptionPane.showConfirmDialog(null, "Are you sure you want to reset the database?","Reset database",JOptionPane.WARNING_MESSAGE)==JOptionPane.YES_OPTION) {
+					WaitUI u=new WaitUI();
+					u.setProgressBarMin(1);
+					u.setProgressBarMax(4);
+					Thread t=new Thread() {
+						public void run () {
+							u.setText("Step (1/3) Cassandra - Checking keyspace existence");
+							u.setProgressBarValue(2);
+							boolean flag=DatabaseCassandra.testKeyspace();
+							if (!flag) {
+			            		JOptionPane.showMessageDialog(MenuUI.this,"No matching keyspace to reset!",Config.APP_NAME,JOptionPane.INFORMATION_MESSAGE);
+			                	u.dispose();
+			            		return;
+							}
+							u.setText("Step (2/3) Cassandra - Reseting keyspace");
+							u.setProgressBarValue(3);
+			            	flag=DatabaseCassandra.reset();
+			            	if (!flag) {
+			            		JOptionPane.showMessageDialog(MenuUI.this,"Failed to reset keyspace!\nPlease check the availability of the Cassandra server.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
+			            	}
+			            	
+							u.setText("Step (3/3) HSQL - Dropping tables");
+							u.setProgressBarValue(4);
+			            	flag=DatabaseHSQL.reset();
+			            	if (flag) {
+			            		JOptionPane.showMessageDialog(MenuUI.this,"Dropped tables successully!",Config.APP_NAME,JOptionPane.INFORMATION_MESSAGE);
+			            	} else {
+			            		JOptionPane.showMessageDialog(MenuUI.this,"Failed to drop tables!\nPlease check the availability of the HSQL server.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
+			            	}
+			            	u.dispose();
 						}
-						u.setText("Step (2/3) Cassandra - Reseting keyspace");
-						u.setProgressBarValue(3);
-		            	flag=DatabaseCassandra.reset();
-		            	if (!flag) {
-		            		JOptionPane.showMessageDialog(MenuUI.this,"Failed to reset keyspace!\nPlease check the availability of the Cassandra server.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
-		            	}
-		            	
-						u.setText("Step (3/3) HSQL - Dropping tables");
-						u.setProgressBarValue(4);
-		            	flag=DatabaseHSQL.reset();
-		            	if (flag) {
-		            		JOptionPane.showMessageDialog(MenuUI.this,"Dropped tables successully!",Config.APP_NAME,JOptionPane.INFORMATION_MESSAGE);
-		            	} else {
-		            		JOptionPane.showMessageDialog(MenuUI.this,"Failed to drop tables!\nPlease check the availability of the HSQL server.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
-		            	}
-		            	u.dispose();
-					}
-				};
-				t.start();
-				u.setVisible(true);
+					};
+					t.start();
+					u.setVisible(true);
+				}
 			}
 		});
 		btnCreateTables.addActionListener(new ActionListener() {
