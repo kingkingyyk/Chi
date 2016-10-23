@@ -3,6 +3,7 @@ package Chi;
 import javax.swing.UIManager;
 
 import Database.Cache;
+import Database.CacheRelationshipBind;
 import Database.DatabaseCassandra;
 import FrameEntityManagement.FrameActuatorManagementBind;
 import FrameEntityManagement.FrameControllerManagementBind;

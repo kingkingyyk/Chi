@@ -99,7 +99,7 @@ public class DatabaseSensor {
 				s.setMaxthreshold(maxT);
 				s.setPositionx(px);
 				s.setPositiony(py);
-				session.save(s);
+				session.update(s);
 				tx.commit();
 				Cache.Sensors.map.put(sn,s);
 	

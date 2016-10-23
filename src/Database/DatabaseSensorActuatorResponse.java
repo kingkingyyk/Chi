@@ -107,8 +107,9 @@ public class DatabaseSensorActuatorResponse {
 				s.setOnnottriggeraction(onNotTrigAct);
 				s.setExpression(expression);
 				s.setEnabled(en);
-				session.save(s);
+				session.update(s);
 				tx.commit();
+				Cache.SensorActuatorResponses.map.put(String.valueOf(id),s);
 	
 				Logger.log(Logger.LEVEL_INFO,"DatabaseSensorActuatorResponse - Update - Execute Callbacks");
 				for (OnUpdateAction a : OnUpdateList) a.run(id,an,onTrigAct,onNotTrigAct,expression,en,timeout);

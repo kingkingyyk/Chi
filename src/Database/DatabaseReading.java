@@ -91,7 +91,7 @@ public class DatabaseReading extends DatabaseCassandra {
 		try {
 			BoundStatement [] sql=getBoundSQLStatementFromFile(DatabaseCassandra.getSession(),Config.getConfig(Config.DATABASE_RECORD_SAVE_TO_DB_SQL_FILE_KEY));
 			Data d;
-			while ((d=DataServerReadingToDatabase.queue.poll())!=null) {
+			while ((d=DataServerReadingToDatabase.queue.peek())!=null) {
 				sql[0].setString(0, d.sname);
 				sql[0].setInt(1,d.timestamp.getYear());
 				sql[0].setInt(2,d.timestamp.getMonthValue());
@@ -102,6 +102,7 @@ public class DatabaseReading extends DatabaseCassandra {
 				sql[0].setTimestamp(6,Timestamp.valueOf(d.timestamp));
 				sql[0].setDouble(7,d.reading);
 				executeSQL("DB Store Reading", DatabaseCassandra.getSession(), sql[0]);
+				DataServerReadingToDatabase.queue.poll();
 			}
 			return true;
 		} catch (NoHostAvailableException e) {

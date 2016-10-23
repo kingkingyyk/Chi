@@ -556,7 +556,8 @@ public class MenuUI extends JFrame {
 		JButton btnEvaluate = new JButton("Evaluate");
 		btnEvaluate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				lblEvaluateResult.setText(String.valueOf(SensoractuatorresponseEvaluator.evaluateStatement(textAreaEvaluate.getText())));
+				try { lblEvaluateResult.setText(String.valueOf(SensoractuatorresponseEvaluator.evaluateStatement(textAreaEvaluate.getText())));}
+				catch (Exception e) {lblEvaluateResult.setText("Parse fail");}
 			}
 		});
 		btnEvaluate.setBounds(314, 86, 89, 23);
@@ -592,6 +593,7 @@ public class MenuUI extends JFrame {
 		textAreaLog.setFont(UIManager.getFont("ComboBox.font"));
 		textAreaLog.setEditable(false);
 		scrollPaneLog.setViewportView(textAreaLog);
+		textAreaLog.setRows(100);
 		
 		JLabel lblConsole = new JLabel("Console :");
 		lblConsole.setBounds(10, 234, 46, 14);

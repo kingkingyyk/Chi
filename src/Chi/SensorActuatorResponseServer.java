@@ -118,22 +118,30 @@ public class SensorActuatorResponseServer {
 			if (ready) {
 				ready=false;
 				updateTimer();
-				boolean currResult=SensoractuatorresponseEvaluator.evaluateStatement(res.getExpression());
-				if (currResult!=lastResult) {
-					if (currResult && !res.getActuator().getStatus().equals(res.getOntriggeraction())) {
-						lastStatus=res.getActuator().getStatus();
-						ControllerPacketActuatorTrigger p=new ControllerPacketActuatorTrigger(res.getActuator().getController().getControllername(),res.getActuator().getName(),res.getOntriggeraction());
-						p.trigger();
-					} else if (!currResult) {
-						if (res.getOnnottriggeraction().equals("RESTORE")) {
-							ControllerPacketActuatorTrigger p=new ControllerPacketActuatorTrigger(res.getActuator().getController().getControllername(),res.getActuator().getName(),lastStatus);
+				boolean currResult=false;
+				boolean parseFail=false;
+				try { currResult=SensoractuatorresponseEvaluator.evaluateStatement(res.getExpression()); } catch (Exception e) {parseFail=true;}
+				if (!parseFail) {
+					if (currResult!=lastResult) {
+						if (currResult && !res.getActuator().getStatus().equals(res.getOntriggeraction())) {
+							lastStatus=res.getActuator().getStatus();
+							ControllerPacketActuatorTrigger p=new ControllerPacketActuatorTrigger(res.getActuator().getController().getControllername(),res.getActuator().getName(),res.getOntriggeraction());
 							p.trigger();
-						} else {
-							ControllerPacketActuatorTrigger p=new ControllerPacketActuatorTrigger(res.getActuator().getController().getControllername(),res.getActuator().getName(),res.getOnnottriggeraction());
-							p.trigger();
+						} else if (!currResult) {
+							if (res.getOnnottriggeraction().equals("RESTORE")) {
+								ControllerPacketActuatorTrigger p=new ControllerPacketActuatorTrigger(res.getActuator().getController().getControllername(),res.getActuator().getName(),lastStatus);
+								p.trigger();
+							} else {
+								ControllerPacketActuatorTrigger p=new ControllerPacketActuatorTrigger(res.getActuator().getController().getControllername(),res.getActuator().getName(),res.getOnnottriggeraction());
+								p.trigger();
+							}
 						}
+						lastResult=currResult;
 					}
-					lastResult=currResult;
+				} else {
+					DatabaseSensorActuatorResponse.updateSensorActuatorResponse(res.getId(),res.getActuator().getName(),
+																				res.getOntriggeraction(), res.getOnnottriggeraction(),
+																				res.getExpression(), false, res.getTimeout());
 				}
 			}
 		}

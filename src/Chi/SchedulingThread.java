@@ -342,7 +342,7 @@ public class SchedulingThread extends Thread {
 																r.getDayschedulerule().getRulename(), r.getOnstartaction(),
 																r.getOnendaction(), r.getLockmanual(), r.getPriority(),
 																r.getEnabled());
-			if (d.getNextEndTime().compareTo(LocalDateTime.now())>0 && d.isEnabled() && d.getDay()!=0) {
+			if (d.isEnabled() && d.getNextEndTime().compareTo(LocalDateTime.now())>0 && d.getDay()!=0) {
 				d.registerOnStartFunc(orss);
 				d.registerOnEndFunc(orse);
 				data.put(d.getName(),d);

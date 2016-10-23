@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Chi.Config;
+import Chi.SensoractuatorresponseEvaluator;
 import Chi.Theme;
 import Chi.WaitUI;
 import Database.Cache;
@@ -43,7 +44,10 @@ public class DialogSensorActuatorResponseAddEdit extends JDialog {
 		return Integer.parseInt((String)comboBoxTimeout.getSelectedItem())*60;
 	}
 	private static boolean validateStatement (String s) {
-		return true;
+		try {
+			SensoractuatorresponseEvaluator.evaluateStatement(s);
+			return true;
+		} catch (Exception e) {return false;}
 	}
 	
 	public DialogSensorActuatorResponseAddEdit() {
@@ -170,10 +174,6 @@ public class DialogSensorActuatorResponseAddEdit extends JDialog {
 			}
 		});
 		
-		for (String c : Cache.Actuators.map.keySet()) {
-			comboBoxActuator.addItem(c);
-		}
-		
 		comboBoxOnHappen.addItem("ON");
 		comboBoxOnHappen.addItem("OFF");
 		comboBoxOnHappen.addItem("NOTHING");
@@ -205,15 +205,18 @@ public class DialogSensorActuatorResponseAddEdit extends JDialog {
 			s=sb.toString();
 		} while (Cache.Actuators.map.containsKey(s));
 		
+		for (String c : Cache.Actuators.map.keySet()) if (Cache.Actuators.map.get(c).getSensoractuatorresponses().size()==0) comboBoxActuator.addItem(c);
+		
 		okButton.addActionListener(new ActionListener() {
 			public boolean flag;
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textAreaStatement.getText();
-				if (txt==null || txt.isEmpty() || txt.contains(Config.PACKET_FIELD_DELIMITER) || !validateStatement(txt) ||
-					comboBoxActuator.getItemCount()==0) {
+				if (txt==null || txt.isEmpty() || txt.contains(Config.PACKET_FIELD_DELIMITER) || comboBoxActuator.getItemCount()==0) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Sensor Actuator Response",JOptionPane.ERROR_MESSAGE);
+				} else if (!validateStatement(txt)) {
+					JOptionPane.showMessageDialog(null,"Invalid statement!","Add Sensor Actuator Response",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
 					u.setText("Creating response rule");
@@ -239,7 +242,10 @@ public class DialogSensorActuatorResponseAddEdit extends JDialog {
 	}
 	
 	private void uiActionsEdit(String n) {
-		setTitle("Edit "+n);
+		setTitle("Edit Response for "+n);
+		
+		for (String c : Cache.Actuators.map.keySet()) if (Cache.Actuators.map.get(c).getSensoractuatorresponses().size()==0 || c.equals(n)) comboBoxActuator.addItem(c);
+		comboBoxActuator.setSelectedItem(n);
 		
 		okButton.addActionListener(new ActionListener() {
 			public boolean flag;
@@ -247,8 +253,10 @@ public class DialogSensorActuatorResponseAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textAreaStatement.getText();
-				if (txt==null || txt.isEmpty() || txt.contains(Config.PACKET_FIELD_DELIMITER) || !validateStatement(txt)) {
-					JOptionPane.showMessageDialog(null,"Invalid information!","Add Sensor Actuator Response",JOptionPane.ERROR_MESSAGE);
+				if (txt==null || txt.isEmpty() || txt.contains(Config.PACKET_FIELD_DELIMITER) || comboBoxActuator.getItemCount()==0) {
+					JOptionPane.showMessageDialog(null,"Invalid information!","Edit Sensor Actuator Response",JOptionPane.ERROR_MESSAGE);
+				} else if (!validateStatement(txt)) {
+					JOptionPane.showMessageDialog(null,"Invalid statement!","Edit Sensor Actuator Response",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
 					u.setText("Creating response rule");

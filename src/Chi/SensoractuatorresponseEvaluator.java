@@ -12,9 +12,7 @@ public class SensoractuatorresponseEvaluator {
 	
 	public static boolean evaluateStatement (String s) {
 		Map<String,Double> context = new HashMap<>();
-		for (Sensor sr : DatabaseReading.SensorLastReading.keySet()) {
-			context.put(sr.getSensorname(),DatabaseReading.SensorLastReading.get(sr));
-		}
+		for (Sensor sr : DatabaseReading.SensorLastReading.keySet()) context.put(sr.getSensorname(),DatabaseReading.SensorLastReading.get(sr));
 		return (boolean) MVEL.eval(s,context);
 	}
 	

@@ -28,9 +28,7 @@ public class FrameSensorManagementContextMenu extends FrameContextMenu {
 		this.deleteMenu=addMenuItem("Delete...","DeleteIcon","DELETE");
 		deleteMenu.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-
-			}
+			public void actionPerformed(ActionEvent arg0) { FrameSensorManagementActions.delete(m);}
 		});
 		
 		this.addPopupMenuListener(new PopupMenuListener() {
