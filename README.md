@@ -40,6 +40,7 @@ Current Working Stuffs :
 + Actuator control (Manual / Scheduled)
 + Efficient local data caching
 + Notification server
++ Adds Sensor Actuator Response Automation
 
 v1.2 To-Do-List :
-+ Adds Sensor Actuator Response Automation
++ Release Testing
