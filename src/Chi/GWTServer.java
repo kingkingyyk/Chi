@@ -24,6 +24,7 @@ import Database.DatabaseDayScheduleRule;
 import Database.DatabaseEvent;
 import Database.DatabaseReading;
 import Database.DatabaseRegularSchedule;
+import Database.DatabaseSensorActuatorResponse;
 import Database.DatabaseSpecialSchedule;
 import Database.DatabaseUser;
 import Entity.Actuator;
@@ -33,6 +34,7 @@ import Entity.Dayschedulerule;
 import Entity.Regularschedule;
 import Entity.Sensor;
 import Entity.SensorReading;
+import Entity.Sensoractuatorresponse;
 import Entity.Sensorevent;
 import Entity.Site;
 import Entity.Specialschedule;
@@ -417,6 +419,71 @@ public class GWTServer {
 		    	} else {
 		    		return "ACTUATOR_NOT_EXIST";
 		    	}
+		    }
+		    case "46" : { //SensorActuatorResponseGetAll
+		    	ArrayList<Object []> result=new ArrayList<>();
+		    	for (Sensoractuatorresponse sar : Cache.SensorActuatorResponses.map.values())
+		    		result.add(sar.toObj());
+		    	return result;
+		    }
+		    case "47" : { //SensorActuatorResponseGetByActuatorName
+		    	ArrayList<Object> result=new ArrayList<>();
+		    	for (Sensoractuatorresponse sar : Cache.SensorActuatorResponses.map.values()) if (sar.getActuator().getName().equals(list.get(1)))
+		    		for (Object o : sar.toObj()) result.add(o);
+		    	return result;
+		    }
+		    case "48" : { //SensorActuatorResponseCreate
+		    	boolean expOK=true;
+		    	try { SensoractuatorresponseEvaluator.evaluateStatement((String)list.get(4)); } catch (Exception e) {expOK=false;}
+		    	if (!expOK) return "EXPRESSION_ERROR";
+		    	if (Cache.Actuators.map.get(list.get(1)).getSensoractuatorresponses().size()>0) return "ACTUATOR_ALREADY_USED";
+		    	boolean flag=DatabaseSensorActuatorResponse.createSensorActuatorResponse((String)list.get(1),(String)list.get(2),(String)list.get(3),
+		    																			 (String)list.get(4),(Boolean)list.get(5),(Integer)list.get(6));
+		    	if (flag) return "OK"; else return "ERROR";
+		    }
+		    case "49" : { //SensorActuatorResponseSetOnTriggerAction
+		    	Sensoractuatorresponse sar=Cache.SensorActuatorResponses.map.get(String.valueOf((int)list.get(1)));
+		    	if (sar==null) return "RESPONSE_NOT_EXIST";
+		    	boolean flag=DatabaseSensorActuatorResponse.updateSensorActuatorResponse(sar.getId(),sar.getActuator().getName(),(String)list.get(2),
+		    																			 sar.getOnnottriggeraction(),sar.getExpression(),sar.getEnabled(),
+		    																			 sar.getTimeout());
+		    	if (flag) return "OK"; else return "ERROR";
+		    }
+		    case "50" : { //SensorActuatorResponseSetOnNotTriggerAction
+		    	Sensoractuatorresponse sar=Cache.SensorActuatorResponses.map.get(String.valueOf((int)list.get(1)));
+		    	if (sar==null) return "RESPONSE_NOT_EXIST";
+		    	boolean flag=DatabaseSensorActuatorResponse.updateSensorActuatorResponse(sar.getId(),sar.getActuator().getName(),sar.getOntriggeraction(),
+		    																			(String)list.get(2),sar.getExpression(),sar.getEnabled(),
+		    																			 sar.getTimeout());
+		    	if (flag) return "OK"; else return "ERROR";
+		    }
+		    case "51" : { //SensorActuatorResponseSetExpression
+		    	boolean expOK=true;
+		    	try { SensoractuatorresponseEvaluator.evaluateStatement((String)list.get(2)); } catch (Exception e) {expOK=false;}
+		    	if (!expOK) return "EXPRESSION_ERROR";
+		    	Sensoractuatorresponse sar=Cache.SensorActuatorResponses.map.get(String.valueOf((int)list.get(1)));
+		    	if (sar==null) return "RESPONSE_NOT_EXIST";
+		    	boolean flag=DatabaseSensorActuatorResponse.updateSensorActuatorResponse(sar.getId(),sar.getActuator().getName(),sar.getOntriggeraction(),
+		    																			 sar.getOnnottriggeraction(),(String)list.get(2),sar.getEnabled(),
+		    																			 sar.getTimeout());
+		    	if (flag) return "OK"; else return "ERROR";
+		    }
+		    case "52" : { //SensorActuatorResponseSetEnabled
+		    	Sensoractuatorresponse sar=Cache.SensorActuatorResponses.map.get(String.valueOf((int)list.get(1)));
+		    	if (sar==null) return "RESPONSE_NOT_EXIST";
+		    	boolean flag=DatabaseSensorActuatorResponse.updateSensorActuatorResponse(sar.getId(),sar.getActuator().getName(),sar.getOntriggeraction(),
+		    			 																 sar.getOnnottriggeraction(),sar.getExpression(),(boolean)list.get(2),
+		    																			 sar.getTimeout());
+		    	if (flag) return "OK"; else return "ERROR";
+		    }
+		    case "53" : { //SensorActuatorResponseSetTimeout
+		    	Sensoractuatorresponse sar=Cache.SensorActuatorResponses.map.get(String.valueOf((int)list.get(1)));
+		    	if (sar==null) return "RESPONSE_NOT_EXIST";
+		    	int value=(int)list.get(2); if (value<5) return "INVALID_TIME";
+		    	boolean flag=DatabaseSensorActuatorResponse.updateSensorActuatorResponse(sar.getId(),sar.getActuator().getName(),sar.getOntriggeraction(),
+		    																			 sar.getOnnottriggeraction(),sar.getExpression(),sar.getEnabled(),
+		    																			 value);
+		    	if (flag) return "OK"; else return "ERROR";
 		    }
 	    }
 	    return null;

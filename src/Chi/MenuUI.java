@@ -551,6 +551,7 @@ public class MenuUI extends JFrame {
 		
 		JPanel panelDebug = new JPanel();
 		tabbedPane.addTab("Debug", null, panelDebug, "It might hurts!");
+		tabbedPane.setEnabledAt(6, false);
 		panelDebug.setLayout(null);
 		
 		JButton btnEvaluate = new JButton("Evaluate");

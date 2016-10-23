@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JPasswordField;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 
 public class ConfigUI extends JDialog {
 	private static final long serialVersionUID = -4765449778876379813L;
@@ -39,6 +40,8 @@ public class ConfigUI extends JDialog {
 	private JTextField textFieldGWTPort;
 	private JPasswordField passwordFieldGWTPassword;
 	private JCheckBox chckbxGWTEncrypt;
+	private JCheckBox chckbxLogToFile;
+	private JComboBox<String> comboBoxLogLevel;
 
 	public ConfigUI() {
 		setModal(true);
@@ -346,6 +349,25 @@ public class ConfigUI extends JDialog {
 		lblGWTLogo.setBounds(434, 102, 100, 100);
 		lblGWTLogo.setIcon(Utility.resizeImageIcon(Theme.getIcon("GWTLogo"),lblGWTLogo.getWidth(),lblGWTLogo.getHeight()));
 		panelGWTSettings.add(lblGWTLogo);
+		
+		JPanel panelLogSettings = new JPanel();
+		tabbedPane.addTab("Logging", null, panelLogSettings, null);
+		panelLogSettings.setLayout(null);
+		
+		JLabel lblLogLevel = new JLabel("Log Level :");
+		lblLogLevel.setBounds(10, 11, 59, 14);
+		panelLogSettings.add(lblLogLevel);
+		
+		chckbxLogToFile = new JCheckBox("Log To File");
+		chckbxLogToFile.setSelected(Boolean.parseBoolean(Config.getConfig(Config.CONFIG_SERVER_LOGGING_TOFILE_KEY)));
+		chckbxLogToFile.setBounds(6, 179, 97, 23);
+		panelLogSettings.add(chckbxLogToFile);
+		
+		comboBoxLogLevel = new JComboBox<>();
+		comboBoxLogLevel.setBounds(75, 8, 97, 20);
+		comboBoxLogLevel.addItem("Error"); 	comboBoxLogLevel.addItem("Warning"); 	comboBoxLogLevel.addItem("Information");
+		comboBoxLogLevel.setSelectedIndex(Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_LOGGING_LEVEL_KEY)));
+		panelLogSettings.add(comboBoxLogLevel);
 		btnGWTPort.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				textFieldGWTPort.setText(Config.getConfig(Config.CONFIG_SERVER_GWT_PORT_KEY+Config.CONFIG_DEFAULT_KEY));
@@ -404,7 +426,11 @@ public class ConfigUI extends JDialog {
 		Config.setConfig(Config.CONFIG_SERVER_GWT_PORT_KEY, textFieldGWTPort.getText());
 		Config.setConfig(Config.CONFIG_SERVER_GWT_PASSWORD_KEY, new String(passwordFieldGWTPassword.getPassword()));
 		Config.setConfig(Config.CONFIG_SERVER_GWT_ENCRYPTION_KEY, String.valueOf(chckbxGWTEncrypt.isSelected()));
-
+		Config.setConfig(Config.CONFIG_SERVER_LOGGING_LEVEL_KEY,String.valueOf(comboBoxLogLevel.getSelectedIndex()));
+		Config.setConfig(Config.CONFIG_SERVER_LOGGING_TOFILE_KEY, String.valueOf(chckbxLogToFile.isSelected()));
+		Logger.LOG_LEVEL=comboBoxLogLevel.getSelectedIndex();
+		Logger.EnableLogToFile=chckbxLogToFile.isSelected();
+		
 		Config.setConfig(Config.CONFIG_SERVER_CONTROLLER_PORT_KEY, textFieldControllerPort.getText());
 		
 		Config.setConfig(Config.CONFIG_SERVER_DATABASE_HSQL_IP_KEY, textFieldDBHSQLIP.getText());

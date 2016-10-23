@@ -79,4 +79,9 @@ public class Sensoractuatorresponse implements java.io.Serializable {
 		this.timeout = timeout;
 	}
 
+	public Object[] toObj () {
+		return new Object [] {this.getId(),this.getActuator().getName(),
+							  this.getOntriggeraction(),this.getOnnottriggeraction(),
+							  this.getExpression(),this.getEnabled(),this.getTimeout()};
+	}
 }

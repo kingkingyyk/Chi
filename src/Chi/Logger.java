@@ -15,13 +15,13 @@ public class Logger {
 	private static SimpleDateFormat formatter=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
 	private static SimpleDateFormat logFileNameFormatter=new SimpleDateFormat("yyyy.MM.dd-HH.mm.ss");
 	private static File LogFile=null;
-	private static boolean EnableLogToFile=false;
+	public static boolean EnableLogToFile=false;
 	private static ConcurrentLinkedQueue<Log> eventQueue=new ConcurrentLinkedQueue<>();
 	private static String [] LEVEL_TEXT={"ERROR","WARNING","INFO"};
 	public static int LEVEL_ERROR=0;
 	public static int LEVEL_WARNING=1;
 	public static int LEVEL_INFO=2;
-	private static int LOG_LEVEL=LEVEL_INFO;
+	public static int LOG_LEVEL=LEVEL_INFO;
 	
 	private static class Log {
 		@SuppressWarnings("unused")
@@ -48,16 +48,18 @@ public class Logger {
 				Thread t=new Thread() {
 					public void run () {
 						try {
-							PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile,true)));
 							while (eventQueue.size()>0) {
 								Log l=eventQueue.poll();
 								System.out.println(l.s);
 								if (MenuUI.getCurrInstance()!=null) {
 									MenuUI.getCurrInstance().appendLog(l.s);
 								}
-								if (EnableLogToFile) pw.println(l.s);
+								if (EnableLogToFile) {
+									PrintWriter pw=new PrintWriter(new BufferedWriter(new FileWriter(LogFile,true)));
+									pw.println(l.s);
+									pw.close();
+								}
 							}
-							pw.close();
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
