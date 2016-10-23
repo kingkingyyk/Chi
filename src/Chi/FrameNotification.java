@@ -165,10 +165,11 @@ public class FrameNotification extends JFrame {
 			NotificationTableRow row=(NotificationTableRow)value;
 			if (row!=null && row.renderText!=null) {
 				String text=row.renderText[ArrayUtils.indexOf(NotificationTableModel.COLUMNS,aTable.getColumnName(aColumn))].toString();
-				if (ArrayUtils.indexOf(NotificationTableModel.COLUMNS,"Type")==aColumn)
+				if (ArrayUtils.indexOf(NotificationTableModel.COLUMNS,"Type")==aColumn) {
 					if (text.equals("CONTROLLER")) setIcon(Utility.resizeImageIcon(Theme.getIcon("ControllerIcon"), 16, 16));
-					if (text.equals("SENSOR")) setIcon(Utility.resizeImageIcon(Theme.getIcon("SensorIcon"), 16, 16));
-				else setText(text);
+					else if (text.equals("SENSOR")) setIcon(Utility.resizeImageIcon(Theme.getIcon("SensorIcon"), 16, 16));
+				}
+				setText(text);
 			}
 
 			if (aTable.isRowSelected(aRow)) {

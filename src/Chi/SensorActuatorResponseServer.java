@@ -6,7 +6,7 @@ import java.util.TimerTask;
 
 import Database.Cache;
 import Database.DatabaseActuator;
-import Database.DatabaseReading;
+import Database.DatabaseEvent;
 import Database.DatabaseSensorActuatorResponse;
 import Entity.Sensoractuatorresponse;
 
@@ -19,7 +19,7 @@ public class SensorActuatorResponseServer {
 	private static OnActuatorUpdate UpdateActCallback=new OnActuatorUpdate();
 	private static HashMap<Sensoractuatorresponse,ReadingTrackData> dataMap=new HashMap<>();
 	
-	private static class OnReadingReceived implements DatabaseReading.OnReceivedAction {
+	private static class OnReadingReceived implements DataServer.OnReadingReceived {
 		@Override
 		public void run(String sensorName, double value) {
 			for (ReadingTrackData dat : dataMap.values()) {
@@ -88,7 +88,7 @@ public class SensorActuatorResponseServer {
 		Timer t;
 		boolean ready;
 		String lastStatus;
-		boolean lastResult;
+		String lastResult;
 		
 		private static class ResetReady extends TimerTask {
 			ReadingTrackData dat;
@@ -105,6 +105,7 @@ public class SensorActuatorResponseServer {
 			res=s;
 			ready=true;
 			lastStatus=s.getActuator().getStatus();
+			lastResult="";
 		}
 		
 		private void updateTimer() {
@@ -122,21 +123,30 @@ public class SensorActuatorResponseServer {
 				boolean parseFail=false;
 				try { currResult=SensoractuatorresponseEvaluator.evaluateStatement(res.getExpression()); } catch (Exception e) {parseFail=true;}
 				if (!parseFail) {
-					if (currResult!=lastResult) {
+					if (!String.valueOf(currResult).equals(lastResult)) {
 						if (currResult && !res.getActuator().getStatus().equals(res.getOntriggeraction())) {
+							Logger.log(Logger.LEVEL_INFO,"SensorActuatorResponseServer - Attempt to set "+res.getActuator().getName()+" to "+res.getOntriggeraction());
+							DatabaseEvent.logControllerEvent(res.getActuator().getController().getControllername(),"","SensorActuatorResponse server attempt set actuator "+
+															 res.getActuator().getName()+" to "+res.getOntriggeraction()+" from expression : "+res.getExpression());
 							lastStatus=res.getActuator().getStatus();
 							ControllerPacketActuatorTrigger p=new ControllerPacketActuatorTrigger(res.getActuator().getController().getControllername(),res.getActuator().getName(),res.getOntriggeraction());
 							p.trigger();
 						} else if (!currResult) {
 							if (res.getOnnottriggeraction().equals("RESTORE")) {
+								Logger.log(Logger.LEVEL_INFO,"SensorActuatorResponseServer - Attempt to set "+res.getActuator().getName()+" to "+lastStatus);
+								DatabaseEvent.logControllerEvent(res.getActuator().getController().getControllername(),"","SensorActuatorResponse server attempt set actuator "+
+										 res.getActuator().getName()+" to "+lastStatus+" from expression : "+res.getExpression());
 								ControllerPacketActuatorTrigger p=new ControllerPacketActuatorTrigger(res.getActuator().getController().getControllername(),res.getActuator().getName(),lastStatus);
 								p.trigger();
 							} else {
+								Logger.log(Logger.LEVEL_INFO,"SensorActuatorResponseServer - Attempt to set "+res.getActuator().getName()+" to "+res.getOnnottriggeraction());
+								DatabaseEvent.logControllerEvent(res.getActuator().getController().getControllername(),"","SensorActuatorResponse server attempt set actuator "+
+										 res.getActuator().getName()+" to "+res.getOnnottriggeraction()+" from expression : "+res.getExpression());
 								ControllerPacketActuatorTrigger p=new ControllerPacketActuatorTrigger(res.getActuator().getController().getControllername(),res.getActuator().getName(),res.getOnnottriggeraction());
 								p.trigger();
 							}
 						}
-						lastResult=currResult;
+						lastResult=String.valueOf(currResult);
 					}
 				} else {
 					DatabaseSensorActuatorResponse.updateSensorActuatorResponse(res.getId(),res.getActuator().getName(),
@@ -163,7 +173,7 @@ public class SensorActuatorResponseServer {
 			}
 		}
 		
-		DatabaseReading.registerOnReceivedAction(ReceivedCallback);
+		DataServer.registerOnReadingReceived(ReceivedCallback);
 		DatabaseSensorActuatorResponse.registerOnCreateAction(CreateCallback);
 		DatabaseSensorActuatorResponse.registerOnUpdateAction(UpdateCallback);
 		DatabaseSensorActuatorResponse.registerOnDeleteAction(DeleteCallback);
@@ -175,7 +185,7 @@ public class SensorActuatorResponseServer {
 		Logger.log(Logger.LEVEL_INFO,"SensorActuatorResponseServer stopped.");
 		isStarted=false;
 		
-		DatabaseReading.unregisterOnReceivedAction(ReceivedCallback);
+		DataServer.unregisterOnReadingReceived(ReceivedCallback);
 		DatabaseSensorActuatorResponse.unregisterOnCreateAction(CreateCallback);
 		DatabaseSensorActuatorResponse.unregisterOnUpdateAction(UpdateCallback);
 		DatabaseSensorActuatorResponse.unregisterOnDeleteAction(DeleteCallback);

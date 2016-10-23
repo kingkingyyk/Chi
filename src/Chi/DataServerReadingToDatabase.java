@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import Database.Cache;
 import Database.DatabaseReading;
 
 public class DataServerReadingToDatabase {
@@ -39,8 +40,10 @@ public class DataServerReadingToDatabase {
 		d.sname=sn;
 		d.timestamp=LocalDateTime.now();
 		d.reading=r;
-		queue.add(d);
+		queue.offer(d);
 		Logger.log(Logger.LEVEL_INFO,"Data Server - Queued write reading to database : "+d.toString());
+		
+		DataServer.fireOnReadingReceived(sn,Cache.Sensors.map.get(sn).denormalizeValue(r));
 	}
 	
 	public static void initialize() {

@@ -59,7 +59,8 @@ public class ControllerPacket {
 				status=sb.toString();
 				if (!status.equals("ON") && !status.equals("OFF")) status=null;
 				Logger.log(Logger.LEVEL_INFO,"Controller Packet Info - Received content : "+status);
-				
+
+				packetQueue.get(this.ct).poll();
 				try { Thread.sleep(Config.CONTROLLER_READY_TIME_MS); } catch (InterruptedException e) {}
 			} catch (Exception e) {
 				Logger.log(Logger.LEVEL_ERROR,"Controller Packet Error - Attempting to send packet. "+e.getMessage());
@@ -72,7 +73,6 @@ public class ControllerPacket {
 				} catch (Exception zz) {};
 			}
 		}
-		packetQueue.get(this.ct).poll();
 		return status;
 	}
 }

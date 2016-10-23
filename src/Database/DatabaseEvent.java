@@ -66,10 +66,12 @@ public class DatabaseEvent {
 			Sensorevent se =new Sensorevent(Cache.Sensors.map.get(name),new Date(),eventType,eventValue);
 			session.save(se);
 			tx.commit();
+			
+			for (OnSensorEventLoggedAction a : OnSensorEventLoggedList) a.run(name, eventType, eventValue);
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
-			Logger.log(Logger.LEVEL_ERROR,"DatabaseSensorEvent - Log controller event - " + e.getMessage());
+			Logger.log(Logger.LEVEL_ERROR,"DatabaseSensorEvent - Log sensor event - " + e.getMessage());
 		} finally {session.close();}
 		return flag;
 	}
@@ -129,6 +131,8 @@ public class DatabaseEvent {
 			Controllerevent ce =new Controllerevent(Cache.Controllers.map.get(name),new Date(),eventType,eventValue);
 			session.save(ce);
 			tx.commit();
+			
+			for (OnControllerEventLoggedAction a : OnControllerEventLoggedList) a.run(name, eventType, eventValue);
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
