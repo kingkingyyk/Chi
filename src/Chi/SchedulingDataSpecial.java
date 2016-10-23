@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
+import Database.Cache;
+import Entity.Dayschedulerule;
+
 public class SchedulingDataSpecial extends SchedulingData {
 	private int year;
 	private int month;

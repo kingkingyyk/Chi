@@ -3,15 +3,15 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated Oct 10, 2016 8:50:49 PM by Hibernate Tools 5.2.0.Beta1 -->
 <hibernate-mapping>
-    <class name="Chi.Specialschedule" table="SPECIALSCHEDULE" schema="PUBLIC" catalog="PUBLIC" optimistic-lock="version">
+    <class name="Entity.Specialschedule" table="SPECIALSCHEDULE" schema="PUBLIC" catalog="PUBLIC" optimistic-lock="version">
         <id name="schedulename" type="string">
             <column name="SCHEDULENAME" length="100" />
             <generator class="assigned" />
         </id>
-        <many-to-one name="actuator" class="Chi.Actuator" fetch="select">
+        <many-to-one name="actuator" class="Entity.Actuator" fetch="select">
             <column name="ACTUATORNAME" length="100" />
         </many-to-one>
-        <many-to-one name="dayschedulerule" class="Chi.Dayschedulerule" fetch="select">
+        <many-to-one name="dayschedulerule" class="Entity.Dayschedulerule" fetch="select">
             <column name="RULE" length="100" />
         </many-to-one>
         <property name="year" type="java.lang.Integer">

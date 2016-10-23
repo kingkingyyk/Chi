@@ -3,12 +3,12 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated Sep 10, 2016 1:24:08 AM by Hibernate Tools 5.1.0.Alpha1 -->
 <hibernate-mapping>
-    <class name="Chi.Controllerevent" table="CONTROLLEREVENT" schema="PUBLIC" catalog="PUBLIC" optimistic-lock="version">
+    <class name="Entity.Controllerevent" table="CONTROLLEREVENT" schema="PUBLIC" catalog="PUBLIC" optimistic-lock="version">
         <id name="id" type="java.lang.Long">
             <column name="ID" />
             <generator class="identity" />
         </id>
-        <many-to-one name="controller" class="Chi.Controller" fetch="select">
+        <many-to-one name="controller" class="Entity.Controller" fetch="select">
             <column name="CONTROLLERNAME" length="100" />
         </many-to-one>
         <property name="timestp" type="timestamp">

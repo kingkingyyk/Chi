@@ -2,6 +2,8 @@ package Chi;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import Database.DatabaseActuator;
+
 public class DataServerActuatorStatusToDatabase {
 	
 	private static class Data {

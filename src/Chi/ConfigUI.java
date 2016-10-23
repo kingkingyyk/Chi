@@ -2,6 +2,11 @@ package Chi;
 
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import Database.Cache;
+import Database.DatabaseCassandra;
+import Database.DatabaseHSQL;
+
 import javax.swing.JTabbedPane;
 import javax.swing.JButton;
 import javax.swing.JDialog;

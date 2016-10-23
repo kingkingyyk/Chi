@@ -6,6 +6,8 @@ import java.net.Socket;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import Entity.Controller;
+
 public class ControllerPacket {
 	public static enum Type {Hello,SetActuator,GetReading,ChangeName,ChangeTimeout};
 	public static ConcurrentHashMap<Controller,ConcurrentLinkedQueue<ControllerPacket>> packetQueue=new ConcurrentHashMap<>();
@@ -59,12 +61,8 @@ public class ControllerPacket {
 				Logger.log(Logger.LEVEL_INFO,"Controller Packet Info - Received content : "+status);
 				
 				try { Thread.sleep(Config.CONTROLLER_READY_TIME_MS); } catch (InterruptedException e) {}
-				if (status!=null && tryCount<Config.CONTROLLER_MAX_RETRY) {
-					packetQueue.get(this.ct).poll();
-				}
 			} catch (Exception e) {
 				Logger.log(Logger.LEVEL_ERROR,"Controller Packet Error - Attempting to send packet. "+e.getMessage());
-				e.printStackTrace();
 				status=null;
 			} finally {
 				try {
@@ -74,6 +72,7 @@ public class ControllerPacket {
 				} catch (Exception zz) {};
 			}
 		}
+		packetQueue.get(this.ct).poll();
 		return status;
 	}
 }

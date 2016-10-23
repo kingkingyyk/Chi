@@ -18,6 +18,11 @@ import javax.swing.table.DefaultTableCellRenderer;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
+
+import Database.DatabaseEvent;
+import Entity.Controllerevent;
+import Entity.Sensorevent;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.GroupLayout;

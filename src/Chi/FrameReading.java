@@ -20,6 +20,10 @@ import org.jfree.data.time.Second;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 
+import Database.DatabaseReading;
+import Entity.Sensor;
+import Entity.SensorReading;
+
 public class FrameReading extends JFrame {
 	private static final long serialVersionUID = -2113178474247458689L;
 	private JPanel contentPane;

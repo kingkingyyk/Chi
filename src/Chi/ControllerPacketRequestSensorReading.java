@@ -1,5 +1,7 @@
 package Chi;
 
+import Database.Cache;
+
 public class ControllerPacketRequestSensorReading {
 	private ControllerPacket p;
 	

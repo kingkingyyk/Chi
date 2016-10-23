@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Oct 11, 2016 10:41:48 PM by Hibernate Tools 5.2.0.Beta1 -->
+<!-- Generated Oct 23, 2016 1:38:39 AM by Hibernate Tools 5.1.0.Alpha1 -->
 <hibernate-mapping>
-    <class name="Chi.Sensorevent" table="SENSOREVENT" schema="PUBLIC" catalog="PUBLIC" optimistic-lock="version">
+    <class name="Entity.Sensorevent" table="SENSOREVENT" schema="PUBLIC" catalog="PUBLIC" optimistic-lock="version">
         <id name="id" type="java.lang.Long">
             <column name="ID" />
             <generator class="identity" />
         </id>
-        <many-to-one name="sensor" class="Chi.Sensor" fetch="select">
+        <many-to-one name="sensor" class="Entity.Sensor" fetch="select">
             <column name="SENSORNAME" length="100" />
         </many-to-one>
         <property name="timestp" type="timestamp">

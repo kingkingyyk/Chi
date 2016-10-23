@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import Database.DatabaseReading;
+
 public class DataServerReadingToDatabase {
 	private static final String TIMESTAMP_FORMAT="yyyy-MM-dd HH:mm:ss"; //format the time
 	private static DateTimeFormatter formatter=DateTimeFormatter.ofPattern(TIMESTAMP_FORMAT);
@@ -22,9 +24,9 @@ public class DataServerReadingToDatabase {
 	}
 
 	public static class Data {
-		String sname;
-		LocalDateTime timestamp;
-		double reading;
+		public String sname;
+		public LocalDateTime timestamp;
+		public double reading;
 		
 		public String toString() {
 			return this.sname+"|"+this.timestamp.format(formatter)+"|"+this.reading;

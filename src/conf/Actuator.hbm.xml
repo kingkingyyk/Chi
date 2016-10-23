@@ -3,12 +3,12 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated Oct 11, 2016 4:13:20 PM by Hibernate Tools 5.2.0.Beta1 -->
 <hibernate-mapping>
-    <class name="Chi.Actuator" table="ACTUATOR" schema="PUBLIC" catalog="PUBLIC" optimistic-lock="version">
+    <class name="Entity.Actuator" table="ACTUATOR" schema="PUBLIC" catalog="PUBLIC" optimistic-lock="version">
         <id name="name" type="string">
             <column name="NAME" length="100" />
             <generator class="assigned" />
         </id>
-        <many-to-one name="controller" class="Chi.Controller" fetch="select">
+        <many-to-one name="controller" class="Entity.Controller" fetch="select">
             <column name="CONTROLLER" length="100" />
         </many-to-one>
         <property name="status" type="string">
@@ -27,19 +27,19 @@
             <key>
                 <column name="ACTUATORNAME" length="100" />
             </key>
-            <one-to-many class="Chi.Regularschedule" />
+            <one-to-many class="Entity.Regularschedule" />
         </set>
         <set name="sensoractuatorresponses" table="SENSORACTUATORRESPONSE" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="ACTUATORNAME" length="100" />
             </key>
-            <one-to-many class="Chi.Sensoractuatorresponse" />
+            <one-to-many class="Entity.Sensoractuatorresponse" />
         </set>
         <set name="specialschedules" table="SPECIALSCHEDULE" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="ACTUATORNAME" length="100" />
             </key>
-            <one-to-many class="Chi.Specialschedule" />
+            <one-to-many class="Entity.Specialschedule" />
         </set>
     </class>
 </hibernate-mapping>

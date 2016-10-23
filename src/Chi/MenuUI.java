@@ -4,6 +4,22 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.DefaultCaret;
+
+import Database.Cache;
+import Database.DatabaseCassandra;
+import Database.DatabaseHSQL;
+import Database.DatabaseReading;
+import FrameEntityManagement.FrameActuatorManagement;
+import FrameEntityManagement.FrameControllerManagement;
+import FrameEntityManagement.FrameDayScheduleRuleManagement;
+import FrameEntityManagement.FrameRegularScheduleManagement;
+import FrameEntityManagement.FrameSensorActuatorResponseManagement;
+import FrameEntityManagement.FrameSensorClassManagement;
+import FrameEntityManagement.FrameSensorManagement;
+import FrameEntityManagement.FrameSiteManagement;
+import FrameEntityManagement.FrameSpecialScheduleManagement;
+import FrameEntityManagement.FrameUserManagement;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -267,7 +283,7 @@ public class MenuUI extends JFrame {
 				DialogReadingSelectSensor diag=new DialogReadingSelectSensor();
 				diag.setLocationRelativeTo(null);
 				diag.setVisible(true);
-				if (diag.OKPressed && JOptionPane.showConfirmDialog(diag,"Confirm to delete all readings of "+diag.selectedSensor+"?","Clear readings",JOptionPane.WARNING_MESSAGE)==JOptionPane.YES_OPTION) {
+				if (diag.OKPressed && JOptionPane.showConfirmDialog(diag,"Confirm to delete all readings of "+diag.selectedSensor+"?","Clear readings",JOptionPane.OK_CANCEL_OPTION,JOptionPane.WARNING_MESSAGE)==JOptionPane.YES_OPTION) {
 					WaitUI u=new WaitUI();
 					u.setText("Deleting readings...");
 					Thread t=new Thread() {
@@ -284,7 +300,7 @@ public class MenuUI extends JFrame {
 		});
 		btnResetDatabase.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (JOptionPane.showConfirmDialog(null, "Are you sure you want to reset the database?","Reset database",JOptionPane.WARNING_MESSAGE)==JOptionPane.YES_OPTION) {
+				if (JOptionPane.showConfirmDialog(null, "Are you sure you want to reset the database?","Reset database",JOptionPane.OK_CANCEL_OPTION,JOptionPane.WARNING_MESSAGE)==JOptionPane.YES_OPTION) {
 					WaitUI u=new WaitUI();
 					u.setProgressBarMin(1);
 					u.setProgressBarMax(4);

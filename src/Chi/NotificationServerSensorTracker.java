@@ -2,6 +2,10 @@ package Chi;
 
 import java.util.HashMap;
 
+import Database.Cache;
+import Database.DatabaseEvent;
+import Entity.Sensor;
+
 public class NotificationServerSensorTracker {
 	private static HashMap<Sensor,Integer> lastSensorStatus=new HashMap<>();
 	//1 - Lower than min threshold, 2 - Normal, 3 - Higher than max threshold;

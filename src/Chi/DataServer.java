@@ -8,6 +8,9 @@ import java.util.LinkedList;
 
 import org.hsqldb.lib.DataOutputStream;
 
+import Database.Cache;
+import Entity.Sensor;
+
 public class DataServer {
 	private static FileOutputStream fileLocker;
 	private static DataServerThread listeningThread;

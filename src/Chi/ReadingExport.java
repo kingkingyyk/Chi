@@ -22,6 +22,8 @@ import org.jfree.data.time.Second;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 
+import Entity.SensorReading;
+
 public class ReadingExport {
 
 	private static DateTimeFormatter HTMLDateFormat = DateTimeFormatter.ofPattern("dd MMMM YYYY, HH:mm:ss a");

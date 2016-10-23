@@ -1,5 +1,9 @@
 package Chi;
 
+import Database.DatabaseController;
+import Database.DatabaseEvent;
+import Database.DatabaseSensor;
+
 public class FrameNotificationBind {
 
 	public static class OnSensorUpdate implements DatabaseSensor.OnUpdateAction {

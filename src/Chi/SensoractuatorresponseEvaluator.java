@@ -5,6 +5,9 @@ import java.util.Map;
 
 import org.mvel.MVEL;
 
+import Database.DatabaseReading;
+import Entity.Sensor;
+
 public class SensoractuatorresponseEvaluator {
 	
 	public static boolean evaluateStatement (String s) {

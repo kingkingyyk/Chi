@@ -2,6 +2,19 @@ package Chi;
 
 import javax.swing.UIManager;
 
+import Database.Cache;
+import Database.DatabaseCassandra;
+import FrameEntityManagement.FrameActuatorManagementBind;
+import FrameEntityManagement.FrameControllerManagementBind;
+import FrameEntityManagement.FrameDayScheduleRuleManagementBind;
+import FrameEntityManagement.FrameRegularScheduleManagementBind;
+import FrameEntityManagement.FrameSensorActuatorResponseManagementBind;
+import FrameEntityManagement.FrameSensorClassManagementBind;
+import FrameEntityManagement.FrameSensorManagementBind;
+import FrameEntityManagement.FrameSiteManagementBind;
+import FrameEntityManagement.FrameSpecialScheduleManagementBind;
+import FrameEntityManagement.FrameUserManagementBind;
+
 public class Chi {
 
 	public static void main (String [] args) {
@@ -51,6 +64,7 @@ public class Chi {
 				FrameRegularScheduleManagementBind.initialize();
 				FrameSpecialScheduleManagementBind.initialize();
 				FrameOngoingSchedulesBind.initialize();
+				FrameSensorActuatorResponseManagementBind.initialize();
 				FrameNotificationBind.initialize();
 				CacheRelationshipBind.initialize();
 				

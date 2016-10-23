@@ -3,7 +3,7 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated Aug 30, 2016 1:51:22 PM by Hibernate Tools 5.1.0.Alpha1 -->
 <hibernate-mapping>
-    <class name="Chi.Site" table="SITE" schema="PUBLIC" catalog="PUBLIC" optimistic-lock="version">
+    <class name="Entity.Site" table="SITE" schema="PUBLIC" catalog="PUBLIC" optimistic-lock="version">
         <id name="sitename" type="string">
             <column name="SITENAME" length="100" />
             <generator class="assigned" />
@@ -15,7 +15,7 @@
             <key>
                 <column name="SITE" length="100" />
             </key>
-            <one-to-many class="Chi.Controller" />
+            <one-to-many class="Entity.Controller" />
         </set>
     </class>
 </hibernate-mapping>
