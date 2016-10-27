@@ -19,6 +19,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import ControllerPacket.ControllerPacketActuatorTrigger;
 import Database.Cache;
 import Database.DatabaseDayScheduleRule;
 import Database.DatabaseEvent;
@@ -39,6 +40,9 @@ import Entity.Sensorevent;
 import Entity.Site;
 import Entity.Specialschedule;
 import Entity.User;
+import SchedulingServer.SchedulingData;
+import SchedulingServer.SchedulingServer;
+import ServerActuatorResponseServer.SensoractuatorresponseEvaluator;
 
 public class GWTServer {
 	private static GWTServerT t;
@@ -412,13 +416,14 @@ public class GWTServer {
 		    case "45" : { //ActuatorSetStatus;
 		    	Actuator act=Cache.Actuators.map.getOrDefault(list.get(1),null);
 		    	if (act!=null) {
-		    		ControllerPacketActuatorTrigger p=new ControllerPacketActuatorTrigger(act.getController().getControllername(),act.getName(),(String)list.get(2));
-		    		p.run();
-		    		if (act.getStatus().equals(list.get(2))) return "OK";
-		    		else return "FAIL";
-		    	} else {
-		    		return "ACTUATOR_NOT_EXIST";
-		    	}
+		    		if (SchedulingServer.isActuatorLocked(act.getName())) return "ACTUATOR_LOCKED_BY_SCHEDULE";
+		    		else {
+		    			ControllerPacketActuatorTrigger p=new ControllerPacketActuatorTrigger(act.getController().getControllername(),act.getName(),(String)list.get(2));
+		    			p.run();
+			    		if (act.getStatus().equals(list.get(2))) return "OK";
+			    		else return "FAIL";
+		    		}
+		    	} else return "ACTUATOR_NOT_EXIST";
 		    }
 		    case "46" : { //SensorActuatorResponseGetAll
 		    	ArrayList<Object []> result=new ArrayList<>();

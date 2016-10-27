@@ -1,4 +1,4 @@
-package Chi;
+package DataServer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,6 +12,8 @@ import javax.swing.JOptionPane;
 
 import org.apache.commons.lang3.CharUtils;
 
+import Chi.Config;
+import Chi.Logger;
 import Database.Cache;
 import Database.DatabaseController;
 import Database.DatabaseReading;

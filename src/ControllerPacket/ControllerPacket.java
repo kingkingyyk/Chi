@@ -1,4 +1,4 @@
-package Chi;
+package ControllerPacket;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -6,6 +6,8 @@ import java.net.Socket;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import Chi.Config;
+import Chi.Logger;
 import Entity.Controller;
 
 public class ControllerPacket {

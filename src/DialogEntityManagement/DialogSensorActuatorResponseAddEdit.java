@@ -8,11 +8,11 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Chi.Config;
-import Chi.SensoractuatorresponseEvaluator;
 import Chi.Theme;
 import Chi.WaitUI;
 import Database.Cache;
 import Database.DatabaseSensorActuatorResponse;
+import ServerActuatorResponseServer.SensoractuatorresponseEvaluator;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;

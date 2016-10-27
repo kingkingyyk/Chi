@@ -1,4 +1,4 @@
-package Chi;
+package ServerActuatorResponseServer;
 
 public class NotificationServer {
 

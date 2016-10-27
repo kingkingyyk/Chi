@@ -18,6 +18,12 @@ import javax.swing.table.DefaultTableCellRenderer;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
+
+import SchedulingServer.SchedulingData;
+import SchedulingServer.SchedulingDataRegular;
+import SchedulingServer.SchedulingDataSpecial;
+import SchedulingServer.SchedulingServer;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.GroupLayout;

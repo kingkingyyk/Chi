@@ -15,10 +15,10 @@ import com.datastax.driver.core.Row;
 import com.datastax.driver.core.exceptions.NoHostAvailableException;
 
 import Chi.Config;
-import Chi.DataServerReadingToDatabase;
-import Chi.DataServerReadingToDatabase.Data;
 import Chi.Logger;
 import Chi.Utility;
+import DataServer.DataServerReadingToDatabase;
+import DataServer.DataServerReadingToDatabase.Data;
 import Entity.Sensor;
 import Entity.SensorReading;
 

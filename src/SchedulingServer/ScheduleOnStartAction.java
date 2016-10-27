@@ -1,4 +1,4 @@
-package Chi;
+package SchedulingServer;
 
 public abstract class ScheduleOnStartAction {
 	public SchedulingData dat=null;

@@ -1,4 +1,4 @@
-package Chi;
+package SchedulingServer;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

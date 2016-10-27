@@ -1,4 +1,4 @@
-package Chi;
+package ServerActuatorResponseServer;
 
 import java.util.HashMap;
 import java.util.Map;

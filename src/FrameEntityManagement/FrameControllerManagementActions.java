@@ -3,8 +3,8 @@ package FrameEntityManagement;
 import javax.swing.JOptionPane;
 
 import Chi.Config;
-import Chi.ControllerPacketRequestAlive;
 import Chi.WaitUI;
+import ControllerPacket.ControllerPacketRequestAlive;
 import Database.DatabaseController;
 import DialogEntityManagement.DialogControllerAddEdit;
 import Entity.Controller;

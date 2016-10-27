@@ -1,7 +1,8 @@
-package Chi;
+package DataServer;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import Chi.Logger;
 import Database.DatabaseActuator;
 
 public class DataServerActuatorStatusToDatabase {

@@ -3,9 +3,9 @@ package FrameEntityManagement;
 import javax.swing.JOptionPane;
 
 import Chi.Config;
-import Chi.ControllerPacketActuatorTrigger;
 import Chi.Logger;
 import Chi.WaitUI;
+import ControllerPacket.ControllerPacketActuatorTrigger;
 import Database.DatabaseActuator;
 import DialogEntityManagement.DialogActuatorAddEdit;
 import Entity.Actuator;

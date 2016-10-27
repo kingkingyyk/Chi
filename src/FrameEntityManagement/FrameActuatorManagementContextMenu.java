@@ -6,6 +6,8 @@ import javax.swing.JMenuItem;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
+import SchedulingServer.SchedulingServer;
+
 public class FrameActuatorManagementContextMenu extends FrameContextMenu {
 	private static final long serialVersionUID = 1L;
 	private JMenuItem newMenu;
@@ -47,7 +49,7 @@ public class FrameActuatorManagementContextMenu extends FrameContextMenu {
 
 			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
-				toggleMenu.setEnabled(m.getSelectedCount()==1);
+				toggleMenu.setEnabled(m.getSelectedCount()==1 && !SchedulingServer.isActuatorLocked(m.getSelectedActuator().getName()));
 				editMenu.setEnabled(m.getSelectedCount()==1);
 				deleteMenu.setEnabled(m.getSelectedCount()>0);
 			};

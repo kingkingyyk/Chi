@@ -1,4 +1,7 @@
-package Chi;
+package SchedulingServer;
+
+import Chi.Logger;
+import Chi.WaitUI;
 
 public class SchedulingServer {
 	private static SchedulingThread scheduleThread;
@@ -59,5 +62,12 @@ public class SchedulingServer {
 	
 	public static void notifyStop() {
 		isStarted=false;
+	}
+	
+	public static boolean isActuatorLocked (String aname) {
+		SchedulingData highestPrio=null;
+		for (SchedulingData dat : scheduleThread.data.values()) if (dat.actuatorName.equals(aname) && (highestPrio==null || dat.priority>highestPrio.priority))
+			highestPrio=dat;
+		return (highestPrio==null || highestPrio.lock);
 	}
 }

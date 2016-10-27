@@ -1,4 +1,4 @@
-package Chi;
+package DataServer;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -8,6 +8,8 @@ import java.util.LinkedList;
 
 import org.hsqldb.lib.DataOutputStream;
 
+import Chi.Config;
+import Chi.Logger;
 import Database.Cache;
 import Entity.Sensor;
 
