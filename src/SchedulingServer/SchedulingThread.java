@@ -9,6 +9,7 @@ import ControllerPacket.ControllerPacketActuatorTrigger;
 import Database.Cache;
 import Database.DatabaseActuator;
 import Database.DatabaseDayScheduleRule;
+import Database.DatabaseEvent;
 import Database.DatabaseRegularSchedule;
 import Database.DatabaseSpecialSchedule;
 import Entity.Regularschedule;
@@ -24,7 +25,7 @@ public class SchedulingThread extends Thread {
 	
 	public class OnActuatorUpdate implements DatabaseActuator.OnUpdateAction {
 		@Override
-		public void run(String oldN, String n, String u, double px, double py, String ctrlType) {
+		public void run(String oldN, String n, String u, String slist, double px, double py, String ctrlType) {
 			for (SchedulingData d : data.values()) {
 				if (d.getActuatorName().equals(oldN)) {
 					d.setActuatorName(n);
@@ -164,6 +165,7 @@ public class SchedulingThread extends Thread {
 			if (!hasConflict) {
 				Logger.log(Logger.LEVEL_INFO,"RegularSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getStartAction()+". [SET]");
 				TriggerActuator(Cache.Actuators.map.get(dat.actuatorName).getController().getControllername(),this.dat.actuatorName,this.dat.getStartAction());
+				DatabaseEvent.logActuatorEvent(dat.actuatorName, "Schedule", "Set to "+this.dat.getStartAction()+" by regular schedule "+this.dat.getName()+" on start.");
 			} else {
 				Logger.log(Logger.LEVEL_INFO,"RegularSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getStartAction()+". [NOT SET DUE TO LOW PRIORITY]");
 			}
@@ -184,6 +186,7 @@ public class SchedulingThread extends Thread {
 			if (!hasConflict) {
 				Logger.log(Logger.LEVEL_INFO,"RegularSchedule ("+this.dat.name+") : Ended -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getEndAction()+". [SET]");
 				TriggerActuator(Cache.Actuators.map.get(dat.actuatorName).getController().getControllername(),this.dat.actuatorName,this.dat.getEndAction());
+				DatabaseEvent.logActuatorEvent(dat.actuatorName, "Schedule", "Set to "+this.dat.getStartAction()+" by regular schedule "+this.dat.getName()+" on end.");
 			} else {
 				Logger.log(Logger.LEVEL_INFO,"RegularSchedule ("+this.dat.name+") : Ended -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getEndAction()+". [NOT SET DUE TO LOW PRIORITY]");
 			}
@@ -267,6 +270,7 @@ public class SchedulingThread extends Thread {
 			if (!hasConflict) {
 				Logger.log(Logger.LEVEL_INFO,"SpecialSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getStartAction()+". [SET]");
 				TriggerActuator(Cache.Actuators.map.get(dat.actuatorName).getController().getControllername(),this.dat.actuatorName,this.dat.getStartAction());
+				DatabaseEvent.logActuatorEvent(dat.actuatorName, "Schedule", "Set to "+this.dat.getStartAction()+" by special schedule "+this.dat.getName()+" on start.");
 			} else {
 				Logger.log(Logger.LEVEL_INFO,"SpecialSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getStartAction()+". [NOT SET DUE TO LOW PRIORITY]");
 			}
@@ -287,6 +291,7 @@ public class SchedulingThread extends Thread {
 			if (!hasConflict) {
 				Logger.log(Logger.LEVEL_INFO,"SpecialSchedule ("+this.dat.name+") : Ended -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getEndAction()+". [SET]");
 				TriggerActuator(Cache.Actuators.map.get(dat.actuatorName).getController().getControllername(),this.dat.actuatorName,this.dat.getEndAction());
+				DatabaseEvent.logActuatorEvent(dat.actuatorName, "Schedule", "Set to "+this.dat.getStartAction()+" by special schedule "+this.dat.getName()+" on end.");
 			} else {
 				Logger.log(Logger.LEVEL_INFO,"SpecialSchedule ("+this.dat.name+") : Ended -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getEndAction()+". [NOT SET DUE TO LOW PRIORITY]");
 			}

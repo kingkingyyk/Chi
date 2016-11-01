@@ -11,6 +11,7 @@ public class Actuator implements java.io.Serializable {
 	private Double positionx;
 	private Double positiony;
 	private String controltype;
+	private String statuslist;
 	private Set<Regularschedule> regularschedules = new HashSet<>(0);
 	private Set<Sensoractuatorresponse> sensoractuatorresponses = new HashSet<>(0);
 	private Set<Specialschedule> specialschedules = new HashSet<>(0);
@@ -23,13 +24,14 @@ public class Actuator implements java.io.Serializable {
 	}
 
 	public Actuator(String name, Controller controller, String status, Double positionx, Double positiony,
-			String controltype, Set<Regularschedule> regularschedules, Set<Sensoractuatorresponse> sensoractuatorresponses, Set<Specialschedule> specialschedules) {
+			String controltype, String statuslist, Set<Regularschedule> regularschedules, Set<Sensoractuatorresponse> sensoractuatorresponses, Set<Specialschedule> specialschedules) {
 		this.name = name;
 		this.controller = controller;
 		this.status = status;
 		this.positionx = positionx;
 		this.positiony = positiony;
 		this.controltype = controltype;
+		this.statuslist = statuslist;
 		this.regularschedules = regularschedules;
 		this.sensoractuatorresponses = sensoractuatorresponses;
 		this.specialschedules = specialschedules;
@@ -79,6 +81,14 @@ public class Actuator implements java.io.Serializable {
 		return this.controltype;
 	}
 
+	public String getStatuslist() {
+		return this.statuslist;
+	}
+
+	public void setStatuslist(String statuslist) {
+		this.statuslist = statuslist;
+	}
+	
 	public void setControltype(String controltype) {
 		this.controltype = controltype;
 	}
@@ -108,7 +118,7 @@ public class Actuator implements java.io.Serializable {
 	}
 
 	public Object [] toObj () {
-		return new Object [] {this.getName(), this.getController().getControllername(), this.getStatus(),this.positionx,this.positiony,this.controltype};
+		return new Object [] {this.getName(), this.getController().getControllername(), this.getStatus(),this.positionx,this.positiony,this.controltype,this.statuslist};
 	}
 	
 }

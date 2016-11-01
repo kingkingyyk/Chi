@@ -49,6 +49,7 @@ CREATE TABLE Actuator(
 	PositionX double,
 	PositionY double,
 	ControlType varchar(100),
+	StatusList varchar(1000),
 	FOREIGN KEY (Controller) REFERENCES Controller(ControllerName) ON UPDATE CASCADE
 )
 @
@@ -107,7 +108,16 @@ CREATE TABLE SensorEvent (
 	TimeStp timestamp,
 	EventType varchar (100),
 	EventValue varchar(100),
-	FOREIGN KEY (SensorName) REFERENCES Sensor(SensorName) ON UPDATE CASCADE
+	FOREIGN KEY (SensorName) REFERENCES Sensor(SensorName) ON UPDATE CASCADE ON DELETE CASCADE
+)
+@
+CREATE TABLE ActuatorEvent (
+	Id bigint IDENTITY PRIMARY KEY,
+	ActuatorName varchar (100),
+	TimeStp timestamp,
+	EventType varchar (100),
+	EventValue varchar(100),
+	FOREIGN KEY (ActuatorName) REFERENCES Actuator(Name) ON UPDATE CASCADE ON DELETE CASCADE
 )
 @
 CREATE TABLE ControllerEvent (
@@ -116,7 +126,34 @@ CREATE TABLE ControllerEvent (
 	TimeStp timestamp,
 	EventType varchar (100),
 	EventValue varchar(100),
-	FOREIGN KEY (ControllerName) REFERENCES Controller(ControllerName) ON UPDATE CASCADE
+	FOREIGN KEY (ControllerName) REFERENCES Controller(ControllerName) ON UPDATE CASCADE ON DELETE CASCADE
+)
+@
+CREATE TABLE UserSensorNotification (
+	Username varchar(100),
+	Sensorname varchar (100),
+	LastRead timestamp,
+	PRIMARY KEY (Username, Sensorname),
+	FOREIGN KEY (Username) REFERENCES User(Username) ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY (Sensorname) REFERENCES Sensor(SensorName) ON UPDATE CASCADE ON DELETE CASCADE
+)
+@
+CREATE TABLE UserActuatorNotification (
+	Username varchar(100),
+	Actuatorname varchar(100),
+	LastRead timestamp,
+	PRIMARY KEY (Username, Actuatorname),
+	FOREIGN KEY (Username) REFERENCES User(Username) ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY (Actuatorname) REFERENCES Actuator(Name) ON UPDATE CASCADE ON DELETE CASCADE
+)
+@
+CREATE TABLE UserControllerNotification (
+	Username varchar(100),
+	Controllername varchar(100),
+	LastRead timestamp,
+	PRIMARY KEY (Username, Controllername),
+	FOREIGN KEY (Username) REFERENCES User(Username) ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY (Controllername) REFERENCES Controller(ControllerName) ON UPDATE CASCADE ON DELETE CASCADE
 )
 @
 INSERT INTO Site VALUES ('DefaultSite','http://i.imgur.com/Ep8mS4K.jpg')

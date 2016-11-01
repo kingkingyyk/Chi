@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Nov 1, 2016 5:10:37 PM by Hibernate Tools 5.2.0.Beta1 -->
+<hibernate-mapping>
+    <class name="Entity.Actuatorevent" table="ACTUATOREVENT" schema="PUBLIC" catalog="PUBLIC" optimistic-lock="version">
+        <id name="id" type="java.lang.Long">
+            <column name="ID" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="actuator" class="Entity.Actuator" fetch="select">
+            <column name="ACTUATORNAME" length="100" />
+        </many-to-one>
+        <property name="timestp" type="timestamp">
+            <column name="TIMESTP" length="26" />
+        </property>
+        <property name="eventtype" type="string">
+            <column name="EVENTTYPE" length="100" />
+        </property>
+        <property name="eventvalue" type="string">
+            <column name="EVENTVALUE" length="100" />
+        </property>
+    </class>
+</hibernate-mapping>

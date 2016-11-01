@@ -74,7 +74,7 @@ public class SensorActuatorResponseServer {
 	public static class OnActuatorUpdate implements DatabaseActuator.OnUpdateAction {
 
 		@Override
-		public void run(String oldN, String n, String u, double px, double py, String ctrlType) {
+		public void run(String oldN, String n, String u, String slist, double px, double py, String ctrlType) {
 			for (Sensoractuatorresponse res : Cache.SensorActuatorResponses.map.values()) {
 				if (!dataMap.containsKey(res) && res.getActuator().getName().equals(n) && res.getEnabled()) {
 					ReadingTrackData dat=new ReadingTrackData(res);

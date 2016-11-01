@@ -22,6 +22,7 @@ import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
 import Database.DatabaseEvent;
 import Entity.Controllerevent;
 import Entity.Sensorevent;
+import Entity.Actuatorevent;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -168,6 +169,7 @@ public class FrameNotification extends JFrame {
 				if (ArrayUtils.indexOf(NotificationTableModel.COLUMNS,"Type")==aColumn) {
 					if (text.equals("CONTROLLER")) setIcon(Utility.resizeImageIcon(Theme.getIcon("ControllerIcon"), 16, 16));
 					else if (text.equals("SENSOR")) setIcon(Utility.resizeImageIcon(Theme.getIcon("SensorIcon"), 16, 16));
+					else if (text.equals("ACTUATOR")) setIcon(Utility.resizeImageIcon(Theme.getIcon("ActuatorIcon"), 16, 16));
 				}
 				setText(text);
 			}
@@ -269,12 +271,17 @@ public class FrameNotification extends JFrame {
 		
 		ArrayList<Sensorevent> seL=DatabaseEvent.getSensorEventBetweenTime(LocalDateTime.of(1970,1,1,0,0),LocalDateTime.now());
 		ArrayList<Controllerevent> ceL=DatabaseEvent.getControllerEventBetweenTime(LocalDateTime.of(1970,1,1,0,0),LocalDateTime.now());
+		ArrayList<Actuatorevent> aeL=DatabaseEvent.getActuatorEventBetweenTime(LocalDateTime.of(1970,1,1,0,0),LocalDateTime.now());
+		
 		ArrayList<Notification> nL=new ArrayList<>();
 		for (Sensorevent se : seL) {
 			nL.add(new Notification(se.getSensor().getSensorname(),"SENSOR",Utility.dateToLocalDateTime(se.getTimestp()),se.getEventtype(),se.getEventvalue()));
 		}
 		for (Controllerevent ce : ceL) {
 			nL.add(new Notification(ce.getController().getControllername(),"CONTROLLER",Utility.dateToLocalDateTime(ce.getTimestp()),ce.getEventtype(),ce.getEventvalue()));
+		}
+		for (Actuatorevent ae : aeL) {
+			nL.add(new Notification(ae.getActuator().getName(),"ACTUATOR",Utility.dateToLocalDateTime(ae.getTimestp()),ae.getEventtype(),ae.getEventvalue()));
 		}
 		Collections.sort(nL);
 		

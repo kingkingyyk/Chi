@@ -2,6 +2,8 @@ package FrameEntityManagement;
 
 import javax.swing.JOptionPane;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import Chi.Config;
 import Chi.Logger;
 import Chi.WaitUI;
@@ -19,7 +21,7 @@ public class FrameActuatorManagementActions {
 	
 	public static void edit(FrameActuatorManagement f) {
 		Actuator act=f.getSelectedActuator();
-		DialogActuatorAddEdit diag=new DialogActuatorAddEdit(act.getName(),act.getController().getControllername(),act.getPositionx(),act.getPositiony(),act.getControltype());
+		DialogActuatorAddEdit diag=new DialogActuatorAddEdit(act.getName(),act.getController().getControllername(),act.getStatuslist(),act.getPositionx(),act.getPositiony(),act.getControltype());
 		diag.setVisible(true);
 	}
 	
@@ -59,9 +61,10 @@ public class FrameActuatorManagementActions {
 	public static void toggle (FrameActuatorManagement f) {
 		Actuator act=f.getSelectedActuator();
 		String status=act.getStatus();
-		if (status.equals("Pending Update")) status="ON";
-		else if (status.equals("OFF")) status="ON";
-		else if (status.equals("ON")) status="OFF";
+		
+		String [] actions=act.getStatuslist().split(";");
+		if (status.equals("Pending Update")) status=actions[0];
+		else status=actions[(ArrayUtils.indexOf(actions,status)+1)%actions.length];
 			
 		ControllerPacketActuatorTrigger p=new ControllerPacketActuatorTrigger(act.getController().getControllername(),act.getName(),status);
 		p.trigger();

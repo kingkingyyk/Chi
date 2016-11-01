@@ -28,7 +28,11 @@ import Database.DatabaseRegularSchedule;
 import Database.DatabaseSensorActuatorResponse;
 import Database.DatabaseSpecialSchedule;
 import Database.DatabaseUser;
+import Database.DatabaseUserActuatorNotification;
+import Database.DatabaseUserControllerNotification;
+import Database.DatabaseUserSensorNotification;
 import Entity.Actuator;
+import Entity.Actuatorevent;
 import Entity.Controller;
 import Entity.Controllerevent;
 import Entity.Dayschedulerule;
@@ -221,7 +225,7 @@ public class GWTServer {
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
-		    case "22" : { //RegularScheduleCreate
+		    case "22a" : { //RegularScheduleCreate
 		    	Regularschedule r=Cache.RegularSchedules.map.get(list.get(1));
 		    	if (r!=null) return "SCHEDULE_ALREADY_EXISTS";
 		    	else if (!Cache.Actuators.map.containsKey(list.get(2))) return "ACTUATOR_NOT_EXIST";
@@ -232,6 +236,29 @@ public class GWTServer {
 		    																	(int)list.get(3), Cache.DayScheduleRules.map.get(list.get(4)).getRulename(),
 		    																	(String)list.get(5), (String)list.get(6), (boolean)list.get(7),
 		    																	(int)list.get(8), (boolean)list.get(9));
+
+		    		if (flag) return "OK"; else return "ERROR";
+		    	}
+		    }
+		    case "22b" : { //RegularScheduleDelete
+		    	Regularschedule r=Cache.RegularSchedules.map.get(list.get(1));
+		    	if (r!=null) return "SCHEDULE_NOT_EXIST";
+		    	else {
+		    		boolean flag=DatabaseRegularSchedule.deleteRegularSchedule((String)list.get(1));
+		    		if (flag) return "OK"; else return "ERROR";
+		    	}
+		    }
+		    case "22c" : { //RegularScheduleUpdateFields
+		    	Regularschedule r=Cache.RegularSchedules.map.get(list.get(1));
+		    	if (r!=null) return "SCHEDULE_NOT_EXIST";
+		    	else if (Cache.RegularSchedules.map.containsKey(list.get(2))) return "SCHEDULE_ALREADY_EXISTS";
+		    	else if (!Cache.Actuators.map.containsKey(list.get(2))) return "ACTUATOR_NOT_EXIST";
+		    	else if (!Cache.DayScheduleRules.map.containsKey(list.get(4))) return "RULE_NOT_EXIST";
+		    	else {
+		    		boolean flag=DatabaseRegularSchedule.updateRegularSchedule( (String)list.get(1),(String)list.get(2),Cache.Actuators.map.get(list.get(3)).getName(),
+		    																	(int)list.get(4), Cache.DayScheduleRules.map.get(list.get(5)).getRulename(),
+		    																	(String)list.get(6), (String)list.get(7), (boolean)list.get(8),
+		    																	(int)list.get(9), (boolean)list.get(10));
 
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
@@ -324,7 +351,7 @@ public class GWTServer {
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
-		    case "32" : { //SpecialScheduleCreate
+		    case "32a" : { //SpecialScheduleCreate
 		    	Specialschedule r=Cache.SpecialSchedules.map.get(list.get(1));
 		    	if (r!=null) return "SCHEDULE_ALREADY_EXISTS";
 		    	else if (!Cache.Actuators.map.containsKey(list.get(2))) return "ACTUATOR_NOT_EXIST";
@@ -335,6 +362,29 @@ public class GWTServer {
 		    																	Cache.DayScheduleRules.map.get(list.get(6)).getRulename(),
 		    																	(String)list.get(7),(String)list.get(8),(boolean)list.get(9),
 		    																	(int)list.get(10), (boolean)(list.get(11)));
+		    		if (flag) return "OK"; else return "ERROR";
+		    	}
+		    }
+		    case "32b" : { //SpecialScheduleDelete
+		    	Specialschedule r=Cache.SpecialSchedules.map.get(list.get(1));
+		    	if (r!=null) return "SCHEDULE_NOT_EXIST";
+		    	else {
+		    		boolean flag=DatabaseSpecialSchedule.deleteSpecialSchedule((String)list.get(1));
+		    		if (flag) return "OK"; else return "ERROR";
+		    	}
+		    }
+		    case "32c" : { //SpecialScheduleUpdateFields
+		    	Specialschedule r=Cache.SpecialSchedules.map.get(list.get(1));
+		    	if (r!=null) return "SCHEDULE_NOT_EXIST";
+		    	else if (Cache.SpecialSchedules.map.containsKey(list.get(2))) return "SCHEDULE_ALREADY_EXISTS";
+		    	else if (!Cache.Actuators.map.containsKey(list.get(2))) return "ACTUATOR_NOT_EXIST";
+		    	else if (!Cache.DayScheduleRules.map.containsKey(list.get(4))) return "RULE_NOT_EXIST";
+		    	else {
+		    		boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule( (String)list.get(1),(String)list.get(2),Cache.Actuators.map.get(list.get(3)).getName(),
+		    																	(int)list.get(4), (int)list.get(5), (int)list.get(6), 
+		    																	Cache.DayScheduleRules.map.get(list.get(7)).getRulename(),
+		    																	(String)list.get(8),(String)list.get(9),(boolean)list.get(10),
+		    																	(int)list.get(11), (boolean)(list.get(12)));
 		    		if (flag) return "OK"; else return "ERROR";
 		    	}
 		    }
@@ -374,28 +424,40 @@ public class GWTServer {
 		    	for (SensorReading sr : lsr) result.add(new Object [] {sr.getTimestamp(),sr.getActualValue()});
 		    	return result;
 		    }
-		    case "39" : { //SensorEventGetByName
-		    	ArrayList<Sensorevent> seL=DatabaseEvent.getSensorEventByName((String)list.get(1));
-		    	ArrayList<Object []> result=new ArrayList<>();
-		    	for (Sensorevent se : seL) result.add(new Object [] {se.getSensor().getSensorname(),Utility.dateToLocalDateTime(se.getTimestp()),se.getEventtype(),se.getEventvalue()});
-		    	return result;
-		    }
-		    case "40" : { //SensorEventGetBetweenTime
-		    	ArrayList<Sensorevent> seL=DatabaseEvent.getSensorEventBetweenTime((LocalDateTime)list.get(1),(LocalDateTime)list.get(2));
-		    	ArrayList<Object []> result=new ArrayList<>();
-		    	for (Sensorevent se : seL) result.add(new Object [] {se.getSensor().getSensorname(),Utility.dateToLocalDateTime(se.getTimestp()),se.getEventtype(),se.getEventvalue()});
-		    	return result;
-		    }
-		    case "41" : { //ControllerEventGetByName
+		    case "39a" : { //ControllerEventGetByName
 		    	ArrayList<Controllerevent> ceL=DatabaseEvent.getControllerEventByName((String)list.get(1));
 		    	ArrayList<Object []> result=new ArrayList<>();
 		    	for (Controllerevent ce : ceL) result.add(new Object [] {ce.getController().getControllername(),Utility.dateToLocalDateTime(ce.getTimestp()),ce.getEventtype(),ce.getEventvalue()});
 		    	return result;
 		    }
-		    case "42" : { //ControllerEventGetBetweenTime
+		    case "39b" : { //ControllerEventGetBetweenTime
 		    	ArrayList<Controllerevent> ceL=DatabaseEvent.getControllerEventBetweenTime((LocalDateTime)list.get(1),(LocalDateTime)list.get(2));
 		    	ArrayList<Object []> result=new ArrayList<>();
 		    	for (Controllerevent ce : ceL) result.add(new Object [] {ce.getController().getControllername(),Utility.dateToLocalDateTime(ce.getTimestp()),ce.getEventtype(),ce.getEventvalue()});
+		    	return result;
+		    }
+		    case "40a" : { //SensorEventGetByName
+		    	ArrayList<Sensorevent> seL=DatabaseEvent.getSensorEventByName((String)list.get(1));
+		    	ArrayList<Object []> result=new ArrayList<>();
+		    	for (Sensorevent se : seL) result.add(new Object [] {se.getSensor().getSensorname(),Utility.dateToLocalDateTime(se.getTimestp()),se.getEventtype(),se.getEventvalue()});
+		    	return result;
+		    }
+		    case "40b" : { //SensorEventGetBetweenTime
+		    	ArrayList<Sensorevent> seL=DatabaseEvent.getSensorEventBetweenTime((LocalDateTime)list.get(1),(LocalDateTime)list.get(2));
+		    	ArrayList<Object []> result=new ArrayList<>();
+		    	for (Sensorevent se : seL) result.add(new Object [] {se.getSensor().getSensorname(),Utility.dateToLocalDateTime(se.getTimestp()),se.getEventtype(),se.getEventvalue()});
+		    	return result;
+		    }
+		    case "41a" : { //ActuatorEventGetByName
+		    	ArrayList<Actuatorevent> seL=DatabaseEvent.getActuatorEventByName((String)list.get(1));
+		    	ArrayList<Object []> result=new ArrayList<>();
+		    	for (Actuatorevent se : seL) result.add(new Object [] {se.getActuator().getName(),Utility.dateToLocalDateTime(se.getTimestp()),se.getEventtype(),se.getEventvalue()});
+		    	return result;
+		    }
+		    case "41b" : { //ActuatorEventGetBetweenTime
+		    	ArrayList<Actuatorevent> seL=DatabaseEvent.getActuatorEventBetweenTime((LocalDateTime)list.get(1),(LocalDateTime)list.get(2));
+		    	ArrayList<Object []> result=new ArrayList<>();
+		    	for (Actuatorevent se : seL) result.add(new Object [] {se.getActuator().getName(),Utility.dateToLocalDateTime(se.getTimestp()),se.getEventtype(),se.getEventvalue()});
 		    	return result;
 		    }
 		    case "43" : { //ActuatorGetAll
@@ -489,6 +551,91 @@ public class GWTServer {
 		    																			 sar.getOnnottriggeraction(),sar.getExpression(),sar.getEnabled(),
 		    																			 value);
 		    	if (flag) return "OK"; else return "ERROR";
+		    }
+		    case "54" : { //User subscribe controller notification
+		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
+		    	if (Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
+		    	else if (Cache.Controllers.map.containsKey(sname)) return "CONTROLLER_NOT_EXIST";
+		    	
+		    	boolean flag=DatabaseUserControllerNotification.subscribeControllerNotification(uname,sname);
+		    	if (flag) return "OK"; else return "ERROR";
+		    }
+		    case "55" : { //User controller notification update last read time
+		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
+		    	if (Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
+		    	else if (Cache.Controllers.map.containsKey(sname)) return "CONTROLLER_NOT_EXIST";
+		    	
+		    	boolean flag=DatabaseUserControllerNotification.updateControllerNotification(uname,sname,Utility.localDateTimeToUtilDate((LocalDateTime)list.get(3)));
+		    	if (flag) return "OK"; else return "ERROR";
+		    }
+		    case "56" : { //User unsubscribe controller notification
+		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
+		    	if (Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
+		    	else if (Cache.Controllers.map.containsKey(sname)) return "SENSOR_NOT_EXIST";
+		    	
+		    	boolean flag=DatabaseUserControllerNotification.unsubscribeControllerNotification(uname,sname);
+		    	if (flag) return "OK"; else return "ERROR";
+		    }
+		    case "57" : { //User controller notification get last read time
+		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
+		    	return DatabaseUserControllerNotification.getControllerNotificationTime(uname,sname);
+		    }
+		    
+		    case "58" : { //User subscribe sensor notification
+		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
+		    	if (Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
+		    	else if (Cache.Sensors.map.containsKey(sname)) return "SENSOR_NOT_EXIST";
+		    	
+		    	boolean flag=DatabaseUserSensorNotification.subscribeSensorNotification(uname,sname);
+		    	if (flag) return "OK"; else return "ERROR";
+		    }
+		    case "59" : { //User sensor notification update last read time
+		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
+		    	if (Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
+		    	else if (Cache.Sensors.map.containsKey(sname)) return "SENSOR_NOT_EXIST";
+		    	
+		    	boolean flag=DatabaseUserSensorNotification.updateSensorNotification(uname,sname,Utility.localDateTimeToUtilDate((LocalDateTime)list.get(3)));
+		    	if (flag) return "OK"; else return "ERROR";
+		    }
+		    case "60" : { //User unsubscribe sensor notification
+		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
+		    	if (Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
+		    	else if (Cache.Sensors.map.containsKey(sname)) return "SENSOR_NOT_EXIST";
+		    	
+		    	boolean flag=DatabaseUserSensorNotification.unsubscribeSensorNotification(uname,sname);
+		    	if (flag) return "OK"; else return "ERROR";
+		    }
+		    case "61" : { //User sensor notification get last read time
+		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
+		    	return DatabaseUserSensorNotification.getSensorNotificationTime(uname,sname);
+		    }
+		    case "62" : { //User subscribe actuator notification
+		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
+		    	if (Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
+		    	else if (Cache.Actuators.map.containsKey(sname)) return "ACTUATOR_NOT_EXIST";
+		    	
+		    	boolean flag=DatabaseUserActuatorNotification.subscribeActuatorNotification(uname,sname);
+		    	if (flag) return "OK"; else return "ERROR";
+		    }
+		    case "63" : { //User actuator notification update last read time
+		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
+		    	if (Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
+		    	else if (Cache.Actuators.map.containsKey(sname)) return "ACTUATOR_NOT_EXIST";
+		    	
+		    	boolean flag=DatabaseUserActuatorNotification.updateActuatorNotification(uname,sname,Utility.localDateTimeToUtilDate((LocalDateTime)list.get(3)));
+		    	if (flag) return "OK"; else return "ERROR";
+		    }
+		    case "64" : { //User unsubscribe actuator notification
+		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
+		    	if (Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
+		    	else if (Cache.Actuators.map.containsKey(sname)) return "ACTUATOR_NOT_EXIST";
+		    	
+		    	boolean flag=DatabaseUserActuatorNotification.unsubscribeActuatorNotification(uname,sname);
+		    	if (flag) return "OK"; else return "ERROR";
+		    }
+		    case "65" : { //User actuator notification get last read time
+		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
+		    	return DatabaseUserActuatorNotification.getActuatorNotificationTime(uname,sname);
 		    }
 	    }
 	    return null;

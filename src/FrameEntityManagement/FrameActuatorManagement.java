@@ -44,7 +44,7 @@ public class FrameActuatorManagement extends JFrame {
 		public boolean isCellEditable(int row, int column){ return false;  }
 		
 		@SuppressWarnings("rawtypes")
-		private Class [] colClass={String.class,String.class,String.class,String.class,String.class};
+		private Class [] colClass={String.class,String.class,String.class,String.class,String.class,String.class};
 	    @Override
 	    public Class<?> getColumnClass(int colNum) {
 	    	return colClass[colNum];
@@ -53,7 +53,7 @@ public class FrameActuatorManagement extends JFrame {
 	}
 	
 	private static class ActuatorTableModel extends AbstractTreeTableModel {
-		public static final String [] COLUMNS= {"Name","Attached On","Status","Position","Control Type"};
+		public static final String [] COLUMNS= {"Name","Attached On","Status","Position","Control Type","Actions"};
 		
 		public ActuatorTableModel (ActuatorTableRow r) {
 			super(r);
@@ -109,7 +109,7 @@ public class FrameActuatorManagement extends JFrame {
 		}
 		
 		public void updateInfo () {
-			renderText=new String [] {obj.getName(), obj.getController().getControllername(), obj.getStatus(),String.format("%.2f,%.2f",obj.getPositionx(),obj.getPositiony()),obj.getControltype()};
+			renderText=new String [] {obj.getName(), obj.getController().getControllername(), obj.getStatus(),String.format("%.2f,%.2f",obj.getPositionx(),obj.getPositiony()),obj.getControltype(),obj.getStatuslist()};
 		}
 		public void addRow (ActuatorTableRow r) {
 			this.subRow.add(r);
@@ -309,6 +309,7 @@ public class FrameActuatorManagement extends JFrame {
 			table.getColumnModel().getColumn(1).setPreferredWidth(100);
 			table.getColumnModel().getColumn(2).setPreferredWidth(80);
 			table.getColumnModel().getColumn(3).setPreferredWidth(50);
+			table.getColumnModel().getColumn(4).setPreferredWidth(100);
 			table.getColumnModel().getColumn(4).setPreferredWidth(100);
 		}
 	}

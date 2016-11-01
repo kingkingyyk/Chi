@@ -10,6 +10,7 @@ import org.hibernate.Transaction;
 
 import Chi.Logger;
 import Chi.Utility;
+import Entity.Actuatorevent;
 import Entity.Controllerevent;
 import Entity.Sensorevent;
 
@@ -22,9 +23,14 @@ public class DatabaseEvent {
 	public static interface OnControllerEventLoggedAction {
 		public void run(String name, String eventType, String eventValue);
 	}
+	
+	public static interface OnActuatorEventLoggedAction {
+		public void run(String name, String eventType, String eventValue);
+	}
 
 	private static ArrayList<OnSensorEventLoggedAction> OnSensorEventLoggedList = new ArrayList<>();
 	private static ArrayList<OnControllerEventLoggedAction> OnControllerEventLoggedList = new ArrayList<>();
+	private static ArrayList<OnActuatorEventLoggedAction> OnActuatorEventLoggedList = new ArrayList<>();
 
 	public static void registerOnSensorEventLoggedAction(OnSensorEventLoggedAction a) {
 		if (!OnSensorEventLoggedList.contains(a)) {
@@ -51,6 +57,20 @@ public class DatabaseEvent {
 		if (OnControllerEventLoggedList.contains(a)) {
 			Logger.log(Logger.LEVEL_INFO,"DatabaseEvent - Unregistered " + a.toString() + " from OnControllerEventLogged callback");
 			OnControllerEventLoggedList.remove(a);
+		}
+	}
+	
+	public static void registerOnActuatorEventLoggedAction(OnActuatorEventLoggedAction a) {
+		if (!OnActuatorEventLoggedList.contains(a)) {
+			Logger.log(Logger.LEVEL_INFO,"DatabaseEvent - Registered " + a.toString() + " to OnActuatorEventLogged callback");
+			OnActuatorEventLoggedList.add(a);
+		}
+	}
+	
+	public static void unregisterOnActuatorEventLoggedAction(OnActuatorEventLoggedAction a) {
+		if (OnActuatorEventLoggedList.contains(a)) {
+			Logger.log(Logger.LEVEL_INFO,"DatabaseEvent - Unregistered " + a.toString() + " from OnActuatorEventLogged callback");
+			OnActuatorEventLoggedList.remove(a);
 		}
 	}
 	
@@ -177,6 +197,71 @@ public class DatabaseEvent {
 			}
 		} catch (HibernateException e) {
 	        Logger.log(Logger.LEVEL_ERROR,"DatabaseEvent - Get controller event - Error - "+e.getMessage());
+	        if (tx!=null) tx.rollback();
+	    } finally {
+	         session.close(); 
+	    }
+		return list;
+	}
+	
+	public static boolean logActuatorEvent (String name, String eventType, String eventValue) {
+		StringBuilder sbLog=new StringBuilder("DatabaseEvent - Log Actuator Event ");
+		sbLog.append(name); sbLog.append("|"); sbLog.append(eventType); sbLog.append("|"); sbLog.append(eventValue);
+		Logger.log(Logger.LEVEL_INFO,sbLog.toString());
+		Session session = Cache.factory.openSession();
+		Transaction tx = null;
+		boolean flag=false;
+		try {
+			tx = session.beginTransaction();
+			Actuatorevent ce =new Actuatorevent(Cache.Actuators.map.get(name),new Date(),eventType,eventValue);
+			session.save(ce);
+			tx.commit();
+			
+			for (OnActuatorEventLoggedAction a : OnActuatorEventLoggedList) a.run(name, eventType, eventValue);
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			Logger.log(Logger.LEVEL_ERROR,"DatabaseSensorEvent - Log actuator event - " + e.getMessage());
+		} finally {session.close();}
+		return flag;
+	}
+	
+	public static ArrayList<Actuatorevent> getActuatorEventByName (String name) {
+		Logger.log(Logger.LEVEL_INFO,"DatabaseEvent - Get actuator event "+name);
+		Session session=Cache.factory.openSession();
+		Transaction tx=null;
+		ArrayList<Actuatorevent> list=new ArrayList<>();
+		try {
+			tx=session.beginTransaction();
+			@SuppressWarnings("rawtypes")
+			List l=session.createQuery("FROM Actuatorevent WHERE SensorName="+name).getResultList();
+			for (Object o : l) {
+				list.add((Actuatorevent) o);
+			}
+		} catch (HibernateException e) {
+	        Logger.log(Logger.LEVEL_ERROR,"DatabaseEvent - Get actuator event - "+e.getMessage());
+	        if (tx!=null) tx.rollback();
+	    } finally {
+	         session.close(); 
+	    }
+		return list;
+	}
+	
+	public static ArrayList<Actuatorevent> getActuatorEventBetweenTime (LocalDateTime min, LocalDateTime max) {
+		Logger.log(Logger.LEVEL_INFO,"DatabaseEvent - Get actuator event between time");
+		Session session=Cache.factory.openSession();
+		Transaction tx=null;
+		ArrayList<Actuatorevent> list=new ArrayList<>();
+		try {
+			tx=session.beginTransaction();
+			@SuppressWarnings("rawtypes")
+			
+			List l=session.createQuery("FROM Actuatorevent WHERE TimeStp>TIMESTAMP("+Utility.localDateTimeToLong(min)+") AND TimeStp<TIMESTAMP("+Utility.localDateTimeToLong(max)+")").getResultList();
+			for (Object o : l) {
+				list.add((Actuatorevent) o);
+			}
+		} catch (HibernateException e) {
+	        Logger.log(Logger.LEVEL_ERROR,"DatabaseEvent - Get actuator event - Error - "+e.getMessage());
 	        if (tx!=null) tx.rollback();
 	    } finally {
 	         session.close(); 

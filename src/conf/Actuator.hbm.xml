@@ -23,6 +23,9 @@
         <property name="controltype" type="string">
             <column name="CONTROLTYPE" length="100" />
         </property>
+        <property name="statuslist" type="string">
+            <column name="STATUSLIST" length="1000" />
+        </property>
         <set name="regularschedules" table="REGULARSCHEDULE" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="ACTUATORNAME" length="100" />

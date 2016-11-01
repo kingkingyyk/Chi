@@ -93,6 +93,6 @@ public class DialogReadingSelectSensor extends JDialog {
 			}
 			
 		});
-		comboBoxController.setSelectedIndex(0);
+		if (comboBoxController.getItemCount()>0) comboBoxController.setSelectedIndex(0);
 	}
 }

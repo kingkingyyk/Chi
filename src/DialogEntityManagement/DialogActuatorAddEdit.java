@@ -29,6 +29,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.StringTokenizer;
 
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
@@ -54,7 +55,30 @@ public class DialogActuatorAddEdit extends JDialog {
 	private String currentMapURL;
 	private JPanel panelMap;
 	private JComboBox<String> comboBoxControlType;
-
+	private JTextField textFieldPossibleActions;
+	private JLabel lblPossibleActionsInfo;
+	
+	private int validatetextFieldPossibleActions () {
+		StringTokenizer st=new StringTokenizer(textFieldPossibleActions.getText(),";");
+		if (st.countTokens()==0) return 1;
+		else {
+			while (st.hasMoreTokens()) {
+				String s=st.nextToken();
+				if (s==null || s.length()==0) return 2;
+			}
+		}
+		return 0;
+	}
+	
+	public String getCleanPossibleActions() {
+		StringBuilder sb=new StringBuilder();
+		StringTokenizer st=new StringTokenizer(textFieldPossibleActions.getText(),";");
+		while (st.hasMoreTokens()) {
+			sb.append(st.nextToken());
+			sb.append(';');
+		}
+		return sb.deleteCharAt(sb.length()-1).toString();
+	}
 	
 	public DialogActuatorAddEdit() {
 		positionTargetFactor[0]=0.5;
@@ -64,12 +88,12 @@ public class DialogActuatorAddEdit extends JDialog {
 		uiActionsAdd();
 	}
 	
-	public DialogActuatorAddEdit(String n, String u, double px, double py, String type) {
+	public DialogActuatorAddEdit(String n, String u, String slist, double px, double py, String type) {
 		positionTargetFactor[0]=px;
 		positionTargetFactor[1]=py;
 		create();
 		uiActionsNormal();
-		prefill(n,u,type);
+		prefill(n,u,type,slist);
 		uiActionsEdit(n);
 	}
 	
@@ -78,38 +102,38 @@ public class DialogActuatorAddEdit extends JDialog {
 		setModal(true);
 		setResizable(false);
 		setIconImage(Theme.getIcon("ChiLogo").getImage());
-		setBounds(100, 100, 608, 490);
+		setBounds(100, 100, 608, 507);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(null);
-		contentPanel.setBounds(0, 11, 602, 391);
+		contentPanel.setBounds(0, 11, 602, 437);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel);
 		contentPanel.setLayout(null);
 		{
 			JLabel lblName = new JLabel("Name :");
-			lblName.setBounds(10, 11, 78, 14);
+			lblName.setBounds(10, 11, 88, 14);
 			lblName.setHorizontalAlignment(SwingConstants.RIGHT);
 			contentPanel.add(lblName);
 		}
 		{
 			textFieldName = new JTextField();
-			textFieldName.setBounds(98, 8, 206, 20);
+			textFieldName.setBounds(108, 8, 206, 20);
 			contentPanel.add(textFieldName);
 			textFieldName.setColumns(30);
 		}
 		{
 			lblNameInfo = new JLabel("");
-			lblNameInfo.setBounds(314, 9, 125, 16);
+			lblNameInfo.setBounds(324, 9, 125, 16);
 			contentPanel.add(lblNameInfo);
 		}
 		
 		JLabel lblController = new JLabel("Attached On :");
 		lblController.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblController.setBounds(10, 42, 78, 14);
+		lblController.setBounds(10, 42, 88, 14);
 		contentPanel.add(lblController);
 		
 		comboBoxController = new JComboBox<>();
-		comboBoxController.setBounds(98, 39, 206, 20);
+		comboBoxController.setBounds(108, 39, 206, 20);
 		comboBoxController.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -124,12 +148,12 @@ public class DialogActuatorAddEdit extends JDialog {
 		
 		JLabel lblPosition = new JLabel("Position :");
 		lblPosition.setHorizontalAlignment(SwingConstants.LEFT);
-		lblPosition.setBounds(10, 105, 75, 14);
+		lblPosition.setBounds(10, 130, 75, 14);
 		contentPanel.add(lblPosition);
 		
 		panelMap = new JPanel();
 		panelMap.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		panelMap.setBounds(10, 130, 584, 278);
+		panelMap.setBounds(10, 150, 584, 278);
 		contentPanel.add(panelMap);
 		panelMap.setLayout(null);
 		
@@ -180,7 +204,7 @@ public class DialogActuatorAddEdit extends JDialog {
 		panelMap.add(lblPositionMap);
 		
 		comboBoxControlType = new JComboBox<String>();
-		comboBoxControlType.setBounds(98, 70, 206, 20);
+		comboBoxControlType.setBounds(108, 70, 206, 20);
 		comboBoxControlType.addItem("Manual");
 		comboBoxControlType.addItem("Scheduled");
 		comboBoxControlType.addItem("Sensor Response");
@@ -188,11 +212,25 @@ public class DialogActuatorAddEdit extends JDialog {
 		
 		JLabel lblControlType = new JLabel("Control Type :");
 		lblControlType.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblControlType.setBounds(10, 72, 78, 14);
+		lblControlType.setBounds(10, 72, 88, 14);
 		contentPanel.add(lblControlType);
+		
+		textFieldPossibleActions = new JTextField("ON;OFF");
+		textFieldPossibleActions.setBounds(108, 99, 297, 20);
+		contentPanel.add(textFieldPossibleActions);
+		textFieldPossibleActions.setColumns(10);
+		
+		JLabel lblPossibleActions = new JLabel("Possible Actions :");
+		lblPossibleActions.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblPossibleActions.setBounds(10, 102, 88, 14);
+		contentPanel.add(lblPossibleActions);
+		
+		lblPossibleActionsInfo = new JLabel("Delimited by ;");
+		lblPossibleActionsInfo.setBounds(415, 99, 177, 16);
+		contentPanel.add(lblPossibleActionsInfo);
 		{
 			JPanel buttonPane = new JPanel();
-			buttonPane.setBounds(0, 429, 602, 33);
+			buttonPane.setBounds(0, 448, 602, 33);
 			getContentPane().add(buttonPane);
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			{
@@ -207,10 +245,11 @@ public class DialogActuatorAddEdit extends JDialog {
 		}
 	}
 	
-	private void prefill(String n, String c, String type) {
+	private void prefill(String n, String c, String type, String prefill) {
 		textFieldName.setText(n);
 		comboBoxController.setSelectedItem(c);
 		comboBoxControlType.setSelectedItem(type);
+		textFieldPossibleActions.setText(prefill);
 	}
 	
 	
@@ -261,6 +300,19 @@ public class DialogActuatorAddEdit extends JDialog {
 		for (String c : Cache.Controllers.map.keySet()) {
 			comboBoxController.addItem(c);
 		}
+		
+		textFieldPossibleActions.addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e) {
+				String txt=textFieldPossibleActions.getText();
+				if (txt==null || txt.isEmpty()) { 
+					lblPossibleActionsInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
+				} else if (validatetextFieldPossibleActions()!=0) {
+					lblPossibleActionsInfo.setText("<html><font color=\"red\">Invalid action</font></html>");
+				} else {
+					lblPossibleActionsInfo.setText("<html><font color=\"green\">OK!</font></html>");
+				}
+			}
+		});
 	}
 	
 	private void uiActionsAdd() {
@@ -296,14 +348,14 @@ public class DialogActuatorAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || Cache.Actuators.map.containsKey(txt) || !Utility.validateName(txt)) {
+				if (txt==null || txt.isEmpty() || Cache.Actuators.map.containsKey(txt) || !Utility.validateName(txt) || validatetextFieldPossibleActions()!=0) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Actuator",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
 					u.setText("Creating actuator");
 					Thread t=new Thread() {
 						public void run () {
-							flag=DatabaseActuator.createActuator(textFieldName.getText(),(String) comboBoxController.getSelectedItem(),positionTargetFactor[0],positionTargetFactor[1],(String)comboBoxControlType.getSelectedItem());
+							flag=DatabaseActuator.createActuator(textFieldName.getText(),(String) comboBoxController.getSelectedItem(),getCleanPossibleActions(),positionTargetFactor[0],positionTargetFactor[1],(String)comboBoxControlType.getSelectedItem());
 							u.dispose();
 						}
 					};
@@ -344,14 +396,14 @@ public class DialogActuatorAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || (Cache.Actuators.map.containsKey(txt) && !txt.equals(n)) || !Utility.validateName(txt)) {
+				if (txt==null || txt.isEmpty() || (Cache.Actuators.map.containsKey(txt) && !txt.equals(n)) || !Utility.validateName(txt) || validatetextFieldPossibleActions()!=0) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Edit Actuator",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
 					u.setText("Updating actuator");
 					Thread t=new Thread() {
 						public void run () {
-							flag=DatabaseActuator.updateActuator(n, textFieldName.getText(),(String)comboBoxController.getSelectedItem(),positionTargetFactor[0],positionTargetFactor[1],(String)comboBoxControlType.getSelectedItem());
+							flag=DatabaseActuator.updateActuator(n, textFieldName.getText(),(String)comboBoxController.getSelectedItem(),getCleanPossibleActions(),positionTargetFactor[0],positionTargetFactor[1],(String)comboBoxControlType.getSelectedItem());
 							u.dispose();
 						}
 					};

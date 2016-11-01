@@ -9,13 +9,13 @@ public class FrameActuatorManagementBind {
 	
 	public static class OnActuatorCreate implements DatabaseActuator.OnCreateAction {
 		@Override
-		public void run(String n, String u, double px, double py) {
+		public void run(String n, String u, String slist, double px, double py) {
 			FrameActuatorManagement.refresh();
 		}
 	}
 	public static class OnActuatorUpdate implements DatabaseActuator.OnUpdateAction {
 		@Override
-		public void run(String oldN, String n, String u, double px, double py, String ctrlType) {
+		public void run(String oldN, String n, String u, String slist, double px, double py, String ctrlType) {
 			FrameActuatorManagement.refresh();
 		}
 	}
