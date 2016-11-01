@@ -27,6 +27,8 @@ import ServerActuatorResponseServer.SensoractuatorresponseEvaluator;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -57,6 +59,29 @@ public class MenuUI extends JFrame {
 	private JTextArea textAreaEvaluate;
 	private JLabel lblEvaluateResult;
 
+	private void onCloseActions () {
+        if (JOptionPane.showConfirmDialog(MenuUI.this,"Are you sure to close?", Config.APP_NAME, JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+			WaitUI u=new WaitUI();
+			u.setText("Closing database connection...");
+			u.setProgressBarMax(2);
+			Thread t=new Thread() {
+				public void run () {
+					NotificationServer.stop();
+					SchedulingServer.stop();
+					Cache.Stop();
+					u.setProgressBarValue(1);
+					DatabaseCassandra.Stop();
+					u.setProgressBarValue(2);
+					u.dispose();
+				}
+			};
+			t.start();
+			u.setVisible(true);
+
+			System.exit(0);
+        }
+	}
+	
 	public MenuUI() {
 		setTitle(Config.APP_NAME);
 		setResizable(false);
@@ -68,25 +93,17 @@ public class MenuUI extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		addWindowListener(new WindowAdapter() {
+		    @Override
+		    public void windowClosing(WindowEvent windowEvent) {
+		    	onCloseActions();
+		    }
+		});
+		
 		JButton btnExit = new JButton("Exit");
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				WaitUI u=new WaitUI();
-				u.setText("Closing database connection...");
-				u.setProgressBarMax(2);
-				Thread t=new Thread() {
-					public void run () {
-						Cache.Stop();
-						u.setProgressBarValue(1);
-						DatabaseCassandra.Stop();
-						u.setProgressBarValue(2);
-						u.dispose();
-					}
-				};
-				t.start();
-				u.setVisible(true);
-
-				System.exit(0);
+				onCloseActions();
 			}
 		});
 		btnExit.setFocusPainted(false);
