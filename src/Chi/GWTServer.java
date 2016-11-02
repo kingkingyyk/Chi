@@ -98,13 +98,23 @@ public class GWTServer {
 		    	for (Object o : Cache.DayScheduleRules.map.get(list.get(1)).toObj()) result.add(o);
 		    	return result;
 		    }
-		    case "9" : { //DayScheduleRuleSet
+		    case "9a" : { //DayScheduleRuleSet
 		    	Dayschedulerule r=Cache.DayScheduleRules.map.get(list.get(1));
 		    	if (r==null) return "RULE_NOT_EXIST";
+		    	else if (!list.get(1).equals(list.get(2)) && Cache.DayScheduleRules.map.get(list.get(2))!=null) return "RULE_ALREADY_EXISTS";
 		    	else {
 		    		int sh=(int)list.get(3); int sm=(int)list.get(4);
 		    		int eh=(int)list.get(5); int em=(int)list.get(6);
 		    		boolean flag=DatabaseDayScheduleRule.updateDayScheduleRule((String)list.get(1),(String)list.get(2), sh, sm, eh, em);
+		    		if (flag) return "OK";
+		    		else return "ERROR";
+		    	}
+		    }
+		    case "9b" : { //DayScheduleRuleDelete
+		    	Dayschedulerule r=Cache.DayScheduleRules.map.get(list.get(1));
+		    	if (r==null) return "RULE_NOT_EXIST";
+		    	else {
+		    		boolean flag=DatabaseDayScheduleRule.deleteDayScheduleRule((String)list.get(1));
 		    		if (flag) return "OK";
 		    		else return "ERROR";
 		    	}
@@ -242,7 +252,7 @@ public class GWTServer {
 		    }
 		    case "22b" : { //RegularScheduleDelete
 		    	Regularschedule r=Cache.RegularSchedules.map.get(list.get(1));
-		    	if (r!=null) return "SCHEDULE_NOT_EXIST";
+		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
 		    		boolean flag=DatabaseRegularSchedule.deleteRegularSchedule((String)list.get(1));
 		    		if (flag) return "OK"; else return "ERROR";
@@ -250,10 +260,10 @@ public class GWTServer {
 		    }
 		    case "22c" : { //RegularScheduleUpdateFields
 		    	Regularschedule r=Cache.RegularSchedules.map.get(list.get(1));
-		    	if (r!=null) return "SCHEDULE_NOT_EXIST";
-		    	else if (Cache.RegularSchedules.map.containsKey(list.get(2))) return "SCHEDULE_ALREADY_EXISTS";
-		    	else if (!Cache.Actuators.map.containsKey(list.get(2))) return "ACTUATOR_NOT_EXIST";
-		    	else if (!Cache.DayScheduleRules.map.containsKey(list.get(4))) return "RULE_NOT_EXIST";
+		    	if (r==null) return "SCHEDULE_NOT_EXIST";
+		    	else if (!list.get(1).equals(list.get(2)) && Cache.RegularSchedules.map.containsKey(list.get(2))) return "SCHEDULE_ALREADY_EXISTS";
+		    	else if (!Cache.Actuators.map.containsKey(list.get(3))) return "ACTUATOR_NOT_EXIST";
+		    	else if (!Cache.DayScheduleRules.map.containsKey(list.get(5))) return "RULE_NOT_EXIST";
 		    	else {
 		    		boolean flag=DatabaseRegularSchedule.updateRegularSchedule( (String)list.get(1),(String)list.get(2),Cache.Actuators.map.get(list.get(3)).getName(),
 		    																	(int)list.get(4), Cache.DayScheduleRules.map.get(list.get(5)).getRulename(),
@@ -367,7 +377,7 @@ public class GWTServer {
 		    }
 		    case "32b" : { //SpecialScheduleDelete
 		    	Specialschedule r=Cache.SpecialSchedules.map.get(list.get(1));
-		    	if (r!=null) return "SCHEDULE_NOT_EXIST";
+		    	if (r==null) return "SCHEDULE_NOT_EXIST";
 		    	else {
 		    		boolean flag=DatabaseSpecialSchedule.deleteSpecialSchedule((String)list.get(1));
 		    		if (flag) return "OK"; else return "ERROR";
@@ -375,10 +385,10 @@ public class GWTServer {
 		    }
 		    case "32c" : { //SpecialScheduleUpdateFields
 		    	Specialschedule r=Cache.SpecialSchedules.map.get(list.get(1));
-		    	if (r!=null) return "SCHEDULE_NOT_EXIST";
-		    	else if (Cache.SpecialSchedules.map.containsKey(list.get(2))) return "SCHEDULE_ALREADY_EXISTS";
-		    	else if (!Cache.Actuators.map.containsKey(list.get(2))) return "ACTUATOR_NOT_EXIST";
-		    	else if (!Cache.DayScheduleRules.map.containsKey(list.get(4))) return "RULE_NOT_EXIST";
+		    	if (r==null) return "SCHEDULE_NOT_EXIST";
+		    	else if (!list.get(1).equals(list.get(2)) && Cache.SpecialSchedules.map.containsKey(list.get(2))) return "SCHEDULE_ALREADY_EXISTS";
+		    	else if (!Cache.Actuators.map.containsKey(list.get(3))) return "ACTUATOR_NOT_EXIST";
+		    	else if (!Cache.DayScheduleRules.map.containsKey(list.get(7))) return "RULE_NOT_EXIST";
 		    	else {
 		    		boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule( (String)list.get(1),(String)list.get(2),Cache.Actuators.map.get(list.get(3)).getName(),
 		    																	(int)list.get(4), (int)list.get(5), (int)list.get(6), 
