@@ -74,7 +74,7 @@ public class DialogActuatorAddEdit extends JDialog {
 		return 0;
 	}
 	
-	public String getCleanPossibleActions() {
+	private String getCleanPossibleActions() {
 		StringBuilder sb=new StringBuilder();
 		StringTokenizer st=new StringTokenizer(textFieldPossibleActions.getText(),";");
 		while (st.hasMoreTokens()) {
@@ -82,6 +82,12 @@ public class DialogActuatorAddEdit extends JDialog {
 			sb.append(';');
 		}
 		return sb.deleteCharAt(sb.length()-1).toString();
+	}
+	
+	private boolean containsNothingActions() {
+		String [] split=getCleanPossibleActions().split(";");
+		for (String s : split) if (s.toUpperCase().equals("NOTHING")) return true;
+		return false;
 	}
 	
 	public DialogActuatorAddEdit() {
@@ -312,6 +318,8 @@ public class DialogActuatorAddEdit extends JDialog {
 					lblPossibleActionsInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
 				} else if (validatetextFieldPossibleActions()!=0) {
 					lblPossibleActionsInfo.setText("<html><font color=\"red\">Invalid action</font></html>");
+				} else if (containsNothingActions()) {
+					lblPossibleActionsInfo.setText("<html><font color=\"red\">Nothing cannot be an action</font></html>");
 				} else {
 					lblPossibleActionsInfo.setText("<html><font color=\"green\">OK!</font></html>");
 				}
@@ -352,7 +360,7 @@ public class DialogActuatorAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || Cache.Actuators.map.containsKey(txt) || !Utility.validateName(txt) || validatetextFieldPossibleActions()!=0) {
+				if (txt==null || txt.isEmpty() || Cache.Actuators.map.containsKey(txt) || !Utility.validateName(txt) || validatetextFieldPossibleActions()!=0 || containsNothingActions()) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Actuator",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -400,7 +408,7 @@ public class DialogActuatorAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || (Cache.Actuators.map.containsKey(txt) && !txt.equals(n)) || !Utility.validateName(txt) || validatetextFieldPossibleActions()!=0) {
+				if (txt==null || txt.isEmpty() || (Cache.Actuators.map.containsKey(txt) && !txt.equals(n)) || !Utility.validateName(txt) || validatetextFieldPossibleActions()!=0 || containsNothingActions()) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Edit Actuator",JOptionPane.ERROR_MESSAGE);
 				} else {
 					String [] statuses=getCleanPossibleActions().split(";");

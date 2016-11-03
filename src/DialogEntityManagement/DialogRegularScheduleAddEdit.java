@@ -110,11 +110,11 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 					String endSelected=(String)comboBoxOnEnd.getSelectedItem();
 					
 					while (comboBoxOnStart.getItemCount()>0) comboBoxOnStart.removeItemAt(0);
-					for (String s : Cache.Actuators.map.get(comboBoxActuator).getStatuslist().split(";")) comboBoxOnStart.addItem(s);
+					for (String s : Cache.Actuators.map.get(comboBoxActuator.getSelectedItem()).getStatuslist().split(";")) if (comboBoxOnStart!=null) comboBoxOnStart.addItem(s);
 					comboBoxOnStart.addItem("NOTHING");
 					
 					while (comboBoxOnEnd.getItemCount()>0) comboBoxOnEnd.removeItemAt(0);
-					for (String s : Cache.Actuators.map.get(comboBoxActuator).getStatuslist().split(";")) comboBoxOnEnd.addItem(s);
+					for (String s : Cache.Actuators.map.get(comboBoxActuator.getSelectedItem()).getStatuslist().split(";")) if (comboBoxOnEnd!=null) comboBoxOnEnd.addItem(s);
 					comboBoxOnEnd.addItem("NOTHING");
 					
 					if (startSelected!=null) comboBoxOnStart.setSelectedItem(startSelected);

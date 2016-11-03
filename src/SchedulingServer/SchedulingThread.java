@@ -135,8 +135,9 @@ public class SchedulingThread extends Thread {
 				}
 				if (en && day!=0) data.put(sn,d);
 				else data.remove(sn);
+
+				FrameOngoingSchedules.refresh();
 			}
-			FrameOngoingSchedules.refresh();
 		}
 	}
 	
