@@ -37,18 +37,21 @@ public class SchedulingServer {
 	}
 	
 	public static void stop() {
-		Logger.log(Logger.LEVEL_INFO,"Attempting to stop scheduling server...");
-		scheduleThread.requestStop();
-		int trials=1;
-		for (;isStarted && trials<=5;trials++) {
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {}
-		}
-		if (isStarted) {
-			Logger.log(Logger.LEVEL_ERROR,"Scheduling server failed to stop after 5 trials...");
-		} else {
-			Logger.log(Logger.LEVEL_INFO,"Scheduling server stopped.");
+		if (scheduleThread!=null) {
+			Logger.log(Logger.LEVEL_INFO,"Attempting to stop scheduling server...");
+			scheduleThread.requestStop();
+			int trials=1;
+			for (;isStarted && trials<=5;trials++) {
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {}
+			}
+			if (isStarted) {
+				Logger.log(Logger.LEVEL_ERROR,"Scheduling server failed to stop after 5 trials...");
+			} else {
+				Logger.log(Logger.LEVEL_INFO,"Scheduling server stopped.");
+				scheduleThread=null;
+			}
 		}
 	}
 	

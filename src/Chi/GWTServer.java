@@ -365,7 +365,7 @@ public class GWTServer {
 		    	Specialschedule r=Cache.SpecialSchedules.map.get(list.get(1));
 		    	if (r!=null) return "SCHEDULE_ALREADY_EXISTS";
 		    	else if (!Cache.Actuators.map.containsKey(list.get(2))) return "ACTUATOR_NOT_EXIST";
-		    	else if (!Cache.DayScheduleRules.map.containsKey(list.get(4))) return "RULE_NOT_EXIST";
+		    	else if (!Cache.DayScheduleRules.map.containsKey(list.get(6))) return "RULE_NOT_EXIST";
 		    	else {
 		    		boolean flag=DatabaseSpecialSchedule.createSpecialSchedule( (String)list.get(1),Cache.Actuators.map.get(list.get(2)).getName(),
 		    																	(int)list.get(3), (int)list.get(4), (int)list.get(5), 

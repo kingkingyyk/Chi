@@ -62,7 +62,7 @@ public class SchedulingDataSpecial extends SchedulingData {
 			this.nextEndTime=LocalDateTime.of(year,month,day,r.getEndhour(),r.getEndminute());
 			if (this.nextEndTime.compareTo(this.nextStartTime)<0) this.nextEndTime=this.nextEndTime.plusDays(1);
 		}
-		if (this.isEnabled() && updateScheduler) {
+		if (this.isEnabled() && updateScheduler && this.nextEndTime.compareTo(LocalDateTime.now())>0) {
 			this.onEndScheduler.purge();
 			this.fireOnEnd=new FireOnEndTaskSpecial();
 			this.fireOnEnd.d=this;
