@@ -100,6 +100,27 @@ public class DialogSpecialScheduleAddEdit extends JDialog {
 		
 		comboBoxActuator = new JComboBox<>();
 		comboBoxActuator.setBounds(98, 39, 206, 20);
+		comboBoxActuator.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if (comboBoxActuator.getSelectedIndex()!=-1) {
+					String startSelected=(String)comboBoxOnStart.getSelectedItem();
+					String endSelected=(String)comboBoxOnEnd.getSelectedItem();
+					
+					while (comboBoxOnStart.getItemCount()>0) comboBoxOnStart.removeItemAt(0);
+					for (String s : Cache.Actuators.map.get(comboBoxActuator).getStatuslist().split(";")) comboBoxOnStart.addItem(s);
+					comboBoxOnStart.addItem("NOTHING");
+					
+					while (comboBoxOnEnd.getItemCount()>0) comboBoxOnEnd.removeItemAt(0);
+					for (String s : Cache.Actuators.map.get(comboBoxActuator).getStatuslist().split(";")) comboBoxOnEnd.addItem(s);
+					comboBoxOnEnd.addItem("NOTHING");
+					
+					if (startSelected!=null) comboBoxOnStart.setSelectedItem(startSelected);
+					if (endSelected!=null) comboBoxOnEnd.setSelectedItem(endSelected);
+				}
+			}
+			
+		});
 		contentPanel.add(comboBoxActuator);
 		
 		JLabel lblDate = new JLabel("Date :");
@@ -113,9 +134,6 @@ public class DialogSpecialScheduleAddEdit extends JDialog {
 		contentPanel.add(lblOnStart);
 		
 		comboBoxOnStart = new JComboBox<String>();
-		comboBoxOnStart.addItem("ON");
-		comboBoxOnStart.addItem("OFF");
-		comboBoxOnStart.addItem("NOTHING");
 		comboBoxOnStart.setBounds(98, 134, 206, 20);
 		contentPanel.add(comboBoxOnStart);
 		
@@ -152,9 +170,6 @@ public class DialogSpecialScheduleAddEdit extends JDialog {
 		
 		comboBoxOnEnd = new JComboBox<String>();
 		comboBoxOnEnd.setBounds(98, 162, 206, 20);
-		comboBoxOnEnd.addItem("ON");
-		comboBoxOnEnd.addItem("OFF");
-		comboBoxOnEnd.addItem("NOTHING");
 		contentPanel.add(comboBoxOnEnd);
 		
 		lblOnEndDo = new JLabel("On End, Do :");
