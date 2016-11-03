@@ -56,6 +56,7 @@ public class Chi {
 				Logger.log(Logger.LEVEL_INFO,"GUI & data binding started.");
 				diag.setText("Binding GUI & Data...");
 				//In topological order
+				CacheRelationshipBind.initialize();
 				FrameUserManagementBind.initialize();
 				FrameSiteManagementBind.initialize();
 				FrameControllerManagementBind.initialize();
@@ -68,7 +69,6 @@ public class Chi {
 				FrameOngoingSchedulesBind.initialize();
 				FrameSensorActuatorResponseManagementBind.initialize();
 				FrameNotificationBind.initialize();
-				CacheRelationshipBind.initialize();
 				
 				diag.setProgBarValue(4);
 				Logger.log(Logger.LEVEL_INFO,"GUI & data binding done.");

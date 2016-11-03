@@ -9,6 +9,8 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import Chi.Config;
 import Chi.Logger;
 import Chi.Theme;
@@ -16,6 +18,8 @@ import Chi.Utility;
 import Chi.WaitUI;
 import Database.Cache;
 import Database.DatabaseActuator;
+import Entity.Regularschedule;
+import Entity.Specialschedule;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -399,21 +403,38 @@ public class DialogActuatorAddEdit extends JDialog {
 				if (txt==null || txt.isEmpty() || (Cache.Actuators.map.containsKey(txt) && !txt.equals(n)) || !Utility.validateName(txt) || validatetextFieldPossibleActions()!=0) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Edit Actuator",JOptionPane.ERROR_MESSAGE);
 				} else {
-					WaitUI u=new WaitUI();
-					u.setText("Updating actuator");
-					Thread t=new Thread() {
-						public void run () {
-							flag=DatabaseActuator.updateActuator(n, textFieldName.getText(),(String)comboBoxController.getSelectedItem(),getCleanPossibleActions(),positionTargetFactor[0],positionTargetFactor[1],(String)comboBoxControlType.getSelectedItem());
-							u.dispose();
-						}
-					};
-					t.start();
-					u.setVisible(true);
+					String [] statuses=getCleanPossibleActions().split(";");
+					StringBuilder conflictList=new StringBuilder();
+					for (Regularschedule rs : Cache.RegularSchedules.map.values())
+						if (rs.getActuator().getName().equals(n) && rs.getEnabled())
+							if ((!rs.getOnstartaction().equals("NOTHING") && !ArrayUtils.contains(statuses,rs.getOnstartaction())) || (!rs.getOnendaction().equals("NOTHING") && !ArrayUtils.contains(statuses,rs.getOnendaction())))
+								conflictList.append("[Regular Schedule] "+rs.getSchedulename()+"\n");
+
+					for (Specialschedule ss : Cache.SpecialSchedules.map.values())
+							if (ss.getActuator().getName().equals(n) && ss.getEnabled())
+								if ((!ss.getOnstartaction().equals("NOTHING") && !ArrayUtils.contains(statuses,ss.getOnstartaction())) || (!ss.getOnendaction().equals("NOTHING") && !ArrayUtils.contains(statuses,ss.getOnendaction())))
+									conflictList.append("[Special Schedule] "+ss.getSchedulename()+"\n");
 					
-					if (flag) {
-						dispose();
-					} else {
-						JOptionPane.showMessageDialog(null,"Database error, please check the console for more information.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
+					StringBuilder sb=new StringBuilder();
+					sb.append("Are you sure to make this changes? The following schedule(s)\n\n");
+					sb.append(conflictList);
+					sb.append("\n");
+					sb.append("need to be updated after this because the action no longer exists in the actuator.");
+					
+					if (conflictList.length()==0 || (conflictList.length()>0 && JOptionPane.showConfirmDialog(null,sb.toString(),"Update actuator",JOptionPane.WARNING_MESSAGE)==JOptionPane.YES_OPTION)) {
+						WaitUI u=new WaitUI();
+						u.setText("Updating actuator");
+						Thread t=new Thread() {
+							public void run () {
+								flag=DatabaseActuator.updateActuator(n, textFieldName.getText(),(String)comboBoxController.getSelectedItem(),getCleanPossibleActions(),positionTargetFactor[0],positionTargetFactor[1],(String)comboBoxControlType.getSelectedItem());
+								u.dispose();
+							}
+						};
+						t.start();
+						u.setVisible(true);
+						
+						if (flag) dispose();
+						else JOptionPane.showMessageDialog(null,"Database error, please check the console for more information.",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			}
