@@ -19,6 +19,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
@@ -36,6 +38,23 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 	private JComboBox<String> comboBoxEndMinute;
 	private JComboBox<String> comboBoxStartTimeAMPM;
 	private JComboBox<String> comboBoxEndTimeAMPM;
+	
+	public boolean isTimeSame() {
+		ArrayList<JComboBox<String>> startInfo=new ArrayList<>();
+		startInfo.add(comboBoxStartHour);
+		startInfo.add(comboBoxStartMinute);
+		startInfo.add(comboBoxStartTimeAMPM);
+		
+		ArrayList<JComboBox<String>> endInfo=new ArrayList<>();
+		endInfo.add(comboBoxEndHour);
+		endInfo.add(comboBoxEndMinute);
+		endInfo.add(comboBoxEndTimeAMPM);
+		
+		for (int i=0;i<startInfo.size();i++) if (!startInfo.get(i).getSelectedItem().equals(endInfo.get(i).getSelectedItem())) return false;
+		
+		startInfo.clear(); endInfo.clear();
+		return true;
+	}
 	
 	public DialogDayScheduleRuleAddEdit() {
 		create();
@@ -217,6 +236,8 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty() || Cache.DayScheduleRules.map.containsKey(txt) || !Utility.validateName(txt)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Day Schedule Rule",JOptionPane.ERROR_MESSAGE);
+				} else if (isTimeSame()){
+					JOptionPane.showMessageDialog(null,"Start & End Time cannot be the same!","Add Day Schedule Rule",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
 					u.setText("Creating rule");
@@ -266,6 +287,8 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty() || (Cache.DayScheduleRules.map.containsKey(txt) && !txt.equals(n)) || !Utility.validateName(txt)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Edit Day Schedule Rule",JOptionPane.ERROR_MESSAGE);
+				} else if (isTimeSame()){
+					JOptionPane.showMessageDialog(null,"Start & End Time cannot be the same!","Edit Day Schedule Rule",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
 					u.setText("Updating actuator");
