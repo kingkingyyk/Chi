@@ -30,6 +30,7 @@ import Entity.Sensor;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
@@ -186,8 +187,11 @@ public class FrameSensorManagement extends JFrame {
 	
 	public static void refresh() {
 		if (FrameSensorManagement.currInstance!=null) {
-			FrameSensorManagement.currInstance.updateSensorTable();
-			FrameSensorManagement.currInstance.table.repaint();
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run () {
+					FrameSensorManagement.currInstance.updateSensorTable();
+				}
+			});
 		}
 	}
 	

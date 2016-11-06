@@ -31,6 +31,7 @@ import Entity.Sensoractuatorresponse;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
@@ -190,8 +191,11 @@ public class FrameSensorActuatorResponseManagement extends JFrame {
 	
 	public static void refresh() {
 		if (FrameSensorActuatorResponseManagement.currInstance!=null) {
-			FrameSensorActuatorResponseManagement.currInstance.updateActuatorTable();
-			//FrameActuatorManagement.currInstance.table.repaint();
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run () {
+					FrameSensorActuatorResponseManagement.currInstance.updateActuatorTable();
+				}
+			});
 		}
 	}
 	

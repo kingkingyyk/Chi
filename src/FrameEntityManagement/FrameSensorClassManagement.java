@@ -21,6 +21,7 @@ import Entity.Sensorclass;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.AbstractAction;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -57,8 +58,12 @@ public class FrameSensorClassManagement extends JFrame {
 	
 	public static void refresh() {
 		if (FrameSensorClassManagement.currInstance!=null) {
-			FrameSensorClassManagement.currInstance.updateSensorClassTable();
-			FrameSensorClassManagement.currInstance.table.repaint();
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run () {
+					FrameSensorClassManagement.currInstance.updateSensorClassTable();
+					FrameSensorClassManagement.currInstance.table.repaint();
+				}
+			});
 		}
 	}
 	

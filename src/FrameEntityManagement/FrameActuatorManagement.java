@@ -30,6 +30,7 @@ import Entity.Actuator;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
@@ -176,8 +177,12 @@ public class FrameActuatorManagement extends JFrame {
 	
 	public static void refresh() {
 		if (FrameActuatorManagement.currInstance!=null) {
-			FrameActuatorManagement.currInstance.updateActuatorTable();
-			//FrameActuatorManagement.currInstance.table.repaint();
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					FrameActuatorManagement.currInstance.updateActuatorTable();
+				}
+			});
 		}
 	}
 	

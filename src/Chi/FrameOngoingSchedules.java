@@ -26,6 +26,7 @@ import SchedulingServer.SchedulingServer;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
@@ -181,8 +182,11 @@ public class FrameOngoingSchedules extends JFrame {
 	
 	public static void refresh() {
 		if (FrameOngoingSchedules.currInstance!=null) {
-			FrameOngoingSchedules.currInstance.updateOnGoingSchedulesTable();
-			FrameOngoingSchedules.currInstance.table.repaint();
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run () {
+					FrameOngoingSchedules.currInstance.updateOnGoingSchedulesTable();
+				}
+			});
 		}
 	}
 	

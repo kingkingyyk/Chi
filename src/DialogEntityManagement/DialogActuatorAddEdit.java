@@ -360,7 +360,7 @@ public class DialogActuatorAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || Cache.Actuators.map.containsKey(txt) || !Utility.validateName(txt) || validatetextFieldPossibleActions()!=0 || containsNothingActions()) {
+				if (txt==null || txt.isEmpty() || Cache.Actuators.map.containsKey(txt) || !Utility.validateName(txt) || validatetextFieldPossibleActions()!=0 || containsNothingActions() || comboBoxController.getSelectedIndex()==-1) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Actuator",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -408,7 +408,7 @@ public class DialogActuatorAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || (Cache.Actuators.map.containsKey(txt) && !txt.equals(n)) || !Utility.validateName(txt) || validatetextFieldPossibleActions()!=0 || containsNothingActions()) {
+				if (txt==null || txt.isEmpty() || (Cache.Actuators.map.containsKey(txt) && !txt.equals(n)) || !Utility.validateName(txt) || validatetextFieldPossibleActions()!=0 || containsNothingActions() || comboBoxController.getSelectedIndex()==-1) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Edit Actuator",JOptionPane.ERROR_MESSAGE);
 				} else {
 					String [] statuses=getCleanPossibleActions().split(";");

@@ -330,7 +330,7 @@ public class SchedulingThread extends Thread {
 			SchedulingDataSpecial d=new SchedulingDataSpecial(	s.getSchedulename(),s.getActuator().getName(),
 																s.getYear(), s.getMonth(), s.getDay(), s.getDayschedulerule().getRulename(),
 																s.getOnstartaction(),s.getOnendaction(),s.getLockmanual(),s.getPriority(),s.getEnabled() );
-			if (d.getNextEndTime().compareTo(LocalDateTime.now())>0 && d.isEnabled()) {
+			if (s.getActuator().getControltype().equals("Scheduled") && d.getNextEndTime().compareTo(LocalDateTime.now())>0 && d.isEnabled()) {
 				d.registerOnStartFunc(osss);
 				d.registerOnEndFunc(osse);
 				data.put(d.getName(),d);
@@ -351,7 +351,7 @@ public class SchedulingThread extends Thread {
 																r.getDayschedulerule().getRulename(), r.getOnstartaction(),
 																r.getOnendaction(), r.getLockmanual(), r.getPriority(),
 																r.getEnabled());
-			if (d.isEnabled() && d.getNextEndTime().compareTo(LocalDateTime.now())>0 && d.getDay()!=0) {
+			if (r.getActuator().getControltype().equals("Scheduled") && d.isEnabled() && d.getNextEndTime().compareTo(LocalDateTime.now())>0 && d.getDay()!=0) {
 				d.registerOnStartFunc(orss);
 				d.registerOnEndFunc(orse);
 				data.put(d.getName(),d);

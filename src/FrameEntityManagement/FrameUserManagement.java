@@ -30,6 +30,7 @@ import Entity.User;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
@@ -182,8 +183,11 @@ public class FrameUserManagement extends JFrame {
 	
 	public static void refresh() {
 		if (FrameUserManagement.currInstance!=null) {
-			FrameUserManagement.currInstance.updateUserTable();
-			//FrameUserManagement.currInstance.table.repaint();
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run () {
+					FrameUserManagement.currInstance.updateUserTable();
+				}
+			});
 		}
 	}
 	private JPanel contentPane;

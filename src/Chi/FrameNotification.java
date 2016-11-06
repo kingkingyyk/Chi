@@ -26,6 +26,7 @@ import Entity.Actuatorevent;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
@@ -198,8 +199,11 @@ public class FrameNotification extends JFrame {
 	
 	public static void refresh() {
 		if (FrameNotification.currInstance!=null) {
-			FrameNotification.currInstance.updateNotificationTable();
-			FrameNotification.currInstance.repaint();
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run () {
+					FrameNotification.currInstance.updateNotificationTable();
+				}
+			});
 		}
 	}
 	

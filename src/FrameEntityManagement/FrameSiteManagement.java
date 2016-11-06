@@ -30,6 +30,7 @@ import Entity.Site;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
@@ -178,7 +179,11 @@ public class FrameSiteManagement extends JFrame {
 	
 	public static void refresh() {
 		if (FrameSiteManagement.currInstance!=null) {
-			FrameSiteManagement.currInstance.updateSiteTable();
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run () {
+					FrameSiteManagement.currInstance.updateSiteTable();
+				}
+			});
 			//FrameSiteManagement.currInstance.table.repaint();
 		}
 	}

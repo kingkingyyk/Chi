@@ -37,7 +37,7 @@ public class FrameSiteManagementContextMenu extends FrameContextMenu {
 
 			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
-				editMenu.setEnabled(m.getSelectedRow()==1);
+				editMenu.setEnabled(m.getSelectedCount()==1);
 				deleteMenu.setEnabled(m.getSelectedCount()>0);
 			};
 		

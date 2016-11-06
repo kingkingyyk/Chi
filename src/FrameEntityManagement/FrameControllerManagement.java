@@ -30,6 +30,7 @@ import Entity.Controller;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
@@ -200,8 +201,12 @@ public class FrameControllerManagement extends JFrame {
 	
 	public static void refresh() {
 		if (FrameControllerManagement.currInstance!=null) {
-			FrameControllerManagement.currInstance.updateControllerTable();
-			FrameControllerManagement.currInstance.table.repaint();
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run () {
+					FrameControllerManagement.currInstance.updateControllerTable();
+				}
+			});
+
 		}
 	}
 	

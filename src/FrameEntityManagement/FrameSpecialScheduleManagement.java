@@ -29,6 +29,7 @@ import Database.Cache;
 import Entity.Specialschedule;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
@@ -194,8 +195,11 @@ public class FrameSpecialScheduleManagement extends JFrame {
 	
 	public static void refresh() {
 		if (FrameSpecialScheduleManagement.currInstance!=null) {
-			FrameSpecialScheduleManagement.currInstance.updateSpecialScheduleTable();
-			//FrameSpecialScheduleManagement.currInstance.table.repaint();
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run () {
+					FrameSpecialScheduleManagement.currInstance.updateSpecialScheduleTable();
+				}
+			});
 		}
 	}
 	

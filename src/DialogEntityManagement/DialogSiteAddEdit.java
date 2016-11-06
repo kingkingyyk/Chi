@@ -222,7 +222,7 @@ public class DialogSiteAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || (Cache.Sites.map.containsKey(txt) && !txt.equals(n)) || lblURLInfo.getText().isEmpty() || Utility.validateName(txt)) {
+				if (txt==null || txt.isEmpty() || (Cache.Sites.map.containsKey(txt) && !txt.equals(n)) || lblURLInfo.getText().isEmpty() || !Utility.validateName(txt)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Site",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

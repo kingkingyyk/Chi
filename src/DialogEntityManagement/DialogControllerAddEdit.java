@@ -342,7 +342,7 @@ public class DialogControllerAddEdit extends JDialog {
 					reportTimeOK=(i>0);
 				} catch (NumberFormatException e) {};
 				
-				if (txt==null || txt.isEmpty() || Cache.Controllers.map.containsKey(txt) || !reportTimeOK || !Utility.validateName(txt)) {
+				if (txt==null || txt.isEmpty() || Cache.Controllers.map.containsKey(txt) || !reportTimeOK || !Utility.validateName(txt) || comboBoxSite.getSelectedIndex()==-1) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Site",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -400,7 +400,7 @@ public class DialogControllerAddEdit extends JDialog {
 					reportTimeOK=(i>0);
 				} catch (NumberFormatException e) {};
 				
-				if (txt==null || txt.isEmpty() || (Cache.Controllers.map.containsKey(txt) && !txt.equals(n)) || !reportTimeOK || !Utility.validateName(txt)) {
+				if (txt==null || txt.isEmpty() || (Cache.Controllers.map.containsKey(txt) && !txt.equals(n)) || !reportTimeOK || !Utility.validateName(txt) || comboBoxSite.getSelectedIndex()==-1) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Site",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
