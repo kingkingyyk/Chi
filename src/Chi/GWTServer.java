@@ -659,7 +659,7 @@ public class GWTServer {
 		public ServerSocket serverSocket;
 		public void run () {
 			try {
-		        final byte[] salt = "chichilol".getBytes();
+		        final byte[] salt = Config.getConfig(Config.CONFIG_SERVER_GWT_SALT_KEY).getBytes();
 		        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
 		        KeySpec spec = new PBEKeySpec(Config.getConfig(Config.CONFIG_SERVER_GWT_PASSWORD_KEY).toCharArray(), salt, 1024, 128);
 		        SecretKey secret=new SecretKeySpec(factory.generateSecret(spec).getEncoded(),"AES");

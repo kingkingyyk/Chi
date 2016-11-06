@@ -42,6 +42,7 @@ public class ConfigUI extends JDialog {
 	private JCheckBox chckbxGWTEncrypt;
 	private JCheckBox chckbxLogToFile;
 	private JComboBox<String> comboBoxLogLevel;
+	private JPasswordField passwordFieldGWTSalt;
 
 	public ConfigUI() {
 		setModal(true);
@@ -332,23 +333,42 @@ public class ConfigUI extends JDialog {
 		
 		JLabel lblGWTPassword = new JLabel("Password :");
 		lblGWTPassword.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblGWTPassword.setBounds(10, 45, 62, 14);
+		lblGWTPassword.setBounds(20, 71, 62, 14);
 		panelGWTSettings.add(lblGWTPassword);
 		
 		passwordFieldGWTPassword = new JPasswordField(Config.getConfig(Config.CONFIG_SERVER_GWT_PASSWORD_KEY));
 		passwordFieldGWTPassword.setToolTipText("The password for GWT server to connect.");
-		passwordFieldGWTPassword.setBounds(82, 42, 86, 20);
+		passwordFieldGWTPassword.setBounds(92, 68, 86, 20);
 		panelGWTSettings.add(passwordFieldGWTPassword);
+		
+		passwordFieldGWTSalt = new JPasswordField(Config.getConfig(Config.CONFIG_SERVER_GWT_SALT_KEY));
+		passwordFieldGWTSalt.setToolTipText("The password for GWT server to connect.");
+		passwordFieldGWTSalt.setBounds(92, 99, 86, 20);
+		panelGWTSettings.add(passwordFieldGWTSalt);
 		
 		chckbxGWTEncrypt = new JCheckBox("Encrypted Connection");
 		chckbxGWTEncrypt.setSelected(Boolean.parseBoolean(Config.getConfig(Config.CONFIG_SERVER_GWT_ENCRYPTION_KEY)));
-		chckbxGWTEncrypt.setBounds(10, 179, 136, 23);
+		chckbxGWTEncrypt.setBounds(10, 38, 136, 23);
+		chckbxGWTEncrypt.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				passwordFieldGWTPassword.setEnabled(chckbxGWTEncrypt.isSelected());
+				passwordFieldGWTSalt.setEnabled(chckbxGWTEncrypt.isSelected());
+			}
+			
+		});
 		panelGWTSettings.add(chckbxGWTEncrypt);
 		
 		JLabel lblGWTLogo = new JLabel();
 		lblGWTLogo.setBounds(434, 102, 100, 100);
 		lblGWTLogo.setIcon(Utility.resizeImageIcon(Theme.getIcon("GWTLogo"),lblGWTLogo.getWidth(),lblGWTLogo.getHeight()));
 		panelGWTSettings.add(lblGWTLogo);
+		
+		JLabel lblGWTSalt = new JLabel("Salt :");
+		lblGWTSalt.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblGWTSalt.setBounds(20, 102, 62, 14);
+		panelGWTSettings.add(lblGWTSalt);
 		
 		JPanel panelLogSettings = new JPanel();
 		tabbedPane.addTab("Logging", null, panelLogSettings, null);
@@ -425,6 +445,7 @@ public class ConfigUI extends JDialog {
 		Config.setConfig(Config.CONFIG_SERVER_INCOMING_PORT_KEY, textFieldListeningPort.getText());
 		Config.setConfig(Config.CONFIG_SERVER_GWT_PORT_KEY, textFieldGWTPort.getText());
 		Config.setConfig(Config.CONFIG_SERVER_GWT_PASSWORD_KEY, new String(passwordFieldGWTPassword.getPassword()));
+		Config.setConfig(Config.CONFIG_SERVER_GWT_SALT_KEY, new String(passwordFieldGWTSalt.getPassword()));
 		Config.setConfig(Config.CONFIG_SERVER_GWT_ENCRYPTION_KEY, String.valueOf(chckbxGWTEncrypt.isSelected()));
 		Config.setConfig(Config.CONFIG_SERVER_LOGGING_LEVEL_KEY,String.valueOf(comboBoxLogLevel.getSelectedIndex()));
 		Config.setConfig(Config.CONFIG_SERVER_LOGGING_TOFILE_KEY, String.valueOf(chckbxLogToFile.isSelected()));

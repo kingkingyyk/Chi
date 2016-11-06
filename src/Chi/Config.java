@@ -40,7 +40,7 @@ public class Config {
 	public static final String CONFIG_SERVER_CONTROLLER_PORT_KEY="server.controller.port";
 	public static final String CONFIG_SERVER_GWT_PORT_KEY="server.gwt.com.port";
 	public static final String CONFIG_SERVER_GWT_ENCRYPTION_KEY="server.gwt.com.encryption";
-	public static final String CONFIG_SERVER_GWT_KEY_FILE_KEY="server.gwt.keyfile";
+	public static final String CONFIG_SERVER_GWT_SALT_KEY="server.gwt.salt";
 	public static final String CONFIG_SERVER_GWT_PASSWORD_KEY="server.gwt.password";
 	public static final String CONFIG_SERVER_LOGGING_LEVEL_KEY="server.logging.level";
 	public static final String CONFIG_SERVER_LOGGING_TOFILE_KEY="server.logging.file";
@@ -72,7 +72,7 @@ public class Config {
 	private static final String CONFIG_SERVER_DATABASE_TEST_OK_DEFAULT="<html><font color=\"green\">Connection OK!</font></html>";
 	private static final String CONFIG_SERVER_DATABASE_TEST_FAIL_DEFAULT="<html><font color=\"red\">Connection fail!</font></html>";
 	private static final String CONFIG_SERVER_GWT_PORT_DEFAULT="40001";
-	private static final String CONFIG_SERVER_GWT_KEY_FILE_DEFAULT="chikey";
+	private static final String CONFIG_SERVER_GWT_SALT_DEFAULT="chichilol";
 	private static final String CONFIG_SERVER_GWT_PASSWORD_DEFAULT="chi-admin";
 	private static final boolean CONFIG_SERVER_GWT_ENCRYPTION_DEFAULT=false;
 	private static final String CONFIG_SERVER_LOGGING_LEVEL_DEFAULT=Logger.LEVEL_INFO+"";
@@ -140,7 +140,7 @@ public class Config {
 		Config.setConfig(CONFIG_SERVER_LOCK_FILE_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_LOCK_FILE_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_GWT_PORT_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_GWT_PORT_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_GWT_ENCRYPTION_KEY+CONFIG_DEFAULT_KEY, String.valueOf(CONFIG_SERVER_GWT_ENCRYPTION_DEFAULT));
-		Config.setConfig(CONFIG_SERVER_GWT_KEY_FILE_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_GWT_KEY_FILE_DEFAULT);
+		Config.setConfig(CONFIG_SERVER_GWT_SALT_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_GWT_SALT_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_GWT_PASSWORD_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_GWT_PASSWORD_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_LOGGING_LEVEL_KEY+CONFIG_DEFAULT_KEY, CONFIG_SERVER_LOGGING_LEVEL_DEFAULT);
 		Config.setConfig(CONFIG_SERVER_LOGGING_TOFILE_KEY+CONFIG_DEFAULT_KEY, String.valueOf(CONFIG_SERVER_LOGGING_TOFILE_DEFAULT));
