@@ -509,13 +509,28 @@ public class GWTServer {
 		    		for (Object o : sar.toObj()) result.add(o);
 		    	return result;
 		    }
-		    case "48" : { //SensorActuatorResponseCreate
+		    case "48a" : { //SensorActuatorResponseCreate
 		    	boolean expOK=true;
-		    	try { SensoractuatorresponseEvaluator.evaluateStatement((String)list.get(4)); } catch (Exception e) {expOK=false;}
+		    	try { SensoractuatorresponseEvaluator.evaluateStatement((String)list.get(4)); expOK=SensoractuatorresponseEvaluator.containsSensor((String)list.get(4));} catch (Exception e) {expOK=false;}
 		    	if (!expOK) return "EXPRESSION_ERROR";
 		    	if (Cache.Actuators.map.get(list.get(1)).getSensoractuatorresponses().size()>0) return "ACTUATOR_ALREADY_USED";
 		    	boolean flag=DatabaseSensorActuatorResponse.createSensorActuatorResponse((String)list.get(1),(String)list.get(2),(String)list.get(3),
 		    																			 (String)list.get(4),(Boolean)list.get(5),(Integer)list.get(6));
+		    	if (flag) return "OK"; else return "ERROR";
+		    }
+		    case "48b" : { //SensorActuatorResponseUpdate
+		    	if (Cache.SensorActuatorResponses.map.get(String.valueOf((Integer)list.get(1)))==null) return "RESPONSE_NOT_EXIST";
+		    	boolean expOK=true;
+		    	try { SensoractuatorresponseEvaluator.evaluateStatement((String)list.get(5)); expOK=SensoractuatorresponseEvaluator.containsSensor((String)list.get(4));} catch (Exception e) {expOK=false;}
+		    	if (!expOK) return "EXPRESSION_ERROR";
+		    	if (Cache.Actuators.map.get(list.get(2)).getSensoractuatorresponses().size()>0) return "ACTUATOR_ALREADY_USED";
+		    	boolean flag=DatabaseSensorActuatorResponse.updateSensorActuatorResponse((Integer)list.get(1),(String)list.get(2),(String)list.get(3),(String)list.get(4),
+		    																			(String)list.get(5),(Boolean)list.get(6),(Integer)list.get(7));
+		    	if (flag) return "OK"; else return "ERROR";
+		    }
+		    case "48c" : { //SensorActuatorResponseDelete
+		    	if (Cache.SensorActuatorResponses.map.get(String.valueOf((Integer)list.get(1)))==null) return "RESPONSE_NOT_EXIST";
+		    	boolean flag=DatabaseSensorActuatorResponse.deleteSensorActuatorResponse((Integer)list.get(1));
 		    	if (flag) return "OK"; else return "ERROR";
 		    }
 		    case "49" : { //SensorActuatorResponseSetOnTriggerAction
@@ -536,7 +551,7 @@ public class GWTServer {
 		    }
 		    case "51" : { //SensorActuatorResponseSetExpression
 		    	boolean expOK=true;
-		    	try { SensoractuatorresponseEvaluator.evaluateStatement((String)list.get(2)); } catch (Exception e) {expOK=false;}
+		    	try { SensoractuatorresponseEvaluator.evaluateStatement((String)list.get(2)); expOK=SensoractuatorresponseEvaluator.containsSensor((String)list.get(2));} catch (Exception e) {expOK=false;}
 		    	if (!expOK) return "EXPRESSION_ERROR";
 		    	Sensoractuatorresponse sar=Cache.SensorActuatorResponses.map.get(String.valueOf((int)list.get(1)));
 		    	if (sar==null) return "RESPONSE_NOT_EXIST";

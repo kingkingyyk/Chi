@@ -46,7 +46,7 @@ public class DialogSensorActuatorResponseAddEdit extends JDialog {
 	private static boolean validateStatement (String s) {
 		try {
 			SensoractuatorresponseEvaluator.evaluateStatement(s);
-			return true;
+			return SensoractuatorresponseEvaluator.containsSensor(s);
 		} catch (Exception e) {return false;}
 	}
 	
