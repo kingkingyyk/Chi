@@ -203,8 +203,8 @@ public class DatabaseController {
 			tx = session.beginTransaction();
 			Controller ctrl = (Controller) session.get(Controller.class,n);
 			if (ctrl!=null) {
-				for (Sensor s : ctrl.getSensors()) DatabaseSensor.deleteSensor(s.getSensorname());
-				for (Actuator act : ctrl.getActuators()) DatabaseActuator.deleteActuator(act.getName());
+				for (Sensor s : Cache.Sensors.map.values()) if (s.getController().getControllername().equals(n)) DatabaseSensor.deleteSensor(s.getSensorname());
+				for (Actuator act : Cache.Actuators.map.values()) if (act.getController().getControllername().equals(n)) DatabaseActuator.deleteActuator(act.getName());
 				
 				session.delete(ctrl);
 				tx.commit();

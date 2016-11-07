@@ -193,8 +193,8 @@ public class DatabaseActuator {
 			tx = session.beginTransaction();
 			Actuator act = session.get(Actuator.class, n);
 			if (act!=null) {
-				for (Regularschedule r : act.getRegularschedules()) DatabaseRegularSchedule.deleteRegularSchedule(r.getSchedulename());
-				for (Specialschedule s : act.getSpecialschedules()) DatabaseSpecialSchedule.deleteSpecialSchedule(s.getSchedulename());
+				for (Regularschedule r : Cache.RegularSchedules.map.values()) if (r.getActuator().getName().equals(n)) DatabaseRegularSchedule.deleteRegularSchedule(r.getSchedulename());
+				for (Specialschedule s : Cache.SpecialSchedules.map.values()) if (s.getActuator().getName().equals(n)) DatabaseSpecialSchedule.deleteSpecialSchedule(s.getSchedulename());
 				for (Sensoractuatorresponse sar : act.getSensoractuatorresponses()) DatabaseSensorActuatorResponse.deleteSensorActuatorResponse(sar.getId());
 				
 				session.delete(act);

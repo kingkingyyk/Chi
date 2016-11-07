@@ -80,12 +80,12 @@ public class GWTServer {
 		    }
 		    case "5" : { //ControllerGetSensors
 		    	ArrayList<Object []> result=new ArrayList<>();
-			    for (Sensor s : Cache.Controllers.map.get(list.get(1)).getSensors()) result.add(s.toObj());
+			    for (Sensor s : Cache.Sensors.map.values()) if (s.getController().getControllername().equals(list.get(1))) result.add(s.toObj());
 		    	return result;
 		    }
 		    case "6" : { //ControllerGetActuators
 		    	ArrayList<Object []> result=new ArrayList<>();
-			    for (Actuator act : Cache.Controllers.map.get(list.get(1)).getActuators()) result.add(Cache.Actuators.map.get(act.getName()).toObj());
+			    for (Actuator act : Cache.Actuators.map.values())if (act.getController().getControllername().equals(list.get(1))) result.add(act.toObj());
 			    return result;
 		    }
 		    case "7" : { //DayScheduleRuleGetAll

@@ -116,7 +116,7 @@ public class DatabaseSite {
 			tx = session.beginTransaction();
 			Site s = session.get(Site.class,n);
 			if (s!=null) {
-				for (Controller c : s.getControllers()) DatabaseController.deleteController(c.getControllername());
+				for (Controller c : Cache.Controllers.map.values()) if (c.getSite().getSitename().equals(n)) DatabaseController.deleteController(c.getControllername());
 				
 				session.delete(s);
 				tx.commit();

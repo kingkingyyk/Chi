@@ -111,6 +111,8 @@ public class DatabaseSensorActuatorResponse {
 				session.update(s);
 				tx.commit();
 				Cache.SensorActuatorResponses.map.put(String.valueOf(id),s);
+				Cache.Actuators.map.get(an).getSensoractuatorresponses().clear();
+				Cache.Actuators.map.get(an).getSensoractuatorresponses().add(s);
 	
 				Logger.log(Logger.LEVEL_INFO,"DatabaseSensorActuatorResponse - Update - Execute Callbacks");
 				for (OnUpdateAction a : OnUpdateList) a.run(id,an,onTrigAct,onNotTrigAct,expression,en,timeout);
@@ -133,10 +135,9 @@ public class DatabaseSensorActuatorResponse {
 			tx = session.beginTransaction();
 			Sensoractuatorresponse s = session.get(Sensoractuatorresponse.class,id);
 			if (s!=null) {
-				Cache.Actuators.map.get(s.getActuator().getName()).getSensoractuatorresponses().clear();
-				
 				session.delete(s);
 				tx.commit();
+				Cache.Actuators.map.get(s.getActuator().getName()).getSensoractuatorresponses().clear();
 				Cache.SensorActuatorResponses.map.remove(String.valueOf(id));
 	
 				Logger.log(Logger.LEVEL_INFO,"DatabaseSensorActuatorResponse - Delete - Execute Callbacks");

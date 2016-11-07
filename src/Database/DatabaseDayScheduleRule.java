@@ -141,8 +141,8 @@ public class DatabaseDayScheduleRule {
 			tx=session.beginTransaction();
 			Dayschedulerule r=session.get(Dayschedulerule.class,n);
 			if (r!=null) {
-				for (Regularschedule rs : r.getRegularschedules()) DatabaseRegularSchedule.deleteRegularSchedule(rs.getSchedulename());
-				for (Specialschedule ss : r.getSpecialschedules()) DatabaseSpecialSchedule.deleteSpecialSchedule(ss.getSchedulename());
+				for (Regularschedule rs : Cache.RegularSchedules.map.values()) if (rs.getDayschedulerule().getRulename().equals(n)) DatabaseRegularSchedule.deleteRegularSchedule(rs.getSchedulename());
+				for (Specialschedule ss : Cache.SpecialSchedules.map.values()) if (ss.getDayschedulerule().getRulename().equals(n)) DatabaseSpecialSchedule.deleteSpecialSchedule(ss.getSchedulename());
 				
 				session.delete(r);
 				tx.commit();
