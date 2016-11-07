@@ -161,7 +161,7 @@ public class FrameRegularScheduleManagement extends JFrame {
 			RegularScheduleTableRow row=(RegularScheduleTableRow)value;
 			if (row!=null && row.renderText!=null) {
 				int index=ArrayUtils.indexOf(RegularScheduleTableModel.COLUMNS,aTable.getColumnName(aColumn));
-				if (!aTable.getColumnName(aColumn).equals("Enabled"))
+				if (!aTable.getColumnName(aColumn).equals("Enabled") && !aTable.getColumnName(aColumn).equals("Lock") )
 					setText(row.renderText[index].toString());
 				else
 					if (row.renderText[index].equals("true"))

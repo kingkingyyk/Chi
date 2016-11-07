@@ -2,6 +2,7 @@ package Chi;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
 import javax.swing.SwingConstants;
 
@@ -42,7 +43,7 @@ public class DialogReadingSelectSensor extends JDialog {
 		comboBoxController = new JComboBox<>();
 		comboBoxController.setBounds(98, 44, 145, 20);
 		ArrayList<String> list=new ArrayList<>();
-		for (Controller c : Cache.Controllers.map.values()) if (!c.getSensors().isEmpty()) list.add(c.getControllername());
+		for (Controller c : Cache.Controllers.map.values()) list.add(c.getControllername());
 		Collections.sort(list);
 		for (String s : list) comboBoxController.addItem(s);
 		getContentPane().add(comboBoxController);
@@ -63,9 +64,13 @@ public class DialogReadingSelectSensor extends JDialog {
 		btnOK = new JButton("OK");
 		btnOK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				OKPressed=true;
-				selectedSensor=(String)comboBoxSensor.getSelectedItem();
-				dispose();
+				if (comboBoxSensor.getSelectedIndex()==-1 || comboBoxController.getSelectedIndex()==-1) {
+					JOptionPane.showMessageDialog(null,"Please select a sensor.","View Reading",JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					OKPressed=true;
+					selectedSensor=(String)comboBoxSensor.getSelectedItem();
+					dispose();
+				}
 			}
 		});
 		btnOK.setBounds(60, 127, 89, 23);
@@ -87,7 +92,10 @@ public class DialogReadingSelectSensor extends JDialog {
 				comboBoxSensor.removeAllItems();
 				
 				ArrayList<String> list=new ArrayList<>();
-				for (Sensor s : Cache.Controllers.map.get(comboBoxController.getSelectedItem()).getSensors()) list.add(s.getSensorname());
+				for (Sensor s : Cache.Sensors.map.values())
+					if (s.getController().getControllername().equals((String)comboBoxController.getSelectedItem()))
+						list.add(s.getSensorname());
+
 				Collections.sort(list);
 				for (String s : list) comboBoxSensor.addItem(s);
 			}

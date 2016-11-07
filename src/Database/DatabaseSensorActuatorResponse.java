@@ -80,6 +80,7 @@ public class DatabaseSensorActuatorResponse {
 			session.save(s);
 			tx.commit();
 			Cache.SensorActuatorResponses.map.put(String.valueOf(s.getId()),s);
+			Cache.Actuators.map.get(an).getSensoractuatorresponses().add(s);
 	
 			Logger.log(Logger.LEVEL_INFO,"DatabaseSensorActuatorResponse - Create - Execute Callbacks");
 			for (OnCreateAction a : OnCreateList) a.run(s.getId(), an, onTrigAct, onNotTrigAct, expression, en, timeout);
@@ -132,6 +133,8 @@ public class DatabaseSensorActuatorResponse {
 			tx = session.beginTransaction();
 			Sensoractuatorresponse s = session.get(Sensoractuatorresponse.class,id);
 			if (s!=null) {
+				Cache.Actuators.map.get(s.getActuator().getName()).getSensoractuatorresponses().clear();
+				
 				session.delete(s);
 				tx.commit();
 				Cache.SensorActuatorResponses.map.remove(String.valueOf(id));

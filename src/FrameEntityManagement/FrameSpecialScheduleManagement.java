@@ -162,7 +162,7 @@ public class FrameSpecialScheduleManagement extends JFrame {
 			SpecialScheduleTableRow row=(SpecialScheduleTableRow)value;
 			if (row!=null && row.renderText!=null) {
 				int index=ArrayUtils.indexOf(SpecialScheduleTableModel.COLUMNS,aTable.getColumnName(aColumn));
-				if (!aTable.getColumnName(aColumn).equals("Enabled"))
+				if (!aTable.getColumnName(aColumn).equals("Enabled") && !aTable.getColumnName(aColumn).equals("Lock") )
 					setText(row.renderText[index].toString());
 				else
 					if (row.renderText[index].equals("true"))
