@@ -1,7 +1,9 @@
 package Database;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -132,4 +134,22 @@ public class DatabaseUserSensorNotification {
 		}
 	}
 	
+	public static ArrayList<String> getSubscription (String username) {
+		Logger.log(Logger.LEVEL_INFO,"DB Get User Sensor Notification Subscription");
+		
+		ArrayList<String> toReturn=new ArrayList<>();
+		if (!Cache.Users.map.containsKey(username)) Logger.log(Logger.LEVEL_INFO,"DB Get User Sensor Notification Subscription - User doesn't exist!");
+		else {
+			Session session=Cache.factory.openSession();
+			try {
+				@SuppressWarnings("unchecked")
+				List<Usersensornotification> l=session.createQuery("FROM Usersensornotification").getResultList();
+				for (Usersensornotification n : l) if (n.getUser().equals(username)) toReturn.add(n.getSensor().getSensorname());
+
+			} catch (HibernateException e) {
+				Logger.log(Logger.LEVEL_ERROR,"DB Get User Sensor Notification Subscription - "+e.getMessage());
+			} finally { session.close(); }
+		}
+		return toReturn;
+	}
 }

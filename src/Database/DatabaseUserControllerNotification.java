@@ -1,7 +1,9 @@
 package Database;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -131,4 +133,22 @@ public class DatabaseUserControllerNotification {
 		}
 	}
 	
+	public static ArrayList<String> getSubscription (String username) {
+		Logger.log(Logger.LEVEL_INFO,"DB Get User Controller Notification Subscription");
+		
+		ArrayList<String> toReturn=new ArrayList<>();
+		if (!Cache.Users.map.containsKey(username)) Logger.log(Logger.LEVEL_INFO,"DB Get User Controller Notification Subscription - User doesn't exist!");
+		else {
+			Session session=Cache.factory.openSession();
+			try {
+				@SuppressWarnings("unchecked")
+				List<Usercontrollernotification> l=session.createQuery("FROM Usercontrollernotification").getResultList();
+				for (Usercontrollernotification n : l) if (n.getUser().equals(username)) toReturn.add(n.getController().getControllername());
+
+			} catch (HibernateException e) {
+				Logger.log(Logger.LEVEL_ERROR,"DB Get User Controller Notification Subscription - "+e.getMessage());
+			} finally { session.close(); }
+		}
+		return toReturn;
+	}
 }

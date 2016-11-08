@@ -615,8 +615,11 @@ public class GWTServer {
 		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
 		    	return DatabaseUserControllerNotification.getControllerNotificationTime(uname,sname);
 		    }
-		    
-		    case "58" : { //User subscribe sensor notification
+		    case "58" : { //User controller notification get subscription
+		    	String uname=(String)list.get(1);
+		    	return DatabaseUserControllerNotification.getSubscription(uname);
+		    }
+		    case "59" : { //User subscribe sensor notification
 		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
 		    	if (Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
 		    	else if (Cache.Sensors.map.containsKey(sname)) return "SENSOR_NOT_EXIST";
@@ -624,7 +627,7 @@ public class GWTServer {
 		    	boolean flag=DatabaseUserSensorNotification.subscribeSensorNotification(uname,sname);
 		    	if (flag) return "OK"; else return "ERROR";
 		    }
-		    case "59" : { //User sensor notification update last read time
+		    case "60" : { //User sensor notification update last read time
 		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
 		    	if (Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
 		    	else if (Cache.Sensors.map.containsKey(sname)) return "SENSOR_NOT_EXIST";
@@ -632,7 +635,7 @@ public class GWTServer {
 		    	boolean flag=DatabaseUserSensorNotification.updateSensorNotification(uname,sname,Utility.localDateTimeToUtilDate((LocalDateTime)list.get(3)));
 		    	if (flag) return "OK"; else return "ERROR";
 		    }
-		    case "60" : { //User unsubscribe sensor notification
+		    case "61" : { //User unsubscribe sensor notification
 		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
 		    	if (Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
 		    	else if (Cache.Sensors.map.containsKey(sname)) return "SENSOR_NOT_EXIST";
@@ -640,11 +643,15 @@ public class GWTServer {
 		    	boolean flag=DatabaseUserSensorNotification.unsubscribeSensorNotification(uname,sname);
 		    	if (flag) return "OK"; else return "ERROR";
 		    }
-		    case "61" : { //User sensor notification get last read time
+		    case "62" : { //User sensor notification get subscription
+		    	String uname=(String)list.get(1);
+		    	return DatabaseUserSensorNotification.getSubscription(uname);
+		    }
+		    case "63" : { //User sensor notification get last read time
 		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
 		    	return DatabaseUserSensorNotification.getSensorNotificationTime(uname,sname);
 		    }
-		    case "62" : { //User subscribe actuator notification
+		    case "64" : { //User subscribe actuator notification
 		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
 		    	if (Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
 		    	else if (Cache.Actuators.map.containsKey(sname)) return "ACTUATOR_NOT_EXIST";
@@ -652,7 +659,7 @@ public class GWTServer {
 		    	boolean flag=DatabaseUserActuatorNotification.subscribeActuatorNotification(uname,sname);
 		    	if (flag) return "OK"; else return "ERROR";
 		    }
-		    case "63" : { //User actuator notification update last read time
+		    case "65" : { //User actuator notification update last read time
 		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
 		    	if (Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
 		    	else if (Cache.Actuators.map.containsKey(sname)) return "ACTUATOR_NOT_EXIST";
@@ -660,7 +667,7 @@ public class GWTServer {
 		    	boolean flag=DatabaseUserActuatorNotification.updateActuatorNotification(uname,sname,Utility.localDateTimeToUtilDate((LocalDateTime)list.get(3)));
 		    	if (flag) return "OK"; else return "ERROR";
 		    }
-		    case "64" : { //User unsubscribe actuator notification
+		    case "66" : { //User unsubscribe actuator notification
 		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
 		    	if (Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
 		    	else if (Cache.Actuators.map.containsKey(sname)) return "ACTUATOR_NOT_EXIST";
@@ -668,9 +675,13 @@ public class GWTServer {
 		    	boolean flag=DatabaseUserActuatorNotification.unsubscribeActuatorNotification(uname,sname);
 		    	if (flag) return "OK"; else return "ERROR";
 		    }
-		    case "65" : { //User actuator notification get last read time
+		    case "67" : { //User actuator notification get last read time
 		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
 		    	return DatabaseUserActuatorNotification.getActuatorNotificationTime(uname,sname);
+		    }
+		    case "68" : { //User actuator notification get subscription
+		    	String uname=(String)list.get(1);
+		    	return DatabaseUserActuatorNotification.getSubscription(uname);
 		    }
 	    }
 	    return null;
