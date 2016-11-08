@@ -1,6 +1,7 @@
 package SchedulingServer;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import Chi.FrameOngoingSchedules;
@@ -65,7 +66,10 @@ public class SchedulingThread extends Thread {
 					}
 				}
 			} else {
-				for (SchedulingData d : data.values()) if (d.getActuatorName().equals(oldN)) data.remove(d.getName());
+				ArrayList<SchedulingData> toRemove=new ArrayList<>();
+				for (SchedulingData d : data.values()) if (d.getActuatorName().equals(n)) toRemove.add(d);
+				
+				for (SchedulingData d : toRemove) data.remove(d.getName());
 			}
 			
 			FrameOngoingSchedules.refresh();

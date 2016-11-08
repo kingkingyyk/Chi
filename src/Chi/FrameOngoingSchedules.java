@@ -141,21 +141,27 @@ public class FrameOngoingSchedules extends JFrame {
 	private static class OnGoingSchedulesTableCellRenderer extends DefaultTableCellRenderer {
 		private static Icon regularSchIcon=Utility.resizeImageIcon(Theme.getIcon("RegularScheduleIcon"), 16, 16);
 		private static Icon specialSchIcon=Utility.resizeImageIcon(Theme.getIcon("SpecialScheduleIcon"), 16, 16);
+		private static Icon tickIcon=Utility.resizeImageIcon(Theme.getIcon("TickIcon"), 16, 16);
+		private static Icon crossIcon=Utility.resizeImageIcon(Theme.getIcon("DeleteIcon"), 16, 16);
 		private static final long serialVersionUID = 1L;
 		
 		@Override
 		public Component getTableCellRendererComponent (JTable aTable, Object value, boolean aIsSelected, boolean aHasFocus, int aRow, int aColumn) {
 			OnGoingSchedulesTableRow row=(OnGoingSchedulesTableRow)value;
 			if (row!=null && row.renderText!=null) {
-				setText(row.renderText[ArrayUtils.indexOf(OnGoingSchedulesTableModel.COLUMNS,aTable.getColumnName(aColumn))].toString());
-				if (aTable.getColumnName(aColumn).equals(OnGoingSchedulesTableModel.COLUMNS[1])) {
+				if (aTable.getColumnName(aColumn).equals("Type")) {
+					setText(row.renderText[ArrayUtils.indexOf(OnGoingSchedulesTableModel.COLUMNS,aTable.getColumnName(aColumn))].toString());
 					if (row.data instanceof SchedulingDataRegular) {
 						setIcon(regularSchIcon);
 					} else if (row.data instanceof SchedulingDataSpecial) {
 						setIcon(specialSchIcon);
 					}
+				} else if  (aTable.getColumnName(aColumn).equals("Lock")) {
+					if (row.data.getLock()) setIcon(tickIcon);
+					else setIcon(crossIcon);
+				} else {
+					setText(row.renderText[ArrayUtils.indexOf(OnGoingSchedulesTableModel.COLUMNS,aTable.getColumnName(aColumn))].toString());
 				}
-
 			}
 
 			if (aTable.isRowSelected(aRow)) {
