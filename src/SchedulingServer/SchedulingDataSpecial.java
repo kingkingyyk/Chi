@@ -24,7 +24,7 @@ public class SchedulingDataSpecial extends SchedulingData {
 	}
 	
 	public SchedulingDataSpecial (String sn, String an, int y, int m, int d, String rn, String startAct, String endAct, boolean lock, int pr, boolean en) {
-		super(sn,an,rn,startAct,endAct,lock,pr,en,1);
+		super(sn,an,rn,startAct,endAct,lock,pr,en,2);
 		this.year=y;
 		this.month=m;
 		this.day=d;
@@ -63,11 +63,14 @@ public class SchedulingDataSpecial extends SchedulingData {
 			if (this.nextEndTime.compareTo(this.nextStartTime)<0) this.nextEndTime=this.nextEndTime.plusDays(1);
 		}
 		if (this.isEnabled() && updateScheduler && this.nextEndTime.compareTo(LocalDateTime.now())>0) {
+
+			if (this.fireOnEnd!=null) this.fireOnEnd.cancel();
 			this.onEndScheduler.purge();
 			this.fireOnEnd=new FireOnEndTaskSpecial();
 			this.fireOnEnd.d=this;
 			this.onEndScheduler.schedule(this.fireOnEnd,Date.from(this.nextEndTime.atZone(ZoneId.systemDefault()).toInstant()));
 				
+			if (this.fireOnStart!=null) this.fireOnStart.cancel();
 			this.onStartScheduler.purge();
 			this.fireOnStart=new FireOnStartTaskSpecial();
 			this.fireOnStart.d=this;

@@ -14,7 +14,7 @@ public class SchedulingDataRegular extends SchedulingData {
 	private static class FireOnEndTaskRegular extends SchedulingData.FireOnEndTask implements Runnable {
 		@Override
 		public void execute() {
-			Logger.log(Logger.LEVEL_INFO,"SchedulingDataRegular.FireOnStartTaskRegular - Scheduled To Fire On Next End");
+			Logger.log(Logger.LEVEL_INFO,"SchedulingDataRegular.FireOnEndTaskRegular - Scheduled To Fire On Next End");
 			this.d.fireOnEnd=new FireOnEndTaskRegular();
 			this.d.fireOnEnd.d=this.d;
 			this.d.onEndScheduler.schedule(this.d.fireOnEnd,Date.from(d.nextEndTime.atZone(ZoneId.systemDefault()).toInstant()));
@@ -66,17 +66,22 @@ public class SchedulingDataRegular extends SchedulingData {
 				if (this.nextEndTime.compareTo(this.nextStartTime)<0) this.nextEndTime=this.nextEndTime.plusDays(1);
 			}
 			if (this.isEnabled() && updateScheduler) {
+
+				if (this.fireOnEnd!=null) this.fireOnEnd.cancel();
 				this.onEndScheduler.purge();
 				this.fireOnEnd=new FireOnEndTaskRegular();
 				this.fireOnEnd.d=this;
 				this.onEndScheduler.schedule(this.fireOnEnd,Date.from(this.nextEndTime.atZone(ZoneId.systemDefault()).toInstant()));
 				
+				if (this.fireOnStart!=null) this.fireOnStart.cancel();
 				this.onStartScheduler.purge();
 				this.fireOnStart=new FireOnStartTaskRegular();
 				this.fireOnStart.d=this;
 				this.onStartScheduler.schedule(this.fireOnStart,Date.from(this.nextStartTime.atZone(ZoneId.systemDefault()).toInstant()));
 			}
 		} else if (this.isEnabled() && updateScheduler) {
+			try { this.onEndScheduler.cancel(); } catch (Exception e) {}
+			try { this.onStartScheduler.cancel(); } catch (Exception e) {}
 			this.onEndScheduler.purge();
 			this.onStartScheduler.purge();
 			this.nextStartTime=LocalDateTime.MAX;

@@ -34,34 +34,35 @@ public class SchedulingThread extends Thread {
 			}
 			
 			if (ctrlType.equals("Scheduled")) {
-				int count=0;
-				
-				for (SchedulingData d : data.values()) if (d.getActuatorName().equals(n)) count++;
-				
-				if (count==0) {
-					for (Regularschedule r : Cache.RegularSchedules.map.values()) {
-						if (r.getActuator().getName().equals(n) && r.getEnabled() && r.getDaymask()!=0) {
-							SchedulingData d=new SchedulingDataRegular(r.getSchedulename(),n,r.getDaymask(),
-																r.getDayschedulerule().getRulename(),
-																r.getOnstartaction(),r.getOnendaction(),
-																r.getLockmanual(),r.getPriority(),
-																r.getEnabled());
-							data.put(r.getSchedulename(),d);
-							FrameOngoingSchedules.refresh();
-						}
+				for (Regularschedule r : Cache.RegularSchedules.map.values()) {
+					if (!data.containsKey(r.getSchedulename()) && r.getActuator().getName().equals(n) &&
+							r.getEnabled() && r.getDaymask()!=0) {
+						SchedulingDataRegular d=new SchedulingDataRegular(r.getSchedulename(),n,r.getDaymask(),
+															r.getDayschedulerule().getRulename(),
+															r.getOnstartaction(),r.getOnendaction(),
+															r.getLockmanual(),r.getPriority(),
+															r.getEnabled());
+						d.registerOnStartFunc(new OnRegularScheduleStart());
+						d.registerOnEndFunc(new OnRegularScheduleEnd());
+						data.put(r.getSchedulename(),d);
+						FrameOngoingSchedules.refresh();
 					}
+				}
 					
-					for (Specialschedule ss : Cache.SpecialSchedules.map.values()) {
-						if (ss.getActuator().getName().equals(n) && ss.getEnabled()) {
-							SchedulingData dat=new SchedulingDataSpecial(ss.getSchedulename(),n,ss.getYear(),
-																		ss.getMonth(),ss.getDay(),
-																		ss.getDayschedulerule().getRulename(),
-																		ss.getOnstartaction(),ss.getOnendaction(),
-																		ss.getLockmanual(),ss.getPriority(),ss.getEnabled());
-							if (dat.getNextEndTime().compareTo(LocalDateTime.now())>0) {
-								data.put(ss.getSchedulename(),dat);
-								FrameOngoingSchedules.refresh();
-							}
+				for (Specialschedule ss : Cache.SpecialSchedules.map.values()) {
+					if (!data.containsKey(ss.getSchedulename()) && ss.getActuator().getName().equals(n) &&
+						ss.getEnabled()) {
+						SchedulingDataSpecial d=new SchedulingDataSpecial(ss.getSchedulename(),n,ss.getYear(),
+																	ss.getMonth(),ss.getDay(),
+																	ss.getDayschedulerule().getRulename(),
+																	ss.getOnstartaction(),ss.getOnendaction(),
+																	ss.getLockmanual(),ss.getPriority(),ss.getEnabled());
+						if (ScheduleUtility.compareScheduleTime(d.getNextEndTime(),LocalDateTime.now())>0) {
+							d.registerOnStartFunc(new OnSpecialScheduleStart());
+							d.registerOnEndFunc(new OnSpecialScheduleEnd());
+							
+							data.put(ss.getSchedulename(),d);
+							FrameOngoingSchedules.refresh();
 						}
 					}
 				}
@@ -69,7 +70,10 @@ public class SchedulingThread extends Thread {
 				ArrayList<SchedulingData> toRemove=new ArrayList<>();
 				for (SchedulingData d : data.values()) if (d.getActuatorName().equals(n)) toRemove.add(d);
 				
-				for (SchedulingData d : toRemove) data.remove(d.getName());
+				for (SchedulingData d : toRemove) {
+					d.purgeTimer();
+					data.remove(d.getName());
+				}
 			}
 			
 			FrameOngoingSchedules.refresh();
@@ -80,23 +84,62 @@ public class SchedulingThread extends Thread {
 		public void run (String an) {
 			for (SchedulingData d : data.values()) {
 				if (d.getActuatorName().equals(an)) {
+					d.purgeTimer();
 					data.remove(d.getName());
 				}
 			}
-			FrameOngoingSchedules.refresh();
 		}
 	}
 	
 	public class OnDayScheduleRuleUpdate implements DatabaseDayScheduleRule.OnUpdateAction {
 		@Override
 		public void run(String oldN, String n, int sh, int sm, int eh, int em) {
+			ArrayList<SchedulingData> toRemove=new ArrayList<>();
 			for (SchedulingData d : data.values()) {
-				if (!d.getTimeRule().equals(oldN)) {
+				if (d.getTimeRule().equals(oldN)) {
 					d.setTimeRule(n);
-				} else {
 					d.updateScheduler(true);
+					
+					if (ScheduleUtility.compareScheduleTime(d.getNextEndTime(),LocalDateTime.now())<=0) toRemove.add(d);
 				}
 			}
+			
+			for (SchedulingData d : toRemove) {
+				d.purgeTimer();
+				data.remove(d.getName());
+			}
+		
+			for (Regularschedule r : Cache.RegularSchedules.map.values()) {
+				if (!data.containsKey(r.getSchedulename()) && r.getDayschedulerule().getRulename().equals(n) &&
+						r.getEnabled() && r.getDaymask()!=0) {
+					SchedulingDataRegular d=new SchedulingDataRegular(r.getSchedulename(),r.getActuator().getName(),r.getDaymask(),
+														r.getDayschedulerule().getRulename(),
+														r.getOnstartaction(),r.getOnendaction(),
+														r.getLockmanual(),r.getPriority(),
+														r.getEnabled());
+					d.registerOnStartFunc(new OnRegularScheduleStart());
+					d.registerOnEndFunc(new OnRegularScheduleEnd());
+					data.put(r.getSchedulename(),d);
+				}
+			}
+				
+			for (Specialschedule ss : Cache.SpecialSchedules.map.values()) {
+				if (!data.containsKey(ss.getSchedulename()) && ss.getDayschedulerule().getRulename().equals(n) &&
+					ss.getEnabled()) {
+					SchedulingDataSpecial d=new SchedulingDataSpecial(ss.getSchedulename(),ss.getActuator().getName(),ss.getYear(),
+																ss.getMonth(),ss.getDay(),
+																ss.getDayschedulerule().getRulename(),
+																ss.getOnstartaction(),ss.getOnendaction(),
+																ss.getLockmanual(),ss.getPriority(),ss.getEnabled());
+					if (ScheduleUtility.compareScheduleTime(d.getNextEndTime(),LocalDateTime.now())>0) {
+						d.registerOnStartFunc(new OnSpecialScheduleStart());
+						d.registerOnEndFunc(new OnSpecialScheduleEnd());
+						
+						data.put(ss.getSchedulename(),d);
+					}
+				}
+			}
+			
 			FrameOngoingSchedules.refresh();
 		}
 	}
@@ -134,11 +177,15 @@ public class SchedulingThread extends Thread {
 				d.setStartAction(start);
 				d.setEndAction(end);
 				d.setLock(lock);
+				d.setPriority(pr);
 				if (d.isEnabled()!=en) {
 					d.setEnabled(en);
 				}
 				if (en && day!=0) data.put(sn,d);
-				else data.remove(sn);
+				else {
+					d.purgeTimer();
+					data.remove(sn);
+				}
 
 				FrameOngoingSchedules.refresh();
 			}
@@ -150,6 +197,7 @@ public class SchedulingThread extends Thread {
 		public void run(String sn) {
 			SchedulingData d=data.get(sn);
 			if (d!=null) {
+				d.purgeTimer();
 				data.remove(sn);
 				FrameOngoingSchedules.refresh();
 			}
@@ -158,42 +206,52 @@ public class SchedulingThread extends Thread {
 	
 	public class OnRegularScheduleStart extends ScheduleOnStartAction {
 		@Override
-		public void run() {
+		public void run(SchedulingData dat) {
 			boolean hasConflict=false;
 			for (SchedulingData d : data.values()) {
-				if (d!=dat && d.getActuatorName().equals(dat.getActuatorName()) && d.getNextEndTime().compareTo(dat.getNextStartTime())>0 && d.getPriority()>dat.getPriority()) {
-					hasConflict=true;
-					break;
+				if (d!=dat && d.getActuatorName().equals(dat.getActuatorName()) && 
+					ScheduleUtility.compareScheduleTime(d.getNextEndTime(),dat.getNextStartTime())>0 && d.enabled) {
+					
+					if (d instanceof SchedulingDataSpecial || (d instanceof SchedulingDataRegular && (d.getPriority()>dat.getPriority() || (d.getPriority()==dat.getPriority() && d.getName().compareTo(dat.getName())<0)))) {
+						hasConflict=true;
+						break;
+					}
+					
 				}
 			}
 			
 			if (!hasConflict) {
-				Logger.log(Logger.LEVEL_INFO,"RegularSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getStartAction()+". [SET]");
-				TriggerActuator(Cache.Actuators.map.get(dat.actuatorName).getController().getControllername(),this.dat.actuatorName,this.dat.getStartAction());
-				DatabaseEvent.logActuatorEvent(dat.actuatorName, "Schedule", "Set to "+this.dat.getStartAction()+" by regular schedule "+this.dat.getName()+" on start.");
+				Logger.log(Logger.LEVEL_INFO,"RegularSchedule ("+dat.name+") : Started -> Attempt to set "+dat.actuatorName+" to "+dat.getStartAction()+". [SET]");
+				TriggerActuator(Cache.Actuators.map.get(dat.actuatorName).getController().getControllername(),dat.actuatorName,dat.getStartAction());
+				DatabaseEvent.logActuatorEvent(dat.actuatorName, "Schedule", "Set to "+dat.getStartAction()+" by regular schedule "+dat.getName()+" on start.");
 			} else {
-				Logger.log(Logger.LEVEL_INFO,"RegularSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getStartAction()+". [NOT SET DUE TO LOW PRIORITY]");
+				Logger.log(Logger.LEVEL_INFO,"RegularSchedule ("+dat.name+") : Started -> Attempt to set "+dat.actuatorName+" to "+dat.getStartAction()+". [NOT SET DUE TO LOW PRIORITY]");
 			}
 		}
 	}
 	
 	public class OnRegularScheduleEnd extends ScheduleOnEndAction {
 		@Override
-		public void run() {
+		public void run(SchedulingData dat) {
 			boolean hasConflict=false;
 			for (SchedulingData d : data.values()) {
-				if (d!=dat && d.getActuatorName().equals(dat.getActuatorName()) && d.getNextEndTime().compareTo(dat.getNextStartTime())>0 && d.getPriority()>dat.getPriority()) {
-					hasConflict=true;
-					break;
+				if (d!=dat && d.getActuatorName().equals(dat.getActuatorName()) && 
+					ScheduleUtility.compareScheduleTime(d.getNextEndTime(),dat.getNextEndTime())>=0 && d.enabled) {
+					
+					if (d instanceof SchedulingDataSpecial || (d instanceof SchedulingDataRegular && (d.getPriority()>dat.getPriority() || (d.getPriority()==dat.getPriority() && d.getName().compareTo(dat.getName())<0)))) { 
+						hasConflict=true;
+						break;
+					}
+					
 				}
 			}
 			
 			if (!hasConflict) {
-				Logger.log(Logger.LEVEL_INFO,"RegularSchedule ("+this.dat.name+") : Ended -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getEndAction()+". [SET]");
-				TriggerActuator(Cache.Actuators.map.get(dat.actuatorName).getController().getControllername(),this.dat.actuatorName,this.dat.getEndAction());
-				DatabaseEvent.logActuatorEvent(dat.actuatorName, "Schedule", "Set to "+this.dat.getStartAction()+" by regular schedule "+this.dat.getName()+" on end.");
+				Logger.log(Logger.LEVEL_INFO,"RegularSchedule ("+dat.name+") : Ended -> Attempt to set "+dat.actuatorName+" to "+dat.getEndAction()+". [SET]");
+				TriggerActuator(Cache.Actuators.map.get(dat.actuatorName).getController().getControllername(),dat.actuatorName,dat.getEndAction());
+				DatabaseEvent.logActuatorEvent(dat.actuatorName, "Schedule", "Set to "+dat.getEndAction()+" by regular schedule "+dat.getName()+" on end.");
 			} else {
-				Logger.log(Logger.LEVEL_INFO,"RegularSchedule ("+this.dat.name+") : Ended -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getEndAction()+". [NOT SET DUE TO LOW PRIORITY]");
+				Logger.log(Logger.LEVEL_INFO,"RegularSchedule ("+dat.name+") : Ended -> Attempt to set "+dat.actuatorName+" to "+dat.getEndAction()+". [NOT SET DUE TO LOW PRIORITY]");
 			}
 			
 			FrameOngoingSchedules.refresh();
@@ -205,7 +263,7 @@ public class SchedulingThread extends Thread {
 		@Override
 		public void run(String sn, String an, int year, int month, int day, String rn, String startAct, String endAct, boolean lock, int pr, boolean en) {
 			SchedulingData d=new SchedulingDataSpecial(sn,an,year,month,day,rn,startAct,endAct,lock,pr,en);
-			if (d.getNextEndTime().compareTo(LocalDateTime.now())>0 && en && Cache.Actuators.map.get(an).getControltype().equals("Scheduled")) {
+			if (d.getNextEndTime().compareTo(LocalDateTime.now())>0 && d.enabled && Cache.Actuators.map.get(an).getControltype().equals("Scheduled")) {
 				data.put(sn,d);
 				FrameOngoingSchedules.refresh();
 			}
@@ -218,7 +276,7 @@ public class SchedulingThread extends Thread {
 			SchedulingDataSpecial d=(SchedulingDataSpecial)data.getOrDefault(oldSN,null);
 			if (d==null) {
 				d=new SchedulingDataSpecial(sn,an,year,month,day,rn,startAct,endAct,lock,pr,en);
-				if (d.getNextEndTime().compareTo(LocalDateTime.now())>0 && d.enabled && day!=0 && Cache.Actuators.map.get(an).getControltype().equals("Scheduled")) {
+				if (d.getNextEndTime().compareTo(LocalDateTime.now())>0 && d.enabled && Cache.Actuators.map.get(an).getControltype().equals("Scheduled")) {
 					data.put(sn,d);
 					FrameOngoingSchedules.refresh();
 				}
@@ -226,8 +284,10 @@ public class SchedulingThread extends Thread {
 				d.setYear(year);
 				d.setMonth(month);
 				d.setDay(day);
-				if (d.getNextEndTime().compareTo(LocalDateTime.now())<0) data.remove(oldSN);
-				else {
+				if (d.getNextEndTime().compareTo(LocalDateTime.now())<0) {
+					d.purgeTimer();
+					data.remove(oldSN);
+				} else {
 					if (!d.getName().equals(sn)) {
 						d.setName(sn);
 						data.remove(oldSN);
@@ -239,10 +299,14 @@ public class SchedulingThread extends Thread {
 					d.setStartAction(startAct);
 					d.setEndAction(endAct);
 					d.setLock(lock);
+					d.setPriority(pr);
 					if (d.isEnabled()!=en) {
 						d.setEnabled(en);
 						if (en) data.put(sn,d);
-						else data.remove(sn);
+						else {
+							d.purgeTimer();
+							data.remove(sn);
+						}
 					}
 				}
 				FrameOngoingSchedules.refresh();
@@ -255,6 +319,7 @@ public class SchedulingThread extends Thread {
 		public void run(String sn) {
 			SchedulingData d=data.get(sn);
 			if (d!=null) {
+				d.purgeTimer();
 				data.remove(sn);
 				FrameOngoingSchedules.refresh();
 			}
@@ -263,45 +328,72 @@ public class SchedulingThread extends Thread {
 	
 	public class OnSpecialScheduleStart extends ScheduleOnStartAction {
 		@Override
-		public void run() {
+		public void run(SchedulingData dat) {
 			boolean hasConflict=false;
 			for (SchedulingData d : data.values()) {
-				if (d!=dat && d instanceof SchedulingDataSpecial && d.getActuatorName().equals(dat.getActuatorName()) && d.getNextEndTime().compareTo(dat.getNextStartTime())>0 && d.getPriority()>dat.getPriority()) {
+				if (d!=dat && d instanceof SchedulingDataSpecial && d.getActuatorName().equals(dat.getActuatorName()) &&
+						ScheduleUtility.compareScheduleTime(d.getNextEndTime(),dat.getNextStartTime())>0  && 
+						(d.getPriority()>dat.getPriority() || (d.getPriority()==dat.getPriority() && d.getName().compareTo(dat.getName())<0)) &&
+						 d.enabled) {
 					hasConflict=true;
 					break;
 				}
 			}
 			
 			if (!hasConflict) {
-				Logger.log(Logger.LEVEL_INFO,"SpecialSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getStartAction()+". [SET]");
-				TriggerActuator(Cache.Actuators.map.get(dat.actuatorName).getController().getControllername(),this.dat.actuatorName,this.dat.getStartAction());
-				DatabaseEvent.logActuatorEvent(dat.actuatorName, "Schedule", "Set to "+this.dat.getStartAction()+" by special schedule "+this.dat.getName()+" on start.");
+				Logger.log(Logger.LEVEL_INFO,"SpecialSchedule ("+dat.name+") : Started -> Attempt to set "+dat.actuatorName+" to "+dat.getStartAction()+". [SET]");
+				TriggerActuator(Cache.Actuators.map.get(dat.actuatorName).getController().getControllername(),dat.actuatorName,dat.getStartAction());
+				DatabaseEvent.logActuatorEvent(dat.actuatorName, "Schedule", "Set to "+dat.getStartAction()+" by special schedule "+dat.getName()+" on start.");
 			} else {
-				Logger.log(Logger.LEVEL_INFO,"SpecialSchedule ("+this.dat.name+") : Started -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getStartAction()+". [NOT SET DUE TO LOW PRIORITY]");
+				Logger.log(Logger.LEVEL_INFO,"SpecialSchedule ("+dat.name+") : Started -> Attempt to set "+dat.actuatorName+" to "+dat.getStartAction()+". [NOT SET DUE TO LOW PRIORITY]");
 			}
 		}
 	}
 	
 	public class OnSpecialScheduleEnd extends ScheduleOnEndAction {
 		@Override
-		public void run() {
+		public void run(SchedulingData dat) {
 			boolean hasConflict=false;
 			for (SchedulingData d : data.values()) {
-				if (d!=dat && d instanceof SchedulingDataSpecial && d.getActuatorName().equals(dat.getActuatorName()) && d.getNextEndTime().compareTo(dat.getNextStartTime())>0 && d.getPriority()>dat.getPriority()) {
+				if (d!=dat && d instanceof SchedulingDataSpecial && d.getActuatorName().equals(dat.getActuatorName()) &&
+					ScheduleUtility.compareScheduleTime(d.getNextEndTime(),dat.getNextEndTime())>=0 &&
+							(d.getPriority()>dat.getPriority() || (d.getPriority()==dat.getPriority() && d.getName().compareTo(dat.getName())<0)) &&
+							d.enabled) {
 					hasConflict=true;
 					break;
 				}
 			}
 			
 			if (!hasConflict) {
-				Logger.log(Logger.LEVEL_INFO,"SpecialSchedule ("+this.dat.name+") : Ended -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getEndAction()+". [SET]");
-				TriggerActuator(Cache.Actuators.map.get(dat.actuatorName).getController().getControllername(),this.dat.actuatorName,this.dat.getEndAction());
-				DatabaseEvent.logActuatorEvent(dat.actuatorName, "Schedule", "Set to "+this.dat.getStartAction()+" by special schedule "+this.dat.getName()+" on end.");
+				Logger.log(Logger.LEVEL_INFO,"SpecialSchedule ("+dat.name+") : Ended -> Attempt to set "+dat.actuatorName+" to "+dat.getEndAction()+". [SET]");
+				TriggerActuator(Cache.Actuators.map.get(dat.actuatorName).getController().getControllername(),dat.actuatorName,dat.getEndAction());
+				DatabaseEvent.logActuatorEvent(dat.actuatorName, "Schedule", "Set to "+dat.getStartAction()+" by special schedule "+dat.getName()+" on end.");
 			} else {
-				Logger.log(Logger.LEVEL_INFO,"SpecialSchedule ("+this.dat.name+") : Ended -> Attempt to set "+this.dat.actuatorName+" to "+this.dat.getEndAction()+". [NOT SET DUE TO LOW PRIORITY]");
+				Logger.log(Logger.LEVEL_INFO,"SpecialSchedule ("+dat.name+") : Ended -> Attempt to set "+dat.actuatorName+" to "+dat.getEndAction()+". [NOT SET DUE TO LOW PRIORITY]");
 			}
 			
-			FrameOngoingSchedules.refresh();
+			Thread t=new Thread() {
+				public void run () {
+					while (true) {
+						boolean exists=false;
+						for (SchedulingData d : data.values()) {
+							if (d!=dat && d instanceof SchedulingDataRegular && d.getActuatorName().equals(dat.getActuatorName())
+								&& ScheduleUtility.compareScheduleTime(d.getNextEndTime(),dat.getNextEndTime())==0 && d.enabled) {
+								exists=true;
+								break;
+							}
+						}
+						
+						if (!exists) {
+							data.remove(dat.getName());
+							FrameOngoingSchedules.refresh();
+							break;
+						}
+						
+						try { Thread.sleep(500); } catch (InterruptedException e) {}
+					}
+				}
+			}; t.start();
 		}
 	}
 	
@@ -319,7 +411,6 @@ public class SchedulingThread extends Thread {
 		OnActuatorDelete oae=new OnActuatorDelete();
 		DatabaseActuator.registerOnUpdateAction(oau);
 		DatabaseActuator.registerOnDeleteAction(oae);
-		
 		
 		OnSpecialScheduleCreate ossc=new OnSpecialScheduleCreate();
 		OnSpecialScheduleUpdate ossu=new OnSpecialScheduleUpdate();
@@ -366,7 +457,12 @@ public class SchedulingThread extends Thread {
 		SchedulingServer.isStarted=true;
 		while (true) {
 			if (stopQueued) {
+				for (SchedulingData d : data.values()) d.purgeTimer();
+				data.clear();
 				stopQueued=false;
+				DatabaseActuator.unregisterOnUpdateAction(oau);
+				DatabaseActuator.unregisterOnDeleteAction(oae);
+				
 				DatabaseDayScheduleRule.unregisterOnUpdateAction(odsru);
 				
 				DatabaseSpecialSchedule.unregisterOnCreateAction(ossc);
@@ -377,10 +473,10 @@ public class SchedulingThread extends Thread {
 				DatabaseRegularSchedule.unregisterOnUpdateAction(orsu);
 				DatabaseRegularSchedule.unregisterOnDeleteAction(orsd);
 				
-				SchedulingServer.notifyStop();
+				SchedulingServer.isStarted=false;
+				break;
 			}
-			try { Thread.sleep(1000);
-			} catch (InterruptedException e) {}
+			try { Thread.sleep(1000);} catch (InterruptedException e) {}
 		}
 	}
 }

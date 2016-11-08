@@ -197,13 +197,13 @@ public class MenuUI extends JFrame {
 		btnStopAutomationServer.setBounds(273, 79, 130, 23);
 		btnStopAutomationServer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SchedulingServer.stop();
-				if (!SchedulingServer.started()) {
-					btnStartAutomationServer.setEnabled(true);
-					btnStopAutomationServer.setEnabled(false);
-					btnOngoingSchedules.setEnabled(false);
+				SchedulingServer.notifyStop();
+				while (SchedulingServer.started()) {
+					try { Thread.sleep(100); } catch (InterruptedException e2) {}
 				}
-				
+				btnStartAutomationServer.setEnabled(true);
+				btnStopAutomationServer.setEnabled(false);
+				btnOngoingSchedules.setEnabled(false);
 				SensorActuatorResponseServer.stop();
 			}
 		});

@@ -62,19 +62,17 @@ public class ControllerPacket {
 				if (!status.equals("ON") && !status.equals("OFF")) status=null;
 				Logger.log(Logger.LEVEL_INFO,"Controller Packet Info - Received content : "+status);
 
-				packetQueue.get(this.ct).poll();
 				try { Thread.sleep(Config.CONTROLLER_READY_TIME_MS); } catch (InterruptedException e) {}
 			} catch (Exception e) {
 				Logger.log(Logger.LEVEL_ERROR,"Controller Packet Error - Attempting to send packet. "+e.getMessage());
 				status=null;
 			} finally {
-				try {
-					if (pw!=null) pw.close();
-					if (dis!=null) dis.close();
-					if (sc!=null) sc.close();
-				} catch (Exception zz) {};
+				try { if (pw!=null) pw.close(); } catch (Exception zz) {};
+				try { if (dis!=null) dis.close(); } catch (Exception zz) {};
+				try { if (sc!=null) sc.close(); } catch (Exception zz) {};
 			}
 		}
+		packetQueue.get(this.ct).poll();
 		return status;
 	}
 }

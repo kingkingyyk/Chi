@@ -64,7 +64,7 @@ public class SchedulingServer {
 	}
 	
 	public static void notifyStop() {
-		isStarted=false;
+		scheduleThread.stopQueued=true;
 	}
 	
 	public static boolean isActuatorLocked (String aname) {

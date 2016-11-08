@@ -1,6 +1,5 @@
 package SchedulingServer;
 
 public abstract class ScheduleOnStartAction {
-	public SchedulingData dat=null;
-	public void run () {};
+	public void run (SchedulingData dat) {};
 }

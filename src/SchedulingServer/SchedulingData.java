@@ -29,14 +29,13 @@ public abstract class SchedulingData implements Comparable<SchedulingData> {
 		@Override
 		public void run() {
 			//if (d.nextEndTime.compareTo(LocalDateTime.now())>=0) {
-				d.updateScheduler(true);
 				if (d.enabled) {
 					for (ScheduleOnEndAction s : d.onEndFunc) {
-						s.dat=d;
-						s.run();
+						s.run(d);
 					}
+					d.updateScheduler(true);
+					this.execute();
 				}
-				this.execute();
 			//}
 
 		}
@@ -49,8 +48,7 @@ public abstract class SchedulingData implements Comparable<SchedulingData> {
 		public void run() {
 			if (d.enabled) {
 				for (ScheduleOnStartAction s : d.onStartFunc) {
-					s.dat=d;
-					s.run();
+					s.run(d);
 				}
 			}
 		}
@@ -125,18 +123,17 @@ public abstract class SchedulingData implements Comparable<SchedulingData> {
 	}
 	
 	public int compareTo(SchedulingData d) {
-		if (this.nextStartTime.compareTo(d.nextStartTime)!=0) {
-			return this.nextStartTime.compareTo(d.nextStartTime);
-		}
-		if (this.classPriority!=d.classPriority) {
-			return d.classPriority-this.classPriority;
-		}
-		if (this.priority!=d.priority) {
-			return d.priority-this.priority;
-		}
-		if (this.nextEndTime.compareTo(d.nextEndTime)!=0) {
-			return d.nextEndTime.compareTo(this.nextEndTime);
-		}
-		return 0;
+		if (this.nextStartTime.compareTo(d.nextStartTime)!=0) return this.nextStartTime.compareTo(d.nextStartTime);
+		if (this.actuatorName.compareTo(d.actuatorName)!=0) return this.actuatorName.compareTo(d.actuatorName);
+		if (this.classPriority!=d.classPriority) return d.classPriority-this.classPriority;
+		if (this.priority!=d.priority) return d.priority-this.priority;
+		return this.name.compareTo(d.name);
+	}
+	
+	public void purgeTimer() {
+		try { this.onEndScheduler.cancel(); } catch (Exception e) {}
+		this.onEndScheduler.purge();
+		try { this.onStartScheduler.cancel(); } catch (Exception e) {}
+		this.onStartScheduler.purge();
 	}
 }
