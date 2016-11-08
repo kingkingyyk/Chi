@@ -21,6 +21,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import ControllerPacket.ControllerPacketActuatorTrigger;
 import Database.Cache;
+import Database.DatabaseActuator;
 import Database.DatabaseDayScheduleRule;
 import Database.DatabaseEvent;
 import Database.DatabaseReading;
@@ -485,7 +486,7 @@ public class GWTServer {
 		    	result.add(act.getStatus());
 		    	return result;
 		    }
-		    case "45" : { //ActuatorSetStatus;
+		    case "45a" : { //ActuatorSetStatus;
 		    	Actuator act=Cache.Actuators.map.getOrDefault(list.get(1),null);
 		    	if (act!=null) {
 		    		if (SchedulingServer.isActuatorLocked(act.getName())) return "ACTUATOR_LOCKED_BY_SCHEDULE";
@@ -496,6 +497,15 @@ public class GWTServer {
 			    		else return "FAIL";
 		    		}
 		    	} else return "ACTUATOR_NOT_EXIST";
+		    }
+		    case "45b" : { //ActuatorSetControlType;
+		    	Actuator act=Cache.Actuators.map.get(list.get(1));
+		    	if (act==null) return "ACTUATOR_NOT_EXIST";
+		    	String type=(String)list.get(2);
+		    	if (!type.equals("Manual") && !type.equals("Scheduled") && !type.equals("Sensor Response")) return "INVALID_CONTROL_TYPE";
+		    	boolean flag=DatabaseActuator.updateActuator(act.getName(),act.getName(),act.getController().getControllername(),
+		    												act.getStatuslist(),act.getPositionx(),act.getPositiony(),(String)list.get(2));
+		    	if (flag) return "OK"; else return "ERROR";
 		    }
 		    case "46" : { //SensorActuatorResponseGetAll
 		    	ArrayList<Object []> result=new ArrayList<>();
@@ -516,14 +526,14 @@ public class GWTServer {
 		    	if (Cache.Actuators.map.get(list.get(1)).getSensoractuatorresponses().size()>0) return "ACTUATOR_ALREADY_USED";
 		    	boolean flag=DatabaseSensorActuatorResponse.createSensorActuatorResponse((String)list.get(1),(String)list.get(2),(String)list.get(3),
 		    																			 (String)list.get(4),(Boolean)list.get(5),(Integer)list.get(6));
-		    	if (flag) return "OK"; else return "ERROR";
+		    	if (flag) return String.valueOf(Cache.Actuators.map.get(list.get(1)).getSensoractuatorresponses().toArray(new Sensoractuatorresponse[1])[0].getId()) ; else return "ERROR";
 		    }
 		    case "48b" : { //SensorActuatorResponseUpdate
 		    	if (Cache.SensorActuatorResponses.map.get(String.valueOf((Integer)list.get(1)))==null) return "RESPONSE_NOT_EXIST";
 		    	boolean expOK=true;
-		    	try { SensoractuatorresponseEvaluator.evaluateStatement((String)list.get(5)); expOK=SensoractuatorresponseEvaluator.containsSensor((String)list.get(4));} catch (Exception e) {expOK=false;}
+		    	try { SensoractuatorresponseEvaluator.evaluateStatement((String)list.get(5)); expOK=SensoractuatorresponseEvaluator.containsSensor((String)list.get(5));} catch (Exception e) {expOK=false;}
 		    	if (!expOK) return "EXPRESSION_ERROR";
-		    	if (Cache.Actuators.map.get(list.get(2)).getSensoractuatorresponses().size()>0) return "ACTUATOR_ALREADY_USED";
+		    	if (!Cache.SensorActuatorResponses.map.get(String.valueOf((Integer)list.get(1))).getActuator().getName().equals(list.get(2)) && Cache.Actuators.map.get(list.get(2)).getSensoractuatorresponses().size()>0) return "ACTUATOR_ALREADY_USED";
 		    	boolean flag=DatabaseSensorActuatorResponse.updateSensorActuatorResponse((Integer)list.get(1),(String)list.get(2),(String)list.get(3),(String)list.get(4),
 		    																			(String)list.get(5),(Boolean)list.get(6),(Integer)list.get(7));
 		    	if (flag) return "OK"; else return "ERROR";

@@ -108,6 +108,7 @@ public class DatabaseSensorActuatorResponse {
 				s.setOnnottriggeraction(onNotTrigAct);
 				s.setExpression(expression);
 				s.setEnabled(en);
+				s.setTimeout(timeout);
 				session.update(s);
 				tx.commit();
 				Cache.SensorActuatorResponses.map.put(String.valueOf(id),s);
