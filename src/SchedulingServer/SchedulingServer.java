@@ -73,6 +73,6 @@ public class SchedulingServer {
 			for (SchedulingData dat : scheduleThread.data.values()) if (dat.actuatorName.equals(aname) && (highestPrio==null || dat.priority>highestPrio.priority))
 				highestPrio=dat;
 		}
-		return (highestPrio==null || highestPrio.lock);
+		return (highestPrio!=null && highestPrio.lock);
 	}
 }
