@@ -643,13 +643,13 @@ public class GWTServer {
 		    	boolean flag=DatabaseUserSensorNotification.unsubscribeSensorNotification(uname,sname);
 		    	if (flag) return "OK"; else return "ERROR";
 		    }
-		    case "62" : { //User sensor notification get subscription
-		    	String uname=(String)list.get(1);
-		    	return DatabaseUserSensorNotification.getSubscription(uname);
-		    }
-		    case "63" : { //User sensor notification get last read time
+		    case "62" : { //User sensor notification get last read time
 		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
 		    	return DatabaseUserSensorNotification.getSensorNotificationTime(uname,sname);
+		    }
+		    case "63" : { //User sensor notification get subscription
+		    	String uname=(String)list.get(1);
+		    	return DatabaseUserSensorNotification.getSubscription(uname);
 		    }
 		    case "64" : { //User subscribe actuator notification
 		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
