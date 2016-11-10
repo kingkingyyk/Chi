@@ -1,6 +1,7 @@
 package Database;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,7 +10,6 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import Chi.Logger;
-import Chi.Utility;
 import Entity.Actuatorevent;
 import Entity.Controllerevent;
 import Entity.Sensorevent;
@@ -32,6 +32,9 @@ public class DatabaseEvent {
 	private static ArrayList<OnControllerEventLoggedAction> OnControllerEventLoggedList = new ArrayList<>();
 	private static ArrayList<OnActuatorEventLoggedAction> OnActuatorEventLoggedList = new ArrayList<>();
 
+	private static String TIMESTAMP_FORMAT="yyyy-MM-dd HH:mm:ss"; //format the time
+	private static DateTimeFormatter formatter=DateTimeFormatter.ofPattern(TIMESTAMP_FORMAT);
+	
 	public static void registerOnSensorEventLoggedAction(OnSensorEventLoggedAction a) {
 		if (!OnSensorEventLoggedList.contains(a)) {
 			Logger.log(Logger.LEVEL_INFO,"DatabaseEvent - Registered " + a.toString() + " to OnSensorEventLogged callback");
@@ -126,7 +129,7 @@ public class DatabaseEvent {
 			tx=session.beginTransaction();
 			@SuppressWarnings("rawtypes")
 			
-			List l=session.createQuery("FROM Sensorevent WHERE TimeStp>TIMESTAMP("+Utility.localDateTimeToLong(min)+") AND TimeStp<TIMESTAMP("+Utility.localDateTimeToLong(max)+")").getResultList();
+			List l=session.createQuery("FROM Sensorevent WHERE TimeStp>TIMESTAMP('"+formatter.format(min)+"') AND TimeStp<TIMESTAMP('"+formatter.format(max)+"')").getResultList();
 			for (Object o : l) {
 				list.add((Sensorevent) o);
 			}
@@ -191,7 +194,7 @@ public class DatabaseEvent {
 			tx=session.beginTransaction();
 			@SuppressWarnings("rawtypes")
 			
-			List l=session.createQuery("FROM Controllerevent WHERE TimeStp>TIMESTAMP("+Utility.localDateTimeToLong(min)+") AND TimeStp<TIMESTAMP("+Utility.localDateTimeToLong(max)+")").getResultList();
+			List l=session.createQuery("FROM Controllerevent WHERE TimeStp>TIMESTAMP('"+formatter.format(min)+"') AND TimeStp<TIMESTAMP('"+formatter.format(max)+"')").getResultList();
 			for (Object o : l) {
 				list.add((Controllerevent) o);
 			}
@@ -229,10 +232,8 @@ public class DatabaseEvent {
 	public static ArrayList<Actuatorevent> getActuatorEventByName (String name) {
 		Logger.log(Logger.LEVEL_INFO,"DatabaseEvent - Get actuator event "+name);
 		Session session=Cache.factory.openSession();
-		Transaction tx=null;
 		ArrayList<Actuatorevent> list=new ArrayList<>();
 		try {
-			tx=session.beginTransaction();
 			@SuppressWarnings("rawtypes")
 			List l=session.createQuery("FROM Actuatorevent WHERE SensorName="+name).getResultList();
 			for (Object o : l) {
@@ -240,7 +241,6 @@ public class DatabaseEvent {
 			}
 		} catch (HibernateException e) {
 	        Logger.log(Logger.LEVEL_ERROR,"DatabaseEvent - Get actuator event - "+e.getMessage());
-	        if (tx!=null) tx.rollback();
 	    } finally {
 	         session.close(); 
 	    }
@@ -250,19 +250,15 @@ public class DatabaseEvent {
 	public static ArrayList<Actuatorevent> getActuatorEventBetweenTime (LocalDateTime min, LocalDateTime max) {
 		Logger.log(Logger.LEVEL_INFO,"DatabaseEvent - Get actuator event between time");
 		Session session=Cache.factory.openSession();
-		Transaction tx=null;
 		ArrayList<Actuatorevent> list=new ArrayList<>();
 		try {
-			tx=session.beginTransaction();
 			@SuppressWarnings("rawtypes")
-			
-			List l=session.createQuery("FROM Actuatorevent WHERE TimeStp>TIMESTAMP("+Utility.localDateTimeToLong(min)+") AND TimeStp<TIMESTAMP("+Utility.localDateTimeToLong(max)+")").getResultList();
+			List l=session.createQuery("FROM Actuatorevent WHERE TimeStp>TIMESTAMP('"+formatter.format(min)+"') AND TimeStp<TIMESTAMP('"+formatter.format(max)+"')").getResultList();
 			for (Object o : l) {
 				list.add((Actuatorevent) o);
 			}
 		} catch (HibernateException e) {
 	        Logger.log(Logger.LEVEL_ERROR,"DatabaseEvent - Get actuator event - Error - "+e.getMessage());
-	        if (tx!=null) tx.rollback();
 	    } finally {
 	         session.close(); 
 	    }

@@ -1,28 +1,24 @@
 package Entity;
-// Generated Nov 1, 2016 3:26:38 PM by Hibernate Tools 5.2.0.Beta1
+// Generated Nov 9, 2016 5:05:17 PM by Hibernate Tools 5.2.0.Beta1
 
 import java.util.Date;
 
+import Chi.Utility;
+
 public class Useractuatornotification implements java.io.Serializable {
-	private static final long serialVersionUID = -5302387381126012623L;
+	private static final long serialVersionUID = 3548118196456020786L;
 	private UseractuatornotificationId id;
-	private Actuator actuator;
-	private User user;
 	private Date lastread;
 
 	public Useractuatornotification() {
 	}
 
-	public Useractuatornotification(UseractuatornotificationId id, Actuator actuator, User user) {
+	public Useractuatornotification(UseractuatornotificationId id) {
 		this.id = id;
-		this.actuator = actuator;
-		this.user = user;
 	}
 
-	public Useractuatornotification(UseractuatornotificationId id, Actuator actuator, User user, Date lastread) {
+	public Useractuatornotification(UseractuatornotificationId id, Date lastread) {
 		this.id = id;
-		this.actuator = actuator;
-		this.user = user;
 		this.lastread = lastread;
 	}
 
@@ -34,22 +30,6 @@ public class Useractuatornotification implements java.io.Serializable {
 		this.id = id;
 	}
 
-	public Actuator getActuator() {
-		return this.actuator;
-	}
-
-	public void setActuator(Actuator actuator) {
-		this.actuator = actuator;
-	}
-
-	public User getUser() {
-		return this.user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
 	public Date getLastread() {
 		return this.lastread;
 	}
@@ -58,4 +38,7 @@ public class Useractuatornotification implements java.io.Serializable {
 		this.lastread = lastread;
 	}
 
+	public Object[] toObj () {
+		return new Object[] {this.id.getUser().getUsername(),this.id.getActuator().getName(),Utility.dateToLocalDateTime(this.lastread)};
+	}
 }

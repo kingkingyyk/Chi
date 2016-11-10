@@ -30,8 +30,8 @@ public class DatabaseUserActuatorNotification {
 			boolean flag;
 			try {
 				tx=session.beginTransaction();
-				UseractuatornotificationId uid=new UseractuatornotificationId(username,actuatorname);
-				session.save(new Useractuatornotification(uid,Cache.Actuators.map.get(actuatorname),Cache.Users.map.get(username),new Date()));
+				UseractuatornotificationId uid=new UseractuatornotificationId(Cache.Users.map.get(username),Cache.Actuators.map.get(actuatorname));
+				session.save(new Useractuatornotification(uid,new Date()));
 				tx.commit();
 				
 				Logger.log(Logger.LEVEL_INFO,"DB Subscribe User Actuator Notification - Execute Callbacks");
@@ -59,7 +59,7 @@ public class DatabaseUserActuatorNotification {
 			boolean flag;
 			try {
 				tx=session.beginTransaction();
-				UseractuatornotificationId uid=new UseractuatornotificationId(username,actuatorname);
+				UseractuatornotificationId uid=new UseractuatornotificationId(Cache.Users.map.get(username),Cache.Actuators.map.get(actuatorname));
 				Useractuatornotification un=session.get(Useractuatornotification.class,uid);
 				if (un!=null) {
 					un.setLastread(time);
@@ -90,7 +90,7 @@ public class DatabaseUserActuatorNotification {
 			Session session=Cache.factory.openSession();
 			LocalDateTime toReturn=null;
 			try {
-				UseractuatornotificationId uid=new UseractuatornotificationId(username,actuatorname);
+				UseractuatornotificationId uid=new UseractuatornotificationId(Cache.Users.map.get(username),Cache.Actuators.map.get(actuatorname));
 				Useractuatornotification un=session.get(Useractuatornotification.class,uid);
 				if (un!=null) toReturn=Utility.dateToLocalDateTime(un.getLastread());
 				else Logger.log(Logger.LEVEL_INFO,"DB Get User Actuator Notification Time - Subscription not found");
@@ -117,7 +117,7 @@ public class DatabaseUserActuatorNotification {
 			boolean flag;
 			try {
 				tx=session.beginTransaction();
-				UseractuatornotificationId uid=new UseractuatornotificationId(username,actuatorname);
+				UseractuatornotificationId uid=new UseractuatornotificationId(Cache.Users.map.get(username),Cache.Actuators.map.get(actuatorname));
 				Useractuatornotification un=session.get(Useractuatornotification.class,uid);
 				session.delete(un);
 				tx.commit();
@@ -133,17 +133,18 @@ public class DatabaseUserActuatorNotification {
 		}
 	}
 	
-	public static ArrayList<String> getSubscription (String username) {
+	public static ArrayList<Object []> getSubscription (String username) {
 		Logger.log(Logger.LEVEL_INFO,"DB Get User Actuator Notification Subscription");
 		
-		ArrayList<String> toReturn=new ArrayList<>();
+		ArrayList<Object []> toReturn=new ArrayList<>();
 		if (!Cache.Users.map.containsKey(username)) Logger.log(Logger.LEVEL_INFO,"DB Get User Actuator Notification Subscription - User doesn't exist!");
 		else {
 			Session session=Cache.factory.openSession();
 			try {
 				@SuppressWarnings("unchecked")
 				List<Useractuatornotification> l=session.createQuery("FROM Useractuatornotification").getResultList();
-				for (Useractuatornotification n : l) if (n.getUser().equals(username)) toReturn.add(n.getActuator().getName());
+
+				for (Useractuatornotification n : l) if (n.getId().getUser().getUsername().equals(username)) toReturn.add(n.toObj());
 
 			} catch (HibernateException e) {
 				Logger.log(Logger.LEVEL_ERROR,"DB Get User Actuator Notification Subscription - "+e.getMessage());

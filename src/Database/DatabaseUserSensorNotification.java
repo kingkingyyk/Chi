@@ -30,8 +30,8 @@ public class DatabaseUserSensorNotification {
 			boolean flag;
 			try {
 				tx=session.beginTransaction();
-				UsersensornotificationId uid=new UsersensornotificationId(username,sensorname);
-				session.save(new Usersensornotification(uid,Cache.Sensors.map.get(sensorname),Cache.Users.map.get(username),new Date()));
+				UsersensornotificationId uid=new UsersensornotificationId(Cache.Users.map.get(username),Cache.Sensors.map.get(sensorname));
+				session.save(new Usersensornotification(uid,new Date()));
 				tx.commit();
 				
 				Logger.log(Logger.LEVEL_INFO,"DB Subscribe User Sensor Notification - Execute Callbacks");
@@ -59,7 +59,7 @@ public class DatabaseUserSensorNotification {
 			boolean flag;
 			try {
 				tx=session.beginTransaction();
-				UsersensornotificationId uid=new UsersensornotificationId(username,sensorname);
+				UsersensornotificationId uid=new UsersensornotificationId(Cache.Users.map.get(username),Cache.Sensors.map.get(sensorname));
 				Usersensornotification un=session.get(Usersensornotification.class,uid);
 				if (un!=null) {
 					un.setLastread(time);
@@ -90,7 +90,7 @@ public class DatabaseUserSensorNotification {
 			Session session=Cache.factory.openSession();
 			LocalDateTime toReturn=null;
 			try {
-				UsersensornotificationId uid=new UsersensornotificationId(username,sensorname);
+				UsersensornotificationId uid=new UsersensornotificationId(Cache.Users.map.get(username),Cache.Sensors.map.get(sensorname));
 				Usersensornotification un=session.get(Usersensornotification.class,uid);
 				if (un!=null) toReturn=Utility.dateToLocalDateTime(un.getLastread());
 				else Logger.log(Logger.LEVEL_INFO,"DB Get User Sensor Notification Time - Subscription not found");
@@ -118,7 +118,7 @@ public class DatabaseUserSensorNotification {
 			boolean flag;
 			try {
 				tx=session.beginTransaction();
-				UsersensornotificationId uid=new UsersensornotificationId(username,sensorname);
+				UsersensornotificationId uid=new UsersensornotificationId(Cache.Users.map.get(username),Cache.Sensors.map.get(sensorname));
 				Usersensornotification un=session.get(Usersensornotification.class,uid);
 				session.delete(un);
 				tx.commit();
@@ -134,17 +134,17 @@ public class DatabaseUserSensorNotification {
 		}
 	}
 	
-	public static ArrayList<String> getSubscription (String username) {
+	public static ArrayList<Object []> getSubscription (String username) {
 		Logger.log(Logger.LEVEL_INFO,"DB Get User Sensor Notification Subscription");
 		
-		ArrayList<String> toReturn=new ArrayList<>();
+		ArrayList<Object []> toReturn=new ArrayList<>();
 		if (!Cache.Users.map.containsKey(username)) Logger.log(Logger.LEVEL_INFO,"DB Get User Sensor Notification Subscription - User doesn't exist!");
 		else {
 			Session session=Cache.factory.openSession();
 			try {
 				@SuppressWarnings("unchecked")
 				List<Usersensornotification> l=session.createQuery("FROM Usersensornotification").getResultList();
-				for (Usersensornotification n : l) if (n.getUser().equals(username)) toReturn.add(n.getSensor().getSensorname());
+				for (Usersensornotification n : l) if (n.getId().getUser().getUsername().equals(username)) toReturn.add(n.toObj());
 
 			} catch (HibernateException e) {
 				Logger.log(Logger.LEVEL_ERROR,"DB Get User Sensor Notification Subscription - "+e.getMessage());

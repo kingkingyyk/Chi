@@ -17,10 +17,10 @@ public class Logger {
 	private static File LogFile=null;
 	public static boolean EnableLogToFile=false;
 	private static ConcurrentLinkedQueue<Log> eventQueue=new ConcurrentLinkedQueue<>();
-	private static String [] LEVEL_TEXT={"ERROR","WARNING","INFO"};
-	public static int LEVEL_ERROR=0;
+	private static String [] LEVEL_TEXT={"INFO","WARNING","ERROR"};
+	public static int LEVEL_ERROR=2;
 	public static int LEVEL_WARNING=1;
-	public static int LEVEL_INFO=2;
+	public static int LEVEL_INFO=0;
 	public static int LOG_LEVEL=LEVEL_INFO;
 	
 	private static class Log {
@@ -35,7 +35,7 @@ public class Logger {
 	}
 	
 	public static void log (int logLevel, String event) {
-		if (logLevel<=LOG_LEVEL) {
+		if (logLevel>=LOG_LEVEL) {
 			StringBuilder sb=new StringBuilder();
 			sb.append(LEVEL_TEXT[logLevel]);
 			sb.append(" | ");
@@ -78,4 +78,7 @@ public class Logger {
 		LogFile=new File(LOG_FOLDER_PATH+"/Server-"+logFileNameFormatter.format(new Date())+".log");
 	}
 	
+	public static void refreshLogLevel () {
+		LOG_LEVEL=Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_LOGGING_LEVEL_KEY));
+	}
 }

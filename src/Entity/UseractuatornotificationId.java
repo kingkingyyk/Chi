@@ -1,33 +1,32 @@
 package Entity;
-// Generated Nov 1, 2016 3:26:38 PM by Hibernate Tools 5.2.0.Beta1
 
 public class UseractuatornotificationId implements java.io.Serializable {
-	private static final long serialVersionUID = -7590278073255366909L;
-	private String username;
-	private String actuatorname;
+	private static final long serialVersionUID = -4277534132638917737L;
+	private User user;
+	private Actuator actuator;
 
 	public UseractuatornotificationId() {
 	}
 
-	public UseractuatornotificationId(String username, String actuatorname) {
-		this.username = username;
-		this.actuatorname = actuatorname;
+	public UseractuatornotificationId(User user, Actuator actuator) {
+		this.user = user;
+		this.actuator = actuator;
 	}
 
-	public String getUsername() {
-		return this.username;
+	public User getUser() {
+		return this.user;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
-	public String getActuatorname() {
-		return this.actuatorname;
+	public Actuator getActuator() {
+		return this.actuator;
 	}
 
-	public void setActuatorname(String actuatorname) {
-		this.actuatorname = actuatorname;
+	public void setActuator(Actuator actuator) {
+		this.actuator = actuator;
 	}
 
 	public boolean equals(Object other) {
@@ -39,18 +38,17 @@ public class UseractuatornotificationId implements java.io.Serializable {
 			return false;
 		UseractuatornotificationId castOther = (UseractuatornotificationId) other;
 
-		return ((this.getUsername() == castOther.getUsername()) || (this.getUsername() != null
-				&& castOther.getUsername() != null && this.getUsername().equals(castOther.getUsername())))
-				&& ((this.getActuatorname() == castOther.getActuatorname())
-						|| (this.getActuatorname() != null && castOther.getActuatorname() != null
-								&& this.getActuatorname().equals(castOther.getActuatorname())));
+		return ((this.getUser() == castOther.getUser()) || (this.getUser() != null && castOther.getUser() != null
+				&& this.getUser().equals(castOther.getUser())))
+				&& ((this.getActuator() == castOther.getActuator()) || (this.getActuator() != null
+						&& castOther.getActuator() != null && this.getActuator().equals(castOther.getActuator())));
 	}
 
 	public int hashCode() {
 		int result = 17;
 
-		result = 37 * result + (getUsername() == null ? 0 : this.getUsername().hashCode());
-		result = 37 * result + (getActuatorname() == null ? 0 : this.getActuatorname().hashCode());
+		result = 37 * result + (getUser() == null ? 0 : this.getUser().hashCode());
+		result = 37 * result + (getActuator() == null ? 0 : this.getActuator().hashCode());
 		return result;
 	}
 

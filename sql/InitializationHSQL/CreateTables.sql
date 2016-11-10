@@ -99,7 +99,7 @@ CREATE TABLE SensorActuatorResponse (
 	Expression varchar(500),
 	Enabled boolean,
 	Timeout int,
-	FOREIGN KEY (ActuatorName) REFERENCES Actuator(Name) ON UPDATE CASCADE ON DELETE CASCADE
+	FOREIGN KEY (ActuatorName) REFERENCES Actuator(Name) ON UPDATE CASCADE
 )
 @
 CREATE TABLE SensorEvent (

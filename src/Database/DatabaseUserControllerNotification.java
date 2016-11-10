@@ -30,8 +30,8 @@ public class DatabaseUserControllerNotification {
 			boolean flag;
 			try {
 				tx=session.beginTransaction();
-				UsercontrollernotificationId uid=new UsercontrollernotificationId(username,controllername);
-				session.save(new Usercontrollernotification(uid,Cache.Controllers.map.get(controllername),Cache.Users.map.get(username),new Date()));
+				UsercontrollernotificationId uid=new UsercontrollernotificationId(Cache.Users.map.get(username),Cache.Controllers.map.get(controllername));
+				session.save(new Usercontrollernotification(uid,new Date()));
 				tx.commit();
 				
 				Logger.log(Logger.LEVEL_INFO,"DB Subscribe User Controller Notification - Execute Callbacks");
@@ -59,7 +59,7 @@ public class DatabaseUserControllerNotification {
 			boolean flag;
 			try {
 				tx=session.beginTransaction();
-				UsercontrollernotificationId uid=new UsercontrollernotificationId(username,controllername);
+				UsercontrollernotificationId uid=new UsercontrollernotificationId(Cache.Users.map.get(username),Cache.Controllers.map.get(controllername));
 				Usercontrollernotification un=session.get(Usercontrollernotification.class,uid);
 				if (un!=null) {
 					un.setLastread(time);
@@ -90,7 +90,7 @@ public class DatabaseUserControllerNotification {
 			Session session=Cache.factory.openSession();
 			LocalDateTime toReturn=null;
 			try {
-				UsercontrollernotificationId uid=new UsercontrollernotificationId(username,controllername);
+				UsercontrollernotificationId uid=new UsercontrollernotificationId(Cache.Users.map.get(username),Cache.Controllers.map.get(controllername));
 				Usercontrollernotification un=session.get(Usercontrollernotification.class,uid);
 				if (un!=null) toReturn=Utility.dateToLocalDateTime(un.getLastread());
 				else Logger.log(Logger.LEVEL_INFO,"DB Get User Controller Notification Time - Subscription not found");
@@ -117,7 +117,7 @@ public class DatabaseUserControllerNotification {
 			boolean flag;
 			try {
 				tx=session.beginTransaction();
-				UsercontrollernotificationId uid=new UsercontrollernotificationId(username,controllername);
+				UsercontrollernotificationId uid=new UsercontrollernotificationId(Cache.Users.map.get(username),Cache.Controllers.map.get(controllername));
 				Usercontrollernotification un=session.get(Usercontrollernotification.class,uid);
 				session.delete(un);
 				tx.commit();
@@ -133,17 +133,17 @@ public class DatabaseUserControllerNotification {
 		}
 	}
 	
-	public static ArrayList<String> getSubscription (String username) {
+	public static ArrayList<Object []> getSubscription (String username) {
 		Logger.log(Logger.LEVEL_INFO,"DB Get User Controller Notification Subscription");
 		
-		ArrayList<String> toReturn=new ArrayList<>();
+		ArrayList<Object []> toReturn=new ArrayList<>();
 		if (!Cache.Users.map.containsKey(username)) Logger.log(Logger.LEVEL_INFO,"DB Get User Controller Notification Subscription - User doesn't exist!");
 		else {
 			Session session=Cache.factory.openSession();
 			try {
 				@SuppressWarnings("unchecked")
 				List<Usercontrollernotification> l=session.createQuery("FROM Usercontrollernotification").getResultList();
-				for (Usercontrollernotification n : l) if (n.getUser().equals(username)) toReturn.add(n.getController().getControllername());
+				for (Usercontrollernotification n : l) if (n.getId().getUser().getUsername().equals(username)) toReturn.add(n.toObj());
 
 			} catch (HibernateException e) {
 				Logger.log(Logger.LEVEL_ERROR,"DB Get User Controller Notification Subscription - "+e.getMessage());

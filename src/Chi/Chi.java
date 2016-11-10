@@ -44,6 +44,7 @@ public class Chi {
 				Logger.log(Logger.LEVEL_INFO,"Reading configuration started.");
 				diag.setText("Loading configurations...");
 				Config.initialize();
+				Logger.refreshLogLevel();
 				diag.setProgBarValue(2);
 				Logger.log(Logger.LEVEL_INFO,"Reading configuration done.");
 				

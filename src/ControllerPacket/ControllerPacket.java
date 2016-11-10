@@ -63,6 +63,7 @@ public class ControllerPacket {
 				Logger.log(Logger.LEVEL_INFO,"Controller Packet Info - Received content : "+status);
 
 				try { Thread.sleep(Config.CONTROLLER_READY_TIME_MS); } catch (InterruptedException e) {}
+				break;
 			} catch (Exception e) {
 				Logger.log(Logger.LEVEL_ERROR,"Controller Packet Error - Attempting to send packet. "+e.getMessage());
 				status=null;

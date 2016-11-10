@@ -10,8 +10,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.spec.KeySpec;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.time.LocalDateTime;
+
 import javax.crypto.Cipher;
 import javax.crypto.SealedObject;
 import javax.crypto.SecretKey;
@@ -447,6 +449,16 @@ public class GWTServer {
 		    	for (Controllerevent ce : ceL) result.add(new Object [] {ce.getController().getControllername(),Utility.dateToLocalDateTime(ce.getTimestp()),ce.getEventtype(),ce.getEventvalue()});
 		    	return result;
 		    }
+		    case "39c" : { //ControllerEventGetBetweenTimeByNames
+		    	@SuppressWarnings("unchecked")
+		    	ArrayList<String> ctrlList=(ArrayList<String>)list.get(1);
+				HashSet<String> ctrlSet=new HashSet<>();
+		    	for (String ctrl : ctrlList) ctrlSet.add(ctrl);
+		    	ArrayList<Controllerevent> ceL=DatabaseEvent.getControllerEventBetweenTime((LocalDateTime)list.get(2),(LocalDateTime)list.get(3));
+		    	ArrayList<Object []> result=new ArrayList<>();
+		    	for (Controllerevent ce : ceL) if (ctrlSet.contains(ce.getController().getControllername())) result.add(new Object [] {ce.getController().getControllername(),Utility.dateToLocalDateTime(ce.getTimestp()),ce.getEventtype(),ce.getEventvalue()});
+		    	return result;
+		    }
 		    case "40a" : { //SensorEventGetByName
 		    	ArrayList<Sensorevent> seL=DatabaseEvent.getSensorEventByName((String)list.get(1));
 		    	ArrayList<Object []> result=new ArrayList<>();
@@ -459,6 +471,16 @@ public class GWTServer {
 		    	for (Sensorevent se : seL) result.add(new Object [] {se.getSensor().getSensorname(),Utility.dateToLocalDateTime(se.getTimestp()),se.getEventtype(),se.getEventvalue()});
 		    	return result;
 		    }
+		    case "40c" : { //SensorEventGetBetweenTimeByNames
+		    	@SuppressWarnings("unchecked")
+		    	ArrayList<String> senList=(ArrayList<String>)list.get(1);
+				HashSet<String> senSet=new HashSet<>();
+		    	for (String sen : senList) senSet.add(sen);
+		    	ArrayList<Sensorevent> seL=DatabaseEvent.getSensorEventBetweenTime((LocalDateTime)list.get(2),(LocalDateTime)list.get(3));
+		    	ArrayList<Object []> result=new ArrayList<>();
+		    	for (Sensorevent se : seL) if (senSet.contains(se.getSensor().getSensorname())) result.add(new Object [] {se.getSensor().getSensorname(),Utility.dateToLocalDateTime(se.getTimestp()),se.getEventtype(),se.getEventvalue()});
+		    	return result;
+		    }
 		    case "41a" : { //ActuatorEventGetByName
 		    	ArrayList<Actuatorevent> seL=DatabaseEvent.getActuatorEventByName((String)list.get(1));
 		    	ArrayList<Object []> result=new ArrayList<>();
@@ -469,6 +491,16 @@ public class GWTServer {
 		    	ArrayList<Actuatorevent> seL=DatabaseEvent.getActuatorEventBetweenTime((LocalDateTime)list.get(1),(LocalDateTime)list.get(2));
 		    	ArrayList<Object []> result=new ArrayList<>();
 		    	for (Actuatorevent se : seL) result.add(new Object [] {se.getActuator().getName(),Utility.dateToLocalDateTime(se.getTimestp()),se.getEventtype(),se.getEventvalue()});
+		    	return result;
+		    }
+		    case "41c" : { //ActuatorEventGetBetweenTimeByNames
+		    	@SuppressWarnings("unchecked")
+		    	ArrayList<String> aenList=(ArrayList<String>)list.get(1);
+				HashSet<String> aenSet=new HashSet<>();
+		    	for (String aen : aenList) aenSet.add(aen);
+		    	ArrayList<Actuatorevent> aeL=DatabaseEvent.getActuatorEventBetweenTime((LocalDateTime)list.get(2),(LocalDateTime)list.get(3));
+		    	ArrayList<Object []> result=new ArrayList<>();
+		    	for (Actuatorevent ae : aeL) if (aenSet.contains(ae.getActuator().getName())) result.add(new Object [] {ae.getActuator().getName(),Utility.dateToLocalDateTime(ae.getTimestp()),ae.getEventtype(),ae.getEventvalue()});
 		    	return result;
 		    }
 		    case "43" : { //ActuatorGetAll
@@ -589,24 +621,24 @@ public class GWTServer {
 		    }
 		    case "54" : { //User subscribe controller notification
 		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
-		    	if (Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
-		    	else if (Cache.Controllers.map.containsKey(sname)) return "CONTROLLER_NOT_EXIST";
+		    	if (!Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
+		    	else if (!Cache.Controllers.map.containsKey(sname)) return "CONTROLLER_NOT_EXIST";
 		    	
 		    	boolean flag=DatabaseUserControllerNotification.subscribeControllerNotification(uname,sname);
 		    	if (flag) return "OK"; else return "ERROR";
 		    }
 		    case "55" : { //User controller notification update last read time
 		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
-		    	if (Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
-		    	else if (Cache.Controllers.map.containsKey(sname)) return "CONTROLLER_NOT_EXIST";
+		    	if (!Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
+		    	else if (!Cache.Controllers.map.containsKey(sname)) return "CONTROLLER_NOT_EXIST";
 		    	
 		    	boolean flag=DatabaseUserControllerNotification.updateControllerNotification(uname,sname,Utility.localDateTimeToUtilDate((LocalDateTime)list.get(3)));
 		    	if (flag) return "OK"; else return "ERROR";
 		    }
 		    case "56" : { //User unsubscribe controller notification
 		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
-		    	if (Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
-		    	else if (Cache.Controllers.map.containsKey(sname)) return "SENSOR_NOT_EXIST";
+		    	if (!Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
+		    	else if (!Cache.Controllers.map.containsKey(sname)) return "SENSOR_NOT_EXIST";
 		    	
 		    	boolean flag=DatabaseUserControllerNotification.unsubscribeControllerNotification(uname,sname);
 		    	if (flag) return "OK"; else return "ERROR";
@@ -621,24 +653,24 @@ public class GWTServer {
 		    }
 		    case "59" : { //User subscribe sensor notification
 		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
-		    	if (Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
-		    	else if (Cache.Sensors.map.containsKey(sname)) return "SENSOR_NOT_EXIST";
+		    	if (!Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
+		    	else if (!Cache.Sensors.map.containsKey(sname)) return "SENSOR_NOT_EXIST";
 		    	
 		    	boolean flag=DatabaseUserSensorNotification.subscribeSensorNotification(uname,sname);
 		    	if (flag) return "OK"; else return "ERROR";
 		    }
 		    case "60" : { //User sensor notification update last read time
 		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
-		    	if (Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
-		    	else if (Cache.Sensors.map.containsKey(sname)) return "SENSOR_NOT_EXIST";
+		    	if (!Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
+		    	else if (!Cache.Sensors.map.containsKey(sname)) return "SENSOR_NOT_EXIST";
 		    	
 		    	boolean flag=DatabaseUserSensorNotification.updateSensorNotification(uname,sname,Utility.localDateTimeToUtilDate((LocalDateTime)list.get(3)));
 		    	if (flag) return "OK"; else return "ERROR";
 		    }
 		    case "61" : { //User unsubscribe sensor notification
 		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
-		    	if (Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
-		    	else if (Cache.Sensors.map.containsKey(sname)) return "SENSOR_NOT_EXIST";
+		    	if (!Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
+		    	else if (!Cache.Sensors.map.containsKey(sname)) return "SENSOR_NOT_EXIST";
 		    	
 		    	boolean flag=DatabaseUserSensorNotification.unsubscribeSensorNotification(uname,sname);
 		    	if (flag) return "OK"; else return "ERROR";
@@ -653,24 +685,24 @@ public class GWTServer {
 		    }
 		    case "64" : { //User subscribe actuator notification
 		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
-		    	if (Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
-		    	else if (Cache.Actuators.map.containsKey(sname)) return "ACTUATOR_NOT_EXIST";
+		    	if (!Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
+		    	else if (!Cache.Actuators.map.containsKey(sname)) return "ACTUATOR_NOT_EXIST";
 		    	
 		    	boolean flag=DatabaseUserActuatorNotification.subscribeActuatorNotification(uname,sname);
 		    	if (flag) return "OK"; else return "ERROR";
 		    }
 		    case "65" : { //User actuator notification update last read time
 		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
-		    	if (Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
-		    	else if (Cache.Actuators.map.containsKey(sname)) return "ACTUATOR_NOT_EXIST";
+		    	if (!Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
+		    	else if (!Cache.Actuators.map.containsKey(sname)) return "ACTUATOR_NOT_EXIST";
 		    	
 		    	boolean flag=DatabaseUserActuatorNotification.updateActuatorNotification(uname,sname,Utility.localDateTimeToUtilDate((LocalDateTime)list.get(3)));
 		    	if (flag) return "OK"; else return "ERROR";
 		    }
 		    case "66" : { //User unsubscribe actuator notification
 		    	String uname=(String)list.get(1); String sname=(String)list.get(2);
-		    	if (Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
-		    	else if (Cache.Actuators.map.containsKey(sname)) return "ACTUATOR_NOT_EXIST";
+		    	if (!Cache.Users.map.containsKey(uname)) return "USER_NOT_EXIST";
+		    	else if (!Cache.Actuators.map.containsKey(sname)) return "ACTUATOR_NOT_EXIST";
 		    	
 		    	boolean flag=DatabaseUserActuatorNotification.unsubscribeActuatorNotification(uname,sname);
 		    	if (flag) return "OK"; else return "ERROR";

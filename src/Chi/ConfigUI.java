@@ -449,7 +449,6 @@ public class ConfigUI extends JDialog {
 		Config.setConfig(Config.CONFIG_SERVER_GWT_ENCRYPTION_KEY, String.valueOf(chckbxGWTEncrypt.isSelected()));
 		Config.setConfig(Config.CONFIG_SERVER_LOGGING_LEVEL_KEY,String.valueOf(comboBoxLogLevel.getSelectedIndex()));
 		Config.setConfig(Config.CONFIG_SERVER_LOGGING_TOFILE_KEY, String.valueOf(chckbxLogToFile.isSelected()));
-		Logger.LOG_LEVEL=comboBoxLogLevel.getSelectedIndex();
 		Logger.EnableLogToFile=chckbxLogToFile.isSelected();
 		
 		Config.setConfig(Config.CONFIG_SERVER_CONTROLLER_PORT_KEY, textFieldControllerPort.getText());

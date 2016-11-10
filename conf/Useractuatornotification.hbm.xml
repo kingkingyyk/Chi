@@ -1,23 +1,17 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Nov 1, 2016 3:26:38 PM by Hibernate Tools 5.2.0.Beta1 -->
+<!-- Generated Nov 9, 2016 5:05:17 PM by Hibernate Tools 5.2.0.Beta1 -->
 <hibernate-mapping>
     <class name="Entity.Useractuatornotification" table="USERACTUATORNOTIFICATION" schema="PUBLIC" catalog="PUBLIC" optimistic-lock="version">
         <composite-id name="id" class="Entity.UseractuatornotificationId">
-            <key-property name="username" type="string">
+            <key-many-to-one name="user" class="Entity.User">
                 <column name="USERNAME" length="100" />
-            </key-property>
-            <key-property name="actuatorname" type="string">
+            </key-many-to-one>
+            <key-many-to-one name="actuator" class="Entity.Actuator">
                 <column name="ACTUATORNAME" length="100" />
-            </key-property>
+            </key-many-to-one>
         </composite-id>
-        <many-to-one name="actuator" class="Entity.Actuator" update="false" insert="false" fetch="select">
-            <column name="ACTUATORNAME" length="100" not-null="true" />
-        </many-to-one>
-        <many-to-one name="user" class="Entity.User" update="false" insert="false" fetch="select">
-            <column name="USERNAME" length="100" not-null="true" />
-        </many-to-one>
         <property name="lastread" type="timestamp">
             <column name="LASTREAD" length="26" />
         </property>

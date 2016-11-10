@@ -1,28 +1,23 @@
 package Entity;
-// Generated Nov 1, 2016 3:26:38 PM by Hibernate Tools 5.2.0.Beta1
 
 import java.util.Date;
 
+import Chi.Utility;
+
 public class Usersensornotification implements java.io.Serializable {
-	private static final long serialVersionUID = -4934809444455293121L;
+	private static final long serialVersionUID = -2987423081288875871L;
 	private UsersensornotificationId id;
-	private Sensor sensor;
-	private User user;
 	private Date lastread;
 
 	public Usersensornotification() {
 	}
 
-	public Usersensornotification(UsersensornotificationId id, Sensor sensor, User user) {
+	public Usersensornotification(UsersensornotificationId id) {
 		this.id = id;
-		this.sensor = sensor;
-		this.user = user;
 	}
 
-	public Usersensornotification(UsersensornotificationId id, Sensor sensor, User user, Date lastread) {
+	public Usersensornotification(UsersensornotificationId id, Date lastread) {
 		this.id = id;
-		this.sensor = sensor;
-		this.user = user;
 		this.lastread = lastread;
 	}
 
@@ -34,28 +29,16 @@ public class Usersensornotification implements java.io.Serializable {
 		this.id = id;
 	}
 
-	public Sensor getSensor() {
-		return this.sensor;
-	}
-
-	public void setSensor(Sensor sensor) {
-		this.sensor = sensor;
-	}
-
-	public User getUser() {
-		return this.user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
 	public Date getLastread() {
 		return this.lastread;
 	}
 
 	public void setLastread(Date lastread) {
 		this.lastread = lastread;
+	}
+	
+	public Object[] toObj () {
+		return new Object[] {this.id.getUser().getUsername(),this.id.getSensor().getSensorname(),Utility.dateToLocalDateTime(this.lastread)};
 	}
 
 }
