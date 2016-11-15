@@ -32,6 +32,7 @@ import org.jfree.data.gantt.TaskSeries;
 import org.jfree.data.gantt.TaskSeriesCollection;
 import org.jfree.ui.TextAnchor;
 
+import Chi.Theme;
 import Chi.Utility;
 import javax.swing.JScrollPane;
 
@@ -127,8 +128,10 @@ public class FrameGanttChart extends JFrame {
 	}
 	
 	public FrameGanttChart() {
+		setTitle("Gnatt Chart");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 750, 400);
+		setIconImage(Theme.getIcon("ChiLogo").getImage());
 		addWindowListener(new WindowListener() {
 			@Override
 			public void windowClosed(WindowEvent arg0) { FrameGanttChart.currInstance=null;}
@@ -154,7 +157,7 @@ public class FrameGanttChart extends JFrame {
 		
 		collection=new TaskSeriesCollection();
 		
-    	chart = ChartFactory.createGanttChart("Scheduling", "Actuator", "Time", (IntervalCategoryDataset) collection, true, true, false);
+    	chart = ChartFactory.createGanttChart("Upcoming Schedule in 24 Hours", "Actuator", "Time", (IntervalCategoryDataset) collection, true, true, false);
     	chart.removeLegend();
     	chart.getTitle().setFont(new Font("Segoe UI",Font.BOLD,20));
     	chart.getTitle().setPaint(Color.WHITE);
@@ -204,7 +207,7 @@ public class FrameGanttChart extends JFrame {
 		
 		t=new Timer();
 		UpdateTask ut=new UpdateTask(); ut.f=this;
-		t.scheduleAtFixedRate(ut,0,2000);
+		t.scheduleAtFixedRate(ut,0,10000);
 		addWindowListener(new WindowListener() {
 
 			@Override

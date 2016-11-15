@@ -245,10 +245,10 @@ public class DatabaseReading extends DatabaseCassandra {
 	}
 	
 	private static LinkedList<SensorReading> getAllReadingBySensor (String sn) {
-		Logger.log(Logger.LEVEL_INFO,"DB Get All Reading By Sensor : "+Config.getConfig(Config. DATABASE_RECORD_QUERY_BETWEEN_TIME_FILE_KEY));
+		Logger.log(Logger.LEVEL_INFO,"DB Get All Reading By Sensor : "+Config.getConfig(Config.DATABASE_RECORD_QUERY_ALL_BY_SENSOR_FILE_KEY));
 		LinkedList<SensorReading> list=new LinkedList<>();
 		try {
-			BoundStatement [] sql=getBoundSQLStatementFromFile(DatabaseCassandra.getSession(),Config.getConfig(Config. DATABASE_RECORD_QUERY_BETWEEN_TIME_FILE_KEY));
+			BoundStatement [] sql=getBoundSQLStatementFromFile(DatabaseCassandra.getSession(),Config.getConfig(Config.DATABASE_RECORD_QUERY_ALL_BY_SENSOR_FILE_KEY));
 			sql[0].setString(0, sn);
 			ResultSet rs=executeSQL("DB Get All Reading By Sensor : ", DatabaseCassandra.getSession(), sql[0]);
 			
