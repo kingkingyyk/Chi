@@ -57,6 +57,7 @@ public class Config {
 	public static final String DATABASE_RECORD_QUERY_BETWEEN_TIME_FILE_KEY="server.database.sql.record.query.betweentime";
 	public static final String DATABASE_RECORD_QUERY_MONTH_FILE_KEY="server.database.sql.record.query.month";
 	public static final String DATABASE_RECORD_QUERY_LATEST_FILE_KEY="server.database.sql.record.query.latest";
+	public static final String DATABASE_RECORD_QUERY_ALL_BY_SENSOR_FILE_KEY="server.database.sql.record.query.bysensor";
 	//Default values.
 	public static final String CONFIG_DEFAULT_KEY=".default";
 	private static final String CONFIG_SERVER_INCOMING_PORT_DEFAULT="40000";
@@ -94,6 +95,7 @@ public class Config {
 	public static final String DATABASE_RECORD_QUERY_BETWEEN_TIME_FILE_DEFAULT="Reading/QueryReadingBetweenTime.sql";
 	public static final String DATABASE_RECORD_QUERY_MONTH_FILE_DEFAULT="Reading/QueryReadingMonth.sql";
 	public static final String DATABASE_RECORD_QUERY_LATEST_FILE_DEFAULT="Reading/QueryLatestReading.sql";
+	public static final String DATABASE_RECORD_QUERY_ALL_BY_SENSOR_FILE_DEFAULT="Reading/QueryAllReadingBySensor.sql";
 	
 	public static void setConfig (String key, String value) {
 		prop.setProperty(key,value);
@@ -155,6 +157,7 @@ public class Config {
 		Config.setConfig(DATABASE_RECORD_QUERY_BETWEEN_TIME_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_RECORD_QUERY_BETWEEN_TIME_FILE_DEFAULT);
 		Config.setConfig(DATABASE_RECORD_QUERY_MONTH_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_RECORD_QUERY_MONTH_FILE_DEFAULT);
 		Config.setConfig(DATABASE_RECORD_QUERY_LATEST_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_RECORD_QUERY_LATEST_FILE_DEFAULT);
+		Config.setConfig(DATABASE_RECORD_QUERY_ALL_BY_SENSOR_FILE_KEY+CONFIG_DEFAULT_KEY, DATABASE_SQL_PATH+"/"+DATABASE_RECORD_QUERY_ALL_BY_SENSOR_FILE_DEFAULT);
 
 		//Real config
 		String [] keys=prop.keySet().toArray(new String[prop.keySet().size()]);

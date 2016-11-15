@@ -1,4 +1,4 @@
-package Chi;
+package NotificationServer;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -19,6 +19,8 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
 
+import Chi.Theme;
+import Chi.Utility;
 import Database.DatabaseEvent;
 import Entity.Controllerevent;
 import Entity.Sensorevent;

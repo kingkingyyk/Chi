@@ -1,4 +1,4 @@
-package Chi;
+package Reading;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
@@ -20,6 +20,7 @@ import org.jfree.data.time.Second;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 
+import Chi.Utility;
 import Database.DatabaseReading;
 import Entity.Sensor;
 import Entity.SensorReading;

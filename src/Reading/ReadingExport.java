@@ -1,4 +1,4 @@
-package Chi;
+package Reading;
 
 import java.awt.Desktop;
 import java.awt.Font;
@@ -22,6 +22,8 @@ import org.jfree.data.time.Second;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 
+import Chi.Config;
+import Chi.Utility;
 import Entity.SensorReading;
 
 public class ReadingExport {

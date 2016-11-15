@@ -53,17 +53,24 @@ public class SchedulingDataRegular extends SchedulingData {
 		if (day!=0) {
 			LocalDateTime now=LocalDateTime.now();
 			Dayschedulerule r=Cache.DayScheduleRules.map.get(this.rule);
+
+			LocalDateTime tempStart=LocalDateTime.of(now.getYear(),now.getMonthValue(),now.getDayOfMonth(),r.getStarthour(),r.getStartminute());
+			LocalDateTime tempEnd=LocalDateTime.of(now.getYear(),now.getMonthValue(),now.getDayOfMonth(),r.getEndhour(),r.getEndminute());
+			if (tempEnd.compareTo(tempStart)<0) tempEnd=tempEnd.plusDays(1);
 			LocalDateTime temp=LocalDateTime.of(now.getYear(),now.getMonthValue(),now.getDayOfMonth(),r.getEndhour(),r.getEndminute());
-			if (now.compareTo(temp)>=0) {
+			if (now.compareTo(tempEnd)>=0) {
 				temp=temp.plusDays(1);
 			}
+
 			while ((day & (1 << temp.getDayOfWeek().getValue()))==0) {
 				temp=temp.plusDays(1);
 			}
 			if (r!=null) {
 				this.nextStartTime=LocalDateTime.of(temp.getYear(),temp.getMonthValue(),temp.getDayOfMonth(),r.getStarthour(),r.getStartminute());
 				this.nextEndTime=LocalDateTime.of(temp.getYear(),temp.getMonthValue(),temp.getDayOfMonth(),r.getEndhour(),r.getEndminute());
-				if (this.nextEndTime.compareTo(this.nextStartTime)<0) this.nextEndTime=this.nextEndTime.plusDays(1);
+				if (this.nextEndTime.compareTo(this.nextStartTime)<0) {
+					this.nextEndTime=this.nextEndTime.plusDays(1);
+				}
 			}
 			if (this.isEnabled() && updateScheduler) {
 

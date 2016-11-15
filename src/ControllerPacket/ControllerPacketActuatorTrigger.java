@@ -3,6 +3,7 @@ package ControllerPacket;
 import Chi.Logger;
 import Database.Cache;
 import Database.DatabaseActuator;
+import Database.DatabaseEvent;
 import FrameEntityManagement.FrameActuatorManagementFeedbackWait;
 
 public class ControllerPacketActuatorTrigger extends Thread {
@@ -29,6 +30,8 @@ public class ControllerPacketActuatorTrigger extends Thread {
 		if ((status=p.send())!=null) {
 			Logger.log(Logger.LEVEL_INFO,"ControllerPacketActuatorTrigger - Packet sent successfully");
 			DatabaseActuator.updateActuatorStatus(actuatorName,status);
+		} else {
+			DatabaseEvent.logActuatorEvent(this.actuatorName, "Controller Packet", "Fail to connect to the attached controller "+this.controllerName);
 		}
 		if (FrameActuatorManagementFeedbackWait.getCurrent()!=null && FrameActuatorManagementFeedbackWait.getCurrent().isVisible()) {
 			FrameActuatorManagementFeedbackWait.getCurrent().setVisible(false);

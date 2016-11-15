@@ -20,7 +20,13 @@ import FrameEntityManagement.FrameSensorManagement;
 import FrameEntityManagement.FrameSiteManagement;
 import FrameEntityManagement.FrameSpecialScheduleManagement;
 import FrameEntityManagement.FrameUserManagement;
+import GWTServer.GWTServer;
+import NotificationServer.FrameNotification;
 import NotificationServer.NotificationServer;
+import Reading.DialogReadingSelectSensor;
+import Reading.FrameReading;
+import SchedulingServer.FrameGanttChart;
+import SchedulingServer.FrameOngoingSchedules;
 import SchedulingServer.SchedulingServer;
 import ServerActuatorResponseServer.SensorActuatorResponseServer;
 import ServerActuatorResponseServer.SensoractuatorresponseEvaluator;
@@ -58,6 +64,7 @@ public class MenuUI extends JFrame {
 	private JScrollPane scrollPaneLog;
 	private JTextArea textAreaEvaluate;
 	private JLabel lblEvaluateResult;
+	private JButton btnGanttChart;
 
 	private void onCloseActions () {
         if (JOptionPane.showConfirmDialog(MenuUI.this,"Are you sure to close?", Config.APP_NAME, JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
@@ -184,6 +191,7 @@ public class MenuUI extends JFrame {
 					btnStartAutomationServer.setEnabled(false);
 					btnStopAutomationServer.setEnabled(true);
 					btnOngoingSchedules.setEnabled(true);
+					btnGanttChart.setEnabled(true);
 				} else {
 					JOptionPane.showMessageDialog(null,"Failed to connect to database. Server will now shut down.","Scheduling Server",JOptionPane.ERROR_MESSAGE);
 				}
@@ -204,6 +212,7 @@ public class MenuUI extends JFrame {
 				btnStartAutomationServer.setEnabled(true);
 				btnStopAutomationServer.setEnabled(false);
 				btnOngoingSchedules.setEnabled(false);
+				btnGanttChart.setEnabled(false);
 				SensorActuatorResponseServer.stop();
 			}
 		});
@@ -237,7 +246,7 @@ public class MenuUI extends JFrame {
 		lblDataServer.setBounds(10, 15, 103, 14);
 		panelServer.add(lblDataServer);
 		
-		JLabel lblGWTServer = new JLabel("GWT Server :");
+		JLabel lblGWTServer = new JLabel("App Server :");
 		lblGWTServer.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblGWTServer.setBounds(10, 49, 103, 14);
 		panelServer.add(lblGWTServer);
@@ -484,11 +493,11 @@ public class MenuUI extends JFrame {
 				f.toFront();
 			}
 		});
-		btnDayScheduleRules.setBounds(10, 61, 127, 23);
+		btnDayScheduleRules.setBounds(10, 11, 127, 23);
 		panelAutomation.add(btnDayScheduleRules);
 		
 		JButton btnRegularSchedules = new JButton("Regular Schedules");
-		btnRegularSchedules.setBounds(145, 61, 127, 23);
+		btnRegularSchedules.setBounds(145, 11, 127, 23);
 		btnRegularSchedules.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				FrameRegularScheduleManagement f=FrameRegularScheduleManagement.getInstance();
@@ -506,12 +515,12 @@ public class MenuUI extends JFrame {
 				f.toFront();
 			}
 		});
-		btnSpecialSchedules.setBounds(277, 61, 127, 23);
+		btnSpecialSchedules.setBounds(277, 11, 127, 23);
 		panelAutomation.add(btnSpecialSchedules);
 		
 		btnOngoingSchedules = new JButton("Ongoing Schedules");
 		btnOngoingSchedules.setEnabled(false);
-		btnOngoingSchedules.setBounds(10, 95, 127, 23);
+		btnOngoingSchedules.setBounds(10, 45, 127, 23);
 		btnOngoingSchedules.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				FrameOngoingSchedules f=FrameOngoingSchedules.getInstance();
@@ -529,24 +538,24 @@ public class MenuUI extends JFrame {
 				f.toFront();
 			}
 		});
-		btnSensorActuatorResponse.setBounds(10, 142, 175, 23);
+		btnSensorActuatorResponse.setBounds(10, 92, 175, 23);
 		panelAutomation.add(btnSensorActuatorResponse);
 		
-		JSeparator separator = new JSeparator();
-		separator.setBounds(10, 48, 394, 2);
-		panelAutomation.add(separator);
-		
 		JSeparator separator_1 = new JSeparator();
-		separator_1.setBounds(10, 129, 394, 2);
+		separator_1.setBounds(10, 79, 394, 2);
 		panelAutomation.add(separator_1);
 		
-		JButton btnAutomationSummary = new JButton("Automation Summary");
-		btnAutomationSummary.addActionListener(new ActionListener() {
+		btnGanttChart = new JButton("Gantt Chart");
+		btnGanttChart.setEnabled(false);
+		btnGanttChart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				FrameGanttChart f=FrameGanttChart.getInstance();
+				f.setVisible(true);
+				f.toFront();
 			}
 		});
-		btnAutomationSummary.setBounds(10, 14, 175, 23);
-		panelAutomation.add(btnAutomationSummary);
+		btnGanttChart.setBounds(145, 45, 127, 23);
+		panelAutomation.add(btnGanttChart);
 		
 		JPanel panelNotification = new JPanel();
 		tabbedPane.addTab("Notification", null, panelNotification, null);

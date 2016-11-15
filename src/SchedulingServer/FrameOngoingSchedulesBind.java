@@ -1,4 +1,4 @@
-package Chi;
+package SchedulingServer;
 
 public class FrameOngoingSchedulesBind {
 	

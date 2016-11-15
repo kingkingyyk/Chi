@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import Chi.FrameOngoingSchedules;
 import Chi.Logger;
 import ControllerPacket.ControllerPacketActuatorTrigger;
 import Database.Cache;
@@ -45,7 +44,6 @@ public class SchedulingThread extends Thread {
 						d.registerOnStartFunc(new OnRegularScheduleStart());
 						d.registerOnEndFunc(new OnRegularScheduleEnd());
 						data.put(r.getSchedulename(),d);
-						FrameOngoingSchedules.refresh();
 					}
 				}
 					
@@ -62,7 +60,6 @@ public class SchedulingThread extends Thread {
 							d.registerOnEndFunc(new OnSpecialScheduleEnd());
 							
 							data.put(ss.getSchedulename(),d);
-							FrameOngoingSchedules.refresh();
 						}
 					}
 				}
@@ -77,6 +74,7 @@ public class SchedulingThread extends Thread {
 			}
 			
 			FrameOngoingSchedules.refresh();
+			FrameGanttChart.refresh();
 		}
 	}
 	
@@ -88,6 +86,8 @@ public class SchedulingThread extends Thread {
 					data.remove(d.getName());
 				}
 			}
+			FrameOngoingSchedules.refresh();
+			FrameGanttChart.refresh();
 		}
 	}
 	
@@ -141,6 +141,7 @@ public class SchedulingThread extends Thread {
 			}
 			
 			FrameOngoingSchedules.refresh();
+			FrameGanttChart.refresh();
 		}
 	}
 	
@@ -151,6 +152,7 @@ public class SchedulingThread extends Thread {
 			if (en && day!=0 && Cache.Actuators.map.get(an).getControltype().equals("Scheduled")) {
 				data.put(sn,d);
 				FrameOngoingSchedules.refresh();
+				FrameGanttChart.refresh();
 			}
 		}
 	}
@@ -164,6 +166,7 @@ public class SchedulingThread extends Thread {
 				if (d.enabled && day!=0 && Cache.Actuators.map.get(an).getControltype().equals("Scheduled")) {
 					data.put(sn,d);
 					FrameOngoingSchedules.refresh();
+					FrameGanttChart.refresh();
 				}
 			} else {
 				if (!d.getName().equals(sn)) {
@@ -188,6 +191,7 @@ public class SchedulingThread extends Thread {
 				}
 
 				FrameOngoingSchedules.refresh();
+				FrameGanttChart.refresh();
 			}
 		}
 	}
@@ -200,6 +204,7 @@ public class SchedulingThread extends Thread {
 				d.purgeTimer();
 				data.remove(sn);
 				FrameOngoingSchedules.refresh();
+				FrameGanttChart.refresh();
 			}
 		}
 	}
@@ -255,6 +260,7 @@ public class SchedulingThread extends Thread {
 			}
 			
 			FrameOngoingSchedules.refresh();
+			FrameGanttChart.refresh();
 		}
 	}
 	
@@ -266,6 +272,7 @@ public class SchedulingThread extends Thread {
 			if (d.getNextEndTime().compareTo(LocalDateTime.now())>0 && d.enabled && Cache.Actuators.map.get(an).getControltype().equals("Scheduled")) {
 				data.put(sn,d);
 				FrameOngoingSchedules.refresh();
+				FrameGanttChart.refresh();
 			}
 		}
 	}
@@ -279,6 +286,7 @@ public class SchedulingThread extends Thread {
 				if (d.getNextEndTime().compareTo(LocalDateTime.now())>0 && d.enabled && Cache.Actuators.map.get(an).getControltype().equals("Scheduled")) {
 					data.put(sn,d);
 					FrameOngoingSchedules.refresh();
+					FrameGanttChart.refresh();
 				}
 			} else {
 				d.setYear(year);
@@ -310,6 +318,7 @@ public class SchedulingThread extends Thread {
 					}
 				}
 				FrameOngoingSchedules.refresh();
+				FrameGanttChart.refresh();
 			}
 		}
 	}
@@ -322,6 +331,7 @@ public class SchedulingThread extends Thread {
 				d.purgeTimer();
 				data.remove(sn);
 				FrameOngoingSchedules.refresh();
+				FrameGanttChart.refresh();
 			}
 		}
 	}
@@ -387,6 +397,7 @@ public class SchedulingThread extends Thread {
 						if (!exists) {
 							data.remove(dat.getName());
 							FrameOngoingSchedules.refresh();
+							FrameGanttChart.refresh();
 							break;
 						}
 						

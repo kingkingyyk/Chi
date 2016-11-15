@@ -1,4 +1,4 @@
-package Chi;
+package GWTServer;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +21,9 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import Chi.Config;
+import Chi.Logger;
+import Chi.Utility;
 import ControllerPacket.ControllerPacketActuatorTrigger;
 import Database.Cache;
 import Database.DatabaseActuator;
@@ -714,6 +717,33 @@ public class GWTServer {
 		    case "68" : { //User actuator notification get subscription
 		    	String uname=(String)list.get(1);
 		    	return DatabaseUserActuatorNotification.getSubscription(uname);
+		    }
+		    case "69a" : {
+		    	return DatabaseReading.getTotalReadingGroupByDay((String)list.get(1));
+		    }
+		    case "69b" : {
+		    	return DatabaseReading.getTotalReadingGroupByMonth((String)list.get(1));
+		    }
+		    case "69c" : {
+		    	return DatabaseReading.getTotalReadingGroupByYear((String)list.get(1));
+		    }
+		    case "70a" : {
+		    	return DatabaseReading.getAverageReadingGroupByDay((String)list.get(1));
+		    }
+		    case "70b" : {
+		    	return DatabaseReading.getAverageReadingGroupByMonth((String)list.get(1));
+		    }
+		    case "70c" : {
+		    	return DatabaseReading.getAverageReadingGroupByYear((String)list.get(1));
+		    }
+		    case "71a" : {
+		    	return DatabaseReading.getCulmulativeReadingGroupByDay((String)list.get(1));
+		    }
+		    case "71b" : {
+		    	return DatabaseReading.getCulmulativeReadingGroupByMonth((String)list.get(1));
+		    }
+		    case "71c" : {
+		    	return DatabaseReading.getCulmulativeReadingGroupByYear((String)list.get(1));
 		    }
 	    }
 	    return null;

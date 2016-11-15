@@ -107,7 +107,7 @@ CREATE TABLE SensorEvent (
 	SensorName varchar (100),
 	TimeStp timestamp,
 	EventType varchar (100),
-	EventValue varchar(100),
+	EventValue varchar(1000),
 	FOREIGN KEY (SensorName) REFERENCES Sensor(SensorName) ON UPDATE CASCADE ON DELETE CASCADE
 )
 @
@@ -116,7 +116,7 @@ CREATE TABLE ActuatorEvent (
 	ActuatorName varchar (100),
 	TimeStp timestamp,
 	EventType varchar (100),
-	EventValue varchar(100),
+	EventValue varchar(1000),
 	FOREIGN KEY (ActuatorName) REFERENCES Actuator(Name) ON UPDATE CASCADE ON DELETE CASCADE
 )
 @
@@ -125,7 +125,7 @@ CREATE TABLE ControllerEvent (
 	ControllerName varchar (100),
 	TimeStp timestamp,
 	EventType varchar (100),
-	EventValue varchar(100),
+	EventValue varchar(1000),
 	FOREIGN KEY (ControllerName) REFERENCES Controller(ControllerName) ON UPDATE CASCADE ON DELETE CASCADE
 )
 @

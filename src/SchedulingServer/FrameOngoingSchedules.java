@@ -1,4 +1,4 @@
-package Chi;
+package SchedulingServer;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -19,10 +19,8 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
 
-import SchedulingServer.SchedulingData;
-import SchedulingServer.SchedulingDataRegular;
-import SchedulingServer.SchedulingDataSpecial;
-import SchedulingServer.SchedulingServer;
+import Chi.Theme;
+import Chi.Utility;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;

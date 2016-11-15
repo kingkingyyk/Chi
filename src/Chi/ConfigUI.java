@@ -313,7 +313,7 @@ public class ConfigUI extends JDialog {
 		panelControllerSettings.add(btnControllerPort);
 		
 		JPanel panelGWTSettings = new JPanel();
-		tabbedPane.addTab("GWT", null, panelGWTSettings, null);
+		tabbedPane.addTab("App Server", null, panelGWTSettings, null);
 		panelGWTSettings.setLayout(null);
 		
 		textFieldGWTPort = new JTextField(Config.getConfig(Config.CONFIG_SERVER_GWT_PORT_KEY));
@@ -326,7 +326,7 @@ public class ConfigUI extends JDialog {
 		btnGWTPort.setBounds(178, 11, 24, 20);
 		panelGWTSettings.add(btnGWTPort);
 		
-		JLabel lblGWTPort = new JLabel("GWT Port :");
+		JLabel lblGWTPort = new JLabel("Port :");
 		lblGWTPort.setBounds(10, 14, 62, 14);
 		panelGWTSettings.add(lblGWTPort);
 		lblGWTPort.setHorizontalAlignment(SwingConstants.RIGHT);

@@ -102,10 +102,8 @@ public class DatabaseEvent {
 	public static ArrayList<Sensorevent> getSensorEventByName (String name) {
 		Logger.log(Logger.LEVEL_INFO,"DatabaseEvent - Get sensor event "+name);
 		Session session=Cache.factory.openSession();
-		Transaction tx=null;
 		ArrayList<Sensorevent> list=new ArrayList<>();
 		try {
-			tx=session.beginTransaction();
 			@SuppressWarnings("rawtypes")
 			List l=session.createQuery("FROM Sensorevent WHERE SensorName="+name).getResultList();
 			for (Object o : l) {
@@ -113,7 +111,6 @@ public class DatabaseEvent {
 			}
 		} catch (HibernateException e) {
 	        Logger.log(Logger.LEVEL_ERROR,"DatabaseEvent - Get sensor event - "+e.getMessage());
-	        if (tx!=null) tx.rollback();
 	    } finally {
 	         session.close(); 
 	    }
@@ -123,19 +120,15 @@ public class DatabaseEvent {
 	public static ArrayList<Sensorevent> getSensorEventBetweenTime (LocalDateTime min, LocalDateTime max) {
 		Logger.log(Logger.LEVEL_INFO,"DatabaseEvent - Get sensor event between time");
 		Session session=Cache.factory.openSession();
-		Transaction tx=null;
 		ArrayList<Sensorevent> list=new ArrayList<>();
 		try {
-			tx=session.beginTransaction();
 			@SuppressWarnings("rawtypes")
-			
 			List l=session.createQuery("FROM Sensorevent WHERE TimeStp>TIMESTAMP('"+formatter.format(min)+"') AND TimeStp<TIMESTAMP('"+formatter.format(max)+"')").getResultList();
 			for (Object o : l) {
 				list.add((Sensorevent) o);
 			}
 		} catch (HibernateException e) {
 	        Logger.log(Logger.LEVEL_ERROR,"DatabaseEvent - Get sensor event - Error - "+e.getMessage());
-	        if (tx!=null) tx.rollback();
 	    } finally {
 	         session.close(); 
 	    }
@@ -167,10 +160,8 @@ public class DatabaseEvent {
 	public static ArrayList<Controllerevent> getControllerEventByName (String name) {
 		Logger.log(Logger.LEVEL_INFO,"DatabaseEvent - Get controller event "+name);
 		Session session=Cache.factory.openSession();
-		Transaction tx=null;
 		ArrayList<Controllerevent> list=new ArrayList<>();
 		try {
-			tx=session.beginTransaction();
 			@SuppressWarnings("rawtypes")
 			List l=session.createQuery("FROM Controllerevent WHERE SensorName="+name).getResultList();
 			for (Object o : l) {
@@ -178,7 +169,6 @@ public class DatabaseEvent {
 			}
 		} catch (HibernateException e) {
 	        Logger.log(Logger.LEVEL_ERROR,"DatabaseEvent - Get controller event - "+e.getMessage());
-	        if (tx!=null) tx.rollback();
 	    } finally {
 	         session.close(); 
 	    }
@@ -188,10 +178,8 @@ public class DatabaseEvent {
 	public static ArrayList<Controllerevent> getControllerEventBetweenTime (LocalDateTime min, LocalDateTime max) {
 		Logger.log(Logger.LEVEL_INFO,"DatabaseEvent - Get controller event between time");
 		Session session=Cache.factory.openSession();
-		Transaction tx=null;
 		ArrayList<Controllerevent> list=new ArrayList<>();
 		try {
-			tx=session.beginTransaction();
 			@SuppressWarnings("rawtypes")
 			
 			List l=session.createQuery("FROM Controllerevent WHERE TimeStp>TIMESTAMP('"+formatter.format(min)+"') AND TimeStp<TIMESTAMP('"+formatter.format(max)+"')").getResultList();
@@ -200,7 +188,6 @@ public class DatabaseEvent {
 			}
 		} catch (HibernateException e) {
 	        Logger.log(Logger.LEVEL_ERROR,"DatabaseEvent - Get controller event - Error - "+e.getMessage());
-	        if (tx!=null) tx.rollback();
 	    } finally {
 	         session.close(); 
 	    }

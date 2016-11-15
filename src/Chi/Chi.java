@@ -16,6 +16,8 @@ import FrameEntityManagement.FrameSensorManagementBind;
 import FrameEntityManagement.FrameSiteManagementBind;
 import FrameEntityManagement.FrameSpecialScheduleManagementBind;
 import FrameEntityManagement.FrameUserManagementBind;
+import NotificationServer.FrameNotificationBind;
+import SchedulingServer.FrameOngoingSchedulesBind;
 
 public class Chi {
 

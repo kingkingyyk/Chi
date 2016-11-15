@@ -1,4 +1,4 @@
-package Chi;
+package NotificationServer;
 
 import Database.DatabaseController;
 import Database.DatabaseEvent;
