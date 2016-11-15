@@ -156,10 +156,4 @@ CREATE TABLE UserControllerNotification (
 	FOREIGN KEY (Controllername) REFERENCES Controller(ControllerName) ON UPDATE CASCADE ON DELETE CASCADE
 )
 @
-INSERT INTO Site VALUES ('DefaultSite','http://i.imgur.com/Ep8mS4K.jpg')
-@
-INSERT INTO SensorClass VALUES ('DefaultClass')
-@
-INSERT INTO Controller VALUES ('DefaultController','DefaultSite','0.5','0.5','255.255.255.255',10,TIMESTAMP(0))
-@
 INSERT INTO Site VALUES ('FSKTM Student Center','http://i.imgur.com/p5ZPRNm.jpg')

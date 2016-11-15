@@ -33,6 +33,7 @@ public class Theme {
 		map.put("UserIcon", new ImageIcon(Theme.class.getResource("/images/USER.png")));
 		map.put("LoadingIcon", new ImageIcon(Theme.class.getResource("/images/loading.gif")));
 		map.put("StartScreen", new ImageIcon(Chi.class.getResource("/images/START_SCREEN.jpg")));
+		map.put("GanttChartBackground", new ImageIcon(Chi.class.getResource("/images/GRAPH_BG.jpg")));
 	}
 	
 	public static ImageIcon getIcon (String key) {

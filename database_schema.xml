@@ -37,52 +37,10 @@
 		<type label="SET" length="1" sql="SET" quote=""/>
 		<type label="Bit" length="0" sql="bit" quote=""/>
 	</group>
-</datatypes><table x="105" y="322" name="Site">
-<row name="SiteName" null="0" autoincrement="0">
-<datatype>VARCHAR(100)</datatype>
-<default>'NULL'</default></row>
-<row name="SiteMapURL" null="0" autoincrement="0">
-<datatype>VARCHAR(350)</datatype>
-</row>
-<key type="PRIMARY" name="">
-<part>SiteName</part>
-</key>
-</table>
-<table x="296" y="403" name="Controller">
-<row name="ControllerName" null="0" autoincrement="0">
-<datatype>VARCHAR(100)</datatype>
-</row>
-<row name="Site" null="0" autoincrement="0">
-<datatype>VARCHAR(100)</datatype>
-<relation table="Site" row="SiteName" />
-</row>
-<row name="PositionX" null="0" autoincrement="0">
-<datatype>DOUBLE</datatype>
-</row>
-<row name="PositionY" null="1" autoincrement="0">
-<datatype>DOUBLE</datatype>
-<default>NULL</default></row>
-<row name="ReportTimeout" null="0" autoincrement="0">
-<datatype>INTEGER</datatype>
-</row>
-<row name="LastReportTime" null="0" autoincrement="0">
-<datatype>TIMESTAMP</datatype>
-</row>
-<key type="PRIMARY" name="">
-<part>ControllerName</part>
-</key>
-</table>
-<table x="551" y="370" name="SensorClass">
-<row name="ClassName" null="0" autoincrement="0">
-<datatype>VARCHAR(100)</datatype>
-</row>
-<key type="PRIMARY" name="">
-<part>ClassName</part>
-</key>
-</table>
-<table x="831" y="486" name="Sensor">
+</datatypes><table x="752" y="489" name="Sensor">
 <row name="SensorName" null="0" autoincrement="0">
 <datatype>VARCHAR</datatype>
+<relation table="UserSensorNotification" row="SensorName" />
 </row>
 <row name="Class" null="0" autoincrement="0">
 <datatype>VARCHAR(100)</datatype>
@@ -108,29 +66,10 @@
 <part>SensorName</part>
 </key>
 </table>
-<table x="109" y="79" name="User">
-<row name="Username" null="0" autoincrement="0">
-<datatype>VARCHAR(100)</datatype>
-</row>
-<row name="Password" null="0" autoincrement="0">
-<datatype>VARCHAR(100)</datatype>
-</row>
-<row name="Level" null="0" autoincrement="0">
-<datatype>INTEGER</datatype>
-</row>
-<row name="Status" null="0" autoincrement="0">
-<datatype>VARCHAR(100)</datatype>
-</row>
-<row name="DateAdded" null="0" autoincrement="0">
-<datatype>TIMESTAMP</datatype>
-</row>
-<key type="PRIMARY" name="">
-<part>Username</part>
-</key>
-</table>
-<table x="556" y="194" name="Actuator">
+<table x="753" y="191" name="Actuator">
 <row name="Name" null="0" autoincrement="0">
 <datatype>VARCHAR(100)</datatype>
+<relation table="UserActuatorNotification" row="ActuatorName" />
 </row>
 <row name="Controller" null="0" autoincrement="0">
 <datatype>VARCHAR(100)</datatype>
@@ -143,7 +82,31 @@
 <part>Name</part>
 </key>
 </table>
-<table x="537" y="27" name="DayScheduleRule">
+<table x="431" y="356" name="Controller">
+<row name="ControllerName" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+</row>
+<row name="Site" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+<relation table="Site" row="SiteName" />
+</row>
+<row name="PositionX" null="0" autoincrement="0">
+<datatype>DOUBLE</datatype>
+</row>
+<row name="PositionY" null="1" autoincrement="0">
+<datatype>DOUBLE</datatype>
+<default>NULL</default></row>
+<row name="ReportTimeout" null="0" autoincrement="0">
+<datatype>INTEGER</datatype>
+</row>
+<row name="LastReportTime" null="0" autoincrement="0">
+<datatype>TIMESTAMP</datatype>
+</row>
+<key type="PRIMARY" name="">
+<part>ControllerName</part>
+</key>
+</table>
+<table x="1181" y="117" name="DayScheduleRule">
 <row name="Name" null="0" autoincrement="0">
 <datatype>VARCHAR</datatype>
 </row>
@@ -163,7 +126,7 @@
 <part>Name</part>
 </key>
 </table>
-<table x="824" y="18" name="RegularSchedule">
+<table x="940" y="87" name="RegularSchedule">
 <row name="ScheduleName" null="0" autoincrement="0">
 <datatype>VARCHAR(100)</datatype>
 </row>
@@ -191,7 +154,7 @@
 <part>ScheduleName</part>
 </key>
 </table>
-<table x="822" y="225" name="SpecialSchedule">
+<table x="947" y="281" name="SpecialSchedule">
 <row name="ScheduleName" null="0" autoincrement="0">
 <datatype>VARCHAR(100)</datatype>
 </row>
@@ -225,7 +188,7 @@
 <part>ScheduleName</part>
 </key>
 </table>
-<table x="1157" y="231" name="SensorReading">
+<table x="1175" y="486" name="SensorReading">
 <row name="SensorName" null="0" autoincrement="0">
 <datatype>VARCHAR(100)</datatype>
 <relation table="Sensor" row="SensorName" />
@@ -262,7 +225,47 @@
 <part>SensorName</part>
 </key>
 </table>
-<table x="1164" y="531" name="SensorEvent">
+<table x="758" y="714" name="ControllerEvent">
+<row name="ID" null="0" autoincrement="1">
+<datatype>INTEGER</datatype>
+</row>
+<row name="ControllerName" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+<relation table="Controller" row="ControllerName" />
+</row>
+<row name="TimeStp" null="0" autoincrement="0">
+<datatype>TIMESTAMP</datatype>
+</row>
+<row name="EventType" null="1" autoincrement="0">
+<datatype>VARCHAR(200)</datatype>
+<default>NULL</default></row>
+<row name="EventValue" null="0" autoincrement="0">
+<datatype>DOUBLE</datatype>
+</row>
+<key type="PRIMARY" name="">
+<part>ID</part>
+</key>
+</table>
+<table x="676" y="382" name="SensorClass">
+<row name="ClassName" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+</row>
+<key type="PRIMARY" name="">
+<part>ClassName</part>
+</key>
+</table>
+<table x="458" y="535" name="Site">
+<row name="SiteName" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+<default>'NULL'</default></row>
+<row name="SiteMapURL" null="0" autoincrement="0">
+<datatype>VARCHAR(350)</datatype>
+</row>
+<key type="PRIMARY" name="">
+<part>SiteName</part>
+</key>
+</table>
+<table x="979" y="670" name="SensorEvent">
 <row name="ID" null="0" autoincrement="1">
 <datatype>INTEGER</datatype>
 </row>
@@ -283,25 +286,94 @@
 <part>ID</part>
 </key>
 </table>
-<table x="558" y="648" name="ControllerEvent">
+<table x="441" y="199" name="ActuatorEvent">
 <row name="ID" null="0" autoincrement="1">
 <datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="ActuatorName" null="1" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+<default>NULL</default><relation table="Actuator" row="Name" />
+</row>
+<row name="TimeStp" null="1" autoincrement="0">
+<datatype>TIMESTAMP</datatype>
+<default>NULL</default></row>
+<row name="EventType" null="1" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+<default>NULL</default></row>
+<row name="EventValue" null="0" autoincrement="0">
+<datatype>VARCHAR(1000)</datatype>
+</row>
+<key type="PRIMARY" name="">
+<part>ID</part>
+</key>
+</table>
+<table x="234" y="164" name="User">
+<row name="Username" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+<relation table="UserActuatorNotification" row="Username" />
+<relation table="UserControllerNotification" row="Username" />
+</row>
+<row name="Password" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+</row>
+<row name="Level" null="0" autoincrement="0">
+<datatype>INTEGER</datatype>
+</row>
+<row name="Status" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+</row>
+<row name="DateAdded" null="0" autoincrement="0">
+<datatype>TIMESTAMP</datatype>
+</row>
+<key type="PRIMARY" name="">
+<part>Username</part>
+</key>
+</table>
+<table x="488" y="43" name="UserActuatorNotification">
+<row name="Username" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+</row>
+<row name="ActuatorName" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+</row>
+<row name="LastRead" null="0" autoincrement="0">
+<datatype>TIMESTAMP</datatype>
+</row>
+<key type="PRIMARY" name="">
+<part>Username</part>
+<part>ActuatorName</part>
+</key>
+</table>
+<table x="168" y="374" name="UserControllerNotification">
+<row name="Username" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
 </row>
 <row name="ControllerName" null="0" autoincrement="0">
 <datatype>VARCHAR(100)</datatype>
 <relation table="Controller" row="ControllerName" />
 </row>
-<row name="TimeStp" null="0" autoincrement="0">
+<row name="LastRead" null="0" autoincrement="0">
 <datatype>TIMESTAMP</datatype>
 </row>
-<row name="EventType" null="1" autoincrement="0">
-<datatype>VARCHAR(200)</datatype>
-<default>NULL</default></row>
-<row name="EventValue" null="0" autoincrement="0">
-<datatype>DOUBLE</datatype>
+<key type="PRIMARY" name="">
+<part>Username</part>
+<part>ControllerName</part>
+</key>
+</table>
+<table x="383" y="631" name="UserSensorNotification">
+<row name="Username" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+<relation table="User" row="Username" />
+</row>
+<row name="SensorName" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+</row>
+<row name="LastRead" null="0" autoincrement="0">
+<datatype>TIMESTAMP</datatype>
 </row>
 <key type="PRIMARY" name="">
-<part>ID</part>
+<part>Username</part>
+<part>SensorName</part>
 </key>
 </table>
 </sql>

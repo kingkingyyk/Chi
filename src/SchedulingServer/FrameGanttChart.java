@@ -3,11 +3,14 @@ package SchedulingServer;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JFrame;
@@ -45,6 +48,7 @@ public class FrameGanttChart extends JFrame {
 	private ChartPanel cPanel;
 	private TaskSeriesCollection collection;
 	private ArrayList<String> barDescription=new ArrayList<>();
+	private int actuatorCount=0;
 	
 	private static class UpdateTask extends TimerTask {
 		FrameGanttChart f;
@@ -95,40 +99,52 @@ public class FrameGanttChart extends JFrame {
 			
 			LocalDateTime minBound=LocalDateTime.now();
 			LocalDateTime maxBound=minBound.plusDays(1);
-			TaskSeries todayBar=new TaskSeries("Today");
-			todayBar.add(new Task("Today",Utility.localDateTimeToUtilDate(minBound),Utility.localDateTimeToUtilDate(maxBound)));
+			TaskSeries dataSet=new TaskSeries("0");
+			dataSet.add(new Task("Today",Utility.localDateTimeToUtilDate(minBound),Utility.localDateTimeToUtilDate(maxBound)));
 			barDescription.add("Ongoing...");
-			collection.add(todayBar);
+			
+			HashMap<String,Integer> count=new HashMap<>();
+			HashMap<Integer,TaskSeries> int2Task=new HashMap<>();
+			int2Task.put(0,dataSet);
 			
 			for (SchedulingData dat : list) {
 				if (dat.getNextStartTime().compareTo(maxBound)<0) {
-					TaskSeries dataSet=new TaskSeries(dat.getName());
-					Task t=new Task(dat.actuatorName,Utility.localDateTimeToUtilDate(maxDate(dat.getNextStartTime(),minBound)),Utility.localDateTimeToUtilDate(minDate(dat.getNextEndTime(),maxBound)));
-					dataSet.add(t);
+					int index=count.getOrDefault(dat.getActuatorName(),0);
+					if (!int2Task.containsKey(index)) {
+						TaskSeries ts=new TaskSeries(String.valueOf(index));
+						int2Task.put(index,ts);
+					}
+					count.put(dat.getActuatorName(),index+1);
+					Task t=new Task(dat.getActuatorName(),Utility.localDateTimeToUtilDate(maxDate(dat.getNextStartTime(),minBound)),Utility.localDateTimeToUtilDate(minDate(dat.getNextEndTime(),maxBound)));
+					int2Task.get(index).add(t);
 					barDescription.add(dat.getName());
-					collection.add(dataSet);
 				}		
 			}
 			
 			for (SchedulingData dat : list) {
 				if (dat.getNextStartTime().compareTo(maxBound)<0) {
 					if (dat instanceof SchedulingDataRegular && ((((SchedulingDataRegular) dat).getDay() & 1 << dat.getNextStartTime().plusDays(1).getDayOfWeek().getValue()) !=0) && dat.getNextStartTime().plusDays(1).compareTo(maxBound)<0) {
-						TaskSeries dataSet=new TaskSeries(dat.getName());
-						dataSet=new TaskSeries(dat.getName()+'.');
-						Task t=new Task(dat.actuatorName,Utility.localDateTimeToUtilDate(maxDate(dat.getNextStartTime().plusDays(1),minBound)),Utility.localDateTimeToUtilDate(minDate(dat.getNextEndTime().plusDays(1),maxBound)));
-						dataSet.add(t);
+						int index=count.getOrDefault(dat.getActuatorName(),0);
+						if (!int2Task.containsKey(index)) {
+							TaskSeries ts=new TaskSeries(String.valueOf(index));
+							int2Task.put(index,ts);
+						}
+						count.put(dat.getActuatorName(),index+1);
+						Task t=new Task(dat.getActuatorName(),Utility.localDateTimeToUtilDate(maxDate(dat.getNextStartTime().plusDays(1),minBound)),Utility.localDateTimeToUtilDate(minDate(dat.getNextEndTime().plusDays(1),maxBound)));
+						int2Task.get(index).add(t);
 						barDescription.add(dat.getName());
-						collection.add(dataSet);
 					}
 				}		
 			}
 			
-
+			for (TaskSeries ts : int2Task.values()) collection.add(ts);
+			
+			actuatorCount=count.keySet().size();
 		}
 	}
 	
 	public FrameGanttChart() {
-		setTitle("Gnatt Chart");
+		setTitle("Gantt Chart");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 750, 400);
 		setIconImage(Theme.getIcon("ChiLogo").getImage());
@@ -162,9 +178,10 @@ public class FrameGanttChart extends JFrame {
     	chart.getTitle().setFont(new Font("Segoe UI",Font.BOLD,20));
     	chart.getTitle().setPaint(Color.WHITE);
     	chart.fireChartChanged();
-    	chart.setBackgroundPaint(Color.BLACK);
+    	chart.setBackgroundImage(Theme.getIcon("GanttChartBackground").getImage());
+    	chart.setBackgroundPaint(new Color(0,0,0,0));
     	((BarRenderer) chart.getCategoryPlot().getRenderer()).setBarPainter(new StandardBarPainter());
-    	chart.getCategoryPlot().setBackgroundPaint(Color.BLACK);
+    	chart.getCategoryPlot().setBackgroundPaint(new Color(0,0,0,0));
     	chart.getCategoryPlot().getDomainAxis().setAxisLinePaint(Color.WHITE);
     	chart.getCategoryPlot().getDomainAxis().setLabelPaint(Color.WHITE);
     	chart.getCategoryPlot().getDomainAxis().setTickLabelPaint(Color.WHITE);
@@ -174,7 +191,7 @@ public class FrameGanttChart extends JFrame {
     	chart.getCategoryPlot().getRangeAxis().setTickLabelPaint(Color.WHITE);
     	chart.getCategoryPlot().getRangeAxis().setTickMarkPaint(Color.WHITE);
     	
-    	Font font3 = new Font("Dialog", Font.PLAIN, 9);
+    	Font font3 = new Font("Dialog", Font.PLAIN, 11);
     	
     	CategoryItemRenderer renderer = chart.getCategoryPlot().getRenderer();
     	renderer.setBaseItemLabelGenerator( new IntervalCategoryItemLabelGenerator());
@@ -193,12 +210,15 @@ public class FrameGanttChart extends JFrame {
 
     	    @Override
     	    public String generateLabel(CategoryDataset dataset, int row, int column) {
-    	        return barDescription.get(row);
+    	        return barDescription.get(row*actuatorCount+column);
     	    }
 
 
     	});
 		
+    	BarRenderer bren=(BarRenderer)chart.getCategoryPlot().getRenderer();
+    	bren.setSeriesFillPaint(0,Color.ORANGE);
+    	
 		JScrollPane scrollPane = new JScrollPane();
 		contentPane.add(scrollPane, BorderLayout.CENTER);
     	
@@ -231,6 +251,22 @@ public class FrameGanttChart extends JFrame {
 			@Override
 			public void windowOpened(WindowEvent arg0) {}
 			
+		});
+		
+		addComponentListener(new ComponentListener() {
+		    public void componentResized(ComponentEvent e) {
+		        cPanel.setMinimumDrawHeight(scrollPane.getHeight());
+		        cPanel.setMinimumDrawWidth(scrollPane.getWidth());
+		    }
+
+			@Override
+			public void componentHidden(ComponentEvent arg0) {}
+
+			@Override
+			public void componentMoved(ComponentEvent arg0) {}
+
+			@Override
+			public void componentShown(ComponentEvent arg0) {}
 		});
 	}
 
