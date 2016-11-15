@@ -315,10 +315,11 @@ public class DatabaseReading extends DatabaseCassandra {
 			if (keyLevel>=KEY_LEVEL_MONTH) o[1]=dt.getMonthValue();
 			if (keyLevel>=KEY_LEVEL_DAY) o[2]=dt.getDayOfMonth();
 			
-			o[o.length-1]=map.get(map.get(localDateTimeToKey(dt,KEY_LEVEL_DAY)));
+			o[o.length-1]=map.get(localDateTimeToKey(dt,KEY_LEVEL_DAY));
 			
 			toReturn.add(o);
 		}
+		
 		return toReturn;
 	}
 	

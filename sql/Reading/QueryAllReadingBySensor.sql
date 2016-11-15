@@ -1,1 +1,1 @@
-SELECT Value FROM SensorReading WHERE SensorName=? ALLOW FILTERING;
+SELECT TimeStp,Value  FROM SensorReading WHERE SensorName=? ALLOW FILTERING;
