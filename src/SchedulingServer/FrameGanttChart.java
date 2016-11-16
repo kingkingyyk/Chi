@@ -1,6 +1,5 @@
 package SchedulingServer;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ComponentEvent;
@@ -34,10 +33,13 @@ import org.jfree.data.gantt.Task;
 import org.jfree.data.gantt.TaskSeries;
 import org.jfree.data.gantt.TaskSeriesCollection;
 import org.jfree.ui.TextAnchor;
+import org.jfree.chart.axis.DateAxis;
 
 import Chi.Theme;
 import Chi.Utility;
 import javax.swing.JScrollPane;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 
 public class FrameGanttChart extends JFrame {
 	private static final long serialVersionUID = -2113178474247458689L;
@@ -99,6 +101,10 @@ public class FrameGanttChart extends JFrame {
 			
 			LocalDateTime minBound=LocalDateTime.now();
 			LocalDateTime maxBound=minBound.plusDays(1);
+			
+			((DateAxis)(chart.getCategoryPlot().getRangeAxis())).setLowerMargin(0);
+			((DateAxis)(chart.getCategoryPlot().getRangeAxis())).setUpperMargin(0);
+			
 			TaskSeries dataSet=new TaskSeries("0");
 			dataSet.add(new Task("Today",Utility.localDateTimeToUtilDate(minBound),Utility.localDateTimeToUtilDate(maxBound)));
 			barDescription.add("Ongoing...");
@@ -117,7 +123,7 @@ public class FrameGanttChart extends JFrame {
 					count.put(dat.getActuatorName(),index+1);
 					Task t=new Task(dat.getActuatorName(),Utility.localDateTimeToUtilDate(maxDate(dat.getNextStartTime(),minBound)),Utility.localDateTimeToUtilDate(minDate(dat.getNextEndTime(),maxBound)));
 					int2Task.get(index).add(t);
-					barDescription.add(dat.getName());
+					barDescription.add(dat.getName()+" : "+dat.getStartAction()+" & "+dat.getEndAction());
 				}		
 			}
 			
@@ -132,7 +138,7 @@ public class FrameGanttChart extends JFrame {
 						count.put(dat.getActuatorName(),index+1);
 						Task t=new Task(dat.getActuatorName(),Utility.localDateTimeToUtilDate(maxDate(dat.getNextStartTime().plusDays(1),minBound)),Utility.localDateTimeToUtilDate(minDate(dat.getNextEndTime().plusDays(1),maxBound)));
 						int2Task.get(index).add(t);
-						barDescription.add(dat.getName());
+						barDescription.add(dat.getName()+" : "+dat.getStartAction()+" & "+dat.getEndAction());
 					}
 				}		
 			}
@@ -146,7 +152,7 @@ public class FrameGanttChart extends JFrame {
 	public FrameGanttChart() {
 		setTitle("Gantt Chart");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 750, 400);
+		setBounds(100, 100, 750, 520);
 		setIconImage(Theme.getIcon("ChiLogo").getImage());
 		addWindowListener(new WindowListener() {
 			@Override
@@ -168,7 +174,6 @@ public class FrameGanttChart extends JFrame {
 		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
 		collection=new TaskSeriesCollection();
@@ -197,8 +202,7 @@ public class FrameGanttChart extends JFrame {
     	renderer.setBaseItemLabelGenerator( new IntervalCategoryItemLabelGenerator());
     	renderer.setBaseItemLabelsVisible(true);
     	renderer.setBaseItemLabelPaint(Color.BLACK);
-    	renderer.setBasePositiveItemLabelPosition(new ItemLabelPosition(
-    	ItemLabelAnchor.INSIDE6, TextAnchor.BOTTOM_CENTER));
+    	renderer.setBasePositiveItemLabelPosition(new ItemLabelPosition(ItemLabelAnchor.INSIDE9, TextAnchor.CENTER_LEFT));
     	renderer.setBaseItemLabelFont(font3);
     	renderer.setBaseItemLabelGenerator( new CategoryItemLabelGenerator(){
 
@@ -220,10 +224,26 @@ public class FrameGanttChart extends JFrame {
     	bren.setSeriesFillPaint(0,Color.ORANGE);
     	
 		JScrollPane scrollPane = new JScrollPane();
-		contentPane.add(scrollPane, BorderLayout.CENTER);
     	
-		cPanel = new ChartPanel(chart);
+		cPanel = new ChartPanel(chart,true);
+		cPanel.setZoomAroundAnchor(true);
+		cPanel.setFillZoomRectangle(false);
+		cPanel.setRefreshBuffer(true);
+		cPanel.setMouseZoomable(true);
+		cPanel.setMouseWheelEnabled(true);
+		//cPanel.setMouseWheelEnabled(true);
+		cPanel.setInitialDelay(300);
 		scrollPane.setViewportView(cPanel);
+		GroupLayout gl_contentPane = new GroupLayout(contentPane);
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 724, Short.MAX_VALUE)
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 471, Short.MAX_VALUE)
+		);
+		contentPane.setLayout(gl_contentPane);
 		
 		t=new Timer();
 		UpdateTask ut=new UpdateTask(); ut.f=this;
