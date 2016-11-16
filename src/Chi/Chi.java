@@ -17,10 +17,13 @@ import FrameEntityManagement.FrameSiteManagementBind;
 import FrameEntityManagement.FrameSpecialScheduleManagementBind;
 import FrameEntityManagement.FrameUserManagementBind;
 import NotificationServer.FrameNotificationBind;
+import Reading.FrameLatestReadingBind;
 import SchedulingServer.FrameOngoingSchedulesBind;
 
 public class Chi {
 
+	public static boolean IssuedStop=false;
+	
 	public static void main (String [] args) {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -72,7 +75,7 @@ public class Chi {
 				FrameOngoingSchedulesBind.initialize();
 				FrameSensorActuatorResponseManagementBind.initialize();
 				FrameNotificationBind.initialize();
-				
+				FrameLatestReadingBind.initialize();
 				diag.setProgBarValue(4);
 				Logger.log(Logger.LEVEL_INFO,"GUI & data binding done.");
 				

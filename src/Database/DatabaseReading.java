@@ -106,7 +106,7 @@ public class DatabaseReading extends DatabaseCassandra {
 			}
 			return true;
 		} catch (NoHostAvailableException e) {
-			Logger.log(Logger.LEVEL_ERROR,"DB Store Reading - Database connection fail!");
+			if (!Chi.Chi.IssuedStop) Logger.log(Logger.LEVEL_ERROR,"DB Store Reading - Database connection fail!");
 		} catch (Exception e) {
 			Logger.log(Logger.LEVEL_ERROR,"DB Store Reading - "+e.getMessage());
 			e.printStackTrace();
@@ -132,7 +132,7 @@ public class DatabaseReading extends DatabaseCassandra {
 			
 			Collections.sort(list);
 		} catch (NoHostAvailableException e) {
-			Logger.log(Logger.LEVEL_ERROR,"DB Get Reading - Database connection fail!");
+			if (!Chi.Chi.IssuedStop) Logger.log(Logger.LEVEL_ERROR,"DB Get Reading - Database connection fail!");
 		} catch (Exception e) {
 			Logger.log(Logger.LEVEL_ERROR,"DB Get Reading - "+e.getMessage());
 			e.printStackTrace();
@@ -140,20 +140,22 @@ public class DatabaseReading extends DatabaseCassandra {
 		return list;
 	}
 	
-	public static double getLatestReading (String sn) {
+	private static double getLatestReading (String sn) {
 		Logger.log(Logger.LEVEL_INFO,"DB Get Latest Reading : "+Config.getConfig(Config.DATABASE_RECORD_QUERY_LATEST_FILE_KEY));
 		try {
 			BoundStatement [] sql=getBoundSQLStatementFromFile(DatabaseCassandra.getSession(),Config.getConfig(Config.DATABASE_RECORD_QUERY_LATEST_FILE_KEY));
 			sql[0].setString(0, sn);
 			ResultSet rs=executeSQL("DB Get Latest Reading", DatabaseCassandra.getSession(), sql[0]);
 			
+			Date latestDate=new Date(0);
 			double d=0;
 			for (Row r : rs) {
-				d=Cache.Sensors.map.get(sn).denormalizeValue(r.getDouble("Value"));
+			    if (rs.getAvailableWithoutFetching() == 100 && !rs.isFullyFetched()) rs.fetchMoreResults();
+				if (r.getTimestamp("TimeStp").after(latestDate)) d=Cache.Sensors.map.get(sn).denormalizeValue(r.getDouble("Value"));
 			}
 			return d;
 		} catch (NoHostAvailableException e) {
-			Logger.log(Logger.LEVEL_ERROR,"DB Get Latest Reading - Database connection fail!");
+			if (!Chi.Chi.IssuedStop) Logger.log(Logger.LEVEL_ERROR,"DB Get Latest Reading - Database connection fail!");
 		} catch (Exception e) {
 			Logger.log(Logger.LEVEL_ERROR,"DB Get Latest Reading - "+e.getMessage());
 			e.printStackTrace();
@@ -335,6 +337,52 @@ public class DatabaseReading extends DatabaseCassandra {
 		return getTotalReadingGroupBy(sn,KEY_LEVEL_YEAR);
 	}
 	
+	private static ArrayList<Object []> getTotalReadingGroupByBetweenTime (String sn, int keyLevel, LocalDateTime st, LocalDateTime et) {
+		LinkedList<SensorReading> list=getReadingBetweenTime(sn,st,et);
+		HashMap<String,Double> map=new HashMap<>();
+		for (SensorReading sr : list) {
+			StringBuilder sb=new StringBuilder();
+			sb.append(localDateTimeToKey(sr.getTimestamp(),keyLevel));
+			map.put(sb.toString(),map.getOrDefault(sb.toString(),0.0)+sr.getActualValue());
+		}
+		
+		//HashMap keys might not be in sequence. need to sort it!
+		ArrayList<LocalDateTime> dateList=new ArrayList<>();
+		for (String s : map.keySet()) {
+			String [] date=s.split(";");
+			dateList.add(LocalDateTime.of(Integer.parseInt(date[0]),Integer.parseInt(date[1]),Integer.parseInt(date[2]),0,0));
+		}
+		Collections.sort(dateList);
+		
+		//add to return....
+		ArrayList<Object []> toReturn=new ArrayList<>();
+		for (LocalDateTime dt : dateList) {
+			Object [] o=new Object [keyLevel+1];
+			
+			if (keyLevel>=KEY_LEVEL_YEAR) o[0]=dt.getYear();
+			if (keyLevel>=KEY_LEVEL_MONTH) o[1]=dt.getMonthValue();
+			if (keyLevel>=KEY_LEVEL_DAY) o[2]=dt.getDayOfMonth();
+			
+			o[o.length-1]=map.get(localDateTimeToKey(dt,KEY_LEVEL_DAY));
+			
+			toReturn.add(o);
+		}
+		
+		return toReturn;
+	}
+	
+	public static ArrayList<Object []> getTotalReadingGroupByDayBetweenTime (String sn, LocalDateTime st, LocalDateTime et) {
+		return getTotalReadingGroupByBetweenTime(sn,KEY_LEVEL_DAY,st,et);
+	}
+	
+	public static ArrayList<Object []> getTotalReadingGroupByMonthBetweenTime (String sn, LocalDateTime st, LocalDateTime et) {
+		return getTotalReadingGroupByBetweenTime(sn,KEY_LEVEL_MONTH,st,et);
+	}
+	
+	public static ArrayList<Object []> getTotalReadingGroupByYearBetweenTime (String sn, LocalDateTime st, LocalDateTime et) {
+		return getTotalReadingGroupByBetweenTime(sn,KEY_LEVEL_YEAR,st,et);
+	}
+	
 	private static ArrayList<Object []> getAverageReadingGroupBy (String sn, int keyLevel) {
 		LinkedList<SensorReading> list=getAllReadingBySensor(sn);
 		HashMap<String,Double> map=new HashMap<>();
@@ -382,6 +430,54 @@ public class DatabaseReading extends DatabaseCassandra {
 		return getAverageReadingGroupBy(sn,KEY_LEVEL_YEAR);
 	}
 	
+	private static ArrayList<Object []> getAverageReadingGroupByBetweenTime (String sn, int keyLevel, LocalDateTime st, LocalDateTime et) {
+		LinkedList<SensorReading> list=getReadingBetweenTime(sn,st,et);
+		HashMap<String,Double> map=new HashMap<>();
+		HashMap<String,Integer> valueCount=new HashMap<>();
+		for (SensorReading sr : list) {
+			StringBuilder sb=new StringBuilder();
+			sb.append(localDateTimeToKey(sr.getTimestamp(),keyLevel));
+			map.put(sb.toString(),map.getOrDefault(sb.toString(),0.0)+sr.getActualValue());
+			valueCount.put(sb.toString(),valueCount.getOrDefault(sb.toString(),0)+1);
+		}
+		
+		//HashMap keys might not be in sequence. need to sort it!
+		ArrayList<LocalDateTime> dateList=new ArrayList<>();
+		for (String s : map.keySet()) {
+			String [] date=s.split(";");
+			dateList.add(LocalDateTime.of(Integer.parseInt(date[0]),Integer.parseInt(date[1]),Integer.parseInt(date[2]),0,0));
+		}
+		Collections.sort(dateList);
+		
+		//add to return....
+		ArrayList<Object []> toReturn=new ArrayList<>();
+		for (LocalDateTime dt : dateList) {
+			Object [] o=new Object [keyLevel+1];
+			
+			if (keyLevel>=KEY_LEVEL_YEAR) o[0]=dt.getYear();
+			if (keyLevel>=KEY_LEVEL_MONTH) o[1]=dt.getMonthValue();
+			if (keyLevel>=KEY_LEVEL_DAY) o[2]=dt.getDayOfMonth();
+			
+			o[o.length-1]=map.get(localDateTimeToKey(dt,KEY_LEVEL_DAY))/valueCount.get(localDateTimeToKey(dt,KEY_LEVEL_DAY));
+			
+			toReturn.add(o);
+		}
+		return toReturn;
+	}
+	
+	public static ArrayList<Object []> getAverageReadingGroupByDayBetweenTime (String sn, LocalDateTime st, LocalDateTime et) {
+		return getAverageReadingGroupByBetweenTime(sn,KEY_LEVEL_DAY,st,et);
+	}
+	
+	public static ArrayList<Object []> getAverageReadingGroupByMonthBetweenTime (String sn, LocalDateTime st, LocalDateTime et) {
+		return getAverageReadingGroupByBetweenTime(sn,KEY_LEVEL_MONTH,st,et);
+	}
+	
+	public static ArrayList<Object []> getAverageReadingGroupByYearBetweenTime (String sn, LocalDateTime st, LocalDateTime et) {
+		return getAverageReadingGroupByBetweenTime(sn,KEY_LEVEL_YEAR,st,et);
+	}
+	
+	
 	private static ArrayList<Object []> getCulmulativeReadingGroupBy (String sn, int keyLevel) {
 		LinkedList<SensorReading> list=getAllReadingBySensor(sn);
 		Collections.sort(list);
@@ -413,5 +509,38 @@ public class DatabaseReading extends DatabaseCassandra {
 	
 	public static ArrayList<Object []> getCulmulativeReadingGroupByYear (String sn) {
 		return getCulmulativeReadingGroupBy(sn,KEY_LEVEL_YEAR);
+	}
+	
+	private static ArrayList<Object []> getCulmulativeReadingBetweenTime (String sn, int keyLevel, LocalDateTime st, LocalDateTime et) {
+		LinkedList<SensorReading> list=getReadingBetweenTime(sn,st,et);
+		Collections.sort(list);
+		
+		ArrayList<Object []> toReturn=new ArrayList<>();
+		double currSum=0;
+		for (SensorReading sr : list) {
+			Object [] o=new Object [keyLevel+1];
+			
+			if (keyLevel>=KEY_LEVEL_YEAR) o[0]=sr.getTimestamp().getYear();
+			if (keyLevel>=KEY_LEVEL_MONTH) o[1]=sr.getTimestamp().getMonthValue();
+			if (keyLevel>=KEY_LEVEL_DAY) o[2]=sr.getTimestamp().getDayOfMonth();
+			
+			currSum+=sr.getActualValue();
+			o[o.length-1]=currSum;
+			
+			toReturn.add(o);
+		}
+		return toReturn;
+	}
+	
+	public static ArrayList<Object []> getCulmulativeReadingGroupByDayBetweenTime (String sn, LocalDateTime st, LocalDateTime et) {
+		return getCulmulativeReadingBetweenTime(sn,KEY_LEVEL_DAY,st,et);
+	}
+	
+	public static ArrayList<Object []> getCulmulativeReadingGroupByMonthBetweenTime (String sn, LocalDateTime st, LocalDateTime et) {
+		return getCulmulativeReadingBetweenTime(sn,KEY_LEVEL_MONTH,st,et);
+	}
+	
+	public static ArrayList<Object []> getCulmulativeReadingGroupByYearBetweenTime (String sn, LocalDateTime st, LocalDateTime et) {
+		return getCulmulativeReadingBetweenTime(sn,KEY_LEVEL_YEAR,st,et);
 	}
 }

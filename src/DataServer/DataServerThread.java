@@ -94,7 +94,7 @@ public class DataServerThread extends Thread {
 						}
 					}
 				} catch (Exception e) {
-					Logger.log(Logger.LEVEL_ERROR,"Data Server - "+e.getMessage());
+					if (!DataServer.started()) Logger.log(Logger.LEVEL_ERROR,"Data Server - "+e.getMessage());
 				}
 			}
 			Logger.log(Logger.LEVEL_INFO,"Data Server - StopP2 - Stop listening");

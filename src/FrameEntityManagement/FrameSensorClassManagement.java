@@ -191,6 +191,35 @@ public class FrameSensorClassManagement extends JFrame {
 			@Override public void keyTyped(KeyEvent arg0) {}
 			
 		});
+		
+		table.getTableHeader().addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if (arg0.getButton()==MouseEvent.BUTTON3) {
+					if (!popup.isVisible()) {
+						popup.setLocation(arg0.getLocationOnScreen());
+						popup.setVisible(true);
+						Thread t=new Thread() {
+							public void run () {
+								try { Thread.sleep(7000); } catch (InterruptedException e) {}
+								if (popup.isVisible()) popup.setVisible(false);
+							}
+						};
+						t.start();
+					} else {
+						popup.setVisible(false);
+					}
+				}
+			}
+
+			@Override public void mouseEntered(MouseEvent arg0) {}
+			@Override public void mouseExited(MouseEvent arg0) {}
+			@Override public void mousePressed(MouseEvent arg0) {}
+			@Override
+			public void mouseReleased(MouseEvent arg0) {}
+			
+		});
 	}
 	
 	public void updateSensorClassTable() {

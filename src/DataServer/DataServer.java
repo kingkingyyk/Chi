@@ -96,8 +96,9 @@ public class DataServer {
 					}
 				} catch (IOException e) {
 					Logger.log(Logger.LEVEL_ERROR,"Data Server - StartP1 - Start failed. "+e.getMessage());
+				} finally {
+					attempted=true;
 				}
-				attempted=true;
 			}
 		};
 		t.start();

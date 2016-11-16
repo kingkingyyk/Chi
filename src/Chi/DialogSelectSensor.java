@@ -1,4 +1,4 @@
-package Reading;
+package Chi;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -18,7 +18,7 @@ import java.util.Collections;
 
 import javax.swing.JButton;
 
-public class DialogReadingSelectSensor extends JDialog {
+public class DialogSelectSensor extends JDialog {
 	private static final long serialVersionUID = 4449101659845512529L;
 	private JComboBox<String> comboBoxSensor;
 	private JComboBox<String> comboBoxController;
@@ -27,9 +27,9 @@ public class DialogReadingSelectSensor extends JDialog {
 	public boolean OKPressed;
 	public String selectedSensor;
 
-	public DialogReadingSelectSensor() {
+	public DialogSelectSensor() {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setTitle("Reading");
+		setTitle("Sensor");
 		setResizable(false);
 		setModal(true);
 		setIconImage(Theme.getIcon("ChiLogo").getImage());

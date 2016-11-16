@@ -1,25 +1,27 @@
 package Reading;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
-import org.jfree.chart.renderer.xy.XYAreaRenderer;
+import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.StandardBarPainter;
+import org.jfree.chart.renderer.xy.XYSplineRenderer;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.time.Second;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
@@ -34,12 +36,9 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JSplitPane;
 import javax.swing.JScrollPane;
 import java.awt.Dimension;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
+import java.awt.BorderLayout;
 
-public class FrameReading extends JFrame {
+public class FrameLiveReading extends JFrame {
 	private static final long serialVersionUID = -2113178474247458689L;
 	private JPanel contentPane;
 	private LocalDateTime lastUpdateTime;
@@ -49,13 +48,16 @@ public class FrameReading extends JFrame {
 	private Timer t;
 	private DateAxis dAxis;
 	private Sensor s;
-	private JTable table;
+	
+	private JFreeChart meterChart;
+	private DefaultCategoryDataset meterDataset;
 	
 	private static class UpdateTask extends TimerTask {
-		FrameReading r;
+		FrameLiveReading r;
 		
 		@Override
 		public void run() {
+			r.setTitle(r.s.getSensorname()+"'s Live Reading");
 			if (r.chart.isNotify()) {
 				r.chart.setNotify(false);
 				LocalDateTime now=LocalDateTime.now();
@@ -63,9 +65,24 @@ public class FrameReading extends JFrame {
 				r.lastUpdateTime=now;
 				for (SensorReading r : list) {
 					this.r.tSeries.addOrUpdate(new Second(Utility.localDateTimeToUtilDate(r.getTimestamp())),r.getActualValue());
-					((DefaultTableModel) this.r.table.getModel()).addRow(new Object [] {r.getTimestamp(),r.getActualValue()});
 				}
-				r.chart.setNotify(true);
+		    	((DateAxis) this.r.chart.getXYPlot().getDomainAxis()).setRange(Utility.localDateTimeToUtilDate(LocalDateTime.now().minusHours(1)), Utility.localDateTimeToUtilDate(LocalDateTime.now().plusMinutes(5)));
+		    	if (this.r.tSeries.getItemCount()>0) {
+		    		Thread t=new Thread() {
+		    			public void run () {
+		    				double currValue=r.meterDataset.getValue("","").doubleValue();
+		    				double targetValue=r.tSeries.getDataItem(r.tSeries.getItemCount()-1).getValue().doubleValue();    		
+		    			    double perStep=(targetValue-currValue)/60;
+		    				for (int i=0;i<60 && r.contentPane.isVisible();i++) {
+		    					currValue+=perStep;
+		    					r.meterDataset.setValue(currValue,"","");
+		    					try {Thread.sleep(17);} catch (InterruptedException e) {}
+		    				}
+		    			}
+		    		};
+		    		t.start();
+		    	}
+		    	r.chart.setNotify(true);
 				if (!this.r.tSeries.isEmpty()) {
 			        this.r.dAxis.setMinimumDate(this.r.tSeries.getDataItem(0).getPeriod().getStart());
 			        this.r.dAxis.setMaximumDate(Utility.localDateTimeToUtilDate(now.plusSeconds(5)));
@@ -74,37 +91,10 @@ public class FrameReading extends JFrame {
 		}
 		
 	}
-	
-	private static class TableModel extends DefaultTableModel {
-		private static final long serialVersionUID = -869414171351487961L;
-		@SuppressWarnings("rawtypes")
-		Class[] columnTypes = new Class[] {
-				LocalDateTime.class, Double.class
-			};
-			@SuppressWarnings({ "rawtypes", "unchecked" })
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-			boolean[] columnEditables = new boolean[] {
-				false, false
-			};
-			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];
-			}
-		
-		
-	}
-	
-	
-	private static class DateTimeRenderer implements TableCellRenderer {
-		private static DateTimeFormatter form=DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-		      boolean hasFocus, int row, int column) {
-		    return new JLabel(form.format((LocalDateTime)value));
-		  }
-	}
-	
-	public FrameReading(Sensor s) {
+
+	public FrameLiveReading(Sensor s) {
+		setTitle(s.getSensorname()+"'s Live Reading");
+		setIconImage(Theme.getIcon("ChiLogo").getImage());
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 750, 400);
         
@@ -113,10 +103,11 @@ public class FrameReading extends JFrame {
 		setContentPane(contentPane);
 		
 		dataset=new TimeSeriesCollection();
-		tSeries=new TimeSeries("Current");
+		tSeries=new TimeSeries(s.getSensorclass().getClassname());
+		tSeries.setMaximumItemCount(30);
 		dataset.addSeries(tSeries);
 		
-    	chart = ChartFactory.createTimeSeriesChart(s.getSensorname(), "Time", s.getUnit(), dataset, true, true, false);
+    	chart = ChartFactory.createTimeSeriesChart("Live Reading", "Time", s.getUnit(), dataset, true, true, false);
     	chart.removeLegend();
     	chart.getTitle().setFont(new Font("Segoe UI",Font.BOLD,20));
     	chart.fireChartChanged();
@@ -145,39 +136,71 @@ public class FrameReading extends JFrame {
 		panel.setMinimumDrawWidth(600);
 		panel.setMinimumDrawHeight(400);
 		panel.setPreferredSize(new Dimension(400, 300));
-		panel.setMaximumDrawWidth(600);
-		panel.setMaximumDrawHeight(400);
+		panel.setMaximumDrawWidth(2400);
+		panel.setMaximumDrawHeight(1600);
 		chart.getTitle().setPaint(Color.WHITE);
     	chart.setBackgroundImage(Theme.getIcon("GanttChartBackground").getImage());
     	chart.setBackgroundPaint(new Color(0,0,0,0));
-    	chart.getXYPlot().setRenderer(new XYAreaRenderer());
-    	((XYAreaRenderer)chart.getXYPlot().getRenderer()).setBaseFillPaint(Color.WHITE);
+    	XYSplineRenderer areaRen=new XYSplineRenderer();
+    	areaRen.setSeriesPaint(0,new Color(247,220,111,255));
+    	areaRen.setSeriesStroke(0,new BasicStroke(3));
+    	chart.getXYPlot().setRenderer(0,areaRen);
     	chart.getXYPlot().setBackgroundPaint(new Color(0,0,0,0));
+    	chart.getXYPlot().setDomainGridlinesVisible(false);
+    	chart.getXYPlot().setRangeGridlinesVisible(false);
+    	
     	chart.getXYPlot().getDomainAxis().setAxisLinePaint(Color.WHITE);
     	chart.getXYPlot().getDomainAxis().setLabelPaint(Color.WHITE);
     	chart.getXYPlot().getDomainAxis().setTickLabelPaint(Color.WHITE);
     	chart.getXYPlot().getDomainAxis().setTickMarkPaint(Color.WHITE);
+    	chart.getXYPlot().getDomainAxis().setAutoRange(true);
+    	
     	chart.getXYPlot().getRangeAxis().setAxisLinePaint(Color.WHITE);
     	chart.getXYPlot().getRangeAxis().setLabelPaint(Color.WHITE);
     	chart.getXYPlot().getRangeAxis().setTickLabelPaint(Color.WHITE);
     	chart.getXYPlot().getRangeAxis().setTickMarkPaint(Color.WHITE);
+    	chart.getXYPlot().getRangeAxis().setRange(s.getMinvalue(),s.getMaxvalue());
+    	chart.getXYPlot().getRangeAxis().setAutoRange(true);
 		scrollPane.setViewportView(panel);
+
+		meterDataset=new DefaultCategoryDataset();
+		meterDataset.setValue(0.0,"","");
+		meterChart=ChartFactory.createBarChart("Latest", "", s.getUnit(),meterDataset);
+		meterChart.setTitle("Latest");
+		meterChart.getTitle().setFont(new Font("Segoe UI",Font.BOLD,15));
+		meterChart.removeLegend();
+		meterChart.setBackgroundPaint(new Color(0,0,0,100));
+		meterChart.getTitle().setPaint(Color.WHITE);
+		((BarRenderer)meterChart.getCategoryPlot().getRenderer()).setBarPainter(new StandardBarPainter());
 		
-		JScrollPane scrollPane_1 = new JScrollPane();
-		splitPane.setRightComponent(scrollPane_1);
+		((BarRenderer)meterChart.getCategoryPlot().getRenderer()).setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+		((BarRenderer)meterChart.getCategoryPlot().getRenderer()).setBaseItemLabelsVisible(true);
+		((BarRenderer)meterChart.getCategoryPlot().getRenderer()).setBaseItemLabelPaint(Color.WHITE);
+		((BarRenderer)meterChart.getCategoryPlot().getRenderer()).setBaseItemLabelFont(new Font("Segoe UI",Font.BOLD,12));
 		
-		table = new JTable(new TableModel());
-		TableColumn tc=new TableColumn(); tc.setHeaderValue("Timestamp");
-		table.addColumn(tc);
-		tc=new TableColumn(); tc.setHeaderValue("Value");
-		table.addColumn(tc);
-		table.setDefaultRenderer(LocalDateTime.class,new DateTimeRenderer());
-		table.setAutoCreateRowSorter(true);
+		meterChart.getCategoryPlot().setBackgroundPaint(new Color(0,0,0,0));
+		meterChart.getCategoryPlot().setDomainGridlinesVisible(false);
+		meterChart.getCategoryPlot().setRangeGridlinesVisible(false);
+		meterChart.getCategoryPlot().getDomainAxis().setAxisLinePaint(Color.WHITE);
+		meterChart.getCategoryPlot().getDomainAxis().setLabelPaint(Color.WHITE);
+		meterChart.getCategoryPlot().getDomainAxis().setTickLabelPaint(Color.WHITE);
+		meterChart.getCategoryPlot().getDomainAxis().setTickMarkPaint(Color.WHITE);
+    	
+		meterChart.getCategoryPlot().getRangeAxis().setAxisLinePaint(Color.WHITE);
+		meterChart.getCategoryPlot().getRangeAxis().setLabelPaint(Color.WHITE);
+		meterChart.getCategoryPlot().getRangeAxis().setTickLabelPaint(Color.WHITE);
+		meterChart.getCategoryPlot().getRangeAxis().setTickMarkPaint(Color.WHITE);
+		meterChart.getCategoryPlot().getRangeAxis().setRange(s.getMinvalue(),s.getMaxvalue());
+    	
+		JPanel panel_1 = new JPanel();
+		splitPane.setRightComponent(panel_1);
+		panel_1.setLayout(new BorderLayout(0, 0));
 		
-		scrollPane_1.setViewportView(table);
+		ChartPanel panel_2 = new ChartPanel(meterChart);
+		panel_1.add(panel_2);
 		contentPane.setLayout(gl_contentPane);
 		
-        lastUpdateTime=LocalDateTime.of(1970,1,1,0,0);
+        lastUpdateTime=LocalDateTime.now().minusHours(1);
 		t=new Timer();
 		UpdateTask ut=new UpdateTask(); ut.r=this;
 		t.schedule(ut,10,2000);

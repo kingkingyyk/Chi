@@ -16,17 +16,17 @@ public class FrameSensorClassManagementContextMenu extends FrameContextMenu {
 	public FrameSensorClassManagementContextMenu (FrameSensorClassManagement m) {
 		this.newMenu=addMenuItem("New...","AddIcon","INSERT");
 		newMenu.addActionListener(new ActionListener() {
-			@Override public void actionPerformed(ActionEvent arg0) {FrameSensorClassManagementActions.add();}
+			@Override public void actionPerformed(ActionEvent arg0) {setVisible(false); FrameSensorClassManagementActions.add();}
 		});
 		
 		this.editMenu=addMenuItem("Edit...","EditIcon","ENTER");
 		editMenu.addActionListener(new ActionListener() {
-			@Override public void actionPerformed(ActionEvent arg0) {FrameSensorClassManagementActions.edit(m);}
+			@Override public void actionPerformed(ActionEvent arg0) {setVisible(false); FrameSensorClassManagementActions.edit(m);}
 		});
 		
 		this.deleteMenu=addMenuItem("Delete...","DeleteIcon","DELETE");
 		deleteMenu.addActionListener(new ActionListener() {
-			@Override public void actionPerformed(ActionEvent arg0) {FrameSensorClassManagementActions.delete(m);}
+			@Override public void actionPerformed(ActionEvent arg0) {setVisible(false); FrameSensorClassManagementActions.delete(m);}
 		});
 		
 		this.addPopupMenuListener(new PopupMenuListener() {

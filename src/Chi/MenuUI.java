@@ -23,8 +23,7 @@ import FrameEntityManagement.FrameUserManagement;
 import GWTServer.GWTServer;
 import NotificationServer.FrameNotification;
 import NotificationServer.NotificationServer;
-import Reading.DialogReadingSelectSensor;
-import Reading.FrameReading;
+import Reading.FrameLatestReading;
 import SchedulingServer.FrameGanttChart;
 import SchedulingServer.FrameOngoingSchedules;
 import SchedulingServer.SchedulingServer;
@@ -68,7 +67,8 @@ public class MenuUI extends JFrame {
 
 	private void onCloseActions () {
         if (JOptionPane.showConfirmDialog(MenuUI.this,"Are you sure to close?", Config.APP_NAME, JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
-			WaitUI u=new WaitUI();
+			Chi.IssuedStop=true;
+        	WaitUI u=new WaitUI();
 			u.setText("Closing database connection...");
 			u.setProgressBarMax(2);
 			Thread t=new Thread() {
@@ -295,13 +295,9 @@ public class MenuUI extends JFrame {
 		panelDatabase.add(btnRunCql);
 		btnViewReadings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				DialogReadingSelectSensor diag=new DialogReadingSelectSensor();
-				diag.setLocationRelativeTo(null);
-				diag.setVisible(true);
-				if (diag.OKPressed) {
-					FrameReading fr=new FrameReading(Cache.Sensors.map.get(diag.selectedSensor));
-					fr.setVisible(true);
-				}
+				FrameLatestReading f=FrameLatestReading.getInstance();
+				f.setVisible(true);
+				f.toFront();
 			}
 		});
 		btnRunSQL.addActionListener(new ActionListener() {
@@ -311,7 +307,7 @@ public class MenuUI extends JFrame {
 		});
 		btnClearReadings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				DialogReadingSelectSensor diag=new DialogReadingSelectSensor();
+				DialogSelectSensor diag=new DialogSelectSensor();
 				diag.setLocationRelativeTo(null);
 				diag.setVisible(true);
 				if (diag.OKPressed && JOptionPane.showConfirmDialog(diag,"Confirm to delete all readings of "+diag.selectedSensor+"?","Clear readings",JOptionPane.OK_CANCEL_OPTION,JOptionPane.WARNING_MESSAGE)==JOptionPane.YES_OPTION) {
