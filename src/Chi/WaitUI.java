@@ -2,7 +2,6 @@ package Chi;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import java.awt.BorderLayout;
 import javax.swing.SwingConstants;
 import javax.swing.JProgressBar;
 import javax.swing.JPanel;
@@ -23,17 +22,26 @@ public class WaitUI extends JDialog {
 		getContentPane().setLayout(null);
 		
 		JPanel panel = new JPanel();
+		panel.setBackground(new Color(38,38,38,255));
 		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panel.setBounds(0, 0, 400, 108);
 		getContentPane().add(panel);
-		panel.setLayout(new BorderLayout(0, 0));
 		
 		lblText = new JLabel("Wait");
-		panel.add(lblText, BorderLayout.CENTER);
-		lblText.setHorizontalAlignment(SwingConstants.CENTER);
+		lblText.setForeground(Color.WHITE);
+		lblText.setBounds(66, 36, 324, 23);
+		lblText.setHorizontalAlignment(SwingConstants.LEFT);
 		
 		progressBar = new JProgressBar();
-		panel.add(progressBar, BorderLayout.SOUTH);
+		progressBar.setBounds(1, 93, 398, 14);
+		
+		JLabel lblBG = new JLabel();
+		lblBG.setBounds(20, 30, 36, 36);
+		lblBG.setIcon(Theme.getIcon("LoadingIcon"));
+		panel.setLayout(null);
+		panel.add(progressBar);
+		panel.add(lblText);
+		panel.add(lblBG);
 
 	}
 

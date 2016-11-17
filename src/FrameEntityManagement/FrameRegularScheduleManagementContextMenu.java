@@ -9,6 +9,7 @@ import javax.swing.event.PopupMenuListener;
 public class FrameRegularScheduleManagementContextMenu extends FrameContextMenu {
 	private static final long serialVersionUID = 1L;
 	private JMenuItem newMenu;
+	private JMenuItem toggleMenu;
 	private JMenuItem editMenu;
 	private JMenuItem deleteMenu;
 	
@@ -16,6 +17,12 @@ public class FrameRegularScheduleManagementContextMenu extends FrameContextMenu 
 		this.newMenu=addMenuItem("New...","AddIcon","INSERT");
 		newMenu.addActionListener(new ActionListener() {
 			@Override public void actionPerformed(ActionEvent arg0) {FrameRegularScheduleManagementActions.add();}
+		});
+		
+		this.toggleMenu=addMenuItem("Toggle Status","ActuatorIcon","SPACE");
+		toggleMenu.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {FrameRegularScheduleManagementActions.toggle(m);}
 		});
 		
 		this.editMenu=addMenuItem("Edit...","EditIcon","ENTER");
@@ -35,6 +42,7 @@ public class FrameRegularScheduleManagementContextMenu extends FrameContextMenu 
 
 			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
+				toggleMenu.setEnabled(m.getSelectedCount()>0);
 				editMenu.setEnabled(m.getSelectedCount()==1);
 				deleteMenu.setEnabled(m.getSelectedCount()>0);
 			};

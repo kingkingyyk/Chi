@@ -14,6 +14,24 @@ public class FrameRegularScheduleManagementActions {
 		diag.setVisible(true);
 	}
 	
+	public static void toggle(FrameRegularScheduleManagement m) {
+		StringBuilder sb=new StringBuilder("Operation failed on the following schedules : \n");
+		boolean failFlag=false;
+		for (Regularschedule rs : m.getSelectedSchedules()) {
+			boolean flag=DatabaseRegularSchedule.updateRegularSchedule(rs.getSchedulename(), rs.getSchedulename(),
+														 rs.getActuator().getName(),rs.getDaymask(),
+														 rs.getDayschedulerule().getRulename(),
+														 rs.getOnstartaction(),rs.getOnendaction(),
+														 rs.getLockmanual(), rs.getPriority(), !rs.getEnabled());
+			failFlag=failFlag || !flag;
+			if (flag) {
+				sb.append(rs.getSchedulename());
+				sb.append('\n');
+			}
+		}
+		if (failFlag) JOptionPane.showMessageDialog(m,sb.toString(),"Toggle status",JOptionPane.ERROR_MESSAGE);
+	}
+	
 	public static void edit(FrameRegularScheduleManagement m) {
 		Regularschedule r=m.getSelectedSchedule();
 		DialogRegularScheduleAddEdit diag=new DialogRegularScheduleAddEdit(r.getSchedulename(),r.getActuator().getName(),r.getDaymask(),r.getDayschedulerule().getRulename(),r.getOnstartaction(),r.getOnendaction(),r.getLockmanual(),r.getPriority(),r.getEnabled());

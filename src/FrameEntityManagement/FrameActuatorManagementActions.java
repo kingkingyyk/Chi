@@ -70,11 +70,14 @@ public class FrameActuatorManagementActions {
 		p.trigger();
 		
 		FrameActuatorManagementFeedbackWait fa=new FrameActuatorManagementFeedbackWait();
+		fa.setText("Commanding the minion...");
 		fa.setLocationRelativeTo(null);
 		Thread t=new Thread() {
 			public void run () {
 				int wait=Config.CONTROLLER_READY_TIME_MS*(Config.CONTROLLER_MAX_RETRY+1);
-				try { Thread.sleep(wait); } catch (InterruptedException e) {};
+				try { Thread.sleep(wait/2); } catch (InterruptedException e) {};
+				fa.setText("We are still working hard...");
+				try { Thread.sleep(wait/2); } catch (InterruptedException e) {};
 				if (fa!=null && fa.isVisible()) {
 					Logger.log(Logger.LEVEL_ERROR,"FrameActuatorManagement - Communication Error : "+act.getController().getControllername()+" doesn't reply in "+wait/1000+" seconds!");
 					fa.setVisible(false);

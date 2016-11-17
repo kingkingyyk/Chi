@@ -31,7 +31,7 @@ public class Theme {
 		map.put("SpecialScheduleIcon", new ImageIcon(Theme.class.getResource("/images/SPECIAL_SCHEDULE.png")));
 		map.put("TickIcon", new ImageIcon(Theme.class.getResource("/images/TICK.png")));
 		map.put("UserIcon", new ImageIcon(Theme.class.getResource("/images/USER.png")));
-		map.put("LoadingIcon", new ImageIcon(Theme.class.getResource("/images/loading.gif")));
+		map.put("LoadingIcon", new ImageIcon(Theme.class.getResource("/images/loading2.gif")));
 		map.put("StartScreen", new ImageIcon(Chi.class.getResource("/images/START_SCREEN.jpg")));
 		map.put("GanttChartBackground", new ImageIcon(Chi.class.getResource("/images/GRAPH_BG.jpg")));
 		map.put("GraphIcon", new ImageIcon(Chi.class.getResource("/images/STATISTICS.png")));

@@ -14,6 +14,24 @@ public class FrameSpecialScheduleManagementActions {
 		diag.setVisible(true);
 	}
 	
+	public static void toggle(FrameSpecialScheduleManagement m) {
+		StringBuilder sb=new StringBuilder("Operation failed on the following schedules : \n");
+		boolean failFlag=false;
+		for (Specialschedule rs : m.getSelectedSchedules()) {
+			boolean flag=DatabaseSpecialSchedule.updateSpecialSchedule(rs.getSchedulename(), rs.getSchedulename(),
+														 rs.getActuator().getName(),rs.getYear(),rs.getMonth(),rs.getDay(),
+														 rs.getDayschedulerule().getRulename(),
+														 rs.getOnstartaction(),rs.getOnendaction(),
+														 rs.getLockmanual(), rs.getPriority(), !rs.getEnabled());
+			failFlag=failFlag || !flag;
+			if (flag) {
+				sb.append(rs.getSchedulename());
+				sb.append('\n');
+			}
+		}
+		if (failFlag) JOptionPane.showMessageDialog(m,sb.toString(),"Toggle status",JOptionPane.ERROR_MESSAGE);
+	}
+	
 	public static void edit(FrameSpecialScheduleManagement m) {
 		Specialschedule s=m.getSelectedSchedule();
 		DialogSpecialScheduleAddEdit diag=new DialogSpecialScheduleAddEdit(s.getSchedulename(),s.getActuator().getName(),s.getYear(),s.getMonth(),s.getDay(),s.getDayschedulerule().getRulename(),s.getOnstartaction(),s.getOnendaction(),s.getLockmanual(),s.getPriority(),s.getEnabled());

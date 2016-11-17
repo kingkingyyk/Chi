@@ -309,6 +309,10 @@ public class FrameRegularScheduleManagement extends JFrame {
 						FrameRegularScheduleManagementActions.add();
 						break;
 					}
+					case (KeyEvent.VK_SPACE) : {
+						FrameRegularScheduleManagementActions.toggle(FrameRegularScheduleManagement.this);
+						break;
+					}
 					case (KeyEvent.VK_ENTER) : {
 						if (getSelectedCount()==1) FrameRegularScheduleManagementActions.edit(FrameRegularScheduleManagement.this);
 						else Toolkit.getDefaultToolkit().beep();
