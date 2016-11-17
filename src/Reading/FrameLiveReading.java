@@ -84,6 +84,9 @@ public class FrameLiveReading extends JFrame {
 			    			TimeSeriesDataItem dat=this.r.tSeries.getDataItem(i);
 			    			regress.addData(dat.getPeriod().getStart().getTime(),dat.getValue().doubleValue());
 			    		}
+			    		if (r.tSeriesPredicted.getItemCount()>0 && r.tSeriesPredicted.getDataItem(r.tSeriesPredicted.getItemCount()-1).getPeriod().getStart().compareTo(r.tSeries.getDataItem(r.tSeries.getItemCount()-1).getPeriod().getStart())>0) {
+			    			r.tSeriesPredicted.delete(r.tSeriesPredicted.getItemCount()-1, r.tSeriesPredicted.getItemCount()-1);
+			    		}
 			    		r.tSeriesPredicted.addOrUpdate(new Second(Utility.localDateTimeToUtilDate(now)),regress.predict(Utility.localDateTimeToUtilDate(now).getTime()));
 		    		}
 		    		
