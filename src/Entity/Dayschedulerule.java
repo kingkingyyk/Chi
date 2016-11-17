@@ -3,7 +3,7 @@ package Entity;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Dayschedulerule implements java.io.Serializable {
+public class Dayschedulerule implements java.io.Serializable, Comparable<Dayschedulerule> {
 	private static final long serialVersionUID = 3621702214681822732L;
 	private String rulename;
 	private Integer starthour;
@@ -90,5 +90,9 @@ public class Dayschedulerule implements java.io.Serializable {
 	public Object [] toObj () {
 		return new Object [] {this.getRulename(),this.getStarthour(),this.getStartminute(),
 							  this.getEndhour(),this.getEndminute()};
+	}
+	
+	public int compareTo (Dayschedulerule r) {
+		return this.getRulename().compareTo(r.getRulename());
 	}
 }

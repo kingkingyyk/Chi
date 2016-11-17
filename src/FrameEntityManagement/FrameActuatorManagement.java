@@ -12,7 +12,6 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -25,6 +24,7 @@ import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
 
 import Chi.Theme;
 import Chi.Utility;
+import DataStructures.MinMaxSortedList;
 import Database.Cache;
 import Entity.Actuator;
 
@@ -92,8 +92,8 @@ public class FrameActuatorManagement extends JFrame {
 
 	}
 	
-	private static class ActuatorTableRow {
-		private LinkedList<ActuatorTableRow> subRow;
+	private static class ActuatorTableRow implements Comparable<ActuatorTableRow> {
+		private MinMaxSortedList<ActuatorTableRow> subRow;
 		private HashMap<Actuator,ActuatorTableRow> rowObj;
 		public String [] renderText;
 		private Actuator obj;
@@ -104,7 +104,7 @@ public class FrameActuatorManagement extends JFrame {
 				updateInfo();
 			} else {
 				renderText=new String [] {"root"};
-				this.subRow=new LinkedList<>();
+				this.subRow=new MinMaxSortedList<>();
 				this.rowObj=new HashMap<>();
 			}
 		}
@@ -139,6 +139,10 @@ public class FrameActuatorManagement extends JFrame {
 		
 		public String toString() {
 			return this.renderText[0];
+		}
+		
+		public int compareTo(ActuatorTableRow r) {
+			return this.obj.compareTo(r.obj);
 		}
 	}
 	
@@ -351,7 +355,7 @@ public class FrameActuatorManagement extends JFrame {
 			flag=true;
 			rootRow.addRow(new ActuatorTableRow(act));
 		}
-		
+
 		if (flag) {
 			table.setTreeTableModel(new ActuatorTableModel(rootRow));
 			

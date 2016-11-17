@@ -4,7 +4,7 @@ package Entity;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Sensor implements java.io.Serializable {
+public class Sensor implements java.io.Serializable, Comparable<Sensor> {
 	private static final long serialVersionUID = 738139606256186433L;
 	private String sensorname;
 	private Controller controller;
@@ -148,5 +148,9 @@ public class Sensor implements java.io.Serializable {
 							  this.getMinvalue(), this.getMaxvalue(), this.getTransformationfactor(),
 							  this.getUnit(), this.getController().getControllername(),this.getMinthreshold(),
 							  this.getMaxthreshold(),this.getPositionx(),this.getPositiony()};
+	}
+	
+	public int compareTo(Sensor s) {
+		return this.getSensorname().compareTo(s.getSensorname());
 	}
 }

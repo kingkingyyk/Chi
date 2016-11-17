@@ -629,12 +629,16 @@ public class MenuUI extends JFrame {
 		
 		btnConfig.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Logger.log(Logger.LEVEL_INFO,"Config UI started.");
-				ConfigUI ui=new ConfigUI();
-				Logger.log(Logger.LEVEL_INFO,"Config UI done.");
-				ui.setLocationRelativeTo(null);
-				ui.setVisible(true);
-				Logger.log(Logger.LEVEL_INFO,"Config UI closed.");
+				if (DataServer.started() || GWTServer.isStarted() || SchedulingServer.started() || SensorActuatorResponseServer.isStarted() || NotificationServer.isStarted()) {
+					JOptionPane.showMessageDialog(MenuUI.this, "Servers must be stopped before changing configurations!", "Configuration", JOptionPane.ERROR_MESSAGE);
+				} else {
+					Logger.log(Logger.LEVEL_INFO,"Config UI started.");
+					ConfigUI ui=new ConfigUI();
+					Logger.log(Logger.LEVEL_INFO,"Config UI done.");
+					ui.setLocationRelativeTo(null);
+					ui.setVisible(true);
+					Logger.log(Logger.LEVEL_INFO,"Config UI closed.");
+				}
 			}
 		});
 		

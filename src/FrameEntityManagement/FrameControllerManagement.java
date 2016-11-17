@@ -13,7 +13,6 @@ import java.awt.event.WindowListener;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -25,6 +24,7 @@ import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
 
 import Chi.Theme;
 import Chi.Utility;
+import DataStructures.MinMaxSortedList;
 import Database.Cache;
 import Entity.Controller;
 
@@ -93,8 +93,8 @@ public class FrameControllerManagement extends JFrame {
 
 	}
 	
-	private static class ControllerTableRow {
-		private LinkedList<ControllerTableRow> subRow;
+	private static class ControllerTableRow  implements Comparable<ControllerTableRow> {
+		private MinMaxSortedList<ControllerTableRow> subRow;
 		private HashMap<Controller,ControllerTableRow> rowObj;
 		public String [] renderText;
 		private Controller obj;
@@ -106,7 +106,7 @@ public class FrameControllerManagement extends JFrame {
 				updateInfo();
 			} else {
 				renderText=new String [] {"root"};
-				this.subRow=new LinkedList<>();
+				this.subRow=new MinMaxSortedList<>();
 				this.rowObj=new HashMap<>();
 			}
 		}
@@ -164,6 +164,10 @@ public class FrameControllerManagement extends JFrame {
 		
 		public String toString() {
 			return this.renderText[0];
+		}
+		
+		public int compareTo(ControllerTableRow r) {
+			return this.obj.compareTo(r.obj);
 		}
 	}
 	

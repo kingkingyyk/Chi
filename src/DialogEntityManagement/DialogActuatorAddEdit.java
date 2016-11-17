@@ -133,7 +133,7 @@ public class DialogActuatorAddEdit extends JDialog {
 		}
 		{
 			lblNameInfo = new JLabel("");
-			lblNameInfo.setBounds(324, 9, 125, 16);
+			lblNameInfo.setBounds(324, 9, 166, 16);
 			contentPanel.add(lblNameInfo);
 		}
 		

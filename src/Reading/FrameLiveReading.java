@@ -28,6 +28,7 @@ import org.jfree.data.time.TimeSeriesCollection;
 
 import Chi.Theme;
 import Chi.Utility;
+import Database.Cache;
 import Database.DatabaseReading;
 import Entity.Sensor;
 import Entity.SensorReading;
@@ -57,7 +58,12 @@ public class FrameLiveReading extends JFrame {
 		
 		@Override
 		public void run() {
-			r.setTitle(r.s.getSensorname()+"'s Live Reading");
+			if (!Cache.Sensors.map.containsKey(r.s.getSensorname())) {
+				r.dispose();
+				return;
+			}
+			if (DataServer.DataServer.started()) r.setTitle(r.s.getSensorname()+"'s Live Reading");
+			else r.setTitle(r.s.getSensorname()+"'s Live Reading [Data Server not Started!]");
 			if (r.chart.isNotify()) {
 				r.chart.setNotify(false);
 				LocalDateTime now=LocalDateTime.now();
@@ -197,6 +203,10 @@ public class FrameLiveReading extends JFrame {
 		panel_1.setLayout(new BorderLayout(0, 0));
 		
 		ChartPanel panel_2 = new ChartPanel(meterChart);
+		panel_2.setMaximumDrawHeight(1750);
+		panel_2.setMaximumDrawWidth(750);
+		panel_2.setMinimumDrawHeight(351);
+		panel_2.setMinimumDrawWidth(148);
 		panel_1.add(panel_2);
 		contentPane.setLayout(gl_contentPane);
 		

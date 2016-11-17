@@ -1,6 +1,6 @@
 package Entity;
 
-public class Regularschedule implements java.io.Serializable {
+public class Regularschedule implements java.io.Serializable, Comparable<Regularschedule> {
 	private static final long serialVersionUID = -3385893166395992584L;
 	private String schedulename;
 	private Actuator actuator;
@@ -110,5 +110,9 @@ public class Regularschedule implements java.io.Serializable {
 							  this.getDaymask(), this.getDayschedulerule().getRulename(),
 							  this.getOnstartaction(), this.getOnendaction(), this.getLockmanual(),
 							  this.getPriority(),this.getEnabled()};
+	}
+	
+	public int compareTo (Regularschedule r) {
+		return this.getSchedulename().compareTo(r.getSchedulename());
 	}
 }

@@ -12,7 +12,6 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -26,8 +25,10 @@ import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
 import Chi.Config;
 import Chi.Theme;
 import Chi.Utility;
+import DataStructures.MinMaxSortedList;
 import Database.Cache;
 import Entity.Regularschedule;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
@@ -93,8 +94,8 @@ public class FrameRegularScheduleManagement extends JFrame {
 
 	}
 	
-	private static class RegularScheduleTableRow {
-		private LinkedList<RegularScheduleTableRow> subRow;
+	private static class RegularScheduleTableRow implements Comparable<RegularScheduleTableRow>{
+		private MinMaxSortedList<RegularScheduleTableRow> subRow;
 		private HashMap<Regularschedule,RegularScheduleTableRow> rowObj;
 		public String [] renderText;
 		private Regularschedule obj;
@@ -106,7 +107,7 @@ public class FrameRegularScheduleManagement extends JFrame {
 				updateInfo();
 			} else {
 				renderText=new String [] {"root"};
-				subRow=new LinkedList<>();
+				subRow=new MinMaxSortedList<>();
 				rowObj=new HashMap<>();
 			}
 		}
@@ -150,6 +151,10 @@ public class FrameRegularScheduleManagement extends JFrame {
 		
 		public String toString() {
 			return this.renderText[0];
+		}
+		
+		public int compareTo(RegularScheduleTableRow r) {
+			return this.obj.compareTo(r.obj);
 		}
 	}
 	

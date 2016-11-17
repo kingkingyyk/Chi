@@ -1,7 +1,7 @@
 package Entity;
 import java.util.Date;
 
-public class User implements java.io.Serializable {
+public class User implements java.io.Serializable, Comparable<User> {
 	private static final long serialVersionUID = -5467220434792658970L;
 	public static String [] USER_STATUS={"ACTIVATED","PENDING APPROVAL","DEACTIVATED"};
 	private String username;
@@ -65,4 +65,7 @@ public class User implements java.io.Serializable {
 		this.dateadded = dateadded;
 	}
 
+	public int compareTo(User u) {
+		return this.getUsername().compareTo(u.getUsername());
+	}
 }

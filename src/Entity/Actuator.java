@@ -3,7 +3,7 @@ package Entity;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Actuator implements java.io.Serializable {
+public class Actuator implements java.io.Serializable, Comparable<Actuator> {
 	private static final long serialVersionUID = -8250978371812671883L;
 	private String name;
 	private Controller controller;
@@ -121,4 +121,7 @@ public class Actuator implements java.io.Serializable {
 		return new Object [] {this.getName(), this.getController().getControllername(), this.getStatus(),this.positionx,this.positiony,this.controltype,this.statuslist};
 	}
 	
+	public int compareTo(Actuator act) {
+		return this.getName().compareTo(act.getName());
+	}
 }

@@ -1,6 +1,6 @@
 package Entity;
 
-public class Sensoractuatorresponse implements java.io.Serializable {
+public class Sensoractuatorresponse implements java.io.Serializable, Comparable<Sensoractuatorresponse> {
 	private static final long serialVersionUID = 5413831594834406684L;
 	private Integer id;
 	private Actuator actuator;
@@ -83,5 +83,9 @@ public class Sensoractuatorresponse implements java.io.Serializable {
 		return new Object [] {this.getId(),this.getActuator().getName(),
 							  this.getOntriggeraction(),this.getOnnottriggeraction(),
 							  this.getExpression(),this.getEnabled(),this.getTimeout()};
+	}
+	
+	public int compareTo(Sensoractuatorresponse sar) {
+		return this.getActuator().getName().compareTo(sar.getActuator().getName());
 	}
 }

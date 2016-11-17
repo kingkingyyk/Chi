@@ -12,7 +12,6 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -26,6 +25,7 @@ import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
 import Chi.Config;
 import Chi.Theme;
 import Chi.Utility;
+import DataStructures.MinMaxSortedList;
 import Database.Cache;
 import Entity.Sensoractuatorresponse;
 
@@ -94,8 +94,8 @@ public class FrameSensorActuatorResponseManagement extends JFrame {
 
 	}
 	
-	private static class SensorActuatorResponseTableRow {
-		private LinkedList<SensorActuatorResponseTableRow> subRow;
+	private static class SensorActuatorResponseTableRow implements Comparable<SensorActuatorResponseTableRow> {
+		private MinMaxSortedList<SensorActuatorResponseTableRow> subRow;
 		private HashMap<Sensoractuatorresponse,SensorActuatorResponseTableRow> rowObj;
 		public String [] renderText;
 		private Sensoractuatorresponse obj;
@@ -106,7 +106,7 @@ public class FrameSensorActuatorResponseManagement extends JFrame {
 				updateInfo();
 			} else {
 				renderText=new String [] {"root"};
-				this.subRow=new LinkedList<>();
+				this.subRow=new MinMaxSortedList<>();
 				this.rowObj=new HashMap<>();
 			}
 		}
@@ -144,6 +144,10 @@ public class FrameSensorActuatorResponseManagement extends JFrame {
 		
 		public String toString() {
 			return this.renderText[0];
+		}
+		
+		public int compareTo(SensorActuatorResponseTableRow r) {
+			return this.obj.compareTo(r.obj);
 		}
 	}
 	

@@ -879,4 +879,8 @@ public class GWTServer {
 		}
 		return false;
 	}
+	
+	public static boolean isStarted() {
+		return t!=null;
+	}
 }
