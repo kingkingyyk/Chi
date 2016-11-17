@@ -10,7 +10,6 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -23,6 +22,7 @@ import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
 
 import Chi.Theme;
 import Chi.Utility;
+import DataStructures.MinMaxSortedList;
 import Database.Cache;
 import Database.DatabaseReading;
 import Entity.Sensor;
@@ -91,8 +91,8 @@ public class FrameLatestReading extends JFrame {
 
 	}
 	
-	private static class SensorTableRow {
-		private LinkedList<SensorTableRow> subRow;
+	private static class SensorTableRow implements Comparable<SensorTableRow> {
+		private MinMaxSortedList<SensorTableRow> subRow;
 		private HashMap<Sensor,SensorTableRow> rowObj;
 		public String [] renderText;
 		private Sensor obj;
@@ -104,7 +104,7 @@ public class FrameLatestReading extends JFrame {
 				updateInfo();
 			} else {
 				renderText=new String [] {"root"};
-				this.subRow=new LinkedList<>();
+				this.subRow=new MinMaxSortedList<>();
 				this.rowObj=new HashMap<>();
 			}
 		}
@@ -142,6 +142,10 @@ public class FrameLatestReading extends JFrame {
 		
 		public String toString() {
 			return this.renderText[0];
+		}
+		
+		public int compareTo(SensorTableRow r) {
+			return this.obj.compareTo(r.obj);
 		}
 	}
 	

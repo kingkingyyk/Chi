@@ -10,7 +10,7 @@ Requires :
 + GWT
 
 Server Requirement :
-+ Main Server (Tested On : Windows 10)
++ Main Server (Tested On : Windows 7/8.1/10)
 + HSQLDB (Tested On : Windows 10, Ubuntu 15)
 + Apache Cassandra (Tested On : Ubuntu 15)
 + Java 8 (Built On Update 92)
@@ -40,7 +40,9 @@ Current Working Stuffs :
 + Actuator control (Manual / Scheduled)
 + Efficient local data caching
 + Notification server
-+ Adds Sensor Actuator Response Automation
++ Sensor Actuator Response Automation
++ Report Exporting
++ Live Animated Update Chart with Prediction
 
 v1.2 To-Do-List :
 + Release Testing
