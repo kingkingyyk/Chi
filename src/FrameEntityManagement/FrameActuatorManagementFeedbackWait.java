@@ -8,6 +8,8 @@ public class FrameActuatorManagementFeedbackWait extends WaitUI {
 
 	public FrameActuatorManagementFeedbackWait() {
 		super();
+		
+		FrameActuatorManagementFeedbackWait.f=this;
 	}
 	
 	public static FrameActuatorManagementFeedbackWait getCurrent() {
