@@ -13,6 +13,8 @@ import java.util.TimerTask;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import org.apache.commons.math3.stat.regression.SimpleRegression;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -25,6 +27,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.time.Second;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
+import org.jfree.data.time.TimeSeriesDataItem;
 
 import Chi.Theme;
 import Chi.Utility;
@@ -49,9 +52,10 @@ public class FrameLiveReading extends JFrame {
 	private Timer t;
 	private DateAxis dAxis;
 	private Sensor s;
-	
 	private JFreeChart meterChart;
 	private DefaultCategoryDataset meterDataset;
+
+	private TimeSeries tSeriesPredicted;
 	
 	private static class UpdateTask extends TimerTask {
 		FrameLiveReading r;
@@ -74,6 +78,15 @@ public class FrameLiveReading extends JFrame {
 				}
 		    	((DateAxis) this.r.chart.getXYPlot().getDomainAxis()).setRange(Utility.localDateTimeToUtilDate(LocalDateTime.now().minusHours(1)), Utility.localDateTimeToUtilDate(LocalDateTime.now().plusMinutes(5)));
 		    	if (this.r.tSeries.getItemCount()>0) {
+		    		if (this.r.tSeries.getItemCount()>1) {
+			    		SimpleRegression regress=new SimpleRegression();
+			    		for (int i=0;i<this.r.tSeries.getItemCount();i++) {
+			    			TimeSeriesDataItem dat=this.r.tSeries.getDataItem(i);
+			    			regress.addData(dat.getPeriod().getStart().getTime(),dat.getValue().doubleValue());
+			    		}
+			    		r.tSeriesPredicted.addOrUpdate(new Second(Utility.localDateTimeToUtilDate(now)),regress.predict(Utility.localDateTimeToUtilDate(now).getTime()));
+		    		}
+		    		
 		    		Thread t=new Thread() {
 		    			public void run () {
 		    				double currValue=r.meterDataset.getValue("","").doubleValue();
@@ -109,12 +122,16 @@ public class FrameLiveReading extends JFrame {
 		setContentPane(contentPane);
 		
 		dataset=new TimeSeriesCollection();
-		tSeries=new TimeSeries(s.getSensorclass().getClassname());
+		tSeries=new TimeSeries("Real Value");
 		tSeries.setMaximumItemCount(30);
 		dataset.addSeries(tSeries);
 		
+		tSeriesPredicted=new TimeSeries("Predicted Value");
+		tSeriesPredicted.setMaximumItemCount(30);
+		dataset.addSeries(tSeriesPredicted);
+		
     	chart = ChartFactory.createTimeSeriesChart("Live Reading", "Time", s.getUnit(), dataset, true, true, false);
-    	chart.removeLegend();
+    	//chart.removeLegend();
     	chart.getTitle().setFont(new Font("Segoe UI",Font.BOLD,20));
     	chart.fireChartChanged();
     	
@@ -150,6 +167,8 @@ public class FrameLiveReading extends JFrame {
     	XYSplineRenderer areaRen=new XYSplineRenderer();
     	areaRen.setSeriesPaint(0,new Color(247,220,111,255));
     	areaRen.setSeriesStroke(0,new BasicStroke(3));
+    	areaRen.setSeriesPaint(1,new Color(247,220,111,100));
+    	areaRen.setSeriesStroke(1,new BasicStroke(3));
     	chart.getXYPlot().setRenderer(0,areaRen);
     	chart.getXYPlot().setBackgroundPaint(new Color(0,0,0,0));
     	chart.getXYPlot().setDomainGridlinesVisible(false);
