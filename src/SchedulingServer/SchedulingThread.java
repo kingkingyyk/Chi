@@ -14,6 +14,7 @@ import Database.DatabaseRegularSchedule;
 import Database.DatabaseSpecialSchedule;
 import Entity.Regularschedule;
 import Entity.Specialschedule;
+import NotificationServer.FrameNotification;
 
 public class SchedulingThread extends Thread {
 	public boolean stopQueued=false;
@@ -215,7 +216,8 @@ public class SchedulingThread extends Thread {
 			boolean hasConflict=false;
 			for (SchedulingData d : data.values()) {
 				if (d!=dat && d.getActuatorName().equals(dat.getActuatorName()) && 
-					ScheduleUtility.compareScheduleTime(d.getNextEndTime(),dat.getNextStartTime())>0 && d.enabled) {
+					ScheduleUtility.compareScheduleTime(d.getNextEndTime(),dat.getNextStartTime())>0 &&
+					ScheduleUtility.compareScheduleTime(d.getNextStartTime(),dat.getNextStartTime())<=0 && d.enabled) {
 					
 					if (d instanceof SchedulingDataSpecial || (d instanceof SchedulingDataRegular && (d.getPriority()>dat.getPriority() || (d.getPriority()==dat.getPriority() && d.getName().compareTo(dat.getName())<0)))) {
 						hasConflict=true;
@@ -232,6 +234,7 @@ public class SchedulingThread extends Thread {
 			} else {
 				Logger.log(Logger.LEVEL_INFO,"RegularSchedule ("+dat.name+") : Started -> Attempt to set "+dat.actuatorName+" to "+dat.getStartAction()+". [NOT SET DUE TO LOW PRIORITY]");
 			}
+			FrameNotification.refresh();
 		}
 	}
 	
@@ -261,6 +264,7 @@ public class SchedulingThread extends Thread {
 			
 			FrameOngoingSchedules.refresh();
 			FrameGanttChart.refresh();
+			FrameNotification.refresh();
 		}
 	}
 	
@@ -343,6 +347,7 @@ public class SchedulingThread extends Thread {
 			for (SchedulingData d : data.values()) {
 				if (d!=dat && d instanceof SchedulingDataSpecial && d.getActuatorName().equals(dat.getActuatorName()) &&
 						ScheduleUtility.compareScheduleTime(d.getNextEndTime(),dat.getNextStartTime())>0  && 
+						ScheduleUtility.compareScheduleTime(d.getNextStartTime(),dat.getNextStartTime())<=0  && 
 						(d.getPriority()>dat.getPriority() || (d.getPriority()==dat.getPriority() && d.getName().compareTo(dat.getName())<0)) &&
 						 d.enabled) {
 					hasConflict=true;
@@ -357,6 +362,7 @@ public class SchedulingThread extends Thread {
 			} else {
 				Logger.log(Logger.LEVEL_INFO,"SpecialSchedule ("+dat.name+") : Started -> Attempt to set "+dat.actuatorName+" to "+dat.getStartAction()+". [NOT SET DUE TO LOW PRIORITY]");
 			}
+			FrameNotification.refresh();
 		}
 	}
 	
@@ -366,7 +372,8 @@ public class SchedulingThread extends Thread {
 			boolean hasConflict=false;
 			for (SchedulingData d : data.values()) {
 				if (d!=dat && d instanceof SchedulingDataSpecial && d.getActuatorName().equals(dat.getActuatorName()) &&
-					ScheduleUtility.compareScheduleTime(d.getNextEndTime(),dat.getNextEndTime())>=0 &&
+						ScheduleUtility.compareScheduleTime(d.getNextEndTime(),dat.getNextStartTime())>0  && 
+						ScheduleUtility.compareScheduleTime(d.getNextStartTime(),dat.getNextStartTime())<=0  && 
 							(d.getPriority()>dat.getPriority() || (d.getPriority()==dat.getPriority() && d.getName().compareTo(dat.getName())<0)) &&
 							d.enabled) {
 					hasConflict=true;
@@ -381,6 +388,7 @@ public class SchedulingThread extends Thread {
 			} else {
 				Logger.log(Logger.LEVEL_INFO,"SpecialSchedule ("+dat.name+") : Ended -> Attempt to set "+dat.actuatorName+" to "+dat.getEndAction()+". [NOT SET DUE TO LOW PRIORITY]");
 			}
+			FrameNotification.refresh();
 			
 			Thread t=new Thread() {
 				public void run () {
