@@ -10,6 +10,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.spec.KeySpec;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.time.LocalDateTime;
@@ -408,17 +409,27 @@ public class GWTServer {
 		    	return SchedulingServer.isStarted;
 		    }
 		    case "34" : { //OngoingScheduleGetAll
+		    	ArrayList<SchedulingData> dList=new ArrayList<>();
+		    	dList.addAll(SchedulingServer.getSchedulingThread().data.values());
+		    	Collections.sort(dList);
+		    	
 		    	ArrayList<Object []> result=new ArrayList<>();
-		    	for (SchedulingData d : SchedulingServer.getSchedulingThread().data.values()) {
+		    	for (SchedulingData d : dList) {
 		    		result.add(new Object [] {d.getName(),d.getActuatorName(),d.getStartAction(),d.getEndAction(),d.getLock(),d.getPriority(),d.getNextStartTime(),d.getNextEndTime()});
 		    	}
 		    	return result;
 		    }
 		    case "35" : { //OngoingScheduleGetByActuatorName
-		    	ArrayList<Object []> result=new ArrayList<>();
+		    	ArrayList<SchedulingData> dList=new ArrayList<>();
 		    	for (SchedulingData d : SchedulingServer.getSchedulingThread().data.values())
 		    		if (d.getActuatorName().equals(list.get(1)))
-		    			result.add(new Object [] {d.getName(),d.getActuatorName(),d.getStartAction(),d.getEndAction(),d.getLock(),d.getPriority(),d.getNextStartTime(),d.getNextEndTime()});
+		    			dList.add(d);
+		    	
+		    	Collections.sort(dList);
+		    	ArrayList<Object []> result=new ArrayList<>();
+		    	for (SchedulingData d : dList)
+		    		result.add(new Object [] {d.getName(),d.getActuatorName(),d.getStartAction(),d.getEndAction(),d.getLock(),d.getPriority(),d.getNextStartTime(),d.getNextEndTime()});
+		    	
 		    	return result;
 		    }
 		    case "36" : { //SensorGetByName

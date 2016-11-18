@@ -73,6 +73,9 @@ public class FrameLiveReading extends JFrame {
 			else r.setTitle(r.s.getSensorname()+"'s Live Reading [Data Server not Started!]");
 			if (r.chart.isNotify()) {
 				r.chart.setNotify(false);
+				
+				r.meterChart.getCategoryPlot().getRangeAxis().setRange(r.s.getMinvalue(),r.s.getMaxvalue());
+				
 				LocalDateTime now=LocalDateTime.now();
 				LinkedList<SensorReading> list=DatabaseReading.getReadingBetweenTime(r.s.getSensorname(),r.lastUpdateTime,now);
 				r.lastUpdateTime=now;
@@ -80,6 +83,7 @@ public class FrameLiveReading extends JFrame {
 					this.r.tSeries.addOrUpdate(new Second(Utility.localDateTimeToUtilDate(r.getTimestamp())),r.getActualValue());
 				}
 		    	((DateAxis) this.r.chart.getXYPlot().getDomainAxis()).setRange(Utility.localDateTimeToUtilDate(LocalDateTime.now().minusHours(1)), Utility.localDateTimeToUtilDate(LocalDateTime.now().plusMinutes(5)));
+		    	
 		    	if (this.r.tSeries.getItemCount()>0) {
 		    		if (this.r.tSeries.getItemCount()>1) {
 			    		SimpleRegression regress=new SimpleRegression();
@@ -107,6 +111,7 @@ public class FrameLiveReading extends JFrame {
 		    		};
 		    		t.start();
 		    	}
+		    	
 		    	r.chart.setNotify(true);
 				if (!this.r.tSeries.isEmpty()) {
 			        this.r.dAxis.setMinimumDate(this.r.tSeries.getDataItem(0).getPeriod().getStart());
