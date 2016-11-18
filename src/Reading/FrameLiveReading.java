@@ -7,6 +7,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -44,6 +45,7 @@ import java.awt.BorderLayout;
 
 public class FrameLiveReading extends JFrame {
 	private static final long serialVersionUID = -2113178474247458689L;
+	private static HashMap <Sensor,FrameLiveReading> fMap=new HashMap<>();
 	private JPanel contentPane;
 	private LocalDateTime lastUpdateTime;
 	private TimeSeriesCollection dataset;
@@ -64,6 +66,7 @@ public class FrameLiveReading extends JFrame {
 		public void run() {
 			if (!Cache.Sensors.map.containsKey(r.s.getSensorname())) {
 				r.dispose();
+				fMap.remove(r.s);
 				return;
 			}
 			if (DataServer.DataServer.started()) r.setTitle(r.s.getSensorname()+"'s Live Reading");
@@ -114,7 +117,17 @@ public class FrameLiveReading extends JFrame {
 		
 	}
 
-	public FrameLiveReading(Sensor s) {
+	public static FrameLiveReading getInstance (Sensor s) {
+		if (fMap.containsKey(s)) {
+			FrameLiveReading f=fMap.get(s);
+			f.toFront();
+			return f;
+		} else {
+			return new FrameLiveReading(s);
+		}
+	}
+	
+	private FrameLiveReading(Sensor s) {
 		setTitle(s.getSensorname()+"'s Live Reading");
 		setIconImage(Theme.getIcon("ChiLogo").getImage());
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -245,6 +258,7 @@ public class FrameLiveReading extends JFrame {
 			@Override
 			public void windowClosed(WindowEvent arg0) {
 				t.cancel();
+				fMap.remove(s);
 			}
 
 			@Override
@@ -263,5 +277,7 @@ public class FrameLiveReading extends JFrame {
 			public void windowOpened(WindowEvent arg0) {}
 			
 		});
+		
+		fMap.put(s,this);
 	}
 }

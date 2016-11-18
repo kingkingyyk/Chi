@@ -244,7 +244,9 @@ public class SchedulingThread extends Thread {
 			boolean hasConflict=false;
 			for (SchedulingData d : data.values()) {
 				if (d!=dat && d.getActuatorName().equals(dat.getActuatorName()) && 
-					ScheduleUtility.compareScheduleTime(d.getNextEndTime(),dat.getNextEndTime())>=0 && d.enabled) {
+					ScheduleUtility.compareScheduleTime(d.getNextEndTime(),dat.getNextEndTime())>=0 &&
+					ScheduleUtility.compareScheduleTime(d.getNextStartTime(),dat.getNextEndTime())<=0 &&
+					d.enabled) {
 					
 					if (d instanceof SchedulingDataSpecial || (d instanceof SchedulingDataRegular && (d.getPriority()>dat.getPriority() || (d.getPriority()==dat.getPriority() && d.getName().compareTo(dat.getName())<0)))) { 
 						hasConflict=true;
@@ -372,8 +374,8 @@ public class SchedulingThread extends Thread {
 			boolean hasConflict=false;
 			for (SchedulingData d : data.values()) {
 				if (d!=dat && d instanceof SchedulingDataSpecial && d.getActuatorName().equals(dat.getActuatorName()) &&
-						ScheduleUtility.compareScheduleTime(d.getNextEndTime(),dat.getNextStartTime())>0  && 
-						ScheduleUtility.compareScheduleTime(d.getNextStartTime(),dat.getNextStartTime())<=0  && 
+						ScheduleUtility.compareScheduleTime(d.getNextEndTime(),dat.getNextEndTime())>=0 &&
+						ScheduleUtility.compareScheduleTime(d.getNextStartTime(),dat.getNextEndTime())<=0 &&
 							(d.getPriority()>dat.getPriority() || (d.getPriority()==dat.getPriority() && d.getName().compareTo(dat.getName())<0)) &&
 							d.enabled) {
 					hasConflict=true;

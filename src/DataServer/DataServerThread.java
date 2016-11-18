@@ -60,7 +60,7 @@ public class DataServerThread extends Thread {
 									String cn=st.nextToken(); //controller name
 									String sn=st.nextToken(); //sensor name
 									double reading=Double.parseDouble(st.nextToken());
-									if (Cache.Controllers.map.get(cn)!=null) {
+									if (Cache.Controllers.map.get(cn)!=null && reading>=0.0 && reading<=1.0) {
 										if (!Cache.Controllers.map.get(cn).getIpaddress().equals(sc.getInetAddress().getHostAddress())) DatabaseController.updateControllerReport(cn,sc.getInetAddress().getHostAddress(),LocalDateTime.now());
 										DatabaseReading.updateLastReading(sn, reading);
 										DataServerReadingToDatabase.queueData(sn,reading);

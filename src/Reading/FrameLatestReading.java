@@ -291,7 +291,7 @@ public class FrameLatestReading extends JFrame {
 	            	table.addRowSelectionInterval(row,row);
 	            
 					if (e.getButton()==MouseEvent.BUTTON1 && e.getClickCount()==2) {
-						FrameLiveReading f=new FrameLiveReading(FrameLatestReading.this.getSelectedSensor());
+						FrameLiveReading f=FrameLiveReading.getInstance(FrameLatestReading.this.getSelectedSensor());
 						f.setLocationRelativeTo(FrameLatestReading.this);
 						f.setVisible(true);
 					}

@@ -6,7 +6,7 @@ public class FrameLatestReadingActions {
 
 	public static void showLive(FrameLatestReading m) {
 		for (Sensor s : m.getSelectedSensors()) {
-			FrameLiveReading f=new FrameLiveReading(s);
+			FrameLiveReading f=FrameLiveReading.getInstance(s);
 			f.setVisible(true);
 		}
 	}
