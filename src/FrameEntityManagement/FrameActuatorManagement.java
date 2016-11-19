@@ -293,7 +293,9 @@ public class FrameActuatorManagement extends JFrame {
 						break;
 					}
 					case (KeyEvent.VK_SPACE) : {
-						if (getSelectedCount()==1) FrameActuatorManagementActions.toggle(FrameActuatorManagement.this);
+						if (getSelectedCount()==1 && !SchedulingServer.SchedulingServer.isActuatorLocked(getSelectedActuator().getName()) &&
+								!getSelectedActuator().getControltype().equals("Sensor Response"))
+							FrameActuatorManagementActions.toggle(FrameActuatorManagement.this);
 						else Toolkit.getDefaultToolkit().beep();
 						break;
 					}

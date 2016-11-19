@@ -6,6 +6,8 @@ import java.net.Socket;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import Chi.Config;
 import Chi.Logger;
 import Entity.Controller;
@@ -54,14 +56,17 @@ public class ControllerPacket {
 				sc.setSoTimeout(5000);
 				
 				pw.write(sb.toString().getBytes());
-				pw.flush();
-				byte [] data=new byte [100];
-				dis.readFully(data);
-				sb=new StringBuilder();
-				for (int i=0;i<data.length;i++) if (data[i]!=0) sb.append((char)data[i]); else break;
-				status=sb.toString();
-				if (!status.equals("ON") && !status.equals("OFF")) status=null;
-				Logger.log(Logger.LEVEL_INFO,"Controller Packet Info - Received content : "+status);
+				if (this.type.ordinal()==ControllerPacket.Type.SetActuator.ordinal()) {
+					byte [] received=new byte [100];
+					try { dis.read(received); } catch (Exception zzz) {}
+					sb=new StringBuilder();
+					for (int i=0;i<received.length;i++) if (received[i]!=0) sb.append((char)received[i]); else break;
+					status=sb.toString();
+					
+					String [] ctrlList=Database.Cache.Actuators.map.get(this.data[1]).getStatuslist().split(";");
+					if (!ArrayUtils.contains(ctrlList,status)) status=null;
+					Logger.log(Logger.LEVEL_INFO,"Controller Packet Info - Received content : "+status);
+				}
 
 				try { Thread.sleep(Config.CONTROLLER_READY_TIME_MS); } catch (InterruptedException e) {}
 				packetQueue.get(this.ct).poll();

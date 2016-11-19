@@ -75,11 +75,27 @@ public class SensorActuatorResponseServer {
 
 		@Override
 		public void run(String oldN, String n, String u, String slist, double px, double py, String ctrlType) {
-			for (Sensoractuatorresponse res : Cache.SensorActuatorResponses.map.values()) {
-				if (!dataMap.containsKey(res) && res.getActuator().getName().equals(n) && res.getEnabled()) {
-					ReadingTrackData dat=new ReadingTrackData(res);
-					dataMap.put(res,dat);
-					dat.checkAndExecute();
+			if (ctrlType.equals("Sensor Response")) {
+				for (Sensoractuatorresponse res : Cache.SensorActuatorResponses.map.values()) {
+					if (!dataMap.containsKey(res) && res.getActuator().getName().equals(n) && res.getEnabled()) {
+						System.out.println("ZZZZ");
+						ReadingTrackData dat=new ReadingTrackData(res);
+						dataMap.put(res,dat);
+						dat.checkAndExecute();
+					}
+				}
+			} else {
+				ReadingTrackData toRemove=null;
+				for (ReadingTrackData dat : dataMap.values()) {
+					if (dat.res.getActuator().getName().equals(n)) {
+						toRemove=dat;
+						break;
+					}
+				}
+				
+				if (toRemove!=null) {
+					toRemove.cleanUp();
+					dataMap.remove(toRemove.res);
 				}
 			}
 		}
@@ -160,7 +176,10 @@ public class SensorActuatorResponseServer {
 		}
 		
 		public void cleanUp() {
-			if (t!=null) t.cancel();
+			if (t!=null) {
+				t.cancel();
+				t=null;
+			}
 		}
 	}
 	
