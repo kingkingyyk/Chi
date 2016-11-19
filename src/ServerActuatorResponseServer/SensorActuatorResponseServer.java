@@ -78,7 +78,6 @@ public class SensorActuatorResponseServer {
 			if (ctrlType.equals("Sensor Response")) {
 				for (Sensoractuatorresponse res : Cache.SensorActuatorResponses.map.values()) {
 					if (!dataMap.containsKey(res) && res.getActuator().getName().equals(n) && res.getEnabled()) {
-						System.out.println("ZZZZ");
 						ReadingTrackData dat=new ReadingTrackData(res);
 						dataMap.put(res,dat);
 						dat.checkAndExecute();
