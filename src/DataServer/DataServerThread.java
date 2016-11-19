@@ -1,8 +1,7 @@
 package DataServer;
 
-import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.LocalDateTime;
@@ -45,9 +44,11 @@ public class DataServerThread extends Thread {
 					Socket sc=ssc.accept();
 					sc.setSoTimeout(5000);
 					if (this.running) {
-						BufferedReader br=new BufferedReader(new InputStreamReader(sc.getInputStream()));
+						DataInputStream br=new DataInputStream(sc.getInputStream());
+						byte [] read_data=new byte[100];
+						try { br.readFully(read_data); } catch (Exception zz) {}
 						StringBuilder sb=new StringBuilder();
-						for (char c : br.readLine().toCharArray()) if (CharUtils.isAsciiPrintable(c)) sb.append(c);
+						for (byte c : read_data) if (CharUtils.isAsciiPrintable((char)c)) sb.append((char)c);
 						String received=sb.toString();
 						br.close();
 						sc.close();
