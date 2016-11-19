@@ -49,7 +49,7 @@ public class FrameActuatorManagementContextMenu extends FrameContextMenu {
 
 			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
-				toggleMenu.setEnabled(m.getSelectedCount()==1 && !SchedulingServer.isActuatorLocked(m.getSelectedActuator().getName()));
+				toggleMenu.setEnabled(m.getSelectedCount()==1 && !SchedulingServer.isActuatorLocked(m.getSelectedActuator().getName()) && !m.getSelectedActuator().getControltype().equals("Sensor Response"));
 				editMenu.setEnabled(m.getSelectedCount()==1);
 				deleteMenu.setEnabled(m.getSelectedCount()>0);
 			};
