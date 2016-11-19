@@ -262,7 +262,7 @@ public class DialogControllerAddEdit extends JDialog {
 					if (currentMapURL.equals(u)) {
 						lblPositionMap.setIcon(null);
 						lblPositionMap.setText("Image loading failed.");
-						Logger.log(Logger.LEVEL_ERROR,"DialogControllerAddEdit - drawMap - "+e.getMessage());
+						Logger.log(Logger.LEVEL_WARNING,"DialogControllerAddEdit - drawMap - "+e.getMessage());
 					}
 				}
 			}
@@ -320,6 +320,8 @@ public class DialogControllerAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
+				} else if (txt.length()>100) {
+					lblNameInfo.setText("<html><font color=\"red\">Too long!</font></html>");
 				} else if (Cache.Controllers.map.containsKey(txt)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else if (!Utility.validateName(txt)) {
@@ -342,7 +344,7 @@ public class DialogControllerAddEdit extends JDialog {
 					reportTimeOK=(i>0);
 				} catch (NumberFormatException e) {};
 				
-				if (txt==null || txt.isEmpty() || Cache.Controllers.map.containsKey(txt) || !reportTimeOK || !Utility.validateName(txt) || comboBoxSite.getSelectedIndex()==-1) {
+				if (txt==null || txt.isEmpty() || txt.length()>100 || Cache.Controllers.map.containsKey(txt) || !reportTimeOK || !Utility.validateName(txt) || comboBoxSite.getSelectedIndex()==-1) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Site",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -378,6 +380,8 @@ public class DialogControllerAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
+				} else if (txt.length()>100) {
+					lblNameInfo.setText("<html><font color=\"red\">Too long!</font></html>");
 				} else if (Cache.Controllers.map.containsKey(txt) && !txt.equals(n)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else if (!Utility.validateName(txt)) {
@@ -400,7 +404,7 @@ public class DialogControllerAddEdit extends JDialog {
 					reportTimeOK=(i>0);
 				} catch (NumberFormatException e) {};
 				
-				if (txt==null || txt.isEmpty() || (Cache.Controllers.map.containsKey(txt) && !txt.equals(n)) || !reportTimeOK || !Utility.validateName(txt) || comboBoxSite.getSelectedIndex()==-1) {
+				if (txt==null || txt.isEmpty() || txt.length()>100 || (Cache.Controllers.map.containsKey(txt) && !txt.equals(n)) || !reportTimeOK || !Utility.validateName(txt) || comboBoxSite.getSelectedIndex()==-1) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Site",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

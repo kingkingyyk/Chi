@@ -215,7 +215,9 @@ public class DialogSensorActuatorResponseAddEdit extends JDialog {
 				String txt=textAreaStatement.getText();
 				if (txt==null || txt.isEmpty() || txt.contains(Config.PACKET_FIELD_DELIMITER) || comboBoxActuator.getItemCount()==0) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Sensor Actuator Response",JOptionPane.ERROR_MESSAGE);
-				} else if (!validateStatement(txt)) {
+				} else if (txt.length()>500) {
+					JOptionPane.showMessageDialog(null,"Expression is too long!","Add Sensor Actuator Response",JOptionPane.ERROR_MESSAGE);
+				} else if (!validateStatement(txt)) {			
 					JOptionPane.showMessageDialog(null,"Invalid statement!","Add Sensor Actuator Response",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -255,6 +257,8 @@ public class DialogSensorActuatorResponseAddEdit extends JDialog {
 				String txt=textAreaStatement.getText();
 				if (txt==null || txt.isEmpty() || txt.contains(Config.PACKET_FIELD_DELIMITER) || comboBoxActuator.getItemCount()==0) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Edit Sensor Actuator Response",JOptionPane.ERROR_MESSAGE);
+				} else if (txt.length()>500) {
+					JOptionPane.showMessageDialog(null,"Expression is too long!","Edit Sensor Actuator Response",JOptionPane.ERROR_MESSAGE);
 				} else if (!validateStatement(txt)) {
 					JOptionPane.showMessageDialog(null,"Invalid statement!","Edit Sensor Actuator Response",JOptionPane.ERROR_MESSAGE);
 				} else {

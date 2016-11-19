@@ -218,6 +218,8 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
+				} else if (txt.length()>100) {
+					lblNameInfo.setText("<html><font color=\"red\">Too long!</font></html>");
 				} else if (Cache.DayScheduleRules.map.containsKey(txt)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else if (!Utility.validateName(txt)) {
@@ -234,7 +236,8 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || Cache.DayScheduleRules.map.containsKey(txt) || !Utility.validateName(txt)) {
+				if (txt==null || txt.isEmpty() || txt.length()>100 || Cache.DayScheduleRules.map.containsKey(txt) ||
+						!Utility.validateName(txt)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Day Schedule Rule",JOptionPane.ERROR_MESSAGE);
 				} else if (isTimeSame()){
 					JOptionPane.showMessageDialog(null,"Start & End Time cannot be the same!","Add Day Schedule Rule",JOptionPane.ERROR_MESSAGE);
@@ -269,6 +272,8 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
+				} else if (txt.length()>100) {
+					lblNameInfo.setText("<html><font color=\"red\">Too long!</font></html>");
 				} else if (Cache.DayScheduleRules.map.containsKey(txt) && !txt.equals(n)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else if (!Utility.validateName(txt)) {
@@ -285,7 +290,8 @@ public class DialogDayScheduleRuleAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || (Cache.DayScheduleRules.map.containsKey(txt) && !txt.equals(n)) || !Utility.validateName(txt)) {
+				if (txt==null || txt.isEmpty() || txt.length()>100 ||
+						(Cache.DayScheduleRules.map.containsKey(txt) &&!txt.equals(n)) || !Utility.validateName(txt)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Edit Day Schedule Rule",JOptionPane.ERROR_MESSAGE);
 				} else if (isTimeSame()){
 					JOptionPane.showMessageDialog(null,"Start & End Time cannot be the same!","Edit Day Schedule Rule",JOptionPane.ERROR_MESSAGE);

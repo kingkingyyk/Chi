@@ -374,7 +374,7 @@ public class DialogSensorAddEdit extends JDialog {
 					if (currentMapURL.equals(u)) {
 						lblPositionMap.setIcon(null);
 						lblPositionMap.setText("Image loading failed.");
-						Logger.log(Logger.LEVEL_ERROR,"DialogControllerAddEdit - drawMap - "+e.getMessage());
+						Logger.log(Logger.LEVEL_WARNING,"DialogControllerAddEdit - drawMap - "+e.getMessage());
 					}
 				}
 			}
@@ -436,6 +436,8 @@ public class DialogSensorAddEdit extends JDialog {
 				String txt=textFieldUnit.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblUnitInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
+				} else if (txt.length()>10) {
+					lblUnitInfo.setText("<html><font color=\"red\">Too long!</font></html>");
 				} else if (txt.contains(Config.PACKET_FIELD_DELIMITER)) {
 					lblUnitInfo.setText("<html><font color=\"red\">Semicolon is not allowed!</font></html>");
 				} else {
@@ -474,6 +476,8 @@ public class DialogSensorAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
+				} else if (txt.length()>100) {
+					lblNameInfo.setText("<html><font color=\"red\">Too long!</font></html>");
 				} else if (Cache.Sensors.map.containsKey(txt)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else if (!Utility.validateName(txt)) {
@@ -489,8 +493,10 @@ public class DialogSensorAddEdit extends JDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (!validateInput() || Cache.Sensors.map.containsKey(textFieldName.getText()) || !Utility.validateName(textFieldName.getText()) ||
-					comboBoxController.getItemCount()==0 || comboBoxClass.getItemCount()==0) {
+				String txt=textFieldName.getText();
+				if (!validateInput() || Cache.Sensors.map.containsKey(txt) ||
+						!Utility.validateName(txt) || comboBoxController.getItemCount()==0 ||
+						comboBoxClass.getItemCount()==0 || txt.length()>100 || textFieldUnit.getText().length()>10) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Sensor",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -529,6 +535,8 @@ public class DialogSensorAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
+				} else if (txt.length()>100) {
+					lblNameInfo.setText("<html><font color=\"red\">Too long!</font></html>");
 				} else if (Cache.Sensors.map.containsKey(txt) && !txt.equals(n)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else if (!Utility.validateName(txt)) {
@@ -544,7 +552,10 @@ public class DialogSensorAddEdit extends JDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (!validateInput() || (Cache.Sensors.map.containsKey(textFieldName.getText()) && !textFieldName.getText().equals(n)) || !Utility.validateName(textFieldName.getText()) || comboBoxController.getSelectedIndex()==-1 || comboBoxClass.getSelectedIndex()==-1) {
+				String txt=textFieldName.getText();
+				if (!validateInput() || (Cache.Sensors.map.containsKey(txt) && !txt.equals(n)) || !Utility.validateName(txt) ||
+						comboBoxController.getSelectedIndex()==-1 || comboBoxClass.getSelectedIndex()==-1 || txt.length()>100 ||
+						textFieldUnit.getText().length()>10) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Sensor",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

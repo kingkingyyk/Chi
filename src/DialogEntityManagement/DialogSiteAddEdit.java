@@ -118,6 +118,8 @@ public class DialogSiteAddEdit extends JDialog {
 				String txt=textFieldURL.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblURLInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
+				} else if (txt.length()>350) {
+					lblNameInfo.setText("<html><font color=\"red\">Too long!</font></html>");
 				} else {
 					lblURLInfo.setText("<html><font color=\"green\">OK!</font></html>");
 				}
@@ -152,6 +154,8 @@ public class DialogSiteAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
+				} else if (txt.length()>100) {
+					lblNameInfo.setText("<html><font color=\"red\">Too long!</font></html>");
 				} else if (Cache.Sites.map.containsKey(txt)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else if (!Utility.validateName(txt)) {
@@ -168,7 +172,8 @@ public class DialogSiteAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || Cache.Sites.map.containsKey(txt) || lblURLInfo.getText().isEmpty() || !Utility.validateName(txt)) {
+				if (txt==null || txt.isEmpty() || Cache.Sites.map.containsKey(txt) || textFieldURL.getText().isEmpty() ||
+					textFieldURL.getText().length()>350 || !Utility.validateName(txt)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Site",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -206,6 +211,8 @@ public class DialogSiteAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
+				} else if (txt.length()>100) {
+					lblNameInfo.setText("<html><font color=\"red\">Too long!</font></html>");
 				} else if (Cache.Sites.map.containsKey(txt) && !txt.equals(n)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else if (!Utility.validateName(txt)) {
@@ -222,7 +229,9 @@ public class DialogSiteAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || (Cache.Sites.map.containsKey(txt) && !txt.equals(n)) || lblURLInfo.getText().isEmpty() || !Utility.validateName(txt)) {
+				if (txt==null || txt.isEmpty() || txt.length()>100 || (Cache.Sites.map.containsKey(txt) && !txt.equals(n))
+						|| textFieldURL.getText().isEmpty() || textFieldURL.getText().length()>350 || !Utility.validateName(txt)) {
+					
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Site",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

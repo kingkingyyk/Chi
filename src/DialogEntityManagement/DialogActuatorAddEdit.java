@@ -64,7 +64,8 @@ public class DialogActuatorAddEdit extends JDialog {
 	
 	private int validatetextFieldPossibleActions () {
 		StringTokenizer st=new StringTokenizer(textFieldPossibleActions.getText(),";");
-		if (st.countTokens()==0) return 1;
+		if (textFieldPossibleActions.getText().length()>=1000) return 0;
+		else if (st.countTokens()==0) return 1;
 		else {
 			while (st.hasMoreTokens()) {
 				String s=st.nextToken();
@@ -291,7 +292,7 @@ public class DialogActuatorAddEdit extends JDialog {
 					if (currentMapURL.equals(u)) {
 						lblPositionMap.setIcon(null);
 						lblPositionMap.setText("Image loading failed.");
-						Logger.log(Logger.LEVEL_ERROR,"DialogControllerAddEdit - drawMap - "+e.getMessage());
+						Logger.log(Logger.LEVEL_WARNING,"DialogControllerAddEdit - drawMap - "+e.getMessage());
 					}
 				}
 			}
@@ -316,6 +317,8 @@ public class DialogActuatorAddEdit extends JDialog {
 				String txt=textFieldPossibleActions.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblPossibleActionsInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
+				} else if (txt.length()>1000) {
+					lblPossibleActionsInfo.setText("<html><font color=\"red\">Too long!</font></html>");
 				} else if (validatetextFieldPossibleActions()!=0) {
 					lblPossibleActionsInfo.setText("<html><font color=\"red\">Invalid action</font></html>");
 				} else if (containsNothingActions()) {
@@ -342,8 +345,10 @@ public class DialogActuatorAddEdit extends JDialog {
 		textFieldName.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty()) { 
+				if (txt==null || txt.isEmpty()) {
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
+				} else if (txt.length()>100) {
+					lblNameInfo.setText("<html><font color=\"red\">Too long!</font></html>");
 				} else if (Cache.Actuators.map.containsKey(txt)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else if (!Utility.validateName(txt)) {
@@ -360,7 +365,7 @@ public class DialogActuatorAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || Cache.Actuators.map.containsKey(txt) || !Utility.validateName(txt) || validatetextFieldPossibleActions()!=0 || containsNothingActions() || comboBoxController.getSelectedIndex()==-1) {
+				if (txt==null || txt.isEmpty() || txt.length()>100 || Cache.Actuators.map.containsKey(txt) || !Utility.validateName(txt) || validatetextFieldPossibleActions()!=0 || containsNothingActions() || comboBoxController.getSelectedIndex()==-1) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Actuator",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -392,6 +397,8 @@ public class DialogActuatorAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
+				} else if (txt.length()>100) {
+					lblNameInfo.setText("<html><font color=\"red\">Too long!</font></html>");
 				} else if (Cache.Actuators.map.containsKey(txt) && !txt.equals(n)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else if (!Utility.validateName(txt)) {
@@ -408,7 +415,7 @@ public class DialogActuatorAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldName.getText();
-				if (txt==null || txt.isEmpty() || (Cache.Actuators.map.containsKey(txt) && !txt.equals(n)) || !Utility.validateName(txt) || validatetextFieldPossibleActions()!=0 || containsNothingActions() || comboBoxController.getSelectedIndex()==-1) {
+				if (txt==null || txt.isEmpty() || txt.length()>100 || (Cache.Actuators.map.containsKey(txt) && !txt.equals(n)) || !Utility.validateName(txt) || validatetextFieldPossibleActions()!=0 || containsNothingActions() || comboBoxController.getSelectedIndex()==-1) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Edit Actuator",JOptionPane.ERROR_MESSAGE);
 				} else {
 					String [] statuses=getCleanPossibleActions().split(";");

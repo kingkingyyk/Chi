@@ -155,6 +155,8 @@ public class DialogUserAddEdit extends JDialog {
 				char [] pw=textFieldPassword.getPassword();
 				if (pw==null || pw.length==0) { 
 					lblPasswordInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
+				} else if (pw.length>100) {
+					lblPasswordInfo.setText("<html><font color=\"red\">Too long!</font></html>");
 				} else {
 					lblPasswordInfo.setText("<html><font color=\"green\">OK!</font></html>");
 				}
@@ -179,6 +181,8 @@ public class DialogUserAddEdit extends JDialog {
 				String txt=textFieldUsername.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblUsernameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
+				} else if (txt.length()>100) {
+					lblUsernameInfo.setText("<html><font color=\"red\">Too long!</font></html>");
 				} else if (Cache.Users.map.containsKey(txt)) {
 					lblUsernameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else if (!Utility.validateName(txt)) {
@@ -195,7 +199,7 @@ public class DialogUserAddEdit extends JDialog {
 			public void actionPerformed(ActionEvent arg0) {
 				String txt=textFieldUsername.getText();
 				char [] pw=textFieldPassword.getPassword();
-				if (txt==null || txt.isEmpty() || Cache.Users.map.containsKey(txt) || pw==null || pw.length==0 || !Utility.validateName(txt)) {
+				if (txt==null || txt.isEmpty() || txt.length()>100 || Cache.Users.map.containsKey(txt) || pw==null || pw.length==0 || pw.length>100 || !Utility.validateName(txt)) {
 					JOptionPane.showMessageDialog(null,"Invalid credential!",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
@@ -227,6 +231,8 @@ public class DialogUserAddEdit extends JDialog {
 				String txt=textFieldUsername.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblUsernameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
+				} else if (txt.length()>100) {
+					lblUsernameInfo.setText("<html><font color=\"red\">Too long!</font></html>");
 				} else if (Cache.Users.map.containsKey(txt) && !txt.equals(fillN)) {
 					lblUsernameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else if (!Utility.validateName(txt)) {
@@ -243,7 +249,7 @@ public class DialogUserAddEdit extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				char [] pw=textFieldPassword.getPassword();
-				if (pw==null || pw.length==0 || !Utility.validateName(textFieldUsername.getText())) {
+				if (pw==null || pw.length==0 || pw.length>100 || textFieldUsername.getText().length()>100 || !Utility.validateName(textFieldUsername.getText())) {
 					JOptionPane.showMessageDialog(null,"Invalid credential!",Config.APP_NAME,JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

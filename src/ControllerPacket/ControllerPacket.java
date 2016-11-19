@@ -54,8 +54,9 @@ public class ControllerPacket {
 				sc.setSoTimeout(5000);
 				
 				pw.write(sb.toString().getBytes());
+				pw.flush();
 				byte [] data=new byte [100];
-				dis.read(data);
+				dis.readFully(data);
 				sb=new StringBuilder();
 				for (int i=0;i<data.length;i++) if (data[i]!=0) sb.append((char)data[i]); else break;
 				status=sb.toString();

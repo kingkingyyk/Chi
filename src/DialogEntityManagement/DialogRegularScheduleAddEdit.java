@@ -335,6 +335,8 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
+				} else if (txt.length()>100) {
+					lblNameInfo.setText("<html><font color=\"red\">Too long!</font></html>");
 				} else if (Cache.RegularSchedules.map.containsKey(txt) || Cache.SpecialSchedules.map.containsKey(txt)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else if (!Utility.validateName(txt)) {
@@ -357,7 +359,7 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 					priorityOK=(i>0);
 				} catch (NumberFormatException e) {};
 				
-				if (txt==null || txt.isEmpty() || Cache.RegularSchedules.map.containsKey(txt) || Cache.SpecialSchedules.map.containsKey(txt) ||
+				if (txt==null || txt.isEmpty() || txt.length()>100 || Cache.RegularSchedules.map.containsKey(txt) || Cache.SpecialSchedules.map.containsKey(txt) ||
 					!priorityOK || !Utility.validateName(txt) || comboBoxActuator.getItemCount()==0 || comboBoxTimeRule.getItemCount()==0) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Regular Schedule",JOptionPane.ERROR_MESSAGE);
 				} else {
@@ -401,6 +403,8 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 				String txt=textFieldName.getText();
 				if (txt==null || txt.isEmpty()) { 
 					lblNameInfo.setText("<html><font color=\"red\">Cannot be empty!</font></html>");
+				} else if (txt.length()>100) {
+					lblNameInfo.setText("<html><font color=\"red\">Too long!</font></html>");
 				} else if ((Cache.RegularSchedules.map.containsKey(txt) || Cache.SpecialSchedules.map.containsKey(txt)) && !txt.equals(n)) {
 					lblNameInfo.setText("<html><font color=\"red\">Already in use!</font></html>");
 				} else if (!Utility.validateName(txt)) {
@@ -422,7 +426,7 @@ public class DialogRegularScheduleAddEdit extends JDialog {
 					int i=Integer.parseInt(textFieldPriority.getText());
 					priorityOK=(i>0);
 				} catch (NumberFormatException e) {};
-				if (txt==null || txt.isEmpty() || ((Cache.RegularSchedules.map.containsKey(txt) && !txt.equals(n))) || !priorityOK || !Utility.validateName(txt)) {
+				if (txt==null || txt.isEmpty() || txt.length()>100 || ((Cache.RegularSchedules.map.containsKey(txt) && !txt.equals(n))) || !priorityOK || !Utility.validateName(txt)) {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Edit Regular Schedule",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();

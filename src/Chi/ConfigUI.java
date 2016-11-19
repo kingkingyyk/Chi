@@ -385,7 +385,7 @@ public class ConfigUI extends JDialog {
 		
 		comboBoxLogLevel = new JComboBox<>();
 		comboBoxLogLevel.setBounds(75, 8, 97, 20);
-		comboBoxLogLevel.addItem("Error"); 	comboBoxLogLevel.addItem("Warning"); 	comboBoxLogLevel.addItem("Information");
+		comboBoxLogLevel.addItem("Information"); 	comboBoxLogLevel.addItem("Warning"); 	comboBoxLogLevel.addItem("Error");
 		comboBoxLogLevel.setSelectedIndex(Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_LOGGING_LEVEL_KEY)));
 		panelLogSettings.add(comboBoxLogLevel);
 		btnGWTPort.addActionListener(new ActionListener() {
@@ -449,6 +449,7 @@ public class ConfigUI extends JDialog {
 		Config.setConfig(Config.CONFIG_SERVER_GWT_ENCRYPTION_KEY, String.valueOf(chckbxGWTEncrypt.isSelected()));
 		Config.setConfig(Config.CONFIG_SERVER_LOGGING_LEVEL_KEY,String.valueOf(comboBoxLogLevel.getSelectedIndex()));
 		Config.setConfig(Config.CONFIG_SERVER_LOGGING_TOFILE_KEY, String.valueOf(chckbxLogToFile.isSelected()));
+		Logger.refreshLogLevel();
 		Logger.EnableLogToFile=chckbxLogToFile.isSelected();
 		
 		Config.setConfig(Config.CONFIG_SERVER_CONTROLLER_PORT_KEY, textFieldControllerPort.getText());

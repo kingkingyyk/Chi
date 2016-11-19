@@ -7,6 +7,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Timer;
@@ -56,6 +57,9 @@ public class FrameLiveReading extends JFrame {
 	private Sensor s;
 	private JFreeChart meterChart;
 	private DefaultCategoryDataset meterDataset;
+	
+	private static final String TIMESTAMP_FORMAT="yyyy-MM-dd HH:mm:ss"; //format the time
+	private static DateTimeFormatter formatter=DateTimeFormatter.ofPattern(TIMESTAMP_FORMAT);
 
 	private TimeSeries tSeriesPredicted;
 	
@@ -75,13 +79,15 @@ public class FrameLiveReading extends JFrame {
 				r.chart.setNotify(false);
 				
 				r.meterChart.getCategoryPlot().getRangeAxis().setRange(r.s.getMinvalue(),r.s.getMaxvalue());
-				
+
 				LocalDateTime now=LocalDateTime.now();
 				LinkedList<SensorReading> list=DatabaseReading.getReadingBetweenTime(r.s.getSensorname(),r.lastUpdateTime,now);
 				r.lastUpdateTime=now;
 				for (SensorReading r : list) {
 					this.r.tSeries.addOrUpdate(new Second(Utility.localDateTimeToUtilDate(r.getTimestamp())),r.getActualValue());
+					this.r.meterChart.setTitle(formatter.format(r.getTimestamp()));
 				}
+				
 		    	((DateAxis) this.r.chart.getXYPlot().getDomainAxis()).setRange(Utility.localDateTimeToUtilDate(LocalDateTime.now().minusHours(1)), Utility.localDateTimeToUtilDate(LocalDateTime.now().plusMinutes(5)));
 		    	
 		    	if (this.r.tSeries.getItemCount()>0) {

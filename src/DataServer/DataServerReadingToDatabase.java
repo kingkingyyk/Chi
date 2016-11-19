@@ -17,7 +17,7 @@ public class DataServerReadingToDatabase {
 	private static class WriteThread extends Thread {
 		public void run() {
 			while (true) {
-				if (queue.size()>0) {
+				if (queue.peek()!=null) {
 					DatabaseReading.storeReading();
 				}
 				try { Thread.sleep(500);} catch (InterruptedException e) {}
