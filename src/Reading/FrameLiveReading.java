@@ -58,7 +58,7 @@ public class FrameLiveReading extends JFrame {
 	private JFreeChart meterChart;
 	private DefaultCategoryDataset meterDataset;
 	
-	private static final String TIMESTAMP_FORMAT="hh:mm:ss aa"; //format the time
+	private static final String TIMESTAMP_FORMAT="hh:mm:ss a"; //format the time
 	private static DateTimeFormatter formatter=DateTimeFormatter.ofPattern(TIMESTAMP_FORMAT);
 
 	private TimeSeries tSeriesPredicted;

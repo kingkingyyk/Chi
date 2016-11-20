@@ -20,7 +20,7 @@ public class SensorActuatorResponseServer {
 	private static OnUpdate UpdateCallback=new OnUpdate();
 	private static OnDelete DeleteCallback=new OnDelete();
 	private static OnActuatorUpdate UpdateActCallback=new OnActuatorUpdate();
-	private static HashMap<Sensoractuatorresponse,ReadingTrackData> dataMap=new HashMap<>();
+	private static HashMap<Integer,ReadingTrackData> dataMap=new HashMap<>();
 	
 	private static class OnReadingReceived implements DataServer.OnReadingReceived {
 		@Override
@@ -36,9 +36,8 @@ public class SensorActuatorResponseServer {
 		public void run(int id, String an, String onTrigAct, String onNotTrigAct, String expression, boolean en,
 				int timeout) {
 			if (en && Cache.Actuators.map.get(an).getControltype().equals("Sensor Response")) {
-				Sensoractuatorresponse res=Cache.SensorActuatorResponses.map.get(String.valueOf(id));
-				ReadingTrackData dat=new ReadingTrackData(res);
-				dataMap.put(res,dat);
+				ReadingTrackData dat=new ReadingTrackData(id);
+				dataMap.put(id,dat);
 				dat.checkAndExecute();
 			}
 		}
@@ -48,14 +47,15 @@ public class SensorActuatorResponseServer {
 		@Override
 		public void run(int id, String an, String onTrigAct, String onNotTrigAct, String expression, boolean en,
 				int timeout) {
-			Sensoractuatorresponse res=Cache.SensorActuatorResponses.map.get(String.valueOf(id));
-			if (en && !dataMap.containsKey(res) &&  Cache.Actuators.map.get(an).getControltype().equals("Sensor Response")) {
-				ReadingTrackData dat=new ReadingTrackData(res);
-				dataMap.put(res,dat);
+			if (en && !dataMap.containsKey(id) &&  Cache.Actuators.map.get(an).getControltype().equals("Sensor Response")) {
+				ReadingTrackData dat=new ReadingTrackData(id);
+				dataMap.put(id,dat);
 				dat.checkAndExecute();
-			} else if (!en && dataMap.containsKey(res)) {
-				dataMap.get(res).cleanUp();
-				dataMap.remove(res);
+			} else if (!en && dataMap.containsKey(id)) {
+				dataMap.get(id).cleanUp();
+				dataMap.remove(id);
+			} else if (dataMap.containsKey(id)) {
+				dataMap.get(id).checkAndExecute();
 			}
 		}
 	}
@@ -63,10 +63,9 @@ public class SensorActuatorResponseServer {
 	private static class OnDelete implements DatabaseSensorActuatorResponse.OnDeleteAction {
 		@Override
 		public void run(int id) {
-			Sensoractuatorresponse res=Cache.SensorActuatorResponses.map.get(String.valueOf(id));
-			if (dataMap.containsKey(res)) {
-				dataMap.get(res).cleanUp();
-				dataMap.remove(res);
+			if (dataMap.containsKey(id)) {
+				dataMap.get(id).cleanUp();
+				dataMap.remove(id);
 			}
 		}
 	}
@@ -77,16 +76,16 @@ public class SensorActuatorResponseServer {
 		public void run(String oldN, String n, String u, String slist, double px, double py, String ctrlType) {
 			if (ctrlType.equals("Sensor Response")) {
 				for (Sensoractuatorresponse res : Cache.SensorActuatorResponses.map.values()) {
-					if (!dataMap.containsKey(res) && res.getActuator().getName().equals(n) && res.getEnabled()) {
-						ReadingTrackData dat=new ReadingTrackData(res);
-						dataMap.put(res,dat);
+					if (!dataMap.containsKey(res.getId()) && res.getActuator().getName().equals(n) && res.getEnabled()) {
+						ReadingTrackData dat=new ReadingTrackData(res.getId());
+						dataMap.put(res.getId(),dat);
 						dat.checkAndExecute();
 					}
 				}
 			} else {
 				ReadingTrackData toRemove=null;
 				for (ReadingTrackData dat : dataMap.values()) {
-					if (dat.res.getActuator().getName().equals(n)) {
+					if (Cache.SensorActuatorResponses.map.get(String.valueOf(dat.id)).getActuator().getName().equals(n)) {
 						toRemove=dat;
 						break;
 					}
@@ -94,7 +93,7 @@ public class SensorActuatorResponseServer {
 				
 				if (toRemove!=null) {
 					toRemove.cleanUp();
-					dataMap.remove(toRemove.res);
+					dataMap.remove(toRemove.id);
 				}
 			}
 		}
@@ -102,7 +101,7 @@ public class SensorActuatorResponseServer {
 	}
 	
 	private static class ReadingTrackData {
-		Sensoractuatorresponse res;
+		int id;
 		Timer t;
 		boolean ready;
 		String lastStatus;
@@ -119,10 +118,10 @@ public class SensorActuatorResponseServer {
 			
 		}
 		
-		public ReadingTrackData (Sensoractuatorresponse s) {
-			res=s;
+		public ReadingTrackData (int i) {
+			id=i;
 			ready=true;
-			lastStatus=s.getActuator().getStatus();
+			lastStatus=Cache.SensorActuatorResponses.map.get(String.valueOf(i)).getActuator().getStatus();
 			lastResult="";
 		}
 		
@@ -130,11 +129,12 @@ public class SensorActuatorResponseServer {
 			t=new Timer();
 			ResetReady tt=new ResetReady();
 			tt.dat=this;
-			t.schedule(tt,res.getTimeout()*1000);
+			t.schedule(tt,Cache.SensorActuatorResponses.map.get(String.valueOf(id)).getTimeout()*1000);
 		}
 		
 		public void checkAndExecute() {
 			if (ready) {
+				Sensoractuatorresponse res=Cache.SensorActuatorResponses.map.get(String.valueOf(id));
 				ready=false;
 				updateTimer();
 				boolean currResult=false;
@@ -188,8 +188,8 @@ public class SensorActuatorResponseServer {
 		
 		for (Sensoractuatorresponse res : Cache.SensorActuatorResponses.map.values()) {
 			if (res.getEnabled() && res.getActuator().getControltype().equals("Sensor Response")) {
-				ReadingTrackData dat=new ReadingTrackData(res);
-				dataMap.put(res,dat);
+				ReadingTrackData dat=new ReadingTrackData(res.getId());
+				dataMap.put(res.getId(),dat);
 				dat.checkAndExecute();
 			}
 		}
@@ -214,7 +214,7 @@ public class SensorActuatorResponseServer {
 		
 		for (ReadingTrackData dat : dataMap.values()) {
 			dat.cleanUp();
-			dataMap.remove(dat.res);
+			dataMap.remove(dat.id);
 		}
 		
 	}
