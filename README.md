@@ -46,3 +46,9 @@ Current Working Stuffs :
 
 v1.2 To-Do-List :
 + Release Testing
+
+v1.3 Upcoming Features :
++ New cache engine
++ JavaFX GUI
++ Code streamlining with Java 8 functional operators + shorthands
++ More parallelism
