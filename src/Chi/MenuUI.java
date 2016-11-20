@@ -603,7 +603,7 @@ public class MenuUI extends JFrame {
 		tabbedPane.addTab("About", null, panelAbout, null);
 		panelAbout.setLayout(null);
 		
-		JLabel lblAbout = new JLabel("<html>A program developed by kingkingyyk for Internet of Things monitor, reporting, control & automation.<br><br><br><br><br><br><br><br>You are running on v1.2 Build 158.<br>Latest update is available on https://github.com/kingkingyyk/Chi</html>");
+		JLabel lblAbout = new JLabel("<html>A program developed by kingkingyyk for Internet of Things monitor, reporting, control & automation.<br><br><br><br><br><br><br><br>You are running on "+Config.VERSION+"<br>Latest update is available on https://github.com/kingkingyyk/Chi</html>");
 		lblAbout.setVerticalAlignment(SwingConstants.TOP);
 		lblAbout.setHorizontalAlignment(SwingConstants.LEFT);
 		lblAbout.setBounds(10, 11, 393, 154);

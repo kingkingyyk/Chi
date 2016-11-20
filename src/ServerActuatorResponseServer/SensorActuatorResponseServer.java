@@ -144,7 +144,7 @@ public class SensorActuatorResponseServer {
 					if (!String.valueOf(currResult).equals(lastResult)) {
 						if (currResult && !res.getActuator().getStatus().equals(res.getOntriggeraction())) {
 							Logger.log(Logger.LEVEL_INFO,"SensorActuatorResponseServer - Attempt to set "+res.getActuator().getName()+" to "+res.getOntriggeraction());
-							DatabaseEvent.logActuatorEvent(res.getActuator().getName(),"","SensorActuatorResponse server attempt set actuator "+
+							DatabaseEvent.logActuatorEvent(res.getActuator().getName(),"SensorActuatorResponse server","Attempt set actuator "+
 															 res.getActuator().getName()+" to "+res.getOntriggeraction()+" from expression : "+res.getExpression());
 							lastStatus=res.getActuator().getStatus();
 							ControllerPacketActuatorTrigger p=new ControllerPacketActuatorTrigger(res.getActuator().getController().getControllername(),res.getActuator().getName(),res.getOntriggeraction());
