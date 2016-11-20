@@ -599,9 +599,19 @@ public class MenuUI extends JFrame {
 		btnConfig.setBounds(10, 11, 96, 23);
 		panelConfig.add(btnConfig);
 		
+		JPanel panelAbout = new JPanel();
+		tabbedPane.addTab("About", null, panelAbout, null);
+		panelAbout.setLayout(null);
+		
+		JLabel lblAbout = new JLabel("<html>A program developed by kingkingyyk for Internet of Things monitor, reporting, control & automation.<br><br><br><br><br><br><br><br>You are running on v1.2 Build 158.<br>Latest update is available on https://github.com/kingkingyyk/Chi</html>");
+		lblAbout.setVerticalAlignment(SwingConstants.TOP);
+		lblAbout.setHorizontalAlignment(SwingConstants.LEFT);
+		lblAbout.setBounds(10, 11, 393, 154);
+		panelAbout.add(lblAbout);
+		
 		JPanel panelDebug = new JPanel();
 		tabbedPane.addTab("Debug", null, panelDebug, "It might hurts!");
-		tabbedPane.setEnabledAt(6, false);
+		tabbedPane.setEnabledAt(7, false);
 		panelDebug.setLayout(null);
 		
 		JButton btnEvaluate = new JButton("Evaluate");
