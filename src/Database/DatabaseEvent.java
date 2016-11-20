@@ -251,4 +251,25 @@ public class DatabaseEvent {
 	    }
 		return list;
 	}
+	
+	public static boolean clearEvents () {
+		Logger.log(Logger.LEVEL_INFO,"DatabaseEvent - Clear events");
+		Session session=Cache.factory.openSession();
+		boolean flag=false;
+		Transaction tx=null;
+		try {
+			tx=session.beginTransaction();
+			session.createQuery("Delete from Actuatorevent").executeUpdate();
+			session.createQuery("Delete from Sensorevent").executeUpdate();
+			session.createQuery("Delete from Controllerevent").executeUpdate();
+			flag=true;
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx!=null) tx.rollback();
+	        Logger.log(Logger.LEVEL_ERROR,"DatabaseEvent - Clear events - Error - "+e.getMessage());
+	    } finally {
+	    	session.close();
+	    }
+		return flag;
+	}
 }

@@ -173,8 +173,9 @@ public class FrameNotification extends JFrame {
 					if (text.equals("CONTROLLER")) setIcon(Utility.resizeImageIcon(Theme.getIcon("ControllerIcon"), 16, 16));
 					else if (text.equals("SENSOR")) setIcon(Utility.resizeImageIcon(Theme.getIcon("SensorIcon"), 16, 16));
 					else if (text.equals("ACTUATOR")) setIcon(Utility.resizeImageIcon(Theme.getIcon("ActuatorIcon"), 16, 16));
+				} else {
+					setText(text);
 				}
-				setText(text);
 			}
 
 			if (aTable.isRowSelected(aRow)) {

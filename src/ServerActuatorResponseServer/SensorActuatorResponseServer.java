@@ -152,13 +152,13 @@ public class SensorActuatorResponseServer {
 						} else if (!currResult) {
 							if (res.getOnnottriggeraction().equals("RESTORE")) {
 								Logger.log(Logger.LEVEL_INFO,"SensorActuatorResponseServer - Attempt to set "+res.getActuator().getName()+" to "+lastStatus);
-								DatabaseEvent.logActuatorEvent(res.getActuator().getName(),"","SensorActuatorResponse server attempt set actuator "+
+								DatabaseEvent.logActuatorEvent(res.getActuator().getName(),"SensorActuatorResponse server","Attempt set actuator "+
 										 res.getActuator().getName()+" to "+lastStatus+" from expression : "+res.getExpression());
 								ControllerPacketActuatorTrigger p=new ControllerPacketActuatorTrigger(res.getActuator().getController().getControllername(),res.getActuator().getName(),lastStatus);
 								p.trigger();
 							} else {
 								Logger.log(Logger.LEVEL_INFO,"SensorActuatorResponseServer - Attempt to set "+res.getActuator().getName()+" to "+res.getOnnottriggeraction());
-								DatabaseEvent.logActuatorEvent(res.getActuator().getName(),"","SensorActuatorResponse server attempt set actuator "+
+								DatabaseEvent.logActuatorEvent(res.getActuator().getName(),"SensorActuatorResponse server","Attempt set actuator "+
 										 res.getActuator().getName()+" to "+res.getOnnottriggeraction()+" from expression : "+res.getExpression());
 								ControllerPacketActuatorTrigger p=new ControllerPacketActuatorTrigger(res.getActuator().getController().getControllername(),res.getActuator().getName(),res.getOnnottriggeraction());
 								p.trigger();

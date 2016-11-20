@@ -8,6 +8,7 @@ import javax.swing.text.DefaultCaret;
 import DataServer.DataServer;
 import Database.Cache;
 import Database.DatabaseCassandra;
+import Database.DatabaseEvent;
 import Database.DatabaseHSQL;
 import Database.DatabaseReading;
 import FrameEntityManagement.FrameActuatorManagement;
@@ -577,6 +578,18 @@ public class MenuUI extends JFrame {
 		});
 		btnNotification.setBounds(10, 11, 131, 23);
 		panelNotification.add(btnNotification);
+		
+		JButton btnClearNotifications = new JButton("Clear Notifications");
+		btnClearNotifications.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (JOptionPane.showConfirmDialog(MenuUI.this,"Confirm to clear?","Clear notifications",JOptionPane.WARNING_MESSAGE)==JOptionPane.OK_OPTION); {
+					DatabaseEvent.clearEvents();
+					FrameNotification.refresh();
+				}
+			}
+		});
+		btnClearNotifications.setBounds(151, 11, 131, 23);
+		panelNotification.add(btnClearNotifications);
 		
 		JPanel panelConfig = new JPanel();
 		tabbedPane.addTab("Configurations", null, panelConfig, null);
