@@ -10,6 +10,7 @@ import FrameEntityManagement.FrameContextMenu;
 public class FrameLatestReadingContextMenu extends FrameContextMenu {
 	private static final long serialVersionUID = 1L;
 	private JMenuItem liveUpdateMenu;
+	private JMenuItem exportInstanceMenu;
 	private JMenuItem exportDailyMenu;
 	private JMenuItem exportMonthlyMenu;
 	private JMenuItem exportYearlyMenu;
@@ -19,6 +20,12 @@ public class FrameLatestReadingContextMenu extends FrameContextMenu {
 		liveUpdateMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {FrameLatestReadingActions.showLive(m);}
+		});
+		
+		this.exportInstanceMenu=addMenuItem("Export Instance Report...","EditIcon","I");
+		exportInstanceMenu.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) { FrameLatestReadingActions.exportInstance(m);}
 		});
 		
 		this.exportDailyMenu=addMenuItem("Export Daily Report...","EditIcon","D");

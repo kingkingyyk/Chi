@@ -321,6 +321,11 @@ public class FrameLatestReading extends JFrame {
 						FrameLatestReadingActions.showLive(FrameLatestReading.this);
 						break;
 					}
+					case (KeyEvent.VK_I) : {
+						if (getSelectedCount()==1) FrameLatestReadingActions.exportInstance(FrameLatestReading.this);
+						else Toolkit.getDefaultToolkit().beep();
+						break;
+					}
 					case (KeyEvent.VK_D) : {
 						if (getSelectedCount()==1) FrameLatestReadingActions.exportDaily(FrameLatestReading.this);
 						else Toolkit.getDefaultToolkit().beep();

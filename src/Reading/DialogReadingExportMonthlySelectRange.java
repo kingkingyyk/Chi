@@ -22,7 +22,7 @@ import java.io.File;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 
-public class DialogReadingExportSelectMonthRange extends JDialog {
+public class DialogReadingExportMonthlySelectRange extends JDialog {
 	private static final long serialVersionUID = -2984954156093518852L;
 	public Sensor s;
 	private JComboBox<String> comboBoxAggregation;
@@ -32,7 +32,7 @@ public class DialogReadingExportSelectMonthRange extends JDialog {
 	private JComboBox<String> comboBoxToMonth;
 	private JComboBox<String> comboBoxToYear;
 	
-	public DialogReadingExportSelectMonthRange() {
+	public DialogReadingExportMonthlySelectRange() {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setModal(true);
 		setTitle("Export Monthly Report");
@@ -53,7 +53,7 @@ public class DialogReadingExportSelectMonthRange extends JDialog {
 			    fc.setDialogTitle("Export Monthly Report");
 			    fc.addChoosableFileFilter(new FileNameExtensionFilter("CSV", "csv"));
 			    fc.setAcceptAllFileFilterUsed(true);
-			    if (fc.showSaveDialog(DialogReadingExportSelectMonthRange.this)==JFileChooser.APPROVE_OPTION && (!fc.getSelectedFile().exists() || (fc.getSelectedFile().exists() && JOptionPane.showConfirmDialog(null,"Overwrite the file?","Export Monthly Report",JOptionPane.WARNING_MESSAGE)==JOptionPane.OK_OPTION) )) {
+			    if (fc.showSaveDialog(DialogReadingExportMonthlySelectRange.this)==JFileChooser.APPROVE_OPTION && (!fc.getSelectedFile().exists() || (fc.getSelectedFile().exists() && JOptionPane.showConfirmDialog(null,"Overwrite the file?","Export Monthly Report",JOptionPane.WARNING_MESSAGE)==JOptionPane.OK_OPTION) )) {
 			    	LocalDateTime st=LocalDateTime.of(Integer.parseInt((String)comboBoxFromYear.getSelectedItem()),Integer.parseInt((String)comboBoxFromMonth.getSelectedItem()),1,0,0);
 			    	LocalDateTime et=LocalDateTime.of(Integer.parseInt((String)comboBoxToYear.getSelectedItem()),Integer.parseInt((String)comboBoxToMonth.getSelectedItem()),1,0,0).plusMonths(1).minusSeconds(1);
 			    	switch ((String)comboBoxAggregation.getSelectedItem()) {
@@ -71,7 +71,7 @@ public class DialogReadingExportSelectMonthRange extends JDialog {
 				    	}   	
 			    	}
 			    	
-				    DialogReadingExportSelectMonthRange.this.dispose();
+			    	DialogReadingExportMonthlySelectRange.this.dispose();
 			    }
 			    fc.setVisible(false);
 

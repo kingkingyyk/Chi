@@ -12,10 +12,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import org.jdesktop.swingx.JXDatePicker;
-
 import Chi.Theme;
-import Chi.Utility;
 import Database.DatabaseReading;
 import Entity.Sensor;
 
@@ -25,24 +22,20 @@ import java.io.File;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 
-public class DialogReadingExportSelectDayRange extends JDialog {
+public class DialogReadingExportYearlySelectRange extends JDialog {
 	private static final long serialVersionUID = -2984954156093518852L;
 	public Sensor s;
 	private JComboBox<String> comboBoxAggregation;
-	private JXDatePicker dateTo;
-	private JXDatePicker dateFrom;
-	private static String [] exportColumns={"Name","Year","Month","Day","Value"};
+	private static String [] exportColumns={"Name","Year","Value"};
+	private JComboBox<String> comboBoxFromYear;
+	private JComboBox<String> comboBoxToYear;
 	
-	public DialogReadingExportSelectDayRange() {
+	public DialogReadingExportYearlySelectRange() {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setModal(true);
-		setTitle("Export Daily Report");
-		setBounds(100, 100, 420, 219);
+		setTitle("Export Yearly Report");
+		setBounds(100, 100, 248, 219);
 		setIconImage(Theme.getIcon("ChiLogo").getImage());
-		
-		dateFrom = new JXDatePicker(Utility.localDateTimeToUtilDate(LocalDateTime.now().minusDays(1)));
-		
-		dateTo = new JXDatePicker(Utility.localDateTimeToUtilDate(LocalDateTime.now()));
 		
 		JLabel lblFrom = new JLabel("From :");
 		lblFrom.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -55,28 +48,28 @@ public class DialogReadingExportSelectDayRange extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 			    final JFileChooser fc = new JFileChooser();
 			    fc.setSelectedFile(new File(s.getSensorname()+".csv"));
-			    fc.setDialogTitle("Export Daily Report");
+			    fc.setDialogTitle("Export Yearly Report");
 			    fc.addChoosableFileFilter(new FileNameExtensionFilter("CSV", "csv"));
 			    fc.setAcceptAllFileFilterUsed(true);
-			    if (fc.showSaveDialog(DialogReadingExportSelectDayRange.this)==JFileChooser.APPROVE_OPTION && (!fc.getSelectedFile().exists() || (fc.getSelectedFile().exists() && JOptionPane.showConfirmDialog(null,"Overwrite the file?","Export Daily Report",JOptionPane.WARNING_MESSAGE)==JOptionPane.OK_OPTION) )) {
-			    	LocalDateTime st=Utility.dateToLocalDateTime(dateFrom.getDate());
-			    	LocalDateTime et=Utility.dateToLocalDateTime(dateFrom.getDate()).plusDays(1).minusSeconds(1);
+			    if (fc.showSaveDialog(DialogReadingExportYearlySelectRange.this)==JFileChooser.APPROVE_OPTION && (!fc.getSelectedFile().exists() || (fc.getSelectedFile().exists() && JOptionPane.showConfirmDialog(null,"Overwrite the file?","Export Yearly Report",JOptionPane.WARNING_MESSAGE)==JOptionPane.OK_OPTION) )) {
+			    	LocalDateTime st=LocalDateTime.of(Integer.parseInt((String)comboBoxFromYear.getSelectedItem()),1,1,0,0);
+			    	LocalDateTime et=LocalDateTime.of(Integer.parseInt((String)comboBoxToYear.getSelectedItem()),1,1,0,0).plusYears(1).minusSeconds(1);
 			    	switch ((String)comboBoxAggregation.getSelectedItem()) {
 				    	case "Sum" : {
-				    		ReadingExport.export(fc.getSelectedFile(),s.getSensorname(),exportColumns,DatabaseReading.getTotalReadingGroupByDayBetweenTime(s.getSensorname(), st, et));
+				    		ReadingExport.export(fc.getSelectedFile(),s.getSensorname(),exportColumns,DatabaseReading.getTotalReadingGroupByYearBetweenTime(s.getSensorname(), st, et));
 				    		break;
 				    	}
 				    	case "Average" : {
-				    		ReadingExport.export(fc.getSelectedFile(),s.getSensorname(),exportColumns,DatabaseReading.getAverageReadingGroupByDayBetweenTime(s.getSensorname(), st, et));
+				    		ReadingExport.export(fc.getSelectedFile(),s.getSensorname(),exportColumns,DatabaseReading.getAverageReadingGroupByYearBetweenTime(s.getSensorname(), st, et));
 				    		break;
 				    	}
 				    	case "Culmulative" : {
-				    		ReadingExport.export(fc.getSelectedFile(),s.getSensorname(),exportColumns,DatabaseReading.getCulmulativeReadingGroupByDayBetweenTime(s.getSensorname(), st, et));
+				    		ReadingExport.export(fc.getSelectedFile(),s.getSensorname(),exportColumns,DatabaseReading.getCulmulativeReadingGroupByYearBetweenTime(s.getSensorname(), st, et));
 				    		break;
 				    	}   	
 			    	}
 			    	
-				    DialogReadingExportSelectDayRange.this.dispose();
+			    	DialogReadingExportYearlySelectRange.this.dispose();
 			    }
 			    fc.setVisible(false);
 
@@ -97,52 +90,62 @@ public class DialogReadingExportSelectDayRange extends JDialog {
 		
 		JLabel lblAggregation = new JLabel("Aggregation :");
 		lblAggregation.setHorizontalAlignment(SwingConstants.RIGHT);
+		
+		comboBoxFromYear = new JComboBox<>();
+		comboBoxToYear = new JComboBox<>();
+		
+		for (int i=1990;i<=LocalDateTime.now().getYear();i++) {
+			comboBoxFromYear.addItem(i+"");
+			comboBoxToYear.addItem(i+"");
+		}
+		
+		comboBoxFromYear.setSelectedItem(String.valueOf(LocalDateTime.now().getYear()-1));
+		comboBoxToYear.setSelectedItem(String.valueOf(LocalDateTime.now().getYear()));
+		
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+							.addContainerGap()
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 								.addGroup(groupLayout.createSequentialGroup()
 									.addComponent(lblFrom, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(dateFrom, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE))
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(comboBoxFromYear, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE))
 								.addGroup(groupLayout.createSequentialGroup()
 									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 										.addComponent(lblTo, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)
 										.addComponent(lblAggregation, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE))
-									.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addPreferredGap(ComponentPlacement.RELATED)
 									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-										.addComponent(comboBoxAggregation, Alignment.TRAILING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(dateTo, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE))))
-							.addContainerGap(73, Short.MAX_VALUE))
-						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(btnExport, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
-									.addGap(94))
-								.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE))
-							.addContainerGap())))
+										.addComponent(comboBoxToYear, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
+										.addComponent(comboBoxAggregation, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(29)
+							.addComponent(btnExport, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(197, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(31)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(dateFrom, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblFrom))
+						.addComponent(lblFrom)
+						.addComponent(comboBoxFromYear, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(dateTo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblTo))
+						.addComponent(lblTo)
+						.addComponent(comboBoxToYear, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(comboBoxAggregation, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblAggregation))
+						.addComponent(lblAggregation)
+						.addComponent(comboBoxAggregation, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(15)
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnExport)
 						.addComponent(btnCancel))
 					.addContainerGap())

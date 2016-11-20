@@ -36,7 +36,7 @@ public class ReadingExport {
 						pw.print(',');
 						for (int i2=0;i2<o.length;i2++) {
 							pw.print(o[i2].toString());
-							if (i2<columns.length-1) pw.print(',');
+							if (i2<o.length-1) pw.print(',');
 							else pw.println();
 						}
 						u.setProgressBarValue(i+1);
