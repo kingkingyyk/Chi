@@ -4,11 +4,8 @@ import java.time.LocalDateTime;
 
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -33,6 +30,7 @@ public class DialogReadingExportMonthlySelectRange extends JDialog {
 	private JComboBox<String> comboBoxToYear;
 	
 	public DialogReadingExportMonthlySelectRange() {
+		setResizable(false);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setModal(true);
 		setTitle("Export Monthly Report");
@@ -40,12 +38,15 @@ public class DialogReadingExportMonthlySelectRange extends JDialog {
 		setIconImage(Theme.getIcon("ChiLogo").getImage());
 		
 		JLabel lblFrom = new JLabel("From :");
+		lblFrom.setBounds(10, 34, 67, 14);
 		lblFrom.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		JLabel lblTo = new JLabel("To :");
+		lblTo.setBounds(10, 72, 67, 14);
 		lblTo.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		JButton btnExport = new JButton("Export");
+		btnExport.setBounds(224, 157, 86, 23);
 		btnExport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			    final JFileChooser fc = new JFileChooser();
@@ -79,6 +80,7 @@ public class DialogReadingExportMonthlySelectRange extends JDialog {
 		});
 		
 		JButton btnCancel = new JButton("Cancel");
+		btnCancel.setBounds(318, 157, 86, 23);
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
@@ -86,17 +88,23 @@ public class DialogReadingExportMonthlySelectRange extends JDialog {
 		});
 		
 		comboBoxAggregation = new JComboBox<>();
+		comboBoxAggregation.setBounds(81, 107, 224, 20);
 		comboBoxAggregation.addItem("Sum");
 		comboBoxAggregation.addItem("Average");
 		comboBoxAggregation.addItem("Culmulative");
 		
 		JLabel lblAggregation = new JLabel("Aggregation :");
+		lblAggregation.setBounds(10, 110, 67, 14);
 		lblAggregation.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		comboBoxFromYear = new JComboBox<>();
+		comboBoxFromYear.setBounds(81, 31, 109, 20);
 		comboBoxFromMonth = new JComboBox<>();
+		comboBoxFromMonth.setBounds(196, 31, 109, 20);
 		comboBoxToYear = new JComboBox<>();
+		comboBoxToYear.setBounds(81, 69, 109, 20);
 		comboBoxToMonth = new JComboBox<>();
+		comboBoxToMonth.setBounds(196, 69, 109, 20);
 		
 		for (int i=1990;i<=LocalDateTime.now().getYear();i++) {
 			comboBoxFromYear.addItem(i+"");
@@ -120,65 +128,17 @@ public class DialogReadingExportMonthlySelectRange extends JDialog {
 		comboBoxToYear.setSelectedItem(String.valueOf(LocalDateTime.now().getYear()));
 		if (LocalDateTime.now().getMonthValue()<10) comboBoxToMonth.setSelectedItem("0"+LocalDateTime.now().getMonthValue());
 		comboBoxToMonth.setSelectedItem(String.valueOf(LocalDateTime.now().getMonthValue()));
-		
-		GroupLayout groupLayout = new GroupLayout(getContentPane());
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-								.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-									.addComponent(lblFrom, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(comboBoxFromYear, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(comboBoxFromMonth, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE))
-								.addGroup(groupLayout.createSequentialGroup()
-									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-										.addComponent(lblTo, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblAggregation, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE))
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-										.addGroup(groupLayout.createSequentialGroup()
-											.addComponent(comboBoxToYear, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
-											.addPreferredGap(ComponentPlacement.RELATED)
-											.addComponent(comboBoxToMonth, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE))
-										.addComponent(comboBoxAggregation, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-							.addContainerGap(73, Short.MAX_VALUE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(btnExport, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
-									.addGap(94))
-								.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE))
-							.addContainerGap())))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(31)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblFrom)
-						.addComponent(comboBoxFromYear, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(comboBoxFromMonth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblTo)
-						.addComponent(comboBoxToYear, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(comboBoxToMonth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblAggregation)
-						.addComponent(comboBoxAggregation, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(15)
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(btnExport)
-						.addComponent(btnCancel))
-					.addContainerGap())
-		);
-		getContentPane().setLayout(groupLayout);
+		getContentPane().setLayout(null);
+		getContentPane().add(lblFrom);
+		getContentPane().add(comboBoxFromYear);
+		getContentPane().add(comboBoxFromMonth);
+		getContentPane().add(lblTo);
+		getContentPane().add(lblAggregation);
+		getContentPane().add(comboBoxToYear);
+		getContentPane().add(comboBoxToMonth);
+		getContentPane().add(comboBoxAggregation);
+		getContentPane().add(btnExport);
+		getContentPane().add(btnCancel);
 
 	}
 }

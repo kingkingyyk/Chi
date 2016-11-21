@@ -36,6 +36,13 @@ public class DatabaseSensor {
 		}
 	}
 	
+	public static void unregisterOnCreateAction (OnCreateAction a) {
+		if (!OnCreateList.contains(a)) {
+			Logger.log(Logger.LEVEL_INFO,"DatabaseSensor - Unregistered "+a.toString()+" to OnCreate callback");
+			OnCreateList.remove(a);
+		}
+	}
+	
 	public static void registerOnUpdateAction (OnUpdateAction a) {
 		if (!OnUpdateList.contains(a)) {
 			Logger.log(Logger.LEVEL_INFO,"DatabaseSensor - Registered "+a.toString()+" to OnUpdate callback");
@@ -43,10 +50,24 @@ public class DatabaseSensor {
 		}
 	}
 	
+	public static void unregisterOnUpdateAction (OnUpdateAction a) {
+		if (OnUpdateList.contains(a)) {
+			Logger.log(Logger.LEVEL_INFO,"DatabaseSensor - Unregistered "+a.toString()+" to OnUpdate callback");
+			OnUpdateList.remove(a);
+		}
+	}
+	
 	public static void registerOnDeleteAction (OnDeleteAction a) {
 		if (!OnDeleteList.contains(a)) {
 			Logger.log(Logger.LEVEL_INFO,"DatabaseSensor - Registered "+a.toString()+" to OnDelete callback");
 			OnDeleteList.add(a);
+		}
+	}
+	
+	public static void unregisterOnDeleteAction (OnDeleteAction a) {
+		if (OnDeleteList.contains(a)) {
+			Logger.log(Logger.LEVEL_INFO,"DatabaseSensor - Unregistered "+a.toString()+" to OnDelete callback");
+			OnDeleteList.remove(a);
 		}
 	}
 	

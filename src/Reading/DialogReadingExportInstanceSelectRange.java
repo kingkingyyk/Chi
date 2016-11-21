@@ -3,7 +3,10 @@ package Reading;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.stream.Collectors;
 
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -18,6 +21,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import com.github.lgooddatepicker.components.DateTimePicker;
 
 import Chi.Theme;
+import Chi.Utility;
 import Chi.WaitUI;
 import Database.DatabaseReading;
 import Entity.Sensor;
@@ -27,6 +31,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.awt.event.ActionEvent;
+import javax.swing.JComboBox;
 
 public class DialogReadingExportInstanceSelectRange extends JDialog {
 	private static final long serialVersionUID = -2984954156093518852L;
@@ -34,12 +39,16 @@ public class DialogReadingExportInstanceSelectRange extends JDialog {
 	private DateTimePicker dateTo;
 	private DateTimePicker dateFrom;
 	private static String [] exportColumns={"Name","Timestamp","Value"};
+	private JComboBox<String> comboBoxGroupBy;
+	private JComboBox<String> comboBoxValue;
+	private static int [] groupByValue={1,5,15,30};
 	
 	public DialogReadingExportInstanceSelectRange() {
+		setResizable(false);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setModal(true);
 		setTitle("Export Instance Report");
-		setBounds(100, 100, 420, 198);
+		setBounds(100, 100, 420, 260);
 		setIconImage(Theme.getIcon("ChiLogo").getImage());
 		
 		dateFrom = new DateTimePicker();
@@ -84,8 +93,42 @@ public class DialogReadingExportInstanceSelectRange extends JDialog {
 					    	
 					    	u.setText("Formatting data...");
 					    	u.setProgressBarValue(1);
-					    	for (SensorReading sr : list)
-					    		readings.add(new Object [] {formatter.format(sr.getTimestamp()),sr.getActualValue()});
+					    	if (comboBoxGroupBy.getSelectedItem().equals("None")) {
+					    		readings.addAll(list.stream()
+						    		 .map(sr -> new Object [] {formatter.format(sr.getTimestamp()),sr.getActualValue()})
+						    		.collect(Collectors.toList()));
+					    	} else {
+					    		HashMap<Long,Double> valueMap=new HashMap<>();
+					    		long factor=60*groupByValue[comboBoxGroupBy.getSelectedIndex()]*1000;
+					    		
+					    		if (comboBoxValue.getSelectedItem().equals("Average")) {
+					    			HashMap<Long,Integer> itemsCountMap=new HashMap<>();
+							    	for (SensorReading sr : list) {
+							    		long key=Utility.localDateTimeToLong(sr.getTimestamp())/factor*factor;
+							    		valueMap.put(key,valueMap.getOrDefault(key,0.0)+sr.getActualValue());
+							    		itemsCountMap.put(key,itemsCountMap.getOrDefault(key,0)+1);
+							    	}
+							    	
+							    	for (Long key : valueMap.keySet()) valueMap.put(key,valueMap.get(key)/itemsCountMap.get(key));
+							    	
+					    		} else if (comboBoxValue.getSelectedItem().equals("Minimum")) {
+							    	for (SensorReading sr : list) {
+							    		long key=Utility.localDateTimeToLong(sr.getTimestamp())/factor*factor;
+							    		valueMap.put(key,Math.min(valueMap.getOrDefault(key,Double.MAX_VALUE),sr.getActualValue()));
+							    	}
+					    		} else if (comboBoxValue.getSelectedItem().equals("Maximum")) {
+							    	for (SensorReading sr : list) {
+							    		long key=Utility.localDateTimeToLong(sr.getTimestamp())/factor*factor;
+							    		valueMap.put(key,Math.min(valueMap.getOrDefault(key,Double.MIN_VALUE),sr.getActualValue()));
+							    	}
+					    		}
+					    		
+						    	readings.addAll(valueMap.keySet().stream()
+						    			.map(s -> Utility.dateToLocalDateTime(new Date(s)))
+						    			.sorted()
+						    			.map(dt -> new Object[]{formatter.format(dt),valueMap.get(Utility.localDateTimeToLong(dt))})
+						    			.collect(Collectors.toList()));
+					    	}
 					    	
 					    	u.setText("Exporting data...");
 					    	u.setProgressBarValue(2);
@@ -112,28 +155,62 @@ public class DialogReadingExportInstanceSelectRange extends JDialog {
 				dispose();
 			}
 		});
+		
+		JLabel lbl = new JLabel("Group By :");
+		lbl.setHorizontalAlignment(SwingConstants.RIGHT);
+		
+		comboBoxGroupBy = new JComboBox<>();
+		comboBoxGroupBy.addItem("None");
+		comboBoxGroupBy.addItem("5 minutes");
+		comboBoxGroupBy.addItem("15 minutes");
+		comboBoxGroupBy.addItem("30 minutes");
+		comboBoxGroupBy.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				comboBoxValue.setEnabled(comboBoxGroupBy.getSelectedIndex()!=0);
+			}
+		});
+		
+		JLabel lblValue = new JLabel("Value :");
+		lblValue.setHorizontalAlignment(SwingConstants.RIGHT);
+		
+		comboBoxValue = new JComboBox<>();
+		comboBoxValue.setEnabled(false);
+		comboBoxValue.addItem("Average");
+		comboBoxValue.addItem("Minimum");
+		comboBoxValue.addItem("Maximum");
+		
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 								.addGroup(groupLayout.createSequentialGroup()
 									.addComponent(lblFrom, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addPreferredGap(ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
 									.addComponent(dateFrom, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE))
 								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(lblTo, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(dateTo, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)))
-							.addContainerGap(73, Short.MAX_VALUE))
-						.addGroup(groupLayout.createSequentialGroup()
+									.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+										.addComponent(lbl, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(lblTo, GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE))
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addComponent(dateTo, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)
+										.addComponent(comboBoxGroupBy, 0, 249, Short.MAX_VALUE))))
+							.addGap(78))
+						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
 							.addComponent(btnExport, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
-							.addGap(8))))
+							.addGap(8))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(lblValue, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(comboBoxValue, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)
+							.addContainerGap(78, Short.MAX_VALUE))))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -146,7 +223,15 @@ public class DialogReadingExportInstanceSelectRange extends JDialog {
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(dateTo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblTo))
-					.addPreferredGap(ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+					.addGap(18)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lbl)
+						.addComponent(comboBoxGroupBy, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblValue)
+						.addComponent(comboBoxValue, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnExport)
 						.addComponent(btnCancel))

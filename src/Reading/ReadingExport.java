@@ -1,5 +1,6 @@
 package Reading;
 
+import java.awt.Desktop;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -16,6 +17,7 @@ public class ReadingExport {
 	public static void export (File f, String name, String [] columns, ArrayList<Object []> data) {
 		if (f.exists() && !f.delete()) {
 			JOptionPane.showMessageDialog(null, "Fail to overwrite file!", "Export", JOptionPane.ERROR_MESSAGE);
+			return;
 		}
 		WaitUI u=new WaitUI();
 		u.setText("Exporting data...");
@@ -42,7 +44,9 @@ public class ReadingExport {
 						u.setProgressBarValue(i+1);
 					}
 					pw.close();
-					JOptionPane.showMessageDialog(null, "Export successful!", "Export", JOptionPane.INFORMATION_MESSAGE);
+					if (JOptionPane.showConfirmDialog(null, "Export successful! Do you want to open the file now?", "Export", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
+						Desktop.getDesktop().open(f);
+					}
 				} catch (IOException e) {
 					JOptionPane.showMessageDialog(null, "Error during export : "+e.getMessage(), "Export", JOptionPane.ERROR_MESSAGE);
 				}
