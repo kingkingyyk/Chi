@@ -323,7 +323,7 @@ public class MenuUI extends JFrame {
 					t.start();
 					Thread t2=new Thread() {
 						public void run () {
-							String [] s={"We are still working hard...","Looks you have a lot of data...","It won't take long..."};
+							String [] s={"We are still working hard...","Looks like you have a lot of data...","It won't take long..."};
 							for (int i=0;i<s.length;i++) {
 								try {Thread.sleep(5000); } catch (InterruptedException e) {}
 								if (u.isVisible()) u.setText(s[i]); else break;

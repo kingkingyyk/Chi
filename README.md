@@ -51,4 +51,5 @@ v1.3 Upcoming Features :
 + New cache engine
 + JavaFX GUI
 + Code streamlining with Java 8 functional operators + shorthands
++ Support for Cassandra cluster
 + More parallelism

@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
+
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.KeyspaceMetadata;
@@ -25,9 +28,12 @@ public class DatabaseCassandra {
 				cluster=Cluster.builder().withCredentials(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_USERNAME_KEY),Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PASSWORD_KEY))/*
 						*/.withPort(Integer.parseInt(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_PORT_KEY)))/*
 						*/.addContactPoint(Config.getConfig(Config.CONFIG_SERVER_DATABASE_CASSANDRA_IP_KEY)).build();
-				session=cluster.connect("Chi");
-				if (session==null) session=cluster.connect("Chi");
-				DatabaseReading.initialize();
+				try {
+					session=cluster.connect("Chi");
+					DatabaseReading.initialize();
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "Error when connecting to Cassandra server.\n"+e.getMessage(), "Chi", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		};
 		t.start();
