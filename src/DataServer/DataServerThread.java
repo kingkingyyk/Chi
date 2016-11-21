@@ -62,7 +62,8 @@ public class DataServerThread extends Thread {
 									String sn=st.nextToken(); //sensor name
 									double reading=Double.parseDouble(st.nextToken());
 									if (Cache.Controllers.map.get(cn)!=null && reading>=0.0 && reading<=1.0) {
-										if (!Cache.Controllers.map.get(cn).getIpaddress().equals(sc.getInetAddress().getHostAddress())) DatabaseController.updateControllerReport(cn,sc.getInetAddress().getHostAddress(),LocalDateTime.now());
+										if (!Cache.Controllers.map.get(cn).getIpaddress().equals(sc.getInetAddress().getHostAddress()) || System.currentTimeMillis()-Cache.Controllers.map.get(cn).getLastreporttime().getTime()>Config.CONTROLLER_UPDATE_REPORT_MAX_MS)
+											DatabaseController.updateControllerReport(cn,sc.getInetAddress().getHostAddress(),LocalDateTime.now());
 										DatabaseReading.updateLastReading(sn, reading);
 										DataServerReadingToDatabase.queueData(sn,reading);
 									}
@@ -72,7 +73,8 @@ public class DataServerThread extends Thread {
 							case "1" : {
 								String cn=st.nextToken();
 								if (Cache.Controllers.map.get(cn)!=null) {
-									if (!Cache.Controllers.map.get(cn).getIpaddress().equals(sc.getInetAddress().getHostAddress())) DatabaseController.updateControllerReport(cn,sc.getInetAddress().getHostAddress(),LocalDateTime.now());
+									if (!Cache.Controllers.map.get(cn).getIpaddress().equals(sc.getInetAddress().getHostAddress()) || System.currentTimeMillis()-Cache.Controllers.map.get(cn).getLastreporttime().getTime()>Config.CONTROLLER_UPDATE_REPORT_MAX_MS)
+										DatabaseController.updateControllerReport(cn,sc.getInetAddress().getHostAddress(),LocalDateTime.now());
 									DataServer.fireOnReportReceived(cn);
 								}
 
@@ -81,7 +83,8 @@ public class DataServerThread extends Thread {
 							case "2" : {
 								String cn=st.nextToken();
 								if (Cache.Controllers.map.get(cn)!=null) {
-									if (!Cache.Controllers.map.get(cn).getIpaddress().equals(sc.getInetAddress().getHostAddress())) DatabaseController.updateControllerReport(cn,sc.getInetAddress().getHostAddress(),LocalDateTime.now());
+									if (!Cache.Controllers.map.get(cn).getIpaddress().equals(sc.getInetAddress().getHostAddress()) || System.currentTimeMillis()-Cache.Controllers.map.get(cn).getLastreporttime().getTime()>Config.CONTROLLER_UPDATE_REPORT_MAX_MS)
+										DatabaseController.updateControllerReport(cn,sc.getInetAddress().getHostAddress(),LocalDateTime.now());
 									DataServerActuatorStatusToDatabase.queueData(st.nextToken(),st.nextToken());
 								}
 								break;

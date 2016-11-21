@@ -10,7 +10,7 @@ public class Config {
 
 	//Unchangeable via configuration file
 	public static final String APP_NAME="Chi";
-	public static final String VERSION="v1.2 Build 163";
+	public static final String VERSION="v1.2 Build 164";
 	
 	public static final String CONFIG_FOLDER_PATH="conf";
 	public static final String CONFIG_FILE_NAME="chi_conf.sh";
@@ -21,6 +21,7 @@ public class Config {
 	public static final String ICON_TEXTURE_PATH="/images";
 	public static final int CONTROLLER_READY_TIME_MS=4000;
 	public static final int CONTROLLER_REPLY_TIMEOUT_MS=15000;
+	public static final int CONTROLLER_UPDATE_REPORT_MAX_MS=7000;
 	public static final int CONTROLLER_MAX_RETRY=3;
 	
 	private static Properties prop;
