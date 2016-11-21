@@ -125,7 +125,10 @@ public class DatabaseReading extends DatabaseCassandra {
 			ResultSet rs=executeSQL("DB Get Reading", DatabaseCassandra.getSession(), sql[0]);
 			
 			for (Row r : rs) {
-			    if (rs.getAvailableWithoutFetching() == 100 && !rs.isFullyFetched()) rs.fetchMoreResults();
+			    if (rs.getAvailableWithoutFetching() == 100 && !rs.isFullyFetched()) {
+			    	rs.fetchMoreResults();
+			    	try { Thread.sleep(100); } catch (InterruptedException e) {}
+			    }
 				SensorReading sr=new SensorReading(sn,Utility.dateToLocalDateTime(new Date(r.getTimestamp("TimeStp").getTime())),r.getDouble("Value"),Cache.Sensors.map.get(sn).denormalizeValue(r.getDouble("Value")));
 				list.addLast(sr);
 			}
@@ -150,7 +153,10 @@ public class DatabaseReading extends DatabaseCassandra {
 			Date latestDate=new Date(0);
 			double d=0;
 			for (Row r : rs) {
-			    if (rs.getAvailableWithoutFetching() == 100 && !rs.isFullyFetched()) rs.fetchMoreResults();
+			    if (rs.getAvailableWithoutFetching() == 100 && !rs.isFullyFetched()) {
+			    	rs.fetchMoreResults();
+			    	try { Thread.sleep(100); } catch (InterruptedException e) {}
+			    }
 				if (r.getTimestamp("TimeStp").after(latestDate)) d=Cache.Sensors.map.get(sn).denormalizeValue(r.getDouble("Value"));
 			}
 			return d;
@@ -174,7 +180,10 @@ public class DatabaseReading extends DatabaseCassandra {
 			sql[0].setInt(2,month);
 			ResultSet rs=executeSQL("DB Get Reading", DatabaseCassandra.getSession(), sql[0]);
 			for (Row r : rs) {
-				if (rs.getAvailableWithoutFetching() == 100 && !rs.isFullyFetched()) rs.fetchMoreResults();
+			    if (rs.getAvailableWithoutFetching() == 100 && !rs.isFullyFetched()) {
+			    	rs.fetchMoreResults();
+			    	try { Thread.sleep(100); } catch (InterruptedException e) {}
+			    }
 				list.addLast(new SensorReading(sn,Utility.dateToLocalDateTime(new Date(r.getTimestamp("TimeStp").getTime())),r.getDouble("Value"),Cache.Sensors.map.get(sn).denormalizeValue(r.getDouble("Value"))));
 			}
 			
@@ -195,7 +204,10 @@ public class DatabaseReading extends DatabaseCassandra {
 			ArrayList<UUID> idToUpdate=new ArrayList<>(); ArrayList<java.util.Date> dateList=new ArrayList<>();
 			ResultSet rs=executeSQL("DB updateSensorName", DatabaseCassandra.getSession(), "SELECT Id, SensorName, TimeStp From SensorReading");
 			for (Row r : rs) {
-				if (rs.getAvailableWithoutFetching() == 100 && !rs.isFullyFetched()) rs.fetchMoreResults();
+			    if (rs.getAvailableWithoutFetching() == 100 && !rs.isFullyFetched()) {
+			    	rs.fetchMoreResults();
+			    	try { Thread.sleep(100); } catch (InterruptedException e) {}
+			    }
 				UUID uuid=r.getUUID("Id"); String sName=r.getString("SensorName"); java.util.Date dat=r.getTimestamp("TimeStp");
 				if (sName.equals(oldSN)) {
 					idToUpdate.add(uuid);
@@ -224,7 +236,10 @@ public class DatabaseReading extends DatabaseCassandra {
 			ArrayList<UUID> idToUpdate=new ArrayList<>(); ArrayList<java.util.Date> dateList=new ArrayList<>();
 			ResultSet rs=executeSQL("DB Clear Reading", DatabaseCassandra.getSession(), "SELECT Id, SensorName, TimeStp From SensorReading");
 			for (Row r : rs) {
-				if (rs.getAvailableWithoutFetching() == 100 && !rs.isFullyFetched()) rs.fetchMoreResults();
+			    if (rs.getAvailableWithoutFetching() == 100 && !rs.isFullyFetched()) {
+			    	rs.fetchMoreResults();
+			    	try { Thread.sleep(100); } catch (InterruptedException e) {}
+			    }
 				UUID uuid=r.getUUID("Id"); String sName=r.getString("SensorName"); java.util.Date dat=r.getTimestamp("TimeStp");
 				if (sName.equals(sn)) {
 					idToUpdate.add(uuid);
@@ -255,7 +270,10 @@ public class DatabaseReading extends DatabaseCassandra {
 			ResultSet rs=executeSQL("DB Get All Reading By Sensor : ", DatabaseCassandra.getSession(), sql[0]);
 			
 			for (Row r : rs) {
-			    if (rs.getAvailableWithoutFetching() == 100 && !rs.isFullyFetched()) rs.fetchMoreResults();
+			    if (rs.getAvailableWithoutFetching() == 100 && !rs.isFullyFetched()) {
+			    	rs.fetchMoreResults();
+			    	try { Thread.sleep(100); } catch (InterruptedException e) {}
+			    }
 				SensorReading sr=new SensorReading(sn,Utility.dateToLocalDateTime(new Date(r.getTimestamp("TimeStp").getTime())),r.getDouble("Value"),Cache.Sensors.map.get(sn).denormalizeValue(r.getDouble("Value")));
 				list.addLast(sr);
 			}
