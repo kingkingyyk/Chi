@@ -41,11 +41,11 @@ public class NotificationServerSensorTracker {
 				int currState=2;
 				if (value<s.getMinthreshold()) currState=1;
 				else if (value>s.getMaxthreshold()) currState=3;
-				if (currState!=lastSensorStatus.getOrDefault(s,2)) {
+				if (currState!=lastSensorStatus.getOrDefault(sensorName,2)) {
 					if (currState==1) DatabaseEvent.logSensorEvent(sensorName,"Lower than minimum threshold",String.valueOf(value));
 					if (currState==3) DatabaseEvent.logSensorEvent(sensorName,"Higher than maximum threshold",String.valueOf(value));
-					lastSensorStatus.put(sensorName,currState);
 				}
+				lastSensorStatus.put(sensorName,currState);
 			}
 		}
 	}

@@ -65,10 +65,9 @@ public class DataServer {
 		}
 	}
 	
-	public static void fireOnReadingReceived (String name, double value) {
+	public static void fireOnReadingReceived (String name, double denormalized) {
 		Sensor s=Cache.Sensors.map.getOrDefault(name,null);
 		if (s!=null) {
-			double denormalized=s.denormalizeValue(value);
 			for (OnReadingReceived r : OnReadingReceivedCallbacks) {
 				r.run(name,denormalized);
 			}

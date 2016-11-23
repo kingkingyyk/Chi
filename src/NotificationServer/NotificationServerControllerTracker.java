@@ -15,26 +15,28 @@ import Entity.Controller;
 public class NotificationServerControllerTracker {
 
 	private static class ControllerTracker {
-		public static HashMap<Controller,ControllerTracker> trackObjs=new HashMap<>();
-		private Controller ctrl;
+		public static HashMap<String,ControllerTracker> trackObjs=new HashMap<>();
+		private String ctrlN;
 		private int reportTimeout;
 		private Date nextExpectedReportTime;
 		private Timer expireTimer;
+		private int lastReportStatus=1;
 		
-		private class OnTimerExpire extends TimerTask implements Runnable {
+		private static class OnTimerExpire extends TimerTask implements Runnable {
 			public ControllerTracker ct;
 			@Override
 			public void run() {
-				DatabaseEvent.logControllerEvent(ct.ctrl.getControllername(),"Report Not Received","Didn't report itself in expected time!");
+				if (ct.lastReportStatus==1) {
+					DatabaseEvent.logControllerEvent(ct.ctrlN,"Report Not Received","Didn't report itself in expected time!");
+					ct.lastReportStatus=2;
+				}
 			}
 		}
 		
-		public ControllerTracker (Controller c) {
-			this.ctrl=c;
-			this.reportTimeout=c.getReporttimeout();
-			trackObjs.put(c,this);
-			
-			expireTimer=new Timer();
+		public ControllerTracker (String ctrlName) {
+			this.ctrlN=ctrlName;
+			this.reportTimeout=Cache.Controllers.map.get(ctrlName).getReporttimeout();
+			trackObjs.put(this.ctrlN,this);
 		}
 		
 		public void refreshTimerTimeout(int t) {
@@ -45,8 +47,11 @@ public class NotificationServerControllerTracker {
 		}
 		
 		public void refreshTimer() {
-			nextExpectedReportTime=Utility.localDateTimeToSQLDate(LocalDateTime.now().plusSeconds(ctrl.getReporttimeout()));
+			lastReportStatus=1;
+			nextExpectedReportTime=Utility.localDateTimeToSQLDate(LocalDateTime.now().plusSeconds(Cache.Controllers.map.get(this.ctrlN).getReporttimeout()));
+			expireTimer.cancel();
 			expireTimer.purge();
+			expireTimer=new Timer();
 			OnTimerExpire t=new OnTimerExpire();
 			t.ct=this;
 			expireTimer.schedule(t, nextExpectedReportTime);
@@ -54,7 +59,7 @@ public class NotificationServerControllerTracker {
 		
 		public static void destroy (String s) {
 			for (ControllerTracker ct : trackObjs.values()) {
-				if (ct.ctrl.getControllername().equals(s)) {
+				if (ct.ctrlN.equals(s)) {
 					ct.expireTimer.purge();
 					trackObjs.remove(ct);
 					break;
@@ -63,7 +68,7 @@ public class NotificationServerControllerTracker {
 		}
 		
 		public static void destroyAll () {
-			for (ControllerTracker ct : trackObjs.values()) ct.expireTimer.purge();
+			for (ControllerTracker ct : trackObjs.values()) if (ct.expireTimer!=null) ct.expireTimer.cancel();
 			trackObjs.clear();
 		}
 	}
@@ -71,19 +76,25 @@ public class NotificationServerControllerTracker {
 
 	private static class OnControllerCreateAction implements DatabaseController.OnCreateAction {
 		public void run (String n, String s, double x, double y, int t) {
-			new ControllerTracker(Cache.Controllers.map.get(n));
+			new ControllerTracker(n);
 		}
 	}
 	
 	private static class OnControllerUpdateAction implements DatabaseController.OnUpdateAction {
 		public void run (String oldN, String n, String s, double x, double y, int t) {
-			ControllerTracker.trackObjs.get(Cache.Controllers.map.get(n)).refreshTimerTimeout(t);
+			if (!oldN.equals(n)) {
+				ControllerTracker ct=ControllerTracker.trackObjs.get(oldN);
+				ct.ctrlN=n;
+				ControllerTracker.trackObjs.remove(oldN);
+				ControllerTracker.trackObjs.put(oldN,ct);
+			}
+			ControllerTracker.trackObjs.get(n).refreshTimerTimeout(t);
 		}
 	}
 	
 	private static class OnControllerReportAction implements DatabaseController.OnReportAction {
 		public void run (String n) {
-			ControllerTracker.trackObjs.get(Cache.Controllers.map.get(n)).refreshTimer();
+			ControllerTracker.trackObjs.get(n).refreshTimer();
 		}
 	}
 	
@@ -106,7 +117,7 @@ public class NotificationServerControllerTracker {
 		DatabaseController.registerOnDeleteAction(cDeleteAction);
 		
 		for (Controller c : Cache.Controllers.map.values()) {
-			new ControllerTracker(c);
+			new ControllerTracker(c.getControllername());
 		}
 	}
 	

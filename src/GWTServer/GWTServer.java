@@ -527,9 +527,9 @@ public class GWTServer {
 		    case "44": { //ActuatorGetByName
 		    	Actuator act=Cache.Actuators.map.get(list.get(1));
 		    	ArrayList<Object> result=new ArrayList<>();
-		    	result.add(act.getName());
-		    	result.add(act.getController().getControllername());
-		    	result.add(act.getStatus());
+		    	
+		    	for (Object o : act.toObj()) result.add(o);
+		    	
 		    	return result;
 		    }
 		    case "45a" : { //ActuatorSetStatus;
