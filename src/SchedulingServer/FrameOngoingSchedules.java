@@ -88,7 +88,7 @@ public class FrameOngoingSchedules extends JFrame {
 	
 	private static class OnGoingSchedulesTableRow {
 		private ArrayList<OnGoingSchedulesTableRow> subRow;
-		private DateTimeFormatter dt=DateTimeFormatter.ofPattern("yyyy/LLL/dd KK:mm a");
+		private DateTimeFormatter dt=DateTimeFormatter.ofPattern("yyyy/LLL/dd hh:mm a");
 		public String [] renderText;
 		public SchedulingData data;
 		

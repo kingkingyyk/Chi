@@ -408,7 +408,7 @@ public class DialogControllerAddEdit extends JDialog {
 					JOptionPane.showMessageDialog(null,"Invalid information!","Add Site",JOptionPane.ERROR_MESSAGE);
 				} else {
 					WaitUI u=new WaitUI();
-					u.setText("Creating controller");
+					u.setText("Updating controller");
 					Thread t=new Thread() {
 						public void run () {
 							flag=DatabaseController.updateController(n,textFieldName.getText(),(String)comboBoxSite.getSelectedItem(),positionTargetFactor[0],positionTargetFactor[1],Integer.parseInt(textFieldReportTimeout.getText())*DialogControllerAddEdit.reportTimeoutUnitFactor[comboBoxReportTimeoutUnit.getSelectedIndex()]);

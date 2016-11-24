@@ -181,7 +181,7 @@ public class DialogSiteAddEdit extends JDialog {
 					Thread t=new Thread() {
 						public void run () {
 							String url=textFieldURL.getText();
-							if (!url.startsWith("http://")) {
+							if (!url.startsWith("http://") && !url.startsWith("https://") ) {
 								url="http://"+url;
 							}
 							flag=DatabaseSite.createSite(textFieldName.getText(),url);
@@ -239,7 +239,7 @@ public class DialogSiteAddEdit extends JDialog {
 					Thread t=new Thread() {
 						public void run () {
 							String url=textFieldURL.getText();
-							if (!url.startsWith("http://")) {
+							if (!url.startsWith("http://") && !url.startsWith("https://") ) {
 								url="http://"+url;
 							}
 							flag=DatabaseSite.updateSite(n,textFieldName.getText(),url);

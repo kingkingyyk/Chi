@@ -49,8 +49,10 @@ public class NotificationServerControllerTracker {
 		public void refreshTimer() {
 			lastReportStatus=1;
 			nextExpectedReportTime=Utility.localDateTimeToSQLDate(LocalDateTime.now().plusSeconds(Cache.Controllers.map.get(this.ctrlN).getReporttimeout()));
-			expireTimer.cancel();
-			expireTimer.purge();
+			if (expireTimer!=null) {
+				expireTimer.cancel();
+				expireTimer.purge();
+			}
 			expireTimer=new Timer();
 			OnTimerExpire t=new OnTimerExpire();
 			t.ct=this;
@@ -61,7 +63,7 @@ public class NotificationServerControllerTracker {
 			for (ControllerTracker ct : trackObjs.values()) {
 				if (ct.ctrlN.equals(s)) {
 					ct.expireTimer.purge();
-					trackObjs.remove(ct);
+					trackObjs.remove(ct.ctrlN);
 					break;
 				}
 			}

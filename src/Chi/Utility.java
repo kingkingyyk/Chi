@@ -48,8 +48,8 @@ public class Utility {
     public static boolean validateName (String s) {
     	if (s.length()==0) return false;
     	char [] ary=s.toCharArray();
-    	boolean flag=Character.isJavaIdentifierStart(ary[0]);
-    	for (int i=1;i<ary.length && flag;i++) {
+    	boolean flag=true;
+    	for (int i=0;i<ary.length && flag;i++) {
     		flag&=Character.isLetterOrDigit(ary[i]) || ary[i]=='_' || ary[i]==' ';
     	}
     	return flag;

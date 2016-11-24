@@ -29,7 +29,7 @@ public class StartScreen extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
-		lblVersion = new JLabel(Config.VERSION);
+		lblVersion = new JLabel(Config.VERSION_RELEASE);
 		lblVersion.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblVersion.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblVersion.setForeground(new Color(255,255,255,0));
