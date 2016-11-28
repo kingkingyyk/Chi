@@ -23,7 +23,7 @@ import Entity.Sensor;
 import Entity.SensorReading;
 
 public class DatabaseReading extends DatabaseCassandra {
-	public static HashMap<Sensor,Double> SensorLastReading=new HashMap<>();
+	public static HashMap<String,Double> SensorLastReading=new HashMap<>();
 	
 	public static interface OnReceivedAction {
 		public void run (String sensorName,double value);
@@ -66,7 +66,7 @@ public class DatabaseReading extends DatabaseCassandra {
 	public static void initialize() {
 		SensorLastReading.clear();
 		for (Sensor s : Cache.Sensors.map.values()) {
-			SensorLastReading.put(s,getLatestReading(s.getSensorname()));
+			SensorLastReading.put(s.getSensorname(),getLatestReading(s.getSensorname()));
 		}
 		DatabaseSensorReadingBind.initialize();
 	}
@@ -74,15 +74,19 @@ public class DatabaseReading extends DatabaseCassandra {
 	public static void updateLastReading (String sn, double reading) {
 		Sensor s=Cache.Sensors.map.getOrDefault(sn,null);
 		if (s!=null) {
-			SensorLastReading.put(s,s.denormalizeValue(reading));
+			SensorLastReading.put(s.getSensorname(),s.denormalizeValue(reading));
 		}
 	}
 	
+	public static void migrateReading (String oldSN, String newSN) {
+		SensorLastReading.put(newSN,SensorLastReading.getOrDefault(oldSN,0.0));
+		SensorLastReading.remove(oldSN);
+	}
+	
 	public static void refreshReading (String sn) {
-		Sensor s=Cache.Sensors.map.getOrDefault(sn,null);
-		if (s!=null) {
-			LinkedList<SensorReading> list =getReadingBetweenTime(s.getSensorname(),LocalDateTime.of(1990,01,01,0,0,0),LocalDateTime.now());
-			if (list.size()>0) SensorLastReading.put(s,list.get(0).getActualValue());
+		if (Cache.Sensors.map.containsKey(sn)) {
+			LinkedList<SensorReading> list =getReadingBetweenTime(sn,LocalDateTime.of(1990,01,01,0,0,0),LocalDateTime.now());
+			if (list.size()>0) SensorLastReading.put(sn,list.get(0).getActualValue());
 		}
 	}
 	

@@ -451,6 +451,9 @@ public class GWTServer {
 		    	for (SensorReading sr : lsr) result.add(new Object [] {sr.getTimestamp(),sr.getActualValue()});
 		    	return result;
 		    }
+		    case "38b" : { //SensorGetLatestReading
+		    	return DatabaseReading.SensorLastReading.getOrDefault((String)list.get(1),0.0);
+		    }
 		    case "39a" : { //ControllerEventGetByName
 		    	ArrayList<Controllerevent> ceL=DatabaseEvent.getControllerEventByName((String)list.get(1));
 		    	ArrayList<Object []> result=new ArrayList<>();

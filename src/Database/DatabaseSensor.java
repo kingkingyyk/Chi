@@ -124,6 +124,7 @@ public class DatabaseSensor {
 				tx.commit();
 				Cache.Sensors.map.put(sn,s);
 	
+				if (!oldSN.equals(sn)) DatabaseReading.migrateReading(oldSN,sn);
 				Logger.log(Logger.LEVEL_INFO,"DatabaseSensor - Update - Execute Callbacks");
 				for (OnUpdateAction a : OnUpdateList) a.run(oldSN, sn,cn,min,max,trans,unit,con,minT,maxT,px,py);
 				flag = true;
