@@ -10,8 +10,8 @@ public class Config {
 
 	//Unchangeable via configuration file
 	public static final String APP_NAME="Chi";
-	public static final String VERSION="v1.2 Build 169";
-	public static final String VERSION_RELEASE="v1.2 RC2";
+	public static final String VERSION="v1.2 Build 170";
+	public static final String VERSION_RELEASE="v1.2 RC3";
 	
 	public static final String CONFIG_FOLDER_PATH="conf";
 	public static final String CONFIG_FILE_NAME="chi_conf.sh";

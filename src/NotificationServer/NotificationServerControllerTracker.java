@@ -62,7 +62,7 @@ public class NotificationServerControllerTracker {
 		public static void destroy (String s) {
 			for (ControllerTracker ct : trackObjs.values()) {
 				if (ct.ctrlN.equals(s)) {
-					ct.expireTimer.purge();
+					if (ct.expireTimer!=null) ct.expireTimer.purge();
 					trackObjs.remove(ct.ctrlN);
 					break;
 				}
