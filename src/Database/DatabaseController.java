@@ -157,7 +157,7 @@ public class DatabaseController {
 						act.setController(ctrl);
 	
 				Logger.log(Logger.LEVEL_INFO,"DatabaseController - Update - Execute Callbacks");
-				for (OnUpdateAction a : OnUpdateList) a.run(n,n,s,x,y,t);
+				for (OnUpdateAction a : OnUpdateList) a.run(oldN,n,s,x,y,t);
 				flag = true;
 			} else Logger.log(Logger.LEVEL_WARNING,"DB Update Controller - Controller doesn't exist");
 		} catch (HibernateException e) {

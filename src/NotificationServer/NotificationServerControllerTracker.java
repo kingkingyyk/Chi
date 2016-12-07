@@ -36,7 +36,7 @@ public class NotificationServerControllerTracker {
 		public ControllerTracker (String ctrlName) {
 			this.ctrlN=ctrlName;
 			this.reportTimeout=Cache.Controllers.map.get(ctrlName).getReporttimeout();
-			trackObjs.put(this.ctrlN,this);
+			trackObjs.put(ctrlName,this);
 		}
 		
 		public void refreshTimerTimeout(int t) {
@@ -88,7 +88,7 @@ public class NotificationServerControllerTracker {
 				ControllerTracker ct=ControllerTracker.trackObjs.get(oldN);
 				ct.ctrlN=n;
 				ControllerTracker.trackObjs.remove(oldN);
-				ControllerTracker.trackObjs.put(oldN,ct);
+				ControllerTracker.trackObjs.put(n,ct);
 			}
 			ControllerTracker.trackObjs.get(n).refreshTimerTimeout(t);
 		}
