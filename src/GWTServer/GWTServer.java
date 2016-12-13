@@ -751,13 +751,13 @@ public class GWTServer {
 		    	return DatabaseReading.getAverageReadingGroupByYear((String)list.get(1));
 		    }
 		    case "71a" : {
-		    	return DatabaseReading.getCulmulativeReadingGroupByDay((String)list.get(1));
+		    	return DatabaseReading.getCumulativeReadingGroupByDay((String)list.get(1));
 		    }
 		    case "71b" : {
-		    	return DatabaseReading.getCulmulativeReadingGroupByMonth((String)list.get(1));
+		    	return DatabaseReading.getCumulativeReadingGroupByMonth((String)list.get(1));
 		    }
 		    case "71c" : {
-		    	return DatabaseReading.getCulmulativeReadingGroupByYear((String)list.get(1));
+		    	return DatabaseReading.getCumulativeReadingGroupByYear((String)list.get(1));
 		    }
 	    }
 	    return null;

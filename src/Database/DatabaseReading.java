@@ -500,69 +500,90 @@ public class DatabaseReading extends DatabaseCassandra {
 	}
 	
 	
-	private static ArrayList<Object []> getCulmulativeReadingGroupBy (String sn, int keyLevel) {
+	private static ArrayList<Object []> getCumulativeReadingGroupBy (String sn, int keyLevel) {
 		LinkedList<SensorReading> list=getAllReadingBySensor(sn);
 		Collections.sort(list);
 		
 		ArrayList<Object []> toReturn=new ArrayList<>();
 		double currSum=0;
+		
+		Object [] o=new Object [keyLevel+1];
+		String key="";
 		for (SensorReading sr : list) {
-			Object [] o=new Object [keyLevel+1];
+			String currKey="";
+			if (keyLevel>=KEY_LEVEL_YEAR) currKey+=sr.getTimestamp().getYear()+"_";
+			if (keyLevel>=KEY_LEVEL_MONTH) currKey+=sr.getTimestamp().getMonthValue()+"_";
+			if (keyLevel>=KEY_LEVEL_DAY) currKey+=sr.getTimestamp().getDayOfMonth()+"_";
 			
-			if (keyLevel>=KEY_LEVEL_YEAR) o[0]=sr.getTimestamp().getYear();
-			if (keyLevel>=KEY_LEVEL_MONTH) o[1]=sr.getTimestamp().getMonthValue();
-			if (keyLevel>=KEY_LEVEL_DAY) o[2]=sr.getTimestamp().getDayOfMonth();
+			if (!currKey.equals(key)) {
+				o=new Object[keyLevel+1];
+				toReturn.add(o);
+				
+				if (keyLevel>=KEY_LEVEL_YEAR) o[0]=sr.getTimestamp().getYear();
+				if (keyLevel>=KEY_LEVEL_MONTH) o[1]=sr.getTimestamp().getMonthValue();
+				if (keyLevel>=KEY_LEVEL_DAY) o[2]=sr.getTimestamp().getDayOfMonth();
+				key=currKey;
+			}
 			
 			currSum+=sr.getActualValue();
 			o[o.length-1]=currSum;
-			
-			toReturn.add(o);
+
 		}
 		return toReturn;
 	}
 	
-	public static ArrayList<Object []> getCulmulativeReadingGroupByDay (String sn) {
-		return getCulmulativeReadingGroupBy(sn,KEY_LEVEL_DAY);
+	public static ArrayList<Object []> getCumulativeReadingGroupByDay (String sn) {
+		return getCumulativeReadingGroupBy(sn,KEY_LEVEL_DAY);
 	}
 	
-	public static ArrayList<Object []> getCulmulativeReadingGroupByMonth (String sn) {
-		return getCulmulativeReadingGroupBy(sn,KEY_LEVEL_MONTH);
+	public static ArrayList<Object []> getCumulativeReadingGroupByMonth (String sn) {
+		return getCumulativeReadingGroupBy(sn,KEY_LEVEL_MONTH);
 	}
 	
-	public static ArrayList<Object []> getCulmulativeReadingGroupByYear (String sn) {
-		return getCulmulativeReadingGroupBy(sn,KEY_LEVEL_YEAR);
+	public static ArrayList<Object []> getCumulativeReadingGroupByYear (String sn) {
+		return getCumulativeReadingGroupBy(sn,KEY_LEVEL_YEAR);
 	}
 	
-	private static ArrayList<Object []> getCulmulativeReadingBetweenTime (String sn, int keyLevel, LocalDateTime st, LocalDateTime et) {
+	private static ArrayList<Object []> getCumulativeReadingBetweenTime (String sn, int keyLevel, LocalDateTime st, LocalDateTime et) {
 		LinkedList<SensorReading> list=getReadingBetweenTime(sn,st,et);
 		Collections.sort(list);
 		
 		ArrayList<Object []> toReturn=new ArrayList<>();
 		double currSum=0;
+		
+		Object [] o=new Object [keyLevel+1];
+		String key="";
 		for (SensorReading sr : list) {
-			Object [] o=new Object [keyLevel+1];
+			String currKey="";
+			if (keyLevel>=KEY_LEVEL_YEAR) currKey+=sr.getTimestamp().getYear()+"_";
+			if (keyLevel>=KEY_LEVEL_MONTH) currKey+=sr.getTimestamp().getMonthValue()+"_";
+			if (keyLevel>=KEY_LEVEL_DAY) currKey+=sr.getTimestamp().getDayOfMonth()+"_";
 			
-			if (keyLevel>=KEY_LEVEL_YEAR) o[0]=sr.getTimestamp().getYear();
-			if (keyLevel>=KEY_LEVEL_MONTH) o[1]=sr.getTimestamp().getMonthValue();
-			if (keyLevel>=KEY_LEVEL_DAY) o[2]=sr.getTimestamp().getDayOfMonth();
+			if (!currKey.equals(key)) {
+				o=new Object[keyLevel+1];
+				toReturn.add(o);
+				
+				if (keyLevel>=KEY_LEVEL_YEAR) o[0]=sr.getTimestamp().getYear();
+				if (keyLevel>=KEY_LEVEL_MONTH) o[1]=sr.getTimestamp().getMonthValue();
+				if (keyLevel>=KEY_LEVEL_DAY) o[2]=sr.getTimestamp().getDayOfMonth();
+				key=currKey;
+			}
 			
 			currSum+=sr.getActualValue();
 			o[o.length-1]=currSum;
-			
-			toReturn.add(o);
 		}
 		return toReturn;
 	}
 	
-	public static ArrayList<Object []> getCulmulativeReadingGroupByDayBetweenTime (String sn, LocalDateTime st, LocalDateTime et) {
-		return getCulmulativeReadingBetweenTime(sn,KEY_LEVEL_DAY,st,et);
+	public static ArrayList<Object []> getCumulativeReadingGroupByDayBetweenTime (String sn, LocalDateTime st, LocalDateTime et) {
+		return getCumulativeReadingBetweenTime(sn,KEY_LEVEL_DAY,st,et);
 	}
 	
-	public static ArrayList<Object []> getCulmulativeReadingGroupByMonthBetweenTime (String sn, LocalDateTime st, LocalDateTime et) {
-		return getCulmulativeReadingBetweenTime(sn,KEY_LEVEL_MONTH,st,et);
+	public static ArrayList<Object []> getCumulativeReadingGroupByMonthBetweenTime (String sn, LocalDateTime st, LocalDateTime et) {
+		return getCumulativeReadingBetweenTime(sn,KEY_LEVEL_MONTH,st,et);
 	}
 	
-	public static ArrayList<Object []> getCulmulativeReadingGroupByYearBetweenTime (String sn, LocalDateTime st, LocalDateTime et) {
-		return getCulmulativeReadingBetweenTime(sn,KEY_LEVEL_YEAR,st,et);
+	public static ArrayList<Object []> getCumulativeReadingGroupByYearBetweenTime (String sn, LocalDateTime st, LocalDateTime et) {
+		return getCumulativeReadingBetweenTime(sn,KEY_LEVEL_YEAR,st,et);
 	}
 }

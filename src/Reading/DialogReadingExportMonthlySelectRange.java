@@ -66,8 +66,8 @@ public class DialogReadingExportMonthlySelectRange extends JDialog {
 				    		ReadingExport.export(fc.getSelectedFile(),s.getSensorname(),exportColumns,DatabaseReading.getAverageReadingGroupByMonthBetweenTime(s.getSensorname(), st, et));
 				    		break;
 				    	}
-				    	case "Culmulative" : {
-				    		ReadingExport.export(fc.getSelectedFile(),s.getSensorname(),exportColumns,DatabaseReading.getCulmulativeReadingGroupByMonthBetweenTime(s.getSensorname(), st, et));
+				    	case "Cumulative" : {
+				    		ReadingExport.export(fc.getSelectedFile(),s.getSensorname(),exportColumns,DatabaseReading.getCumulativeReadingGroupByMonthBetweenTime(s.getSensorname(), st, et));
 				    		break;
 				    	}   	
 			    	}
@@ -91,7 +91,7 @@ public class DialogReadingExportMonthlySelectRange extends JDialog {
 		comboBoxAggregation.setBounds(81, 107, 224, 20);
 		comboBoxAggregation.addItem("Sum");
 		comboBoxAggregation.addItem("Average");
-		comboBoxAggregation.addItem("Culmulative");
+		comboBoxAggregation.addItem("Cumulative");
 		
 		JLabel lblAggregation = new JLabel("Aggregation :");
 		lblAggregation.setBounds(10, 110, 67, 14);

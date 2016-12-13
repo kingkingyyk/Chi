@@ -73,8 +73,8 @@ public class DialogReadingExportDailySelectRange extends JDialog {
 				    		ReadingExport.export(fc.getSelectedFile(),s.getSensorname(),exportColumns,DatabaseReading.getAverageReadingGroupByDayBetweenTime(s.getSensorname(), st, et));
 				    		break;
 				    	}
-				    	case "Culmulative" : {
-				    		ReadingExport.export(fc.getSelectedFile(),s.getSensorname(),exportColumns,DatabaseReading.getCulmulativeReadingGroupByDayBetweenTime(s.getSensorname(), st, et));
+				    	case "Cumulative" : {
+				    		ReadingExport.export(fc.getSelectedFile(),s.getSensorname(),exportColumns,DatabaseReading.getCumulativeReadingGroupByDayBetweenTime(s.getSensorname(), st, et));
 				    		break;
 				    	}   	
 			    	}
@@ -98,7 +98,7 @@ public class DialogReadingExportDailySelectRange extends JDialog {
 		comboBoxAggregation.setBounds(86, 111, 250, 20);
 		comboBoxAggregation.addItem("Sum");
 		comboBoxAggregation.addItem("Average");
-		comboBoxAggregation.addItem("Culmulative");
+		comboBoxAggregation.addItem("Cumulative");
 		
 		JLabel lblAggregation = new JLabel("Aggregation :");
 		lblAggregation.setBounds(10, 114, 67, 14);
