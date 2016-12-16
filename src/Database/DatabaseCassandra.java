@@ -33,6 +33,7 @@ public class DatabaseCassandra {
 					DatabaseReading.initialize();
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "Error when connecting to Cassandra server.\n"+e.getMessage(), "Chi", JOptionPane.ERROR_MESSAGE);
+					session=cluster.connect();
 				}
 			}
 		};
