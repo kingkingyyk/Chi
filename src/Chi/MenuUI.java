@@ -115,7 +115,7 @@ public class MenuUI extends JFrame {
 			}
 		});
 		btnExit.setFocusPainted(false);
-		btnExit.setBounds(463, 6, 51, 36);
+		btnExit.setBounds(448, 6, 66, 36);
 		contentPane.add(btnExit);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
