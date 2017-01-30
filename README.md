@@ -2,7 +2,10 @@
 A system built for Internet of Things
 + Supports remote management (GWT Web-based UI)
 + Supports automated management (Server GUI + GWT Web-based UI)
++ Release : https://github.com/kingkingyyk/Chi-Releases
 + Web UI repo : https://github.com/zktaichou/fyp
++ Award winning
+![alt text](http://i.imgur.com/aBeVFAG.jpg)
 
 Requires :
 + Apache Cassandra
@@ -43,9 +46,6 @@ Current Working Stuffs :
 + Sensor Actuator Response Automation
 + Report Exporting
 + Live Animated Update Chart with Prediction
-
-v1.2 To-Do-List :
-+ Release Testing
 
 v1.3 Upcoming Features :
 + New cache engine
