@@ -48,5 +48,20 @@
   		<artifactId>vertx-web</artifactId>
   		<version>3.5.1</version>
   	</dependency>
+  	<dependency>
+  		<groupId>org.slf4j</groupId>
+  		<artifactId>slf4j-simple</artifactId>
+  		<version>1.7.25</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>io.netty</groupId>
+  		<artifactId>netty-handler</artifactId>
+  		<version>4.1.22.Final</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>io.vertx</groupId>
+  		<artifactId>vertx-auth-common</artifactId>
+  		<version>3.5.1</version>
+  	</dependency>
   </dependencies>
 </project>

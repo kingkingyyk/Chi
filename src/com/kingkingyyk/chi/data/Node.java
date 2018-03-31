@@ -7,15 +7,16 @@ import com.datastax.driver.mapping.annotations.PartitionKey;
 import com.datastax.driver.mapping.annotations.Table;
 
 @Table(keyspace="Chi", name = "nodes", 
-		readConsistency="ALL", writeConsistency="ALL", 
+		readConsistency="ANY", writeConsistency="ANY", 
 		caseSensitiveKeyspace=false, caseSensitiveTable=false)
-
+//CREATE TABLE Chi.nodes(id UUID PRIMARY KEY, name text, site_id UUID, mapX double, mapY double);
 public class Node {
 	@PartitionKey
 	@Column(name = "id") private UUID id;
 	@Column(name = "name") private String name;
-	@Column(name = "mapX") private double mapX;
-	@Column(name = "mapY") private double mapY;
+	@Column(name = "site_id") private UUID siteId;
+	@Column(name = "mapX") private double mapx;
+	@Column(name = "mapY") private double mapy;
 	
 	public Node() {}
 }

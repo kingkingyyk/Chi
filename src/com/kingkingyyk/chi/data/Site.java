@@ -7,9 +7,9 @@ import com.datastax.driver.mapping.annotations.PartitionKey;
 import com.datastax.driver.mapping.annotations.Table;
 
 @Table(keyspace="Chi", name = "sites", 
-		readConsistency="ALL", writeConsistency="ALL", 
+		readConsistency="ANY", writeConsistency="ANY", 
 		caseSensitiveKeyspace=false, caseSensitiveTable=false)
-
+//CREATE TABLE Chi.sites(id UUID PRIMARY KEY, name text, mapURL text);
 public class Site {
 	@PartitionKey
 	@Column(name = "id") private UUID id;
