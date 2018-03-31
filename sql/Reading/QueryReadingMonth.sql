@@ -1,1 +1,0 @@
-SELECT TimeStp,Value FROM SensorReading WHERE SensorName=? AND Year=? AND Month=? ALLOW FILTERING;

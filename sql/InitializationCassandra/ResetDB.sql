@@ -1,3 +1,0 @@
-USE Chi
-@
-DROP KEYSPACE Chi

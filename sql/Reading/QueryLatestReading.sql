@@ -1,1 +1,0 @@
-SELECT TimeStp, Value FROM SensorReading WHERE SensorName=? LIMIT 1 ALLOW FILTERING;
