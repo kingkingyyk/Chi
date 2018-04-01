@@ -1,4 +1,4 @@
-package com.kingkingyyk.chi.data;
+package com.kingkingyyk.chi.data.obj;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
