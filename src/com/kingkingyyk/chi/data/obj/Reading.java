@@ -11,8 +11,8 @@ import com.datastax.driver.mapping.annotations.Table;
 @Table(keyspace="Chi", name = "readings", 
 	readConsistency="ANY", writeConsistency="ANY", 
 	caseSensitiveKeyspace=false, caseSensitiveTable=false)
-//CREATE TABLE Chi.readings(id UUID, probe_id UUID, received_time timestamp, value double, tvalue double, PRIMARY KEY(id,received_time));
 public class Reading {
+	public static final String CREATION_SQL = "CREATE TABLE IF NOT EXISTS Chi.readings(id UUID, probe_id UUID, received_time timestamp, value double, tvalue double, PRIMARY KEY(id,received_time));";
 	@PartitionKey(0) @Column(name = "id") private UUID id;
 	@Column(name = "probe_id") private UUID probe_id;
 	@PartitionKey(1) @ClusteringColumn @Column(name = "received_time") private LocalDateTime receivedTime;

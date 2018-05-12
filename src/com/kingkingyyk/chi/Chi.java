@@ -17,6 +17,16 @@ public class Chi {
 		
 		Database.initialize(Config.cassandra);
 		REST.initialize(Config.rest);
+		setupShutdownHook();
+	}
+	
+	private static void setupShutdownHook() {
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			public void run () {
+				Logger.getLogger(Chi.class.getName()).info("Ctrl+C detected.");
+				shutdown();
+			};
+		});
 	}
 	
 	public static boolean shutdown() {

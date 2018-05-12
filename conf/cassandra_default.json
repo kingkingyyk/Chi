@@ -1,9 +1,10 @@
 {
-	"cluster-name": "Test Cluster",
-	"endpoints" : [
-		{
-			"host": "192.168.0.48",
-			"port": 9042
-		}
-	]
+	"cluster-name":"Test Cluster",
+	"replication": "'class': 'SimpleStrategy', 'replication_factor': 1",
+	"endpoints":[
+					{
+						"host":"192.168.0.152",
+						"port":9042
+					}
+				]
 }

@@ -6,13 +6,13 @@ import com.datastax.driver.mapping.annotations.Column;
 import com.datastax.driver.mapping.annotations.PartitionKey;
 import com.datastax.driver.mapping.annotations.Table;
 
-import io.vertx.core.json.JsonObject;
 
 @Table(keyspace="Chi", name = "users", 
 		readConsistency="ANY", writeConsistency="ANY", 
 		caseSensitiveKeyspace=false, caseSensitiveTable=false)
-//CREATE TABLE Chi.users(id UUID PRIMARY KEY, name text, password text);
+
 public class User {
+	public static final String CREATION_SQL = "CREATE TABLE IF NOT EXISTS Chi.users(id UUID PRIMARY KEY, name text, password text);";
 	@PartitionKey
 	@Column(name = "id") private UUID id;
 	@Column(name = "name") private String name;

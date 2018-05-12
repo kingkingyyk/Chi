@@ -9,8 +9,8 @@ import com.datastax.driver.mapping.annotations.Table;
 @Table(keyspace="Chi", name = "sites", 
 		readConsistency="ANY", writeConsistency="ANY", 
 		caseSensitiveKeyspace=false, caseSensitiveTable=false)
-//CREATE TABLE Chi.sites(id UUID PRIMARY KEY, name text, mapURL text);
 public class Site {
+	public static final String CREATION_SQL = "CREATE TABLE IF NOT EXISTS Chi.sites(id UUID PRIMARY KEY, name text, mapURL text);";
 	@PartitionKey
 	@Column(name = "id") private UUID id;
 	@Column(name = "name") private String name;

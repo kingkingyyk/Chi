@@ -15,6 +15,7 @@ import io.vertx.core.json.JsonObject;
 public class Cassandra {
 	public static final String FILENAME = "cassandra";
 	public String clusterName;
+	public String replication;
 	public List<InetSocketAddress> endpoints=new ArrayList<>();
 	
 	private static File getSavedConfig() {
@@ -38,6 +39,7 @@ public class Cassandra {
 	}
 	
 	private static final String KEY_CLUSTERNAME = "cluster-name";
+	private static final String KEY_REPLICATION = "replication";
 	private static final String KEY_ENDPOINTS = "endpoints";
 	private static final String KEY_ENDPOINTS_HOST = "host";
 	private static final String KEY_ENDPOINTS_PORT = "port";
@@ -46,6 +48,7 @@ public class Cassandra {
 		JsonObject obj = new JsonObject(new String(Files.readAllBytes(f.toPath())));
 		Cassandra c = new Cassandra();
 		c.clusterName = obj.getString(KEY_CLUSTERNAME);
+		c.replication = obj.getString(KEY_REPLICATION);
 		JsonArray endpoints = obj.getJsonArray(KEY_ENDPOINTS);
 		for (int i=0;i<endpoints.size();i++) {
 			JsonObject endpointObj = endpoints.getJsonObject(i);
@@ -58,6 +61,7 @@ public class Cassandra {
 		File saved=Cassandra.getSavedConfig();
 		JsonObject obj=new JsonObject();
 		obj.put(KEY_CLUSTERNAME, this.clusterName);
+		obj.put(KEY_REPLICATION, this.replication);
 		JsonArray endpoints=new JsonArray();
 		obj.put(KEY_ENDPOINTS, endpoints);
 		for (int i=0;i<this.endpoints.size();i++) {
