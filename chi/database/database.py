@@ -19,6 +19,7 @@ class Database(object):
                                 load_balancing_policy=RoundRobinPolicy(),
                                 control_connection_timeout=self.config.query_timeout)
         self._session = self._cluster.connect()
+        self._session.default_timeout = self.config.connection_timeout
         self._session_name = self.config.keyspace+'_'+str(time.time())
         connection.register_connection(name=self._session_name,
                                        session=self._session,

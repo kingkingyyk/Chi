@@ -6,6 +6,7 @@ class DatabaseConfig(Config):
     _KEYSPACE_KEY = 'keyspace'
     _REPLICATION_KEY = 'replication-factor'
     _EXECUTOR_THREADS_KEY = 'executor-threads'
+    _CONNECTION_TIMEOUT_KEY = 'connection-timeout'
     _QUERY_TIMEOUT_KEY = 'query-timeout'
     _ENDPOINTS_KEY = 'endpoints'
     _ENDPOINTS_HOST_KEY = 'hosts'
@@ -15,6 +16,7 @@ class DatabaseConfig(Config):
     _DEFAULT_KEYSPACE = 'chi'
     _DEFAULT_REPLICATIION = 1
     _DEFAULT_EXECUTOR_THREADS = 10
+    _DEFAULT_CONNECTION_TIMEOUT = 20.0
     _DEFAULT_QUERY_TIMEOUT = 10.0
     _DEFAULT_ENDPOINT_HOSTS = ['192.168.0.152']
     _DEFAULT_ENDPOINT_PORT = 9042
@@ -27,6 +29,7 @@ class DatabaseConfig(Config):
         self.keyspace = DatabaseConfig._DEFAULT_KEYSPACE
         self.replication = DatabaseConfig._DEFAULT_REPLICATIION
         self.executor_threads = DatabaseConfig._DEFAULT_EXECUTOR_THREADS
+        self.connection_timeout = DatabaseConfig._DEFAULT_CONNECTION_TIMEOUT
         self.query_timeout = DatabaseConfig._DEFAULT_QUERY_TIMEOUT
 
         self.settings[DatabaseConfig._ENDPOINTS_KEY] = {}
@@ -64,6 +67,14 @@ class DatabaseConfig(Config):
     @executor_threads.setter
     def executor_threads(self, n):
         self.settings[DatabaseConfig._EXECUTOR_THREADS_KEY] = n
+
+    @property
+    def connection_timeout(self):
+        return self.settings[DatabaseConfig._CONNECTION_TIMEOUT_KEY]
+
+    @connection_timeout.setter
+    def connection_timeout(self, n):
+        self.settings[DatabaseConfig._CONNECTION_TIMEOUT_KEY] = n
 
     @property
     def query_timeout(self):
