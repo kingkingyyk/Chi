@@ -4,16 +4,18 @@ class DatabaseConfig(Config):
     _CONFIG_FILE = 'cassandra.json'
     _CLUSTER_NAME_KEY = 'cluster-name'
     _KEYSPACE_KEY = 'keyspace'
-    _REPLICATION_KEY = 'replication'
+    _REPLICATION_KEY = 'replication-factor'
     _EXECUTOR_THREADS_KEY = 'executor-threads'
+    _QUERY_TIMEOUT_KEY = 'query-timeout'
     _ENDPOINTS_KEY = 'endpoints'
     _ENDPOINTS_HOST_KEY = 'hosts'
     _ENDPOINTS_PORT_KEY = 'port'
 
     _DEFAULT_CLUSTER_NAME = 'Test Cluster'
-    _DEFAULT_KEYSPACE = 'Chi'
-    _DEFAULT_REPLICATIION = '\'class\': \'SimpleStrategy\', \'replication_factor\': 1'
+    _DEFAULT_KEYSPACE = 'chi'
+    _DEFAULT_REPLICATIION = 1
     _DEFAULT_EXECUTOR_THREADS = 10
+    _DEFAULT_QUERY_TIMEOUT = 10.0
     _DEFAULT_ENDPOINT_HOSTS = ['192.168.0.152']
     _DEFAULT_ENDPOINT_PORT = 9042
 
@@ -21,15 +23,15 @@ class DatabaseConfig(Config):
         super().__init__(DatabaseConfig._CONFIG_FILE)
 
     def _init_default(self):
-        self.settings = {DatabaseConfig._CLUSTER_NAME_KEY: DatabaseConfig._DEFAULT_CLUSTER_NAME,
-                         DatabaseConfig._KEYSPACE_KEY: DatabaseConfig._DEFAULT_KEYSPACE,
-                         DatabaseConfig._REPLICATION_KEY: DatabaseConfig._DEFAULT_REPLICATIION,
-                         DatabaseConfig._EXECUTOR_THREADS_KEY: DatabaseConfig._DEFAULT_EXECUTOR_THREADS,
-                         DatabaseConfig._ENDPOINTS_KEY:  {
-                                                            DatabaseConfig._ENDPOINTS_HOST_KEY: DatabaseConfig._DEFAULT_ENDPOINT_HOSTS,
-                                                            DatabaseConfig._ENDPOINTS_PORT_KEY: DatabaseConfig._DEFAULT_ENDPOINT_PORT
-                                                        }
-                         }
+        self.cluster_name = DatabaseConfig._DEFAULT_CLUSTER_NAME
+        self.keyspace = DatabaseConfig._DEFAULT_KEYSPACE
+        self.replication = DatabaseConfig._DEFAULT_REPLICATIION
+        self.executor_threads = DatabaseConfig._DEFAULT_EXECUTOR_THREADS
+        self.query_timeout = DatabaseConfig._DEFAULT_QUERY_TIMEOUT
+
+        self.settings[DatabaseConfig._ENDPOINTS_KEY] = {}
+        self.endpoints = DatabaseConfig._DEFAULT_ENDPOINT_HOSTS
+        self.endpoints_port = DatabaseConfig._DEFAULT_ENDPOINT_PORT
 
     @property
     def cluster_name(self):
@@ -37,7 +39,7 @@ class DatabaseConfig(Config):
 
     @cluster_name.setter
     def cluster_name(self, n):
-        self.settings[DatabaseConfig._CLUSTER_NAME_KEY]
+        self.settings[DatabaseConfig._CLUSTER_NAME_KEY] = n
 
     @property
     def keyspace(self):
@@ -45,7 +47,7 @@ class DatabaseConfig(Config):
 
     @keyspace.setter
     def keyspace(self, n):
-        self.settings[DatabaseConfig._KEYSPACE_KEY]
+        self.settings[DatabaseConfig._KEYSPACE_KEY] = n
 
     @property
     def replication(self):
@@ -53,7 +55,7 @@ class DatabaseConfig(Config):
 
     @replication.setter
     def replication(self, n):
-        self.settings[DatabaseConfig._REPLICATION_KEY]
+        self.settings[DatabaseConfig._REPLICATION_KEY] = n
 
     @property
     def executor_threads(self):
@@ -62,6 +64,14 @@ class DatabaseConfig(Config):
     @executor_threads.setter
     def executor_threads(self, n):
         self.settings[DatabaseConfig._EXECUTOR_THREADS_KEY] = n
+
+    @property
+    def query_timeout(self):
+        return self.settings[DatabaseConfig._QUERY_TIMEOUT_KEY]
+
+    @query_timeout.setter
+    def query_timeout(self, n):
+        self.settings[DatabaseConfig._QUERY_TIMEOUT_KEY] = n
 
     @property
     def endpoints_port(self):
