@@ -11,8 +11,9 @@ class TestSite(TestModelBase):
         site.save()
         self.id = site.id
 
-    def test_create(self):
-        site = Site.objects().first()
+    def test_query(self):
+        site = Site.objects(id=self.id).first()
+        assert site.id == self.id
         assert site.name == self.name
         assert site.map_url == self.url
 
@@ -22,6 +23,7 @@ class TestSite(TestModelBase):
         Site.objects(id=self.id).update(name=new_name, map_url=new_url)
 
         site = Site.objects(id=self.id).first()
+        assert site.id == self.id
         assert site.name == new_name
         assert site.map_url == new_url
 

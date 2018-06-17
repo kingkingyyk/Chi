@@ -1,6 +1,7 @@
 from .test_model import TestModelBase
 from chi.database.model.model import Site, Node
 
+
 class TestNode(TestModelBase):
 
     def create_model_object(self):
@@ -14,23 +15,27 @@ class TestNode(TestModelBase):
         node.save()
         self.id = node.id
 
-    def test_create(self):
-        node = Node.objects().first()
+    def test_query(self):
+        node = Node.objects(id=self.id).first()
+        assert node.id == self.id
         assert node.name == self.name
         assert node.map_x == self.x
         assert node.map_y == self.y
 
-    """
     def test_update(self):
         new_name = 'abcde'
-        User.objects(id=self.id, username=self.username).update(password=new_password)
+        new_x = -8.0
+        new_y = 8.0
+        Node.objects(id=self.id).update(name=new_name, map_x=new_x, map_y=new_y)
 
-        user = User.objects(id=self.id, username=self.username).first()
-        assert user.password == new_password
+        node = Node.objects(id=self.id).first()
+        assert node.id == self.id
+        assert node.name == new_name
+        assert node.map_x == new_x
+        assert node.map_y == new_y
 
     def test_delete(self):
-        user = User.objects(id=self.id, username=self.username).first()
-        user.delete()
+        node = Node.objects(id=self.id).first()
+        node.delete()
 
-        assert User.objects(id=self.id, username=self.username).count() == 0
-    """
+        assert Node.objects(id=self.id).count() == 0

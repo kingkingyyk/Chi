@@ -5,7 +5,7 @@ from uuid import uuid4
 
 class User(Model):
     id = columns.UUID(primary_key=True, default=uuid4, partition_key=True)
-    username = columns.Text(primary_key=True, required=True)
+    username = columns.Text(required=True)
     password = columns.Text(required=True)
 
 
