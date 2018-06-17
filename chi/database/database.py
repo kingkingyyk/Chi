@@ -32,12 +32,9 @@ class Database(object):
 
         self._session.set_keyspace(self.config.keyspace)
         logging.info('Keyspace initialization done, synchronizing tables...')
-        sync_table(User, keyspaces=[self.config.keyspace], connections=[self._session_name])
-        sync_table(Site, keyspaces=[self.config.keyspace], connections=[self._session_name])
-        sync_table(Node, keyspaces=[self.config.keyspace], connections=[self._session_name])
-        sync_table(Control, keyspaces=[self.config.keyspace], connections=[self._session_name])
-        sync_table(Probe, keyspaces=[self.config.keyspace], connections=[self._session_name])
-        sync_table(Reading, keyspaces=[self.config.keyspace], connections=[self._session_name])
+        obj_classes = [User, Site, Node, Control, Probe, Reading]
+        for obj_class in obj_classes:
+            sync_table(obj_class, keyspaces=[self.config.keyspace], connections=[self._session_name])
         Database._LOGGER.info('Done synchronizing tables.')
 
     def reset(self):
@@ -45,6 +42,12 @@ class Database(object):
         drop_keyspace(self.config.keyspace, connections=[self._session_name])
         Database._LOGGER.info('Keyspace is dropped.')
         self._init_table()
+
+    def truncate(self):
+        obj_classes = [User, Site, Node, Control, Probe, Reading]
+        for obj_class in obj_classes:
+            for obj in obj_class.objects.all():
+                obj.delete()
 
     def shutdown(self):
         self._session.shutdown()

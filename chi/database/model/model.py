@@ -11,13 +11,13 @@ class User(Model):
 
 class Site(Model):
     id = columns.UUID(primary_key=True, default=uuid4, partition_key=True)
-    name = columns.Text(primary_key=True, required=True)
+    name = columns.Text(required=True)
     map_url = columns.Text(required=True)
 
 
 class Node(Model):
     id = columns.UUID(primary_key=True, default=uuid4, partition_key=True)
-    name = columns.Text(primary_key=True, required=True)
+    name = columns.Text(required=True)
     site_id = columns.UUID(required=True)
     map_x = columns.Float(required=True)
     map_y = columns.Float(required=True)
@@ -25,7 +25,7 @@ class Node(Model):
 
 class Control(Model):
     id = columns.UUID(primary_key=True, default=uuid4, partition_key=True)
-    name = columns.Text(primary_key=True, required=True)
+    name = columns.Text(required=True)
     node_id = columns.UUID(required=True)
     site_id = columns.UUID(required=True)
     map_x = columns.Float(required=True)
@@ -34,7 +34,7 @@ class Control(Model):
 
 class Probe(Model):
     id = columns.UUID(primary_key=True, default=uuid4, partition_key=True)
-    name = columns.Text(primary_key=True, required=True)
+    name = columns.Text(required=True)
     node_id = columns.UUID(required=True)
     site_id = columns.UUID(required=True)
     map_x = columns.Float(required=True)
