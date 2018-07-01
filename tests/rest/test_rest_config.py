@@ -6,7 +6,7 @@ class TestRESTConfig(object):
 
     def test_default_settings(self):
         rest_config = RESTConfig()
-        assert rest_config.port is RESTConfig._DEFAULT_PORT
+        assert rest_config.port == RESTConfig._DEFAULT_PORT
 
 
     def test_persist_settings(self):

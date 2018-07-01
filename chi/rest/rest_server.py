@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, make_response
 from gevent import monkey
 from gevent.pywsgi import WSGIServer
 import threading
@@ -11,14 +11,12 @@ class RESTServer (threading.Thread):
         threading.Thread.__init__(self)
         self.config = config
 
-    def run(self):
         monkey.patch_all()
-        app = Flask('Chi')
-        app.config.update(DEBUG=True)
+        self.app = Flask('Chi')
+        self.app.config.update(DEBUG=True)
+        AdminView.register(self.app)
+        UserView.register(self.app)
 
-        AdminView.register(app)
-        UserView.register(app)
-
-        rest_server = WSGIServer(('', self.config.port), app)
+    def run(self):
+        rest_server = WSGIServer(('0.0.0.0', self.config.port), self.app)
         rest_server.serve_forever()
-
