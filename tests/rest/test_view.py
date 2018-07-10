@@ -1,9 +1,12 @@
 import pytest
 from chi.globals import main
 from chi.globals.main import ChiServer
+from chi.database.db_config import DatabaseConfig
+from chi.database.database import Database
+from ..database.model.test_model import TestModelBase
 
+class TestView(TestModelBase):
 
-class TestView(object):
 
     @pytest.fixture
     def client(self):

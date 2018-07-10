@@ -1,13 +1,20 @@
 from cassandra.cqlengine.models import Model
 from cassandra.cqlengine import columns
 from uuid import uuid4
-
+import bcrypt
 
 class User(Model):
+    PASSWORD_ENCODING = 'UTF-8'
     id = columns.UUID(primary_key=True, default=uuid4, partition_key=True)
-    username = columns.Text(required=True)
-    password = columns.Text(required=True)
+    username = columns.Text(required=True, index=True)
+    password = columns.Bytes(required=True)
 
+    @staticmethod
+    def encrypt_password(val):
+        return bcrypt.hashpw(val.encode(User.PASSWORD_ENCODING), bcrypt.gensalt())
+
+    def is_password_match(self, val):
+        return bcrypt.hashpw(val.encode(User.PASSWORD_ENCODING), self.password) == self.password
 
 class Site(Model):
     id = columns.UUID(primary_key=True, default=uuid4, partition_key=True)
@@ -48,3 +55,9 @@ class Reading(Model):
     probe_id = columns.UUID(required=True)
     received_time = columns.DateTime(primary_key=True, clustering_order='DESC')
     raw_value = columns.Double(required=True)
+
+
+class TokenBind(Model):
+    token = columns.UUID(primary_key=True, default=uuid4, partition_key=True)
+    username = columns.Text(required=True, index=True)
+    grant_time = columns.DateTime(required=True)

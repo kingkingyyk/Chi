@@ -12,7 +12,7 @@ class TestDatabase(ConfigTestBase):
         database.reset()
 
         username = 'myuser'
-        password = '1234abcdef'
+        password = User.encrypt_password('1234abcdef')
         user = User.create(username=username, password=password)
         user.save()
 

@@ -32,7 +32,7 @@ class Database(object):
 
         self._session.set_keyspace(self.config.keyspace)
         logging.info('Keyspace initialization done, synchronizing tables...')
-        obj_classes = [User, Site, Node, Control, Probe, Reading]
+        obj_classes = [User, Site, Node, Control, Probe, Reading, TokenBind]
         for obj_class in obj_classes:
             sync_table(obj_class, keyspaces=[self.config.keyspace], connections=[self._session_name])
         Database._LOGGER.info('Done synchronizing tables.')
