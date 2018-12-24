@@ -9,6 +9,7 @@ pipeline {
         stage('Example Deploy') {
             steps {
                 bat returnStdout: true, script: '''virtualenv venv &&^
+                venv\\Scripts\\activate.bat %%^
                 pip install .\\ &&^
                 pytest'''
             }
