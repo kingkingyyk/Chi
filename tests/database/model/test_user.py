@@ -7,7 +7,8 @@ class TestUser(TestModelBase):
     def create_model_object(self):
         self.username = 'lol'
         self.password = '12345'
-        user = User.create(username=self.username, password=User.encrypt_password(self.password))
+        self.role = User.READWRITE_USER
+        user = User.create(username=self.username, password=User.encrypt_password(self.password), role=self.role)
         user.save()
         self.id = user.id
         self.password = user.password
@@ -17,6 +18,7 @@ class TestUser(TestModelBase):
         assert user.id == self.id
         assert user.username == self.username
         assert user.password == self.password
+        assert user.role == self.role
 
     def test_update(self):
         new_password = User.encrypt_password('abcde')
@@ -26,6 +28,7 @@ class TestUser(TestModelBase):
         assert user.id == self.id
         assert user.username == self.username
         assert user.password == new_password
+        assert user.role == self.role
 
     def test_delete(self):
         user = User.objects(id=self.id).first()

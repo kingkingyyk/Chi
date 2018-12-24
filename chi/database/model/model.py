@@ -5,9 +5,15 @@ import bcrypt
 
 class User(Model):
     PASSWORD_ENCODING = 'UTF-8'
+    ADMINISTRATOR = 'administrator'
+    READWRITE_USER = 'readwrite'
+    READONLY_USER = 'readonly'
+    POSSIBLE_ROLES = [ADMINISTRATOR, READWRITE_USER, READONLY_USER]
+
     id = columns.UUID(primary_key=True, default=uuid4, partition_key=True)
     username = columns.Text(required=True, index=True)
     password = columns.Bytes(required=True)
+    role = columns.Text(required=True, default=READWRITE_USER)
 
     @staticmethod
     def encrypt_password(val):

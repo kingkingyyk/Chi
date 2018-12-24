@@ -34,3 +34,11 @@ class RESTServer (threading.Thread):
     def run(self):
         rest_server = WSGIServer(('0.0.0.0', self.config.port), self.app)
         rest_server.serve_forever()
+
+
+class AuthenticatedView:
+
+    def requires_admin(func):
+        def func_wrapper(self):
+            return func(self)
+        return func_wrapper
