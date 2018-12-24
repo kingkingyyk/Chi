@@ -6,10 +6,10 @@ pipeline {
                 deleteDir()
             }
         }
-        stage('Example Deploy') {
+        stage('Run test') {
             steps {
                 bat returnStdout: true, script: '''virtualenv venv &&^
-                venv\\Scripts\\activate.bat %%^
+                venv\\Scripts\\activate.bat &&^
                 pip install .\\ &&^
                 pytest'''
             }
