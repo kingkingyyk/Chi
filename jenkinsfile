@@ -1,15 +1,14 @@
 pipeline {
     agent any
     stages {
-        stage('Clean up working dir') {
-            steps {
-                deleteDir()
-            }
+        stage('Clean') {
+            deleteDir()
+        }
+        stage('Checkout') {
+            checkout scm
         }
         stage('Run test') {
-            steps {
-                bat returnStdout: true, script: 'virtualenv venv && venv\\Scripts\\activate.bat && pip install .\\ && pytest'
-            }
+            bat returnStdout: true, script: 'virtualenv venv && venv\\Scripts\\activate.bat && pip install .\\ && pytest'
         }
     }
 }
