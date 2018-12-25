@@ -14,8 +14,12 @@ pipeline {
         stage('Run test') {
             steps {
                 bat returnStdout: true, script: 'virtualenv venv && venv\\Scripts\\activate.bat && pip install .\\ && pytest --junitxml=pytest.xml'
-                junit 'pytest.xml'
             }
+        }
+    }
+    post {
+        always {
+            junit 'pytest.xml'
         }
     }
 }
