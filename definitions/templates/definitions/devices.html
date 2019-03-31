@@ -1,0 +1,42 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Devices{% endblock %}
+
+{% block navbar %}
+    <nav style="background-color: orange">
+        <div class="nav-wrapper">
+            <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <a href="/" class="brand-logo" style="padding-left: 20px">Chi</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li class="active"><a href="{% url 'devices' %}">Devices</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="fixed-action-btn">
+        <a class="waves-effect waves-light btn-floating btn-large red" href="{% url 'add_device' %}">
+            <i class="large material-icons">add</i>
+        </a>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div class="row" style="display: inline-block">
+    {% for device in devices %}
+        <div class="col s12 m6 l4">
+            <div class="card small">
+                <div class="card-image">
+                    <img src="/static/IMG_7285.JPG">
+                    <span class="card-title">{{device.name}}</span>
+                </div>
+                <div class="card-content">
+                    <p>Building > Site</p>
+                </div>
+                <div class="card-action">
+                    <a href="#">View</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}

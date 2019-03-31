@@ -20,8 +20,8 @@ Requires :
 + Update subscription
 
 ### Client
-+ JavaFX REST Client
-+ Android Client
++ HTML Client
++ REST Client
 
 ### Data
 + Remove the usage of HSQLDB

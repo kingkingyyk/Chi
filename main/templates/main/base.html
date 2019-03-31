@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="/static/base.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    {% block header %}{% endblock %}
+</head>
+<body>
+    {% block navbar %}{% endblock navbar %}
+    <ul id="slide-out" class="sidenav">
+        <li><a href="#!">{{user.username}}</a></li>
+        <li><div class="divider"></div></li>
+        <li><a class="waves-effect" href="{% url 'devices' %}">Devices</a></li>
+        <li><a class="waves-effect" href="/logout">Logout</a></li>
+    </ul>
+    <div class="progress" id="loading-bar">
+        <div class="indeterminate" id="loading-bar-fill"></div>
+    </div>
+    <div class="container content">
+        {% block body %}{% endblock body %}
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        M.AutoInit();
+        $("#loading-bar").hide();
+        $.ajaxSetup({
+            headers:  {'X-CSRFToken': '{{ csrf_token }}'}
+        });
+    </script>
+    {% block js %}{% endblock js %}
+</body>
+</html>

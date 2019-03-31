@@ -1,0 +1,23 @@
+.content {
+    opacity: 0;
+    animation: content-fade 0.4s ease-in 0s 1 forwards;
+}
+
+
+@keyframes content-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1.0;
+  }
+}
+
+#loading-bar {
+    margin-top: -5px;
+    background-color: rgba(0,0,0,0);
+}
+
+#loading-bar-fill {
+    background-color: red;
+}

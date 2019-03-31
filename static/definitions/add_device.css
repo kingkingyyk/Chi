@@ -1,0 +1,31 @@
+h4 {
+    color: orange;
+}
+
+.div-option-fields {
+    margin-top: 50px;
+}
+
+.div-action-buttons {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	align-items: stretch;
+	align-content: stretch;
+}
+
+.action-button {
+    margin-left: 10px;
+}
+
+.action-error {
+    color: red;
+    width: 100%;
+    margin: auto;
+}
+
+#new-site-floor-plan-preview {
+    width: 300px;
+    height: auto;
+}

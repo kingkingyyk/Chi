@@ -1,0 +1,94 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}Add Device{% endblock %}
+
+{% block header %}
+    <link rel="stylesheet" href="{% static 'definitions/add_device.css' %}">
+{% endblock %}
+
+{% block navbar %}
+    <nav style="background-color: orange">
+        <div class="nav-wrapper">
+            <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <a href="/" class="brand-logo" style="padding-left: 20px">Chi</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li class="active"><a href="{% url 'devices' %}">Devices</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block body %}
+    <div id="step1">
+        <h4>Step 1 - Pick a building</h4>
+        <div class="input-field col s12 div-option-fields">
+            <select id="select-building">
+                {% for building in buildings %}
+                    <option value="{{ building.id }}">{{ building.name }}</option>
+                {% endfor %}
+                <option value="new">Create a new building...</option>
+            </select>
+            <label>Building</label>
+        </div>
+        <div class="div-option-fields">
+            <div class="input-field col s6" id="new-building-name">
+                <input id="building-name" type="text" class="validate">
+                <label for="building-name">Name</label>
+            </div>
+        </div>
+    </div>
+    <div id="step2">
+        <h4>Step 2 - Pick a site</h4>
+        <div class="input-field col s12 div-option-fields">
+            <select id="select-site"></select>
+            <label>Site</label>
+        </div>
+        <div class="div-option-fields" id="new-site">
+            <div class="input-field col s6" id="new-site-name">
+                <input id="site-name" type="text" class="validate">
+                <label for="site-name">Name</label>
+            </div>
+            <div class="input-field col s6" id="new-site-floor">
+                <input id="site-floor" type="text" class="validate">
+                <label for="site-floor">Floor</label>
+            </div>
+            <div class="input-field col s6" id="new-site-floor-plan">
+                <div class="row">
+                    <div class = "file-field input-field">
+                        <div class = "waves-effect waves-light btn orange white-text">
+                            <span>Select Floor Plan</span>
+                            <input id="new-site-floor-plan-input" type="file" accept="image/jpeg" onchange="previewFloorPlan();"/>
+                        </div>
+                    </div>
+                </div>
+                <img id="new-site-floor-plan-preview"/>
+            </div>
+        </div>
+    </div>
+    <div id="step3">
+        <h4>Step 3 - Create your device</h4>
+        <div class="div-option-fields">
+            <div class="input-field col s6" id="new-device-name">
+                <input id="device-name" type="text" class="validate">
+                <label for="device-name">Name</label>
+            </div>
+        </div>
+    </div>
+    <div id="step4">
+        <h4>Step 4 - Mark your device location</h4>
+        <div>Your device ID is insert some device id here !!</div>
+        <div>Your device ID is insert some device id here !!</div>
+    </div>
+    <div class="div-action-buttons">
+        {% csrf_token %}
+        <span class="action-error"></span>
+        <a class="waves-effect waves-light btn orange white-text action-button" id="back-button">Back</a>
+        <a class="waves-effect waves-light btn orange white-text action-button" id="next-button">Next</a>
+    </div>
+{% endblock %}
+
+
+{% block js %}
+    <script src="{% static 'definitions/add_device.js' %}"></script>
+{% endblock js %}
